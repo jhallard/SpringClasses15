@@ -1,0 +1,84 @@
+// $Id: textarea.java,v 1.1 2012-05-31 22:30:03-07 - - $
+
+import java.awt.*;
+import java.awt.event.*;
+import java.net.*;
+import javax.swing.*;
+import static java.lang.String.*;
+import static java.lang.System.*;
+
+class textarea {
+   static String hostport = "hostname:51966";
+   static String username = "foobar";
+
+   static class confirm implements ActionListener { 
+      public void actionPerformed (ActionEvent event) {
+         int response = JOptionPane.showConfirmDialog (null, "Really?");
+         if (response == JOptionPane.YES_OPTION) exit (0);
+      }
+   }
+
+   static class copyfield implements ActionListener {
+      JTextArea textarea;
+      copyfield (JTextArea init) {
+         textarea = init;
+      }
+      public void actionPerformed (ActionEvent event) {
+         JTextField source = (JTextField) event.getSource ();
+         String text = source.getText ();
+         textarea.append (username + ": " + text + "\n");
+         source.setText ("");
+      }
+   }
+
+
+   public static void main (String[] args) {
+      Font courier = new Font ("Courier", Font.PLAIN, 12);
+      JFrame frame = new JFrame ("textarea"); 
+      Container pane = frame.getContentPane ();
+
+      GridBagLayout layout = new GridBagLayout ();
+      GridBagConstraints constraints = new GridBagConstraints ();
+      constraints.anchor = GridBagConstraints.EAST;
+      constraints.gridwidth = GridBagConstraints.REMAINDER;
+
+      Button quit = new Button ("Quit");
+      confirm quitlistener = new confirm ();
+      quit.addActionListener (quitlistener);
+
+      String spaces = "     ";
+      pane.add (quit);
+      pane.add (new JLabel (spaces + "Client: " + hostport));
+      pane.add (new JLabel (spaces + "Server: " + hostport));
+      pane.add (new JLabel (spaces + "User: foobar"));
+      JLabel progname = new JLabel ("chatter");
+      layout.setConstraints (progname, constraints);
+      pane.add (progname);
+
+      JTextArea textarea = new JTextArea (25, 80);
+      textarea.setEditable (false);
+      textarea.setFont (courier);
+      JScrollPane scroll = new JScrollPane (textarea);
+      constraints.anchor = GridBagConstraints.WEST;
+      layout.setConstraints (scroll, constraints);
+
+      JTextField textfield = new JTextField (80);
+      textfield.setFont (courier);
+      layout.setConstraints (textfield, constraints);
+
+      pane.setLayout (layout);
+      pane.add (scroll);
+      pane.add (textfield);
+
+      copyfield textlistener = new copyfield (textarea);
+      textfield.addActionListener (textlistener);
+
+      frame.pack ();
+      textfield.requestFocusInWindow ();
+      frame.setLocation (256, 256);
+      frame.setVisible (true);
+      textarea.append ("Starting...\n");
+   }
+
+}
+

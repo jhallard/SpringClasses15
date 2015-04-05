@@ -1,0 +1,53 @@
+ 0.000016 main STARTING
+ 0.001176 producer 2 STARTING
+ 0.001221 producer 1 STARTING
+ 0.001319 producer 3 STARTING
+ 0.001855 consumer 5 STARTING
+ 0.001889 consumer 6 STARTING
+ 0.002018 consumer 4 STARTING
+ 0.301407 producer 1 ["Hello",1]
+ 0.601295 producer 2 ["Hello",2]
+ 0.601520 producer 1 ["World",1]
+ 0.901453 producer 3 ["Hello",3]
+ 0.901615 producer 1 ["foo",1]
+ 2.402218 consumer 4 ["Hello",1]
+ 2.402272 producer 2 ["World",2]
+ 3.001942 producer 1 ["bar",1]
+ 3.001998 consumer 5 ["Hello",2]
+ 3.602056 consumer 6 ["World",1]
+ 3.602104 producer 3 ["World",3]
+ 4.802424 consumer 4 ["Hello",3]
+ 4.802531 producer 2 ["foo",2]
+ 6.002091 consumer 5 ["foo",1]
+ 6.002174 producer 1 ["baz",1]
+ 7.202241 consumer 6 ["World",2]
+ 7.202284 producer 3 ["foo",3]
+ 7.202669 consumer 4 ["bar",1]
+ 7.202744 producer 2 ["bar",2]
+ 9.002240 consumer 5 ["World",3]
+ 9.002307 producer 1 ["qux",1]
+ 9.002321 producer 1 FINISHED
+ 9.602874 consumer 4 ["foo",2]
+ 9.602921 producer 2 ["baz",2]
+10.802433 consumer 6 ["baz",1]
+10.802481 producer 3 ["bar",3]
+12.002367 consumer 5 ["foo",3]
+12.002420 producer 2 ["qux",2]
+12.002447 producer 2 FINISHED
+12.003057 consumer 4 ["bar",2]
+12.003092 producer 3 ["baz",3]
+14.402617 consumer 6 ["qux",1]
+14.402661 producer 3 ["qux",3]
+14.402673 producer 3 FINISHED
+14.403245 consumer 4 ["baz",2]
+15.002490 consumer 5 ["bar",3]
+16.803465 consumer 4 ["qux",2]
+18.002623 consumer 5 ["baz",3]
+18.002780 consumer 6 ["qux",3]
+19.203740 consumer 4 caught end_data
+19.203788 consumer 4 FINISHED
+21.002810 consumer 5 caught end_data
+21.002869 consumer 5 FINISHED
+21.602961 consumer 6 caught end_data
+21.602997 consumer 6 FINISHED
+21.603049 main FINISHED

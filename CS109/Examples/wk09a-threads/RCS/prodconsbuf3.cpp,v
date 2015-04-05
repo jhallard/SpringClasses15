@@ -1,0 +1,1113 @@
+head	1.29;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.29
+date	2014.06.04.19.06.43;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2014.06.04.19.04.25;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2014.06.04.19.04.00;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2014.06.04.19.03.46;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2014.06.04.18.57.40;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2014.06.04.18.57.01;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.06.04.18.56.41;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.06.04.18.56.26;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.06.04.18.55.59;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.06.04.18.55.26;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.06.04.18.55.18;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.06.04.18.55.02;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.06.03.21.30.55;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.06.03.21.30.37;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.06.03.21.22.01;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.06.03.21.14.22;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.06.03.21.02.34;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.06.03.21.01.11;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.06.03.20.56.50;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.06.03.20.52.39;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.06.03.20.43.42;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.06.02.20.14.16;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.06.02.20.13.59;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.06.02.19.54.18;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.06.02.19.52.34;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.06.02.19.50.38;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.06.02.19.50.18;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.06.02.19.35.57;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.06.02.19.35.27;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.29
+log
+@-
+@
+text
+@// $Id: prodconsbuf3.cpp,v 1.28 2014-06-04 12:04:25-07 - - $
+
+// Producer/consumer problem using mutex and condition_variable.
+
+#include <array>
+#include <cassert>
+#include <chrono>
+#include <condition_variable>
+#include <iomanip>
+#include <iostream>
+#include <mutex>
+#include <sstream>
+#include <string>
+#include <thread>
+#include <vector>
+using namespace std;
+
+//
+// Timer.
+//
+class elapsed_time {
+   private:
+      using clock = chrono::high_resolution_clock;
+      clock::time_point start {clock::now()};
+   public: 
+      double elapsed_nanoseconds() {
+         clock::time_point now = clock::now();
+         return chrono::duration_cast<chrono::nanoseconds> (now - start)
+                .count() / 1e9;
+      }
+} timer;
+
+
+//
+// Printer for synchronized output accepts a variable number
+// of arguments.
+//
+
+class synch_printer {
+   private:
+      mutex out_mutex;
+      ostream& out;
+      void print_();
+      template <typename Head, typename... Tail>
+      void print_ (const Head& head, Tail... tail);
+   public:
+      synch_printer (ostream& out): out(out){}
+      template <typename... Type>
+      void print (Type... params);
+};
+
+void synch_printer::print_() {
+}
+
+template <typename Head, typename... Tail>
+void synch_printer::print_ (const Head& head, Tail... tail) {
+   out << head;
+   print_ (tail...);
+}
+
+template <typename... Type>
+void synch_printer::print (Type... params) {
+   unique_lock<mutex> lock {out_mutex};
+   out << setw(9) << setprecision(6) << fixed
+       << timer.elapsed_nanoseconds() << " ";
+   print_ (params...);
+   out << endl << flush;
+}
+
+//
+// Trace block/function entry/exit.
+
+class start_trace {
+   private:
+      const string name;
+      synch_printer& printer;
+   public:
+      start_trace (string name, synch_printer& printer):
+                   name(name), printer(printer) {
+         printer.print (name, " STARTING");
+      }
+      ~start_trace() { printer.print (name, " FINISHED"); }
+};
+
+
+//
+// class bounded_buffer
+// NOT synchronized.
+// Just your ordinary Data Structures queue.
+//
+
+template <typename Type, size_t size>
+class bounded_buffer {
+   public:
+      using value_type = Type;
+   private:
+      static constexpr ssize_t EMPTY {-1};
+      ssize_t head {EMPTY};
+      ssize_t tail {EMPTY};
+      array<Type,size> items;
+   public:
+      bool empty() const { return head == EMPTY; }
+      bool full() { return (tail + 1) % size == head; }
+      const value_type& front() const;
+      void pop_front();
+      void push (const value_type& val);
+};
+
+class bounded_buffer_error: public runtime_error {
+   public:
+      explicit bounded_buffer_error (const string& what);
+};
+
+bounded_buffer_error::bounded_buffer_error (const string& what):
+            runtime_error (what) {
+}
+
+template <typename Type, size_t size>
+const Type& bounded_buffer<Type,size>::front() const {
+   if (empty()) throw bounded_buffer_error ("front (empty)");
+   return items[head];
+}
+
+template <typename Type, size_t size>
+void bounded_buffer<Type,size>::pop_front() {
+   if (empty()) throw bounded_buffer_error ("pop_front (empty)");
+   if (head == tail) head = tail = EMPTY;
+                else head = (head + 1) % size;
+}
+
+template <typename Type, size_t size>
+void bounded_buffer<Type,size>::push (const value_type& val) {
+   if (full()) throw bounded_buffer_error ("push (full)");
+   if (empty()) head = tail = 0;
+           else tail = (tail + 1) % size;
+   items[tail] = val;
+}
+
+
+//
+// class synchronized_buffer
+// prevents concurrent access and uses the bounded_buffer.
+//
+
+template <typename Type, size_t size>
+class synchronized_buffer {
+   public:
+      using value_type = Type;
+   private:
+      bounded_buffer<Type,size> buffer;
+      mutex lock;
+      condition_variable put_wait;
+      condition_variable get_wait;
+      bool producers_gone {false};
+   public:
+      struct end_data: public exception{};
+      void put (const value_type& val);
+      value_type get();
+      void end_data_notify_all();
+};
+
+template <typename Type, size_t size>
+void synchronized_buffer<Type,size>::put (const value_type& val) {
+   unique_lock<mutex> ulock (lock);
+   while (buffer.full()) put_wait.wait (ulock);
+   buffer.push (val);
+   get_wait.notify_one();
+}
+
+template <typename Type, size_t size>
+Type synchronized_buffer<Type,size>::get() {
+   unique_lock<mutex> ulock (lock);
+   while (buffer.empty()) {
+      if (producers_gone) throw end_data();
+                     else get_wait.wait (ulock);
+   }
+   value_type result = buffer.front();
+   buffer.pop_front();
+   put_wait.notify_one();
+   return result;
+}
+
+template <typename Type, size_t size>
+void synchronized_buffer<Type,size>::end_data_notify_all() {
+   unique_lock<mutex> ulock (lock);
+   producers_gone = true;
+   get_wait.notify_all();
+}
+
+
+//
+// Producer and consumer threads.
+//
+
+using buf_data = pair<string,int>;
+using synch_buffer = synchronized_buffer<buf_data,5>;
+string to_string (const buf_data& data) {
+   return " [\"" + data.first + "\"," + to_string (data.second) + "]";
+}
+
+void producer (int id, synch_buffer& buffer, synch_printer &mcout,
+               const vector<string>& words) {
+   start_trace trace ("producer " + to_string (id), mcout);
+   for (const auto& word: words) {
+      this_thread::sleep_for (chrono::milliseconds (id * 300));
+      buf_data data {word, id};
+      buffer.put (data);
+      mcout.print ("producer ", id, to_string (data));
+   }
+}
+
+void consumer (int id, synch_buffer& buffer, synch_printer &mcout) {
+   start_trace trace ("consumer " + to_string (id), mcout);
+   try {
+      for(;;) {
+         this_thread::sleep_for (chrono::milliseconds (id * 600));
+         auto data = buffer.get();
+         mcout.print ("consumer ", id, to_string (data));
+      }
+   }catch (synch_buffer::end_data&) {
+      mcout.print ("consumer ", id, " caught end_data");
+   }
+}
+
+
+//
+// Main.
+//
+
+template <typename number, class Function>
+void for_each (number start, number end, Function fn) {
+   for (; start != end; ++start) fn (start);
+}
+
+int main() {
+   synch_printer mcout (cout);
+   start_trace trace ("main", mcout);
+   synch_buffer buffer;
+   vector<thread> producers;
+   vector<thread> consumers;
+   vector<string> words {"Hello", "World", "foo", "bar", "baz", "qux"};
+   for_each (1, 4, [&] (int id) {
+      producers.push_back (thread (producer, id, ref (buffer),
+                           ref (mcout), ref (words)));
+   });
+   for_each (4, 7, [&] (int id) {
+      consumers.push_back (thread (consumer, id, ref (buffer),
+                           ref (mcout)));
+   });
+   for (auto& t: producers) t.join();
+   buffer.end_data_notify_all();
+   for (auto& t: consumers) t.join();
+   return 0;
+}
+
+//TEST// prodconsbuf3 >prodconsbuf3.out 2>&1
+//TEST// mkpspdf prodconsbuf3.ps prodconsbuf3.cpp* prodconsbuf3.out
+
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.27 2014-06-04 12:04:00-07 - - $
+d26 1
+a26 1
+      double elapsed() {
+d65 1
+a65 1
+       << timer.elapsed() << " ";
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.26 2014-06-04 12:03:46-07 - - $
+a113 1
+template <typename Type, size_t size>
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.21 2014-06-04 11:55:59-07 - - $
+d112 1
+a112 1
+}
+@
+
+
+1.25
+log
+@-
+@
+text
+@d35 52
+a95 4
+      class error: public runtime_error {
+         public:
+            explicit error (const string& what);
+      };
+d109 5
+d115 1
+a115 1
+bounded_buffer<Type,size>::error::error (const string& what):
+d121 1
+a121 1
+   if (empty()) throw error ("bounded_buffer::front (empty)");
+d127 1
+a127 1
+   if (empty()) throw error ("bounded_buffer::pop_front (empty)");
+d134 1
+a134 1
+   if (full()) throw error ("bounded_buffer::push (full)");
+d160 1
+a160 1
+      void get_wait_notify_all();
+d185 1
+a185 1
+void synchronized_buffer<Type,size>::get_wait_notify_all() {
+a192 52
+// Printer for synchronized output accepts a variable number
+// of arguments.
+//
+
+class synch_printer {
+   private:
+      mutex out_mutex;
+      ostream& out;
+      void print_();
+      template <typename Head, typename... Tail>
+      void print_ (const Head& head, Tail... tail);
+   public:
+      synch_printer (ostream& out): out(out){}
+      template <typename... Type>
+      void print (Type... params);
+};
+
+void synch_printer::print_() {
+}
+
+template <typename Head, typename... Tail>
+void synch_printer::print_ (const Head& head, Tail... tail) {
+   out << head;
+   print_ (tail...);
+}
+
+template <typename... Type>
+void synch_printer::print (Type... params) {
+   unique_lock<mutex> lock {out_mutex};
+   out << setw(9) << setprecision(6) << fixed
+       << timer.elapsed() << " ";
+   print_ (params...);
+   out << endl << flush;
+}
+
+//
+// Trace block/function entry/exit.
+
+class start_trace {
+   private:
+      const string name;
+      synch_printer& printer;
+   public:
+      start_trace (string name, synch_printer& printer):
+                   name(name), printer(printer) {
+         printer.print (name, " STARTING");
+      }
+      ~start_trace() { printer.print (name, " FINISHED"); }
+};
+
+
+//
+d252 1
+a252 1
+   buffer.get_wait_notify_all();
+@
+
+
+1.24
+log
+@-
+@
+text
+@d63 1
+a63 1
+      runtime_error (const string& what) {
+@
+
+
+1.23
+log
+@-
+@
+text
+@d62 1
+a62 1
+class bounded_buffer<Type,size>::error::error (const string& what):
+@
+
+
+1.22
+log
+@-
+@
+text
+@d62 1
+a62 1
+class typename bounded_buffer<Type,size>::error::error (const string& what):
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.20 2014-06-04 11:55:26-07 - - $
+d62 1
+a62 1
+class bounded_buffer<Type,size>::error::error (const string& what):
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.19 2014-06-04 11:55:18-07 - - $
+d62 1
+a62 1
+class bounded_buffer::error::error (const string& what):
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.18 2014-06-04 11:55:02-07 - - $
+d47 1
+a47 1
+      }
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.17 2014-06-03 14:30:55-07 - - $
+d45 2
+a46 1
+         explicit error (const string& what);
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.16 2014-06-03 14:30:37-07 - - $
+d44 3
+d56 1
+a56 1
+      void pop();
+d61 5
+d67 1
+a67 1
+   if (empty()) throw runtime_error ("bounded_buffer::front (empty)");
+d72 2
+a73 2
+void bounded_buffer<Type,size>::pop() {
+   if (empty()) throw runtime_error ("bounded_buffer::pop (empty)");
+d80 1
+a80 1
+   if (full()) throw runtime_error ("bounded_buffer::push (full)");
+d125 1
+a125 1
+   buffer.pop();
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.15 2014-06-03 14:22:01-07 - - $
+d178 1
+a178 1
+      start_trace() { printer.print (name, " FINISHED"); }
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.14 2014-06-03 14:14:22-07 - - $
+d37 1
+a37 1
+// Just your ordinary 12B Data Structures queue.
+a49 1
+      // Six synthesized are all OK.
+d166 3
+d174 5
+a178 2
+      start_trace (string, synch_printer&);
+      ~start_trace();
+a180 9
+start_trace::start_trace (string name, synch_printer& printer):
+                          name(name), printer(printer) {
+   printer.print (name, " STARTING");
+}
+
+start_trace::~start_trace() {
+   printer.print (name, " FINISHED");
+}
+
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.13 2014-06-03 14:02:34-07 - - $
+d169 2
+a170 2
+      string name;
+      synch_printer printer;
+d174 1
+a174 1
+}
+d198 1
+a198 1
+   start_trace ("producer " + to_string (id), mcout);
+d208 1
+a208 1
+   start_trace ("consumer " + to_string (id), mcout);
+a230 1
+   cout << boolalpha;
+d232 1
+a232 1
+   start_trace ("main", mcout);
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.12 2014-06-03 14:01:11-07 - - $
+d125 1
+d145 2
+a146 2
+      template <typename... T>
+      void print (T... params);
+d158 2
+a159 2
+template <typename... T>
+void synch_printer::print (T... params) {
+d164 19
+a182 1
+   out << endl;
+d198 1
+a198 1
+   mcout.print ("producer ", id, " STARTING");
+a204 1
+   mcout.print ("producer ", id, " FINISHED");
+d208 1
+a208 1
+   mcout.print ("consumer ", id, " STARTING");
+d216 1
+a216 1
+      // No more producers, so no more data.
+a217 1
+   mcout.print ("consumer ", id, " FINISHED");
+d233 1
+a233 1
+   mcout.print ("main STARTING");
+a248 1
+   mcout.print ("main FINISHED");
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.11 2014-06-03 13:56:50-07 - - $
+d6 2
+a9 2
+#include <cassert>
+#include <chrono>
+a17 2
+#include <sys/time.h>
+
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.9 2014-06-03 13:43:42-07 - - $
+d42 1
+a42 1
+template <typename T, size_t size>
+d45 1
+a45 1
+      using value_type = T;
+d47 4
+a50 4
+      static constexpr ssize_t EMPTY = -1;
+      ssize_t head = EMPTY;
+      ssize_t tail = EMPTY;
+      array<T,size> items;
+d52 1
+a52 1
+      // Six synthesizeable are all OK.
+d60 2
+a61 2
+template <typename T, size_t size>
+const T& bounded_buffer<T,size>::front() const {
+d66 2
+a67 2
+template <typename T, size_t size>
+void bounded_buffer<T,size>::pop() {
+d73 2
+a74 2
+template <typename T, size_t size>
+void bounded_buffer<T,size>::push (const value_type& val) {
+d87 1
+a87 1
+template <typename T, size_t size>
+d90 1
+a90 1
+      using value_type = T;
+d92 1
+a92 1
+      bounded_buffer<T,size> buffer;
+d104 2
+a105 2
+template <typename T, size_t size>
+void synchronized_buffer<T,size>::put (const value_type& val) {
+d112 2
+a113 2
+template <typename T, size_t size>
+T synchronized_buffer<T,size>::get() {
+d125 2
+a126 2
+template <typename T, size_t size>
+void synchronized_buffer<T,size>::get_wait_notify_all() {
+@
+
+
+1.10
+log
+@-
+@
+text
+@d223 5
+a227 4
+   for_each (1, 4, 
+      [] (int id) { producers.push_back (thread (producer, id, ref (buffer), ref (mcout), ref (words))); });
+   }
+   for (int id = 1; id <= 3; ++id) {
+d230 1
+a230 1
+   }
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.8 2014-06-02 13:14:16-07 - - $
+d173 1
+a173 1
+using buf_data = pair<string,size_t>;
+d210 5
+d223 2
+a224 3
+   for (int id = 1; id <= 3; ++id) {
+      producers.push_back (thread (producer, id, ref (buffer),
+                           ref (mcout), ref (words)));
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.7 2014-06-02 13:13:59-07 - - $
+d94 3
+a96 2
+      condition_variable prod_wait;
+      condition_variable cons_wait;
+d98 1
+d101 1
+a101 2
+      struct end_data: public exception{};
+      bool producers_gone {false};
+d107 1
+a107 1
+   while (buffer.full()) prod_wait.wait (ulock);
+d109 1
+a109 1
+   cons_wait.notify_one();
+d117 1
+a117 1
+                     else cons_wait.wait (ulock);
+d121 1
+a121 1
+   prod_wait.notify_one();
+d125 6
+d133 2
+a134 1
+// Buffer and data declarations and printer.
+d137 1
+a137 1
+class printer {
+d141 1
+a141 1
+      void prt() {}
+d143 1
+a143 5
+      void prt (const Head& head, Tail... tail) {
+         out << head;
+         prt (tail...);
+
+      }
+d145 1
+a145 1
+      printer (ostream& out): out(out){}
+d147 1
+a147 7
+      void print (T... params) {
+         unique_lock<mutex> lock {out_mutex};
+         out << setw(9) << setprecision(6) << fixed
+             << timer.elapsed() << " ";
+         prt (params...);
+         out << endl;
+      }
+d149 18
+a166 1
+printer mcout (cout);
+d179 2
+a180 2
+void producer (size_t id, synch_buffer* buffer,
+               const vector<string>* words) {
+d182 1
+a182 1
+   for (const auto& word: *words) {
+d185 1
+a185 1
+      buffer->put (data);
+d191 1
+a191 1
+void consumer (size_t id, synch_buffer* buffer) {
+d196 1
+a196 1
+         auto data = buffer->get();
+d212 1
+d218 3
+a220 2
+   for (size_t i = 1; i <= 3; ++i) {
+      producers.push_back (thread (producer, i, &buffer, &words));
+d222 3
+a224 2
+   for (size_t i = 1; i <= 3; ++i) {
+      consumers.push_back (thread (consumer, i, &buffer));
+d227 1
+a227 1
+   buffer.producers_gone = true;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.6 2014-06-02 12:54:18-07 - - $
+d30 1
+a30 1
+         return duration_cast<chrono::nanoseconds> (now - start)
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.5 2014-06-02 12:52:34-07 - - $
+a16 1
+using namespace std::chrono;
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.4 2014-06-02 12:50:38-07 - - $
+a129 6
+using buf_data = pair<string,size_t>;
+using synch_buffer = synchronized_buffer<buf_data,5>;
+string to_string (const buf_data& data) {
+   return " [\"" + data.first + "\"," + to_string (data.second) + "]";
+}
+
+d159 6
+d191 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf3.cpp,v 1.3 2014-06-02 12:50:18-07 - - $
+d152 1
+a152 1
+         out << setw(7) << setprecision(4) << fixed
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodconsbuf2.cpp,v 1.1 2014-06-02 11:47:42-07 - - $
+d215 2
+a216 2
+//TEST// prodconsbuf >prodconsbuf.out 2>&1
+//TEST// mkpspdf prodconsbuf.ps prodconsbuf.cpp* prodconsbuf.out
+@
+
+
+1.2
+log
+@-
+@
+text
+@d17 1
+d26 2
+a27 2
+      using namespace std::chrono;
+      system_clock::time_point start = system_clock::now();
+d29 4
+a32 5
+      elapsed_time() { gettimeofday (&start, nullptr); }
+      long elapsed() {
+         system_clock::time_point now = system_clock::now();
+         auto delta = now - start;
+         return duration<long,chrono::microseconds> (delta);
+d107 1
+a107 1
+   if (buffer.full()) prod_wait.wait (ulock);
+d115 1
+a115 1
+   if (buffer.empty()) {
+d152 2
+a153 1
+         out << timer.elapsed() << " ";
+d169 1
+a169 1
+      this_thread::sleep_for (chrono::milliseconds (id * 200));
+d181 1
+a181 1
+         this_thread::sleep_for (chrono::milliseconds (id * 400));
+@
+
+
+1.1
+log
+@-
+@
+text
+@d25 1
+@

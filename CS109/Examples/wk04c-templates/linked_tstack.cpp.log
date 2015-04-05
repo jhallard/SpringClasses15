@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting linked_tstack.cpp
+linked_tstack.cpp:
+     $Id: linked_tstack.cpp,v 1.27 2015-01-27 17:54:09-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 linked_tstack.cpp -o linked_tstack -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f linked_tstack.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished linked_tstack.cpp

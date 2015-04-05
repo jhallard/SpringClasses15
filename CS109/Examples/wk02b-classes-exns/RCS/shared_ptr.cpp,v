@@ -1,0 +1,128 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.5
+date	2014.04.10.21.44.24;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.04.10.21.43.05;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.04.10.21.39.38;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.04.10.21.36.59;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.04.10.21.35.13;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: shared_ptr.cpp,v 1.3 2014-04-10 14:39:38-07 - - $
+
+#include <cstdlib>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int main (int argc, char** argv) {
+   auto vecstr = make_shared<vector<shared_ptr<string>>>();
+   cout << "vector<string*> = " << vecstr << endl;
+   for (auto argp = &argv[0]; argp != &argv[argc]; ++argp) {
+      vecstr->push_back (make_shared<string> (*argp));
+   }
+   for (auto itor = vecstr->cbegin(); itor != vecstr->cend(); ++itor) {
+      cout << "string* = " << *itor << " -> " << **itor << endl;
+   }
+   cerr << "We are done." << endl;
+   return EXIT_SUCCESS;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=shared_ptr.out.grind \
+//TEST//       shared_ptr foo bar baz qux >shared_ptr.out 2>&1
+//TEST// mkpspdf shared_ptr.ps shared_ptr.cpp* shared_ptr.out*
+*/
+
+@
+
+
+1.4
+log
+@-
+@
+text
+@d12 1
+a12 1
+   auto vecstr = make_shared<vector<shared_ptr<string>>(0);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: shared_ptr.cpp,v 1.2 2014-04-10 14:36:59-07 - - $
+d12 1
+a12 1
+   auto vecstr = make_shared<vector<shared_ptr<string>>();
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: shared_ptr.cpp,v 1.1 2014-04-10 14:35:13-07 - - $
+d12 1
+a12 1
+   auto vecstr = make_shared<vector<string*>>();
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: leaks.cpp,v 1.4 2014-04-10 14:17:42-07 - - $
+d14 2
+a15 3
+   for (int itor = 0; itor < argc; ++itor) {
+      string str = argv[itor];
+      vecstr->push_back (make_shared<string> (str));
+@

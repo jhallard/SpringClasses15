@@ -1,0 +1,1631 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: semaphilo.ps
+%%For: Wesley Mackey
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Wed Jun  4 12:13:30 2014
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier-Bold /F-gs-font MF
+/F-gs-font 11 11 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript-mycolor 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+/HeaderPageCountF /Helvetica-Bold findfont 18 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    /dhw d_header_w 4 sub def
+
+    /linecolor {0 0 0 setrgbcolor} bind def  % line color
+    /txcolor   {0 0 0 setrgbcolor} bind def  % text color
+    /fncolor   {0 0 0 setrgbcolor} bind def  % filename line color
+
+    .5 setlinewidth
+
+    % line across bottom of the header area
+    linecolor
+    0 0 moveto dhw 0 lineto
+
+    % side boxes
+    /sbw d_header_h 2 mul def	% side box width
+
+    % left side box
+    0 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % date/time in left box
+    txcolor
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 5 div moveto show
+
+    % right side box
+    dhw sbw sub 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % get width of pagecount
+    HeaderPageCountF setfont
+    pagecountstr stringwidth pop
+
+    txcolor
+    HeaderPageNumF setfont
+    pagenumstr stringwidth pop add  % add to width of pagecount
+    sbw exch sub 2 div dhw sbw sub add
+    d_header_h .2 mul moveto
+
+    pagenumstr show
+
+    HeaderPageCountF setfont
+    pagecountstr show
+
+    % filename
+    fncolor
+    HeaderHDRF setfont
+    dhw fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % HACK around a bug in enscript 1.6.0:
+      % for some reason this is getting set to "(null)" and
+      %
+      user_header_center_str (\(null\)) eq {
+        /user_header_center_str () def
+      } if
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        dhw user_header_left_str stringwidth pop sub 2 div
+        h moveto user_header_left_str show
+      } {
+        sbw 5 add h moveto user_header_left_str show
+
+        dhw user_header_center_str stringwidth pop sub 2 div
+        h moveto user_header_center_str show
+
+	dhw sbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} bind def
+%%EndResource
+/d_page_w 536 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 708 def
+/d_header_w 536 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 536 def
+/d_footer_h 0 def
+/d_output_w 536 def
+/d_output_h 708 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (semaphilo.cpp) def
+/fdir () def
+/ftail (semaphilo.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (06/04/14) def
+/pagecountstr (/6) def
+/modtimestr (12:13:15) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: semaphilo.cpp,v 1.22 2014-06-04 12:13:15-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(//) s
+32.4 658 M (4:) s
+52.2 658 M
+(// Implementation of semaphores.) s
+32.4 646 M (5:) s
+52.2 646 M
+(// Solution to Dining Philosophers problem.) s
+32.4 634 M (6:) s
+52.2 634 M
+(//) s
+32.4 622 M (7:) s
+32.4 610 M (8:) s
+52.2 610 M
+(#include <condition_variable>) s
+32.4 598 M (9:) s
+52.2 598 M
+(#include <iomanip>) s
+25.8 586 M (10:) s
+52.2 586 M
+(#include <iostream>) s
+25.8 574 M (11:) s
+52.2 574 M
+(#include <mutex>) s
+25.8 562 M (12:) s
+52.2 562 M
+(#include <random>) s
+25.8 550 M (13:) s
+52.2 550 M
+(#include <string>) s
+25.8 538 M (14:) s
+52.2 538 M
+(#include <thread>) s
+25.8 526 M (15:) s
+52.2 526 M
+(using namespace std;) s
+25.8 514 M (16:) s
+25.8 502 M (17:) s
+52.2 502 M
+(//) s
+25.8 490 M (18:) s
+52.2 490 M
+(// Timer.) s
+25.8 478 M (19:) s
+52.2 478 M
+(//) s
+25.8 466 M (20:) s
+52.2 466 M
+(class elapsed_time {) s
+25.8 454 M (21:) s
+52.2 454 M
+(   private:) s
+25.8 442 M (22:) s
+52.2 442 M
+(      using clock = chrono::high_resolution_clock;) s
+25.8 430 M (23:) s
+52.2 430 M
+(      clock::time_point start {clock::now\(\)};) s
+25.8 418 M (24:) s
+52.2 418 M
+(   public: ) s
+25.8 406 M (25:) s
+52.2 406 M
+(      double elapsed_nanoseconds\(\) {) s
+25.8 394 M (26:) s
+52.2 394 M
+(         clock::time_point now = clock::now\(\);) s
+25.8 382 M (27:) s
+52.2 382 M
+(         return chrono::duration_cast<chrono::nanoseconds> \(now - start\)) s
+25.8 370 M (28:) s
+52.2 370 M
+(                .count\(\) / 1e9;) s
+25.8 358 M (29:) s
+52.2 358 M
+(      }) s
+25.8 346 M (30:) s
+52.2 346 M
+(} timer;) s
+25.8 334 M (31:) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (semaphilo.cpp) def
+/fdir () def
+/ftail (semaphilo.cpp) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (06/04/14) def
+/pagecountstr (/6) def
+/modtimestr (12:13:15) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (32:) s
+25.8 682 M (33:) s
+52.2 682 M
+(//) s
+25.8 670 M (34:) s
+52.2 670 M
+(// Printer for synchronized output accepts a variable number) s
+25.8 658 M (35:) s
+52.2 658 M
+(// of arguments.) s
+25.8 646 M (36:) s
+52.2 646 M
+(//) s
+25.8 634 M (37:) s
+25.8 622 M (38:) s
+52.2 622 M
+(class synch_printer {) s
+25.8 610 M (39:) s
+52.2 610 M
+(   private:) s
+25.8 598 M (40:) s
+52.2 598 M
+(      mutex out_mutex;) s
+25.8 586 M (41:) s
+52.2 586 M
+(      ostream& out;) s
+25.8 574 M (42:) s
+52.2 574 M
+(      void print_\(\);) s
+25.8 562 M (43:) s
+52.2 562 M
+(      template <typename Head, typename... Tail>) s
+25.8 550 M (44:) s
+52.2 550 M
+(      void print_ \(const Head& head, Tail... tail\);) s
+25.8 538 M (45:) s
+52.2 538 M
+(   public:) s
+25.8 526 M (46:) s
+52.2 526 M
+(      synch_printer \(ostream& out\): out\(out\){}) s
+25.8 514 M (47:) s
+52.2 514 M
+(      template <typename... Type>) s
+25.8 502 M (48:) s
+52.2 502 M
+(      void print \(Type... params\);) s
+25.8 490 M (49:) s
+52.2 490 M
+(};) s
+25.8 478 M (50:) s
+25.8 466 M (51:) s
+52.2 466 M
+(void synch_printer::print_\(\) {) s
+25.8 454 M (52:) s
+52.2 454 M
+(}) s
+25.8 442 M (53:) s
+25.8 430 M (54:) s
+52.2 430 M
+(template <typename Head, typename... Tail>) s
+25.8 418 M (55:) s
+52.2 418 M
+(void synch_printer::print_ \(const Head& head, Tail... tail\) {) s
+25.8 406 M (56:) s
+52.2 406 M
+(   out << head;) s
+25.8 394 M (57:) s
+52.2 394 M
+(   print_ \(tail...\);) s
+25.8 382 M (58:) s
+52.2 382 M
+(}) s
+25.8 370 M (59:) s
+25.8 358 M (60:) s
+52.2 358 M
+(template <typename... Type>) s
+25.8 346 M (61:) s
+52.2 346 M
+(void synch_printer::print \(Type... params\) {) s
+25.8 334 M (62:) s
+52.2 334 M
+(   unique_lock<mutex> lock {out_mutex};) s
+25.8 322 M (63:) s
+52.2 322 M
+(   out << setw\(9\) << setprecision\(6\) << fixed) s
+25.8 310 M (64:) s
+52.2 310 M
+(       << timer.elapsed_nanoseconds\(\) << " ";) s
+25.8 298 M (65:) s
+52.2 298 M
+(   print_ \(params...\);) s
+25.8 286 M (66:) s
+52.2 286 M
+(   out << endl << flush;) s
+25.8 274 M (67:) s
+52.2 274 M
+(}) s
+25.8 262 M (68:) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (semaphilo.cpp) def
+/fdir () def
+/ftail (semaphilo.cpp) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (06/04/14) def
+/pagecountstr (/6) def
+/modtimestr (12:13:15) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (69:) s
+25.8 682 M (70:) s
+52.2 682 M
+(//) s
+25.8 670 M (71:) s
+52.2 670 M
+(// class semaphore) s
+25.8 658 M (72:) s
+52.2 658 M
+(//    count > 0: number to be let through the gate) s
+25.8 646 M (73:) s
+52.2 646 M
+(//    count = 0: gate is locked, nobody waiting) s
+25.8 634 M (74:) s
+52.2 634 M
+(//    count < 0: gate locked with -count threads waiting) s
+25.8 622 M (75:) s
+52.2 622 M
+(// semaphore lock\(1\) is a mutex) s
+25.8 610 M (76:) s
+52.2 610 M
+(//) s
+25.8 598 M (77:) s
+25.8 586 M (78:) s
+52.2 586 M
+(class semaphore {) s
+25.8 574 M (79:) s
+52.2 574 M
+(   private:) s
+25.8 562 M (80:) s
+52.2 562 M
+(      mutex lock;) s
+25.8 550 M (81:) s
+52.2 550 M
+(      condition_variable cond;) s
+25.8 538 M (82:) s
+52.2 538 M
+(      int count{};) s
+25.8 526 M (83:) s
+52.2 526 M
+(   public:) s
+25.8 514 M (84:) s
+52.2 514 M
+(      semaphore \(int count = 0\);) s
+25.8 502 M (85:) s
+52.2 502 M
+(      void down\(\); // Dijkstra's P \("proberen", Dutch "try"\)) s
+25.8 490 M (86:) s
+52.2 490 M
+(      void up\(\);   // Dijkstra's V \("verhogen", Dutch "raise"\)) s
+25.8 478 M (87:) s
+52.2 478 M
+(};) s
+25.8 466 M (88:) s
+25.8 454 M (89:) s
+52.2 454 M
+(semaphore::semaphore \(int count\): count\(count\) {) s
+25.8 442 M (90:) s
+52.2 442 M
+(}) s
+25.8 430 M (91:) s
+25.8 418 M (92:) s
+52.2 418 M
+(void semaphore::down\(\) {) s
+25.8 406 M (93:) s
+52.2 406 M
+(   unique_lock<mutex> ulock {lock};) s
+25.8 394 M (94:) s
+52.2 394 M
+(   --count;) s
+25.8 382 M (95:) s
+52.2 382 M
+(   if \(count < 0\) cond.wait \(ulock\);) s
+25.8 370 M (96:) s
+52.2 370 M
+(}) s
+25.8 358 M (97:) s
+25.8 346 M (98:) s
+52.2 346 M
+(void semaphore::up\(\) {) s
+25.8 334 M (99:) s
+52.2 334 M
+(   unique_lock<mutex> ulock {lock};) s
+19.2 322 M (100:) s
+52.2 322 M
+(   if \(count < 0\) cond.notify_one\(\);) s
+19.2 310 M (101:) s
+52.2 310 M
+(   ++count;) s
+19.2 298 M (102:) s
+52.2 298 M
+(}) s
+19.2 286 M (103:) s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (semaphilo.cpp) def
+/fdir () def
+/ftail (semaphilo.cpp) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (06/04/14) def
+/pagecountstr (/6) def
+/modtimestr (12:13:15) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (104:) s
+19.2 682 M (105:) s
+52.2 682 M
+(class fork_manager {) s
+19.2 670 M (106:) s
+52.2 670 M
+(   private:) s
+19.2 658 M (107:) s
+52.2 658 M
+(      enum fork_state {THINKING = 0, HUNGRY, EATING};) s
+19.2 646 M (108:) s
+52.2 646 M
+(      semaphore lock {1};) s
+19.2 634 M (109:) s
+52.2 634 M
+(      const size_t size;) s
+19.2 622 M (110:) s
+52.2 622 M
+(      vector<semaphore> waiting;) s
+19.2 610 M (111:) s
+52.2 610 M
+(      vector<fork_state> state;) s
+19.2 598 M (112:) s
+52.2 598 M
+(   private:) s
+19.2 586 M (113:) s
+52.2 586 M
+(      size_t left \(size_t id\) { return \(id + size - 1\) % size; }) s
+19.2 574 M (114:) s
+52.2 574 M
+(      size_t right \(size_t id\) { return \(id + 1\) % size; }) s
+19.2 562 M (115:) s
+52.2 562 M
+(      void check \(size_t id\);) s
+19.2 550 M (116:) s
+52.2 550 M
+(   public:) s
+19.2 538 M (117:) s
+52.2 538 M
+(      fork_manager \(size_t size\);) s
+19.2 526 M (118:) s
+52.2 526 M
+(      void take \(size_t id\);) s
+19.2 514 M (119:) s
+52.2 514 M
+(      void put \(size_t id\);) s
+19.2 502 M (120:) s
+52.2 502 M
+(};) s
+19.2 490 M (121:) s
+19.2 478 M (122:) s
+52.2 478 M
+(fork_manager::fork_manager \(size_t size\): size\(size\),) s
+19.2 466 M (123:) s
+52.2 466 M
+(              waiting \(size\), state\(size, THINKING\) {) s
+19.2 454 M (124:) s
+52.2 454 M
+(}) s
+19.2 442 M (125:) s
+19.2 430 M (126:) s
+52.2 430 M
+(void fork_manager::check \(size_t id\) {) s
+19.2 418 M (127:) s
+52.2 418 M
+(   if \(state[id] == HUNGRY and state[left\(id\)] != EATING) s
+19.2 406 M (128:) s
+52.2 406 M
+(                           and state[right\(id\)] != EATING\) {) s
+19.2 394 M (129:) s
+52.2 394 M
+(      state[id] = EATING;) s
+19.2 382 M (130:) s
+52.2 382 M
+(      waiting[id].up\(\);) s
+19.2 370 M (131:) s
+52.2 370 M
+(   }) s
+19.2 358 M (132:) s
+52.2 358 M
+(}) s
+19.2 346 M (133:) s
+19.2 334 M (134:) s
+52.2 334 M
+(void fork_manager::take \(size_t id\) {) s
+19.2 322 M (135:) s
+52.2 322 M
+(   lock.down\(\);) s
+19.2 310 M (136:) s
+52.2 310 M
+(   state[id] = HUNGRY;) s
+19.2 298 M (137:) s
+52.2 298 M
+(   check \(id\);) s
+19.2 286 M (138:) s
+52.2 286 M
+(   lock.up\(\);) s
+19.2 274 M (139:) s
+52.2 274 M
+(   waiting[id].down\(\);) s
+19.2 262 M (140:) s
+52.2 262 M
+(}) s
+19.2 250 M (141:) s
+19.2 238 M (142:) s
+52.2 238 M
+(void fork_manager::put \(size_t id\) {) s
+19.2 226 M (143:) s
+52.2 226 M
+(   lock.down\(\);) s
+19.2 214 M (144:) s
+52.2 214 M
+(   state[id] = THINKING;) s
+19.2 202 M (145:) s
+52.2 202 M
+(   check \(left \(id\)\);) s
+19.2 190 M (146:) s
+52.2 190 M
+(   check \(right \(id\)\);) s
+19.2 178 M (147:) s
+52.2 178 M
+(   lock.up\(\);) s
+19.2 166 M (148:) s
+52.2 166 M
+(}) s
+19.2 154 M (149:) s
+_R
+S
+%%Page: (5) 5
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 5 def
+/fname (semaphilo.cpp) def
+/fdir () def
+/ftail (semaphilo.cpp) def
+% User defined strings:
+/pagenumstr (5) def
+/moddatestr (06/04/14) def
+/pagecountstr (/6) def
+/modtimestr (12:13:15) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (150:) s
+19.2 682 M (151:) s
+52.2 682 M
+(//) s
+19.2 670 M (152:) s
+52.2 670 M
+(// Code to simulate one Dining Philosopher.) s
+19.2 658 M (153:) s
+52.2 658 M
+(//) s
+19.2 646 M (154:) s
+19.2 634 M (155:) s
+52.2 634 M
+(using normal_dist = normal_distribution<double>;) s
+19.2 622 M (156:) s
+52.2 622 M
+(using rand_engine = default_random_engine;) s
+19.2 610 M (157:) s
+52.2 610 M
+(using rand_gen = decltype \(bind \(normal_dist{}, rand_engine{}\)\);) s
+19.2 598 M (158:) s
+19.2 586 M (159:) s
+52.2 586 M
+(rand_gen make_rand \(double mean, double stdev\) {) s
+19.2 574 M (160:) s
+52.2 574 M
+(   auto seed = chrono::system_clock::now\(\).time_since_epoch\(\).count\(\);) s
+19.2 562 M (161:) s
+52.2 562 M
+(   rand_engine engine {seed};) s
+19.2 550 M (162:) s
+52.2 550 M
+(   normal_dist distribution \(mean, stdev\);) s
+19.2 538 M (163:) s
+52.2 538 M
+(   rand_gen rand = bind \(distribution, engine\);) s
+19.2 526 M (164:) s
+52.2 526 M
+(   return rand;) s
+19.2 514 M (165:) s
+52.2 514 M
+(}) s
+19.2 502 M (166:) s
+19.2 490 M (167:) s
+52.2 490 M
+(void perform \(synch_printer& mcout, rand_gen& rand, size_t cycle,) s
+19.2 478 M (168:) s
+52.2 478 M
+(              const string& ident, const string& activity\) {) s
+19.2 466 M (169:) s
+52.2 466 M
+(   long delay = rand\(\);) s
+19.2 454 M (170:) s
+52.2 454 M
+(   mcout.print \(ident, activity, " ", cycle, " \(", delay, "\)"\);) s
+19.2 442 M (171:) s
+52.2 442 M
+(   this_thread::sleep_for \(chrono::milliseconds \(delay\)\);) s
+19.2 430 M (172:) s
+52.2 430 M
+(}) s
+19.2 418 M (173:) s
+19.2 406 M (174:) s
+52.2 406 M
+(void philosopher \(size_t id, const string& name,) s
+19.2 394 M (175:) s
+52.2 394 M
+(                  size_t cycles, double mean, double stdev,) s
+19.2 382 M (176:) s
+52.2 382 M
+(                  fork_manager& forks, synch_printer& mcout\) {) s
+19.2 370 M (177:) s
+52.2 370 M
+(   rand_gen rand = make_rand \(mean, stdev\);) s
+19.2 358 M (178:) s
+52.2 358 M
+(   string ident = "\(" + to_string\(id\) + "\) " + name + " is ";) s
+19.2 346 M (179:) s
+52.2 346 M
+(   mcout.print \(ident, "STARTING"\);) s
+19.2 334 M (180:) s
+52.2 334 M
+(   for \(size_t cycle = 0; cycle < cycles; ++cycle\) {) s
+19.2 322 M (181:) s
+52.2 322 M
+(      perform \(mcout, rand, cycle, ident, "thinking"\);) s
+19.2 310 M (182:) s
+52.2 310 M
+(      mcout.print \(ident, "hungry ", cycle\);) s
+19.2 298 M (183:) s
+52.2 298 M
+(      forks.take \(id\);) s
+19.2 286 M (184:) s
+52.2 286 M
+(      perform \(mcout, rand, cycle, ident, "eating"\);) s
+19.2 274 M (185:) s
+52.2 274 M
+(      forks.put \(id\);) s
+19.2 262 M (186:) s
+52.2 262 M
+(   }) s
+19.2 250 M (187:) s
+52.2 250 M
+(   mcout.print \(ident, "FINISHED"\);) s
+19.2 238 M (188:) s
+52.2 238 M
+(}) s
+19.2 226 M (189:) s
+_R
+S
+%%Page: (6) 6
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 6 def
+/fname (semaphilo.cpp) def
+/fdir () def
+/ftail (semaphilo.cpp) def
+% User defined strings:
+/pagenumstr (6) def
+/moddatestr (06/04/14) def
+/pagecountstr (/6) def
+/modtimestr (12:13:15) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (190:) s
+19.2 682 M (191:) s
+52.2 682 M
+(//) s
+19.2 670 M (192:) s
+52.2 670 M
+(// Host at the Symposium.) s
+19.2 658 M (193:) s
+52.2 658 M
+(//) s
+19.2 646 M (194:) s
+52.2 646 M
+(// In ancient Greece, the symposium \(Greek ######### sympósion,) s
+19.2 634 M (195:) s
+52.2 634 M
+(// from ######### sympínein, "to drink together"\) was a drinking) s
+19.2 622 M (196:) s
+52.2 622 M
+(// party.  Literary works that describe or take place at a) s
+19.2 610 M (197:) s
+52.2 610 M
+(// symposium include two Socratic dialogues, Plato's Symposium and) s
+19.2 598 M (198:) s
+52.2 598 M
+(// Xenophon's Symposium, as well as a number of Greek poems such) s
+19.2 586 M (199:) s
+52.2 586 M
+(// as the elegies of Theognis of Megara.) s
+19.2 574 M (200:) s
+52.2 574 M
+(//) s
+19.2 562 M (201:) s
+19.2 550 M (202:) s
+52.2 550 M
+(int main\(\) {) s
+19.2 538 M (203:) s
+52.2 538 M
+(   synch_printer mcout {cout};) s
+19.2 526 M (204:) s
+52.2 526 M
+(   mcout.print \("Symposium STARTING"\);) s
+19.2 514 M (205:) s
+52.2 514 M
+(   vector<string> names = {) s
+19.2 502 M (206:) s
+52.2 502 M
+(      "Pythagoras",) s
+19.2 490 M (207:) s
+52.2 490 M
+(      "Socrates",) s
+19.2 478 M (208:) s
+52.2 478 M
+(      "Plato",) s
+19.2 466 M (209:) s
+52.2 466 M
+(      "Aristotle",) s
+19.2 454 M (210:) s
+52.2 454 M
+(      "Zeno",) s
+19.2 442 M (211:) s
+52.2 442 M
+(   };) s
+19.2 430 M (212:) s
+52.2 430 M
+(   fork_manager forks {names.size\(\)};) s
+19.2 418 M (213:) s
+52.2 418 M
+(   vector<thread> philos;) s
+19.2 406 M (214:) s
+52.2 406 M
+(   for \(size_t id = 0; id < names.size\(\); ++id\) {) s
+19.2 394 M (215:) s
+52.2 394 M
+(      philos.push_back \(thread \(philosopher, id, ref \(names[id]\),) s
+19.2 382 M (216:) s
+52.2 382 M
+(                                5, 1000, 250,) s
+19.2 370 M (217:) s
+52.2 370 M
+(                                ref \(forks\), ref \(mcout\)\)\);) s
+19.2 358 M (218:) s
+52.2 358 M
+(   }) s
+19.2 346 M (219:) s
+52.2 346 M
+(   for \(auto& phil: philos\) phil.join\(\);) s
+19.2 334 M (220:) s
+52.2 334 M
+(   mcout.print \("Symposium FINISHED"\);) s
+19.2 322 M (221:) s
+52.2 322 M
+(   return 0;) s
+19.2 310 M (222:) s
+52.2 310 M
+(}) s
+19.2 298 M (223:) s
+19.2 286 M (224:) s
+52.2 286 M
+(//TEST// semaphilo >semaphilo.out 2>&1) s
+19.2 274 M (225:) s
+52.2 274 M
+(//TEST// mkpspdf semaphilo.ps semaphilo.cpp* semaphilo.out) s
+19.2 262 M (226:) s
+_R
+S
+%%Page: (1) 7
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (semaphilo.cpp.log) def
+/fdir () def
+/ftail (semaphilo.cpp.log) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (06/04/14) def
+/pagecountstr (/1) def
+/modtimestr (12:13:16) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting semaphilo.cpp) s
+32.4 682 M (2:) s
+52.2 682 M
+(semaphilo.cpp:) s
+32.4 670 M (3:) s
+52.2 670 M
+(     $Id: semaphilo.cpp,v 1.22 2014-06-04 12:13:15-07 - - $) s
+32.4 658 M (4:) s
+52.2 658 M
+(g++ -g -O0 -Wall -Wextra -std=gnu++11 semaphilo.cpp -o semaphilo -lglut ) s
+5 646 M
+(-lGLU -lGL -lX11 -lm -lrt) s
+32.4 634 M (5:) s
+52.2 634 M
+(rm -f semaphilo.o) s
+32.4 622 M (6:) s
+52.2 622 M
+(@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished semaphilo.cpp) s
+_R
+S
+%%Page: (1) 8
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (semaphilo.out) def
+/fdir () def
+/ftail (semaphilo.out) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (06/04/14) def
+/pagecountstr (/2) def
+/modtimestr (12:13:30) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+( 0.000005 Symposium STARTING) s
+32.4 682 M (2:) s
+52.2 682 M
+( 0.001190 \(0\) Pythagoras is STARTING) s
+32.4 670 M (3:) s
+52.2 670 M
+( 0.001289 \(2\) Plato is STARTING) s
+32.4 658 M (4:) s
+52.2 658 M
+( 0.001354 \(2\) Plato is thinking 0 \(1187\)) s
+32.4 646 M (5:) s
+52.2 646 M
+( 0.001388 \(1\) Socrates is STARTING) s
+32.4 634 M (6:) s
+52.2 634 M
+( 0.001409 \(1\) Socrates is thinking 0 \(703\)) s
+32.4 622 M (7:) s
+52.2 622 M
+( 0.001433 \(0\) Pythagoras is thinking 0 \(637\)) s
+32.4 610 M (8:) s
+52.2 610 M
+( 0.001468 \(3\) Aristotle is STARTING) s
+32.4 598 M (9:) s
+52.2 598 M
+( 0.001528 \(3\) Aristotle is thinking 0 \(933\)) s
+25.8 586 M (10:) s
+52.2 586 M
+( 0.001554 \(4\) Zeno is STARTING) s
+25.8 574 M (11:) s
+52.2 574 M
+( 0.001582 \(4\) Zeno is thinking 0 \(1223\)) s
+25.8 562 M (12:) s
+52.2 562 M
+( 0.638537 \(0\) Pythagoras is hungry 0) s
+25.8 550 M (13:) s
+52.2 550 M
+( 0.638578 \(0\) Pythagoras is eating 0 \(979\)) s
+25.8 538 M (14:) s
+52.2 538 M
+( 0.704488 \(1\) Socrates is hungry 0) s
+25.8 526 M (15:) s
+52.2 526 M
+( 0.934618 \(3\) Aristotle is hungry 0) s
+25.8 514 M (16:) s
+52.2 514 M
+( 0.934662 \(3\) Aristotle is eating 0 \(588\)) s
+25.8 502 M (17:) s
+52.2 502 M
+( 1.188519 \(2\) Plato is hungry 0) s
+25.8 490 M (18:) s
+52.2 490 M
+( 1.224734 \(4\) Zeno is hungry 0) s
+25.8 478 M (19:) s
+52.2 478 M
+( 1.522758 \(3\) Aristotle is thinking 1 \(555\)) s
+25.8 466 M (20:) s
+52.2 466 M
+( 1.522807 \(2\) Plato is eating 0 \(1046\)) s
+25.8 454 M (21:) s
+52.2 454 M
+( 1.617665 \(0\) Pythagoras is thinking 1 \(799\)) s
+25.8 442 M (22:) s
+52.2 442 M
+( 1.617701 \(4\) Zeno is eating 0 \(1068\)) s
+25.8 430 M (23:) s
+52.2 430 M
+( 2.077874 \(3\) Aristotle is hungry 1) s
+25.8 418 M (24:) s
+52.2 418 M
+( 2.416759 \(0\) Pythagoras is hungry 1) s
+25.8 406 M (25:) s
+52.2 406 M
+( 2.568970 \(2\) Plato is thinking 1 \(872\)) s
+25.8 394 M (26:) s
+52.2 394 M
+( 2.569012 \(1\) Socrates is eating 0 \(1128\)) s
+25.8 382 M (27:) s
+52.2 382 M
+( 2.685863 \(4\) Zeno is thinking 1 \(592\)) s
+25.8 370 M (28:) s
+52.2 370 M
+( 2.685891 \(3\) Aristotle is eating 1 \(905\)) s
+25.8 358 M (29:) s
+52.2 358 M
+( 3.277906 \(4\) Zeno is hungry 1) s
+25.8 346 M (30:) s
+52.2 346 M
+( 3.441069 \(2\) Plato is hungry 1) s
+25.8 334 M (31:) s
+52.2 334 M
+( 3.591004 \(4\) Zeno is eating 1 \(768\)) s
+25.8 322 M (32:) s
+52.2 322 M
+( 3.591045 \(3\) Aristotle is thinking 2 \(950\)) s
+25.8 310 M (33:) s
+52.2 310 M
+( 3.697158 \(1\) Socrates is thinking 1 \(673\)) s
+25.8 298 M (34:) s
+52.2 298 M
+( 3.697200 \(2\) Plato is eating 1 \(981\)) s
+25.8 286 M (35:) s
+52.2 286 M
+( 4.359104 \(4\) Zeno is thinking 2 \(1300\)) s
+25.8 274 M (36:) s
+52.2 274 M
+( 4.359135 \(0\) Pythagoras is eating 1 \(721\)) s
+25.8 262 M (37:) s
+52.2 262 M
+( 4.370256 \(1\) Socrates is hungry 1) s
+25.8 250 M (38:) s
+52.2 250 M
+( 4.541139 \(3\) Aristotle is hungry 2) s
+25.8 238 M (39:) s
+52.2 238 M
+( 4.678281 \(2\) Plato is thinking 2 \(610\)) s
+25.8 226 M (40:) s
+52.2 226 M
+( 4.678329 \(3\) Aristotle is eating 2 \(1008\)) s
+25.8 214 M (41:) s
+52.2 214 M
+( 5.080245 \(0\) Pythagoras is thinking 2 \(1008\)) s
+25.8 202 M (42:) s
+52.2 202 M
+( 5.080287 \(1\) Socrates is eating 1 \(976\)) s
+25.8 190 M (43:) s
+52.2 190 M
+( 5.288387 \(2\) Plato is hungry 2) s
+25.8 178 M (44:) s
+52.2 178 M
+( 5.659250 \(4\) Zeno is hungry 2) s
+25.8 166 M (45:) s
+52.2 166 M
+( 5.686498 \(3\) Aristotle is thinking 3 \(1196\)) s
+25.8 154 M (46:) s
+52.2 154 M
+( 5.686549 \(4\) Zeno is eating 2 \(1039\)) s
+25.8 142 M (47:) s
+52.2 142 M
+( 6.056378 \(1\) Socrates is thinking 2 \(1481\)) s
+25.8 130 M (48:) s
+52.2 130 M
+( 6.056399 \(2\) Plato is eating 2 \(1136\)) s
+25.8 118 M (49:) s
+52.2 118 M
+( 6.088413 \(0\) Pythagoras is hungry 2) s
+25.8 106 M (50:) s
+52.2 106 M
+( 6.725713 \(4\) Zeno is thinking 3 \(949\)) s
+25.8 94 M (51:) s
+52.2 94 M
+( 6.725748 \(0\) Pythagoras is eating 2 \(1049\)) s
+25.8 82 M (52:) s
+52.2 82 M
+( 6.882674 \(3\) Aristotle is hungry 3) s
+25.8 70 M (53:) s
+52.2 70 M
+( 7.192532 \(2\) Plato is thinking 3 \(1046\)) s
+25.8 58 M (54:) s
+52.2 58 M
+( 7.192581 \(3\) Aristotle is eating 3 \(893\)) s
+25.8 46 M (55:) s
+52.2 46 M
+( 7.537529 \(1\) Socrates is hungry 2) s
+25.8 34 M (56:) s
+52.2 34 M
+( 7.674818 \(4\) Zeno is hungry 3) s
+25.8 22 M (57:) s
+52.2 22 M
+( 7.774931 \(0\) Pythagoras is thinking 3 \(1164\)) s
+25.8 10 M (58:) s
+52.2 10 M
+( 7.774964 \(1\) Socrates is eating 2 \(1386\)) s
+_R
+S
+%%Page: (2) 9
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (semaphilo.out) def
+/fdir () def
+/ftail (semaphilo.out) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (06/04/14) def
+/pagecountstr (/2) def
+/modtimestr (12:13:30) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (59:) s
+52.2 694 M
+( 8.085671 \(3\) Aristotle is thinking 4 \(1193\)) s
+25.8 682 M (60:) s
+52.2 682 M
+( 8.085725 \(4\) Zeno is eating 3 \(1308\)) s
+25.8 670 M (61:) s
+52.2 670 M
+( 8.238712 \(2\) Plato is hungry 3) s
+25.8 658 M (62:) s
+52.2 658 M
+( 8.939092 \(0\) Pythagoras is hungry 3) s
+25.8 646 M (63:) s
+52.2 646 M
+( 9.161135 \(1\) Socrates is thinking 3 \(822\)) s
+25.8 634 M (64:) s
+52.2 634 M
+( 9.161196 \(2\) Plato is eating 3 \(615\)) s
+25.8 622 M (65:) s
+52.2 622 M
+( 9.278847 \(3\) Aristotle is hungry 4) s
+25.8 610 M (66:) s
+52.2 610 M
+( 9.393907 \(4\) Zeno is thinking 4 \(1270\)) s
+25.8 598 M (67:) s
+52.2 598 M
+( 9.393966 \(0\) Pythagoras is eating 3 \(816\)) s
+25.8 586 M (68:) s
+52.2 586 M
+( 9.776293 \(2\) Plato is thinking 4 \(1045\)) s
+25.8 574 M (69:) s
+52.2 574 M
+( 9.776341 \(3\) Aristotle is eating 4 \(325\)) s
+25.8 562 M (70:) s
+52.2 562 M
+( 9.983247 \(1\) Socrates is hungry 3) s
+25.8 550 M (71:) s
+52.2 550 M
+(10.101434 \(3\) Aristotle is FINISHED) s
+25.8 538 M (72:) s
+52.2 538 M
+(10.210066 \(0\) Pythagoras is thinking 4 \(1238\)) s
+25.8 526 M (73:) s
+52.2 526 M
+(10.210123 \(1\) Socrates is eating 3 \(1068\)) s
+25.8 514 M (74:) s
+52.2 514 M
+(10.664083 \(4\) Zeno is hungry 4) s
+25.8 502 M (75:) s
+52.2 502 M
+(10.664102 \(4\) Zeno is eating 4 \(1202\)) s
+25.8 490 M (76:) s
+52.2 490 M
+(10.821456 \(2\) Plato is hungry 4) s
+25.8 478 M (77:) s
+52.2 478 M
+(11.278285 \(1\) Socrates is thinking 4 \(776\)) s
+25.8 466 M (78:) s
+52.2 466 M
+(11.278308 \(2\) Plato is eating 4 \(1203\)) s
+25.8 454 M (79:) s
+52.2 454 M
+(11.448249 \(0\) Pythagoras is hungry 4) s
+25.8 442 M (80:) s
+52.2 442 M
+(11.866242 \(4\) Zeno is FINISHED) s
+25.8 430 M (81:) s
+52.2 430 M
+(11.866291 \(0\) Pythagoras is eating 4 \(944\)) s
+25.8 418 M (82:) s
+52.2 418 M
+(12.054365 \(1\) Socrates is hungry 4) s
+25.8 406 M (83:) s
+52.2 406 M
+(12.481445 \(2\) Plato is FINISHED) s
+25.8 394 M (84:) s
+52.2 394 M
+(12.810390 \(0\) Pythagoras is FINISHED) s
+25.8 382 M (85:) s
+52.2 382 M
+(12.810439 \(1\) Socrates is eating 4 \(1031\)) s
+25.8 370 M (86:) s
+52.2 370 M
+(13.841611 \(1\) Socrates is FINISHED) s
+25.8 358 M (87:) s
+52.2 358 M
+(13.841778 Symposium FINISHED) s
+_R
+S
+%%Trailer
+%%Pages: 9
+%%DocumentNeededResources: font Times-Roman Courier-Bold Times-Bold 
+%%EOF

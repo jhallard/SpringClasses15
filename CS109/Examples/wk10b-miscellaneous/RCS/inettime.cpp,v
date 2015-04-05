@@ -1,0 +1,386 @@
+head	1.11;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.11
+date	2013.08.21.03.20.12;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.08.21.03.19.30;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.08.21.03.12.31;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.03.15.00.45.40;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.03.15.00.45.14;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.03.15.00.43.56;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.03.15.00.43.41;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.03.15.00.40.00;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.03.15.00.37.17;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.03.14.23.04.25;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.03.14.23.03.49;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.11
+log
+@-
+@
+text
+@// $Id: inettime.cpp,v 1.10 2013-08-20 20:19:30-07 - - $
+
+//
+// Print time from internet time server.
+//
+
+#include <cerrno>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
+
+#include <libgen.h>
+#include <netdb.h>
+
+using namespace std;
+
+// Unix epoch is 1970-01-01 00:00:00 UTC
+// Inet epoch is 1900-01-01 00:00:00 UTC
+const long INET_UNIX_YEARS = 1970 - 1900;
+const long INET_UNIX_DAYS = INET_UNIX_YEARS * 365 + INET_UNIX_YEARS / 4;
+const long INET_UNIX_SECONDS = INET_UNIX_DAYS * 24 * 3600;
+const string DEFAULT_HOST = "tick.ucla.edu";
+
+string exec_name;
+
+void crash (const string &object, const string &error) {
+   cerr << exec_name << ": " << object << ": " << error << endl;
+   exit (EXIT_FAILURE);
+}
+
+void print_time (const string &label, const time_t hosttime) {
+   char timebuf[256];
+   strftime (timebuf, sizeof timebuf, "%a %b %d %T %Y %Z",
+             localtime (&hosttime));
+   cout << setiosflags(ios::left) << setw(5) << label << " = "
+        << setiosflags(ios::right) << setw(12) << hosttime
+        << " = " << timebuf << endl;
+}
+
+template <typename type_t>
+string to_string (const type_t &that) {
+   ostringstream stream;
+   stream << that;
+   return stream.str ();
+}
+
+string host_string (char *host_addr) {
+   string result;
+   for (size_t itor = 0; itor < 4; ++itor) {
+      if (itor > 0) result += ".";
+      result += to_string (host_addr[itor] & 0xFF);
+   }
+   return result;
+}
+
+
+hostent *get_hostent (const string &hostname) {
+   hostent *hostent = gethostbyname (hostname.c_str());
+   if (hostent == NULL) crash (hostname, hstrerror (h_errno));
+   cout << hostname << " = " << hostent->h_name << " = "
+        << host_string (hostent->h_addr) << endl;
+   return hostent;
+}
+
+int get_sock_fd (char *host_addr, int ipport) {
+   int sockfd = socket (AF_INET, SOCK_STREAM, 0);
+   if (sockfd < 0) crash ("socket()", strerror (errno));
+   sockaddr_in sock;
+   sock.sin_family = AF_INET; 
+   sock.sin_port = htons (ipport);
+   sock.sin_addr = *reinterpret_cast<in_addr *> (host_addr);
+   int connect_rc = connect (sockfd,
+               reinterpret_cast<sockaddr *> (&sock), sizeof sock);
+   if (connect_rc < 0) {
+      crash ("connect(" + host_string(host_addr) + ":"
+             + to_string (ipport) + ")", strerror (errno));
+   }
+   return sockfd;
+}
+
+string visible (const char *const daytime) {
+   stringstream result;
+   for (const char *itor = daytime; *itor != '\0'; ++itor)
+      if (isprint(*itor)) result << *itor;
+         else result << "\\x" << uppercase << hex << int (*itor);
+   return result.str();
+}
+
+
+int main (int argc, char **argv) {
+   exec_name = basename (argv[0]);
+
+   cout << "INET_UNIX_YEARS = " << INET_UNIX_YEARS << endl;
+   cout << "INET_UNIX_DAYS = " << INET_UNIX_DAYS << endl;
+   cout << "INET_UNIX_SECONDS = " << INET_UNIX_SECONDS << endl;
+   cout << "IPPORT_TIMESERVER = " << IPPORT_TIMESERVER << endl;
+   cout << "IPPORT_DAYTIME = " << IPPORT_DAYTIME << endl;
+
+   // Get Inet host address and print it.
+   string hostname = argc < 2 ? DEFAULT_HOST : argv[1];
+   if (hostname == "-") hostname = "localhost";
+   hostent *hostent = get_hostent (hostname);
+
+   // Get information from IPPORT_TIMESERVER (port 37).
+   int time_sock_fd = get_sock_fd (hostent->h_addr, IPPORT_TIMESERVER);
+   uint32_t inettime;
+   int rc = read (time_sock_fd, &inettime, sizeof inettime);
+   if (rc != sizeof inettime) crash ("socket", "read failed");
+   close (time_sock_fd);
+   uint32_t hosttime = ntohl (inettime) - INET_UNIX_SECONDS;
+   print_time ("inet", hosttime);
+   print_time ("local", time (NULL));
+
+   // Get information from IPPORT_DAYTIME (port 13).
+   int date_sock_fd = get_sock_fd (hostent->h_addr, IPPORT_DAYTIME);
+   char daytime_buf[1024];
+   int nbytes = read (date_sock_fd, daytime_buf, sizeof daytime_buf);
+   if (nbytes <= 0) crash ("socket", "read failed");
+   close (date_sock_fd);
+   daytime_buf[nbytes] = '\0';
+   cout << "daytime = \"" << visible (daytime_buf) << "\"" << endl;
+
+   return EXIT_SUCCESS;
+}
+
+//TEST// ./inettime >inettime.out 2>&1
+//TEST// mkpspdf inettime.ps inettime.cpp* inettime.out
+
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inettime.cpp,v 1.9 2013-08-20 20:12:31-07 - - $
+d89 1
+a89 1
+                     else result << "\\x" << uppercase << hex << *itor;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inettime.cpp,v 1.8 2013-03-14 17:45:40-07 - - $
+d10 1
+d85 9
+d100 2
+a114 2
+   cout << "IPPORT_TIMESERVER (port " << IPPORT_TIMESERVER << "):"
+        << endl;
+d125 1
+a125 2
+   cout << "IPPORT_DAYTIME (port " << IPPORT_DAYTIME << ") = \""
+        << daytime_buf << "\"" << endl;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inettime.cpp,v 1.7 2013-03-14 17:45:14-07 - - $
+d103 2
+d115 2
+a116 1
+   cout << "IPPORT_DAYTIME = \"" << daytime_buf << "\"" << endl;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inettime.cpp,v 1.4 2013-03-14 17:40:00-07 - - $
+d59 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d112 1
+a112 1
+   cout << "IPPORT_DAYTIME = " << daytime_buf << endl;
+@
+
+
+1.5
+log
+@-
+@
+text
+@d54 1
+a54 1
+      result += to_string (host_addr[itor] & 0xFF));
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inettime.cpp,v 1.3 2013-03-14 17:37:17-07 - - $
+d43 7
+d51 4
+a54 4
+   ostringstream result;
+   for (size_t byte = 0; byte < 4; ++byte) {
+      if (byte > 0) result << ".";
+      result << (static_cast<unsigned> (host_addr[byte]) & 0xFF);
+d56 1
+a56 1
+   return result.str();
+d77 2
+a78 3
+      ostringstream object;
+      crash ("connect(" + host_string(host_addr) + ":" + ipport + ")",
+             strerror (errno));
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inettime.cpp,v 1.1 2013-03-14 16:03:49-07 - - $
+d34 9
+d71 2
+a72 3
+      object << "connect(" << host_string(host_addr)
+             << ":" << ipport << ")";
+      crash (object.str(), strerror (errno));
+a76 9
+void print_time (const string &label, const time_t hosttime) {
+   char timebuf[256];
+   strftime (timebuf, sizeof timebuf, "%a %b %d %T %Y %Z",
+             localtime (&hosttime));
+   cout << setiosflags(ios::left) << setw(5) << label << " = "
+        << setiosflags(ios::right) << setw(12) << hosttime
+        << " = " << timebuf << endl;
+}
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d7 1
+d9 2
+d12 1
+d29 47
+a75 4
+void h_error (string object) {
+   cerr << exec_name << ": " << object << ": " << hstrerror (h_errno)
+        << endl;
+	exit (EXIT_FAILURE);
+d88 20
+a107 7
+   struct hostent *hostent = gethostbyname (hostname.c_str());
+   if (hostent == NULL) h_error (hostname);
+   cout << hostname << " = " << hostent->h_name << " = ";
+   for (size_t byte = 0; byte < 4; ++byte) {
+      cout << static_cast<unsigned int> (hostent->h_addr[byte]) << ".";
+   }
+   cout << endl;
+d111 4
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inettime.cpp,v 1.1 2013-03-14 16:03:01-07 - - $
+d41 1
+a41 1
+   struct hostent *hostent = gethostbyname (hostname);
+d43 1
+a43 1
+   cout << hostname << " = " << hostent->h_name << " = "
+@

@@ -1,0 +1,45 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2012.05.31.02.46.24;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id: getallfonts.java,v 1.16 2012-05-30 19:44:53-07 - - $
+
+//
+// Print all Java font names.
+//
+
+import java.awt.*;
+import java.util.*;
+import static java.lang.System.*;
+import static java.util.Collections.*;
+
+class showfontfamilies {
+   public static void main (String[] args) {
+      GraphicsEnvironment grenv =
+      GraphicsEnvironment.getLocalGraphicsEnvironment();
+      for (String fontname: grenv.getAvailableFontFamilyNames()) {
+         out.printf ("%s%n", fontname);
+      }
+   }
+}
+
+//TEST// getallfonts
+@

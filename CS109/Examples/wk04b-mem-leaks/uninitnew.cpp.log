@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting uninitnew.cpp
+uninitnew.cpp: $Id: uninitnew.cpp,v 1.2 2014-04-22 18:55:00-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 uninitnew.cpp -o uninitnew -lm
+rm -f uninitnew.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished uninitnew.cpp

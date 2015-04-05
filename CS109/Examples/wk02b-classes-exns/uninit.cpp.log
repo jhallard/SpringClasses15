@@ -1,0 +1,16 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting uninit.cpp
+* uninit.cpp: $Id: uninit.cpp,v 1.1 2012-04-10 19:08:04-07 - - $
+* g++ -g -O0 -Wall -Wextra -std=gnu++11 uninit.cpp -o uninit -lm
+* uninit.cpp:22:5: warning: unused parameter 'argc'
+[-Wunused-parameter]
+*  int main (int argc, char **argv) {
+*      ^
+* uninit.cpp:22:5: warning: unused parameter 'argv'
+[-Wunused-parameter]
+* uninit.cpp: In function 'int main(int, char**)':
+* uninit.cpp:24:12: warning: 'an_int' is used uninitialized in this
+function [-Wuninitialized]
+*     cout << an_int << endl;
+*             ^
+* rm -f uninit.o
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished uninit.cpp

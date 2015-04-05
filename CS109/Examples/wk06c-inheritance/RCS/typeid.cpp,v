@@ -1,0 +1,524 @@
+head	1.17;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.17
+date	2015.02.11.01.53.15;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2015.02.11.01.52.28;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.07.20.03.00.50;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2013.07.20.03.00.30;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.07.20.02.59.27;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.07.20.02.58.30;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.07.20.02.55.21;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.07.20.02.53.14;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.07.20.02.48.16;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.07.20.02.47.53;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.07.20.02.47.28;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.07.20.02.45.18;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.25.02.53.19;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.25.02.51.50;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.25.02.51.36;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.25.02.50.24;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.25.02.49.28;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.17
+log
+@-
+@
+text
+@// $Id: typeid.cpp,v 1.16 2015-02-10 17:52:28-08 - - $
+
+//
+// Show a few classes with inheritance.
+// All are inline for simplicity.
+// Suppress copy ctor and operator= because of inheritance.
+// Always make dtor virtual if any functions are virtual.
+//
+
+#include <iostream>
+#include <string>
+#include <typeinfo>
+
+using namespace std;
+#define TRACE(STMT) cout << "TRACE (" << #STMT << ")" << endl; STMT
+#define SHOW cout << this << "->" << __func__ << endl;
+
+class base {
+   private:
+      string baseid;
+      base (const base&) = delete;
+      base& operator= (const base&) = delete;
+   public:
+      base(): baseid ("(base)") { SHOW }
+      virtual ~base() { SHOW }
+      virtual void print() { cout << baseid; }
+};
+
+class extend: public base {
+   private:
+      string extendid;
+   public:
+      extend(): extendid ("(extend)") { SHOW }
+      virtual ~extend() { SHOW }
+      virtual void print() { base::print(); cout << "::" << extendid; }
+};
+
+class other: public base {
+   private:
+      string otherid;
+   public:
+      other(): otherid ("(other)") { SHOW }
+      virtual ~other() { SHOW }
+      virtual void print() { base::print(); cout << "::" << otherid; }
+};
+
+
+int main() {
+   TRACE (cout << sizeof (base) << endl;)
+   TRACE (cout << sizeof (extend) << endl;)
+   TRACE (cout << sizeof (other) << endl;)
+   TRACE (base *bptr = new base();)
+   TRACE (cout << "typeid *bptr = " << typeid (*bptr).name() << endl;)
+   TRACE (bptr->print(); cout << endl;)
+   TRACE (base *dptr = new extend();)
+   TRACE (cout << "typeid *dptr = " << typeid (*dptr).name() << endl;)
+   TRACE (dptr->print(); cout << endl;)
+   TRACE (base *optr = new other();)
+   TRACE (cout << "typeid *optr = " << typeid (*optr).name() << endl;)
+   TRACE (optr->print(); cout << endl;)
+   TRACE (delete optr;)
+   TRACE (delete bptr;)
+   TRACE (bptr = dptr;)
+   TRACE (cout << "typeid *bptr = " << typeid (*bptr).name() << endl;)
+   TRACE (bptr->print(); cout << endl;)
+   TRACE (dptr = dynamic_cast<extend *> (bptr);)
+   TRACE (cout << "typeid *dptr = " << typeid (*dptr).name() << endl;)
+   TRACE (dptr->print(); cout << endl;)
+   TRACE (extend dloc;)
+   TRACE (cout << "typeid dloc = " << typeid (dloc).name() << endl;)
+   TRACE (dloc.print(); cout << endl;)
+   TRACE (delete dptr;)
+   //error: 'base::base(const base&)' is private
+   //Otherwise we would get slicing.
+   TRACE (return 0;)
+}
+
+//TEST// grind="valgrind --leak-check=full --show-reachable=yes"
+//TEST// $grind typeid >typeid.out 2>&1
+//TEST// mkpspdf typeid.ps typeid.cpp* typeid.out*
+
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.15 2013-07-19 20:00:50-07 - - $
+d78 2
+a79 3
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=typeid.out.grind typeid >typeid.out 2>&1
+a80 1
+*/
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.14 2013-07-19 20:00:30-07 - - $
+d21 2
+a22 2
+      base (const base &) = delete;
+      base &operator= (const base &) = delete;
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.13 2013-07-19 19:59:27-07 - - $
+d16 1
+a16 1
+#define SHOW cout << *this << "->" << __func__ << endl;
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.12 2013-07-19 19:58:30-07 - - $
+d16 1
+a16 1
+#define SHOW cout << __func__ << endl;
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.11 2013-07-19 19:55:21-07 - - $
+d80 1
+a80 1
+//TEST//       typeid >typeid.out 2>&1
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.10 2013-07-19 19:53:14-07 - - $
+d20 1
+a20 1
+      string basename;
+d24 1
+a24 1
+      base(): basename ("(base)") { SHOW }
+d26 1
+a26 1
+      void print() { cout << basename; }
+d29 1
+a29 1
+class derived: public base {
+d31 1
+a31 1
+      string derivedname;
+d33 3
+a35 3
+      derived(): derivedname ("(derived)") { SHOW }
+      virtual ~derived() { SHOW }
+      void print() { base::print(); cout << "::" << derivedname; }
+d40 1
+a40 1
+      string othername;
+d42 1
+a42 1
+      other(): othername ("(other)") { SHOW }
+d44 1
+a44 1
+      void print() { base::print(); cout << "::" << othername; }
+d50 1
+a50 1
+   TRACE (cout << sizeof (derived) << endl;)
+d54 2
+a55 2
+   TRACE (bptr->print();)
+   TRACE (base *dptr = new derived();)
+d66 1
+a66 1
+   TRACE (dptr = dynamic_cast<derived *> (bptr);)
+d69 1
+a69 1
+   TRACE (derived dloc;)
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.9 2013-07-19 19:48:16-07 - - $
+d47 1
+d57 1
+a57 1
+   TRACE (dptr->print();)
+d60 1
+a60 1
+   TRACE (optr->print();)
+d65 1
+a65 1
+   TRACE (bptr->print();)
+d68 1
+a68 1
+   TRACE (dptr->print();)
+d71 2
+a72 1
+   TRACE (dloc.print();)
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.8 2013-07-19 19:47:53-07 - - $
+d21 2
+a22 2
+      base (const base &);
+      base &operator= (const base &);
+d26 1
+d35 1
+d44 1
+d53 1
+d56 1
+d59 3
+d64 1
+d67 1
+d70 1
+a70 1
+   //base bloc = dloc;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.7 2013-07-19 19:47:28-07 - - $
+d45 3
+a47 3
+   TRACE (cout << sizeof base << endl;)
+   TRACE (cout << sizeof derived << endl;)
+   TRACE (cout << sizeof other << endl;)
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.6 2013-07-19 19:45:18-07 - - $
+d45 3
+a47 3
+   TRACE (cout << sizeof base << endl;
+   TRACE (cout << sizeof derived << endl;
+   TRACE (cout << sizeof other << endl;
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.5 2012-04-24 19:53:19-07 - - $
+d16 1
+a16 1
+#define SHOW cout << __func__ endl;
+d60 3
+a62 3
+   TRACE (//base bloc = dloc;)
+   TRACE (//error: 'base::base(const base&)' is private)
+   TRACE (//Otherwise we would get slicing.)
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.2 2012-04-24 19:50:24-07 - - $
+d15 2
+d20 1
+d24 2
+a25 3
+      base(): basename ("(base)") {};
+      virtual ~base() {};
+      string basename;
+d29 2
+d32 2
+a33 3
+      derived(): derivedname ("(derived)") {};
+      virtual ~derived() {};
+      string derivedname;
+d37 2
+d40 2
+a41 3
+      other(): othername ("(other)") {};
+      virtual ~other() {};
+      string othername;
+d45 19
+a63 18
+   base *bptr = new base();
+   cout << "typeid *bptr = " << typeid (*bptr).name() << endl;
+   base *dptr = new derived();
+   cout << "typeid *dptr = " << typeid (*dptr).name() << endl;
+   base *optr = new other();
+   cout << "typeid *optr = " << typeid (*optr).name() << endl;
+   bptr = dptr;
+   cout << "typeid *bptr = " << typeid (*bptr).name() << endl;
+   dptr = dynamic_cast<derived *> (bptr);
+   cout << "typeid *dptr = " << typeid (*dptr).name() << endl;
+   derived dloc;
+   cout << "typeid dloc = " << typeid (dloc).name() << endl;
+
+   //base bloc = dloc;
+   //error: 'base::base(const base&)' is private
+   //Otherwise we would get slicing.
+
+   return 0;
+a67 1
+//TEST//       --log-file=typeid.out.grind \
+@
+
+
+1.4
+log
+@-
+@
+text
+@d7 1
+d54 3
+a56 2
+   base bloc = dloc;
+   cout << "typeid bloc = " << typeid (bloc).name() << endl;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d53 2
+a54 2
+   //base bloc = dloc;
+   //cout << "typeid bloc = " << typeid (bloc).name() << endl;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.1 2012-04-24 19:49:28-07 - - $
+d16 3
+d52 5
+a56 2
+   base bloc = dloc;
+   cout << "typeid bloc = " << typeid (bloc).name() << endl;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: typeid.cpp,v 1.1 2011-02-04 20:02:02-08 - - $
+a15 3
+   private:
+      base (const base &);
+      base &operator= (const base &);
+@

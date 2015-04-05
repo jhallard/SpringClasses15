@@ -1,0 +1,127 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.5
+date	2014.03.31.20.02.14;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.03.28.02.09.27;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.01.04.03.11.35;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2011.01.05.04.45.41;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.01.05.04.45.03;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: argv.cpp,v 1.4 2014-03-27 19:09:27-07 - - $
+
+//
+// NAME
+//    argv - print out the argument vector
+//
+// SYNOPSIS
+//    argv [string...]
+//
+// DESCRIPTION
+//    Prints out its arguments to stdout, one per line.
+//
+
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+
+int main (int argc, char** argv) {
+   cout << "argc = " << argc << endl;
+   for (int argi = 0; argi < argc; ++argi) {
+      cout << "argv[" << argi << "] = \"" << argv[argi] << "\""
+           << endl;
+   }
+   return EXIT_SUCCESS;
+}
+
+//TEST// ./argv foo bar baz qux quux >argv.lis 2>&1
+//TEST// mkpspdf argv.ps argv.cpp* argv.lis
+
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: argv.cpp,v 1.3 2013-01-03 19:11:35-08 - - $
+d19 1
+a19 1
+int main (int argc, char **argv) {
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: argv.cpp,v 1.2 2011-01-04 20:45:41-08 - - $
+d28 1
+a28 1
+//TEST// runprogram.perl -x argv.lis ./argv foo bar baz qux quux
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: argv.cpp,v 1.1 2011-01-04 20:45:03-08 - - $
+d29 1
+a29 1
+//TEST// mkpspdf argv.ps argv.cpp argv.lis
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: argv.cc,v 1.1 2010-01-05 19:21:21-08 - - $
+d20 1
+@

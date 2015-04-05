@@ -1,0 +1,73 @@
+::::::::::::::
+roboserver.log
+::::::::::::::
+bash-2$ multiserver 8888
+multiserver: port 8888: waiting for client
+multiserver: port 8888: socket.accept OK
+multiserver: port 8888: worker 1: starting
+1[1]Hello
+1[2]roboclient[0] Hello (localhost 8888) -- Message from World.
+1[3]roboclient[1] Hello (localhost 8888) -- Message from World.
+1[4]roboclient[2] Hello (localhost 8888) -- Message from World.
+1[5]roboclient[3] Hello (localhost 8888) -- Message from World.
+multiserver: port 8888: socket.accept OK
+multiserver: port 8888: worker 2: starting
+2[1]Foo-Bar
+2[2]roboclient[0] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+1[6]roboclient[4] Hello (localhost 8888) -- Message from World.
+2[3]roboclient[1] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[4]roboclient[2] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+1[7]roboclient[5] Hello (localhost 8888) -- Message from World.
+2[5]roboclient[3] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[6]roboclient[4] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+1[8]roboclient[6] Hello (localhost 8888) -- Message from World.
+2[7]roboclient[5] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[8]roboclient[6] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+1[9]roboclient[7] Hello (localhost 8888) -- Message from World.
+2[9]roboclient[7] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[10]roboclient[8] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+1[10]roboclient[8] Hello (localhost 8888) -- Message from World.
+2[11]roboclient[9] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+multiserver: port 8888: worker 2: finished
+1[11]roboclient[9] Hello (localhost 8888) -- Message from World.
+multiserver: port 8888: worker 1: finished
+^C
+bash-3$ exit
+exit
+
+::::::::::::::
+roboclient1.log
+::::::::::::::
+bash-2$ roboclient localhost 8888 Hello 2 10 Message from World.
+roboclient: localhost 8888: socket OK
+1[1]Hello
+1[2]roboclient[0] Hello (localhost 8888) -- Message from World.
+1[3]roboclient[1] Hello (localhost 8888) -- Message from World.
+1[4]roboclient[2] Hello (localhost 8888) -- Message from World.
+1[5]roboclient[3] Hello (localhost 8888) -- Message from World.
+1[6]roboclient[4] Hello (localhost 8888) -- Message from World.
+1[7]roboclient[5] Hello (localhost 8888) -- Message from World.
+1[8]roboclient[6] Hello (localhost 8888) -- Message from World.
+1[9]roboclient[7] Hello (localhost 8888) -- Message from World.
+1[10]roboclient[8] Hello (localhost 8888) -- Message from World.
+bash-3$ exit
+exit
+
+::::::::::::::
+roboclient2.log
+::::::::::::::
+bash-2$ roboclient localhost 8888 Foo-Bar 1 10 Message from Foo Bar Baz Qux.
+roboclient: localhost 8888: socket OK
+2[1]Foo-Bar
+2[2]roboclient[0] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[3]roboclient[1] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[4]roboclient[2] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[5]roboclient[3] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[6]roboclient[4] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[7]roboclient[5] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[8]roboclient[6] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[9]roboclient[7] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+2[10]roboclient[8] Foo-Bar (localhost 8888) -- Message from Foo Bar Baz Qux.
+bash-3$ exit
+exit
+

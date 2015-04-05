@@ -1,0 +1,204 @@
+head	1.8;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.8
+date	2014.07.15.01.41.35;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.07.15.01.41.06;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.07.15.01.40.56;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.07.15.01.40.19;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.07.15.01.40.07;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.07.15.01.39.40;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.07.15.01.39.29;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.07.15.01.39.08;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@-
+@
+text
+@#include <cstring>
+#include <iostream>
+#include <list>
+#include <unordered_map>
+#include <deque>
+#include <vector>
+using namespace std;
+
+#include <malloc.h>
+
+class bdeque: public deque<size_t> {
+   public:
+      using deque<size_t>::_Map_pointer;
+      using deque<size_t>::_S_buffer_size;
+};
+
+void print_mallinfo() {
+   struct mallinfo info = mallinfo();
+   cout << info.arena << " non-mmapped space from system" << endl;
+   cout << info.ordblks << " number of free chunks" << endl;
+   cout << info.smblks << " number of fastbin blocks" << endl;
+   cout << info.hblks << " number of mmapped regions" << endl;
+   cout << info.hblkhd << " space in mmapped regions" << endl;
+   cout << info.usmblks << " maximum total allocated space" << endl;
+   cout << info.fsmblks << " space in freed fastbin blocks" << endl;
+   cout << info.uordblks << " total allocated space" << endl;
+   cout << info.fordblks << " total free space" << endl;
+   cout << info.keepcost << " top-most, releasable space" << endl;
+}
+
+int main () {
+   deque<size_t> di;
+   cout << sizeof di << endl;
+   print_mallinfo();
+   for (size_t i = 0; i < 1000; ++i) {
+      for (size_t j = 0; j < 10000; ++j) di.push_back (j);
+      while (di.size() > 1000) di.pop_front();
+   }
+   print_mallinfo();
+   return 0;
+}
+@
+
+
+1.7
+log
+@-
+@
+text
+@d36 2
+a37 2
+      for (size_t j = 0; j < 1000000; ++j) di.push_back (j);
+      while (di.size() > 100000) di.pop_front();
+@
+
+
+1.6
+log
+@-
+@
+text
+@d35 1
+a35 1
+   for (size_t i = 0; i < 1000000; ++i) {
+@
+
+
+1.5
+log
+@-
+@
+text
+@d19 10
+a28 10
+   cout << info.arena << "non-mmapped space allocated from system" << endl;
+   cout << info.ordblks << "number of free chunks" << endl;
+   cout << info.smblks << "number of fastbin blocks" << endl;
+   cout << info.hblks << "number of mmapped regions" << endl;
+   cout << info.hblkhd << "space in mmapped regions" << endl;
+   cout << info.usmblks << "maximum total allocated space" << endl;
+   cout << info.fsmblks << "space available in freed fastbin blocks" << endl;
+   cout << info.uordblks << "total allocated space" << endl;
+   cout << info.fordblks << "total free space" << endl;
+   cout << info.keepcost << "top-most, releasable space" << endl;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d19 10
+a28 10
+   cout << info->arena << "non-mmapped space allocated from system" << endl;
+   cout << info->ordblks << "number of free chunks" << endl;
+   cout << info->smblks << "number of fastbin blocks" << endl;
+   cout << info->hblks << "number of mmapped regions" << endl;
+   cout << info->hblkhd << "space in mmapped regions" << endl;
+   cout << info->usmblks << "maximum total allocated space" << endl;
+   cout << info->fsmblks << "space available in freed fastbin blocks" << endl;
+   cout << info->uordblks << "total allocated space" << endl;
+   cout << info->fordblks << "total free space" << endl;
+   cout << info->keepcost << "top-most, releasable space" << endl;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d18 1
+a18 1
+   struct mallinfo *info = mallinfo();
+@
+
+
+1.2
+log
+@-
+@
+text
+@d17 1
+a17 1
+print_mallinfo() {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d19 10
+a28 10
+   cout << arena << "non-mmapped space allocated from system" << endl;
+   cout << ordblks << "number of free chunks" << endl;
+   cout << smblks << "number of fastbin blocks" << endl;
+   cout << hblks << "number of mmapped regions" << endl;
+   cout << hblkhd << "space in mmapped regions" << endl;
+   cout << usmblks << "maximum total allocated space" << endl;
+   cout << fsmblks << "space available in freed fastbin blocks" << endl;
+   cout << uordblks << "total allocated space" << endl;
+   cout << fordblks << "total free space" << endl;
+   cout << keepcost << "top-most, releasable space" << endl;
+@

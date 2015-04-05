@@ -1,0 +1,78 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2010.12.03.01.57.33;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@
+Winter 2009
+CMPS-109 -- Advanced Programming
+
+week  1:
+ 1. Wed Jan  7 - intro; syllabus; Ex/00-intro; Budd,ch.1,2
+ 2. Fri Jan  9 - Budd,ch.2; asg1: Makefile, yshell.cc
+ 3. Mon Jan 12 - asg1: {util,trace,commands}.{h,cc}
+
+week  2:
+ 4. Wed Jan 14 - asg1: inode.{h,cc}; finish ch.2, start ch.3
+ 5. Fri Jan 16 - Budd,ch.3
+ 6. Mon Jan 19 - HOLIDAY.
+
+week  3:
+ 7. Wed Jan 21 - mem mgmt, references, pointers.  Budd,ch.4
+ 8. Fri Jan 23 - Budd,ch.4 - ref counting, ptr/repr classes
+ 9. Mon Jan 26 - asg2: bigint
+
+week  4:
+10. Wed Jan 28 - more asg2: bigint
+11. Fri Jan 30 - mem mgmt; stack vals; ref count
+12. Mon Feb  2 - scope; mem leaks; extern; canonical class form
+
+week  5:
+13. Wed Feb  4 - TEST #1.
+14. Fri Feb  6 - nested classes; begin inheritance (ch.6)
+15. Mon Feb  9 - ch.6: inheritance polymorphism
+
+week  6:
+16. Wed Feb 11 - Inheritance; prog 3, objects, Postscript.
+17. Fri Feb 13 - test answers; review prog 3.
+18. Mon Feb 16 - HOLIDAY.
+
+week  7:
+19. Wed Feb 18 - program 4
+20. Fri Feb 20 - program 4, ch.9
+21. Mon Feb 23 - ch.10, ch.11
+
+week  8:
+22. Wed Feb 25 - TEST #2.
+23. Fri Feb 27 - Concurrency.  Java threads.
+24. Mon Mar  2 - IP communications, producer/consumer, ports, sockets
+
+week  9:
+25. Wed Mar  4 - examples: webserver; intro awt, swing
+26. Fri Mar  6 - test answers; program 5
+27. Mon Mar  9 - interfaces in C++; Budd,ch.12
+
+week 10:
+28. Wed Mar 11 - Budd,ch.13; Java generics tutorial.
+29. Fri Mar 13 - review
+30. Mon Mar 16 - review
+
+$Id: 2009-q1winter-lecture-log,v 1.1 2010-03-23 16:27:24-07 - - $
+@

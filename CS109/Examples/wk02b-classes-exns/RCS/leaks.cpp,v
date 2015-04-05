@@ -1,0 +1,118 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.4
+date	2014.04.10.21.17.42;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.06.29.02.52.57;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.11.02.07.27;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.11.02.07.02;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@// $Id: leaks.cpp,v 1.3 2013-06-28 19:52:57-07 - - $
+
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int main (int argc, char** argv) {
+   vector<string*> *vecstr = new vector<string*>();
+   cout << "vector<string*> = " << vecstr << endl;
+   for (int itor = 0; itor < argc; ++itor) {
+      string str = argv[itor];
+      vecstr->push_back (new string(str));
+   }
+   for (auto itor = vecstr->cbegin(); itor != vecstr->cend(); ++itor) {
+      cout << "string* = " << *itor << " -> " << **itor << endl;
+   }
+   cerr << "We are done." << endl;
+   return EXIT_SUCCESS;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=leaks.out.grind \
+//TEST//       leaks foo bar baz qux >leaks.out 2>&1
+//TEST// mkpspdf leaks.ps leaks.cpp* leaks.out*
+*/
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: leaks.cpp,v 1.2 2012-04-10 19:07:27-07 - - $
+d10 3
+a12 3
+int main (int argc, char **argv) {
+   vector<string *> *vecstr = new vector<string *>();
+   cout << "vector<string *> = " << vecstr << endl;
+d17 2
+a18 4
+   vector<string *>::const_iterator itor = vecstr->cbegin();
+   vector<string *>::const_iterator end = vecstr->cend();
+   for (; itor != end; ++itor) {
+      cout << "string * = " << *itor << " -> " << **itor << endl;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: leaks.cpp,v 1.1 2012-04-10 19:07:02-07 - - $
+d17 2
+a18 2
+   vector<string *>::const_iterator itor = vecstr->begin();
+   vector<string *>::const_iterator end = vecstr->end();
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: leaks.cpp,v 1.15 2011-01-21 18:30:25-08 - - $
+d26 1
+d31 1
+@

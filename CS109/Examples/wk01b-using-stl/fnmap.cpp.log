@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting fnmap.cpp
+fnmap.cpp:
+     $Id: fnmap.cpp,v 1.26 2014-06-20 22:30:54-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 fnmap.cpp -o fnmap -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f fnmap.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished fnmap.cpp

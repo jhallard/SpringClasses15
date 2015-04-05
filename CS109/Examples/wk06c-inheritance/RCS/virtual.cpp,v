@@ -1,0 +1,438 @@
+head	1.14;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.14
+date	2015.02.11.01.54.20;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.07.20.02.35.13;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.07.20.02.33.13;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.07.20.02.32.20;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.07.20.02.31.25;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.07.20.02.29.00;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.07.20.02.28.46;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.07.20.02.27.44;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.07.20.02.27.04;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.07.20.02.26.43;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.07.20.02.26.25;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.25.02.57.34;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.25.02.56.22;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.25.02.54.31;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.14
+log
+@-
+@
+text
+@// $Id: virtual.cpp,v 1.13 2013-07-19 19:35:13-07 - - $
+
+#include <iostream>
+#include <typeinfo>
+
+using namespace std;
+#define TRACE(STMT) cout << "TRACE (" << #STMT << ")" << endl; STMT
+
+class nonbase {
+   public:
+      nonbase() { cout << "nonbase()" << endl; }
+      ~nonbase() { cout << "~nonbase()" << endl; }
+      void show () { cout << typeid (*this).name() << endl; }
+};
+
+class nonderived: public nonbase {
+   public:
+      nonderived() { cout << "nonderived()" << endl; }
+      ~nonderived() { cout << "~nonderived()" << endl; }
+      void show () { cout << typeid (*this).name() << endl; }
+};
+
+class virtbase {
+   public:
+      // Inheritance classes must have virtual destructors.
+      virtbase() { cout << "virtbase()" << endl; }
+      virtual ~virtbase() { cout << "~virtbase()" << endl; }
+      virtual void show () { cout << typeid (*this).name() << endl; }
+};
+
+class virtderived: public virtbase {
+   public:
+      virtderived() { cout << "virtderived()" << endl; }
+      virtual ~virtderived() { cout << "~virtderived()" << endl; }
+      virtual void show () { cout << typeid (*this).name() << endl; }
+};
+
+int main () {
+   TRACE (nonbase *nb = new nonbase();)
+   TRACE (nb->show();)
+   TRACE (nonderived *nd = new nonderived ();)
+   TRACE (nd->show();)
+   TRACE (delete nb;)
+   TRACE (nb = nd;)
+   TRACE (nb->show();)
+   TRACE (nd = static_cast<nonderived*> (nb);)
+   TRACE (nd->show();)
+   TRACE (delete nd;)
+
+   TRACE (virtbase *vb = new virtbase();)
+   TRACE (vb->show();)
+   TRACE (virtderived *vd = new virtderived ();)
+   TRACE (vd->show();)
+   TRACE (delete vb;)
+   TRACE (vb = vd;)
+   TRACE (vb->show();)
+   TRACE (vd = dynamic_cast<virtderived*> (vb);)
+   TRACE (vd->show();)
+   TRACE (delete vd;)
+   TRACE (return 0;)
+}
+
+//TEST// grind="valgrind --leak-check=full --show-reachable=yes"
+//TEST// $grind virtual 1>virtual.out 2>&1
+//TEST// mkpspdf virtual.ps virtual.cpp* virtual.out*
+
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.12 2013-07-19 19:33:13-07 - - $
+d63 2
+a64 3
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       virtual 1>virtual.out 2>&1
+a65 1
+*/
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.11 2013-07-19 19:32:20-07 - - $
+a6 1
+
+a38 1
+
+d60 1
+a60 1
+
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.10 2013-07-19 19:31:25-07 - - $
+d67 1
+a67 1
+//TEST//       virtual 1>virtual.out 2>virtual.err
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.9 2013-07-19 19:29:00-07 - - $
+d45 1
+a49 1
+   TRACE (delete nb;)
+d56 1
+a60 1
+   TRACE (delete vb;)
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.8 2013-07-19 19:28:46-07 - - $
+d49 2
+d60 2
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.7 2013-07-19 19:27:44-07 - - $
+d47 1
+a47 1
+   TRACE (nd = static_cast<nonderived> (nb);)
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.6 2013-07-19 19:27:04-07 - - $
+d47 1
+a47 1
+   TRACE (nd = nb;)
+d56 1
+a56 1
+   TRACE (vd = vb;)
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.5 2013-07-19 19:26:43-07 - - $
+d42 1
+a42 1
+   TRACE (nb->show("nb");)
+d44 1
+a44 1
+   TRACE (nd->show("nd");)
+d46 1
+a46 1
+   TRACE (nb->show("nb");)
+d48 1
+a48 1
+   TRACE (nd->show("nd");)
+d51 1
+a51 1
+   TRACE (vb->show("vb");)
+d53 1
+a53 1
+   TRACE (vd->show("vd");)
+d55 1
+a55 1
+   TRACE (vb->show("vb");)
+d57 1
+a57 1
+   TRACE (vd->show("vd");)
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.4 2013-07-19 19:26:25-07 - - $
+d27 1
+a27 1
+      virtual virtbase() { cout << "virtbase()" << endl; }
+d34 1
+a34 1
+      virtual virtderived() { cout << "virtderived()" << endl; }
+d42 1
+a42 1
+   TRACE (nb->prt("nb");)
+d44 1
+a44 1
+   TRACE (nd->prt("nd");)
+d46 1
+a46 1
+   TRACE (nb->prt("nb");)
+d48 1
+a48 1
+   TRACE (nd->prt("nd");)
+d51 1
+a51 1
+   TRACE (vb->prt("vb");)
+d53 1
+a53 1
+   TRACE (vd->prt("vd");)
+d55 1
+a55 1
+   TRACE (vb->prt("vb");)
+d57 1
+a57 1
+   TRACE (vd->prt("vd");)
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.3 2012-04-24 19:57:34-07 - - $
+d8 1
+a8 1
+#define TRACE(STMT) { cout << "TRACE (" << #STMT << ")" << endl; STMT }
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.2 2012-04-24 19:56:22-07 - - $
+d8 2
+d12 3
+a14 3
+      void prt (const string &arg) {
+         cout << arg << " " << typeid (*this).name() << endl;
+      }
+d19 3
+a21 3
+      void prt (const string &arg) {
+         cout << arg << " " << typeid (*this).name() << endl;
+      }
+d26 4
+a29 4
+      virtual ~virtbase(){} //must be virtual because prt is virtual
+      virtual void prt (const string &arg) {
+         cout << arg << " " << typeid (*this).name() << endl;
+      }
+d34 3
+a36 4
+      virtual ~virtderived(){} //must be virtual because prt is virtual
+      virtual void prt (const string &arg) {
+         cout << arg << " " << typeid (*this).name() << endl;
+      }
+d41 17
+a57 13
+   nonbase *nb = new nonbase();
+   nb->prt("nb");
+   nonderived *nd = new nonderived ();
+   nd->prt("nd");
+   nb = nd;
+   nb->prt("nb");
+
+   virtbase *vb = new virtbase();
+   vb->prt("vb");
+   virtderived *vd = new virtderived ();
+   vd->prt("vd");
+   vb = vd;
+   vb->prt("vb");
+d63 1
+a63 2
+//TEST//       --log-file=virtual.out.grind \
+//TEST//       virtual >virtual.out 2>&1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.1 2012-04-24 19:54:31-07 - - $
+d24 1
+a24 1
+      ~virtbase(){}; //dtor must be virtual because prt is virtual
+d32 1
+a32 1
+      ~virtderived(){}; //dtor must be virtual because prt is virtual
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: virtual.cpp,v 1.3 2011-02-04 20:01:08-08 - - $
+d24 1
+d32 1
+@

@@ -1,0 +1,38 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2014.05.21.02.01.31;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@TARGETS=broadcaster client getip ghbn ieee754 listener pack pack2 \
+	select selectserver server showip talker
+
+CC=gcc
+CCOPTS=-Wall -Wextra
+
+.PHONY: all clean
+
+all: $(TARGETS)
+
+clean:
+	rm -f $(TARGETS)
+
+%: %.c
+	$(CC) $(CCOPTS) -o $@@ $<
+@

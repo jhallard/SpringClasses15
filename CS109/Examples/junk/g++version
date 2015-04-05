@@ -1,0 +1,31 @@
+Using built-in specs.
+COLLECT_GCC=g++
+COLLECT_LTO_WRAPPER=/opt/rh/devtoolset-2/root/usr/libexec/gcc/x86_64-redhat-linux/4.8.1/lto-wrapper
+Target: x86_64-redhat-linux
+Configured with: ../configure
+--prefix=/opt/rh/devtoolset-2/root/usr
+--mandir=/opt/rh/devtoolset-2/root/usr/share/man
+--infodir=/opt/rh/devtoolset-2/root/usr/share/info
+--with-bugurl=http://bugzilla.redhat.com/bugzilla
+--enable-bootstrap
+--enable-shared
+--enable-threads=posix
+--enable-checking=release
+--with-system-zlib
+--enable-__cxa_atexit
+--disable-libunwind-exceptions
+--enable-gnu-unique-object
+--enable-linker-build-id
+--enable-languages=c,c++,fortran,lto
+--enable-plugin
+--with-linker-hash-style=gnu
+--enable-initfini-array
+--disable-libgcj
+--with-isl=/builddir/build/BUILD/gcc-4.8.1-20130715/obj-x86_64-redhat-linux/isl-install
+--with-cloog=/builddir/build/BUILD/gcc-4.8.1-20130715/obj-x86_64-redhat-linux/cloog-install
+--with-mpc=/builddir/build/BUILD/gcc-4.8.1-20130715/obj-x86_64-redhat-linux/mpc-install
+--with-tune=generic
+--with-arch_32=i686
+--build=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.8.1 20130715 (Red Hat 4.8.1-4) (GCC) 

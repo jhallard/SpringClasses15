@@ -1,0 +1,45 @@
+// $Id: accumulate.cpp,v 1.2 2012-06-05 20:11:51-07 - - $
+
+//
+// Accumulate.
+// Takes an object and an action and accumulates a sequence,
+// producing a final result.
+//
+
+#include <tr1/array>
+#include <iostream>
+#include <list>
+#include <vector>
+
+using namespace std;
+using namespace std::tr1;
+
+template <typename itor_t, typename value_t, typename binary_fn>
+value_t accumulate (const itor_t &begin, const itor_t &end,
+                    const value_t &initial, const binary_fn &binfn) {
+   value_t result (initial);
+   for (itor_t itor = begin; itor != end; ++itor) {
+      result = binfn (result, *itor);
+   }
+   return result;
+}
+
+template <typename value_t>
+struct adder {
+   value_t operator() (const value_t &left, const value_t &right) {
+      return left + right;
+   }
+};
+
+template <typename value_t>
+struct multiplier {
+   value_t operator() (const value_t &left, const value_t &right) {
+      return left * right;
+   }
+};
+
+void array_test() {
+   array <double, 5> ad4 = {3.1, 4.1, 5.9, 2.6, 5.3};
+   cout << accumulate (ad4.begin(), ad4.end(), 0.0, adder) << endl;
+   cout << accumulate (ad4.begin(), ad4.end(), 1.0, multiplier) << endl;
+}

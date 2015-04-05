@@ -1,0 +1,1427 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: Enscript Output
+%%For: Wesley Mackey
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Mon Aug 12 19:35:23 2013
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier-Bold /F-gs-font MF
+/F-gs-font 10.5 10.5 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 536 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 708 def
+/d_header_w 536 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 536 def
+/d_footer_h 0 def
+/d_output_w 536 def
+/d_output_h 708 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (waitnotifybuffer.java) def
+/fdir () def
+/ftail (waitnotifybuffer.java) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/12/13) def
+/modtimestr (19:35:19) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08a-java-threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+31.2 694.5 M (1:) s
+50.1 694.5 M
+(// $Id: waitnotifybuffer.java,v 1.16 2013-08-12 19:35:19-07 - - $) s
+31.2 683 M (2:) s
+31.2 671.5 M (3:) s
+50.1 671.5 M
+(//) s
+31.2 660 M (4:) s
+50.1 660 M
+(// Producer-consumer example using wait and notify on a) s
+31.2 648.5 M (5:) s
+50.1 648.5 M
+(// bounded buffer.  Producer blocks when queue is full, and) s
+31.2 637 M (6:) s
+50.1 637 M
+(// consumer blocks when queue is empty.  All classes are) s
+31.2 625.5 M (7:) s
+50.1 625.5 M
+(// static inner classes to make the example fit in one file.) s
+31.2 614 M (8:) s
+50.1 614 M
+(// Usually, each class would be in a separate file.) s
+31.2 602.5 M (9:) s
+50.1 602.5 M
+(//) s
+24.9 591 M (10:) s
+24.9 579.5 M (11:) s
+50.1 579.5 M
+(import java.io.*;) s
+24.9 568 M (12:) s
+50.1 568 M
+(import java.util.*;) s
+24.9 556.5 M (13:) s
+50.1 556.5 M
+(import static java.lang.String.*;) s
+24.9 545 M (14:) s
+50.1 545 M
+(import static java.lang.System.*;) s
+24.9 533.5 M (15:) s
+24.9 522 M (16:) s
+50.1 522 M
+(class waitnotifybuffer {) s
+24.9 510.5 M (17:) s
+24.9 499 M (18:) s
+50.1 499 M
+(static class arrayqueue<item_t> {) s
+24.9 487.5 M (19:) s
+50.1 487.5 M
+(   private static final int EMPTY = -1;) s
+24.9 476 M (20:) s
+50.1 476 M
+(   private int front = EMPTY;) s
+24.9 464.5 M (21:) s
+50.1 464.5 M
+(   private int rear = EMPTY;) s
+24.9 453 M (22:) s
+50.1 453 M
+(   private item_t[] items;) s
+24.9 441.5 M (23:) s
+24.9 430 M (24:) s
+50.1 430 M
+(   @SuppressWarnings \("unchecked"\)) s
+24.9 418.5 M (25:) s
+50.1 418.5 M
+(   public arrayqueue \(int size\) {) s
+24.9 407 M (26:) s
+50.1 407 M
+(      items = \(item_t[]\) new Object[size];) s
+24.9 395.5 M (27:) s
+50.1 395.5 M
+(   }) s
+24.9 384 M (28:) s
+24.9 372.5 M (29:) s
+50.1 372.5 M
+(   public boolean is_empty\(\) {) s
+24.9 361 M (30:) s
+50.1 361 M
+(      return front == EMPTY;) s
+24.9 349.5 M (31:) s
+50.1 349.5 M
+(   }) s
+24.9 338 M (32:) s
+24.9 326.5 M (33:) s
+50.1 326.5 M
+(   public boolean is_full\(\) {) s
+24.9 315 M (34:) s
+50.1 315 M
+(      return \(rear + 1\) % items.length == front;) s
+24.9 303.5 M (35:) s
+50.1 303.5 M
+(   }) s
+24.9 292 M (36:) s
+24.9 280.5 M (37:) s
+50.1 280.5 M
+(   public void push_rear \(item_t item\) {) s
+24.9 269 M (38:) s
+50.1 269 M
+(      if \(is_full\(\)\) throw new) s
+24.9 257.5 M (39:) s
+50.1 257.5 M
+(            IllegalStateException \("arrayqueue.push_rear"\);) s
+24.9 246 M (40:) s
+50.1 246 M
+(      if \(is_empty\(\)\) front = rear = 0;) s
+24.9 234.5 M (41:) s
+50.1 234.5 M
+(                 else rear = \(rear + 1\) % items.length;) s
+24.9 223 M (42:) s
+50.1 223 M
+(      items[rear] = item;) s
+24.9 211.5 M (43:) s
+50.1 211.5 M
+(   }) s
+24.9 200 M (44:) s
+24.9 188.5 M (45:) s
+50.1 188.5 M
+(   item_t pop_front\(\) {) s
+24.9 177 M (46:) s
+50.1 177 M
+(      if \(is_empty\(\)\) throw new) s
+24.9 165.5 M (47:) s
+50.1 165.5 M
+(            IllegalStateException \("arrayqueue.pop_front"\);) s
+24.9 154 M (48:) s
+50.1 154 M
+(      item_t result = items[front];) s
+24.9 142.5 M (49:) s
+50.1 142.5 M
+(      if \(front == rear\) front = rear = EMPTY;) s
+24.9 131 M (50:) s
+50.1 131 M
+(                    else front = \(front + 1\) % items.length;) s
+24.9 119.5 M (51:) s
+50.1 119.5 M
+(      return result;) s
+24.9 108 M (52:) s
+50.1 108 M
+(   }) s
+24.9 96.5 M (53:) s
+50.1 96.5 M
+(}) s
+24.9 85 M (54:) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (waitnotifybuffer.java) def
+/fdir () def
+/ftail (waitnotifybuffer.java) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (08/12/13) def
+/modtimestr (19:35:19) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08a-java-threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+24.9 694.5 M (55:) s
+24.9 683 M (56:) s
+50.1 683 M
+(interface buffer<item_t> {) s
+24.9 671.5 M (57:) s
+50.1 671.5 M
+(   void put \(item_t item\);) s
+24.9 660 M (58:) s
+50.1 660 M
+(   item_t get\(\);) s
+24.9 648.5 M (59:) s
+50.1 648.5 M
+(   void set_eof\(\);) s
+24.9 637 M (60:) s
+50.1 637 M
+(}) s
+24.9 625.5 M (61:) s
+24.9 614 M (62:) s
+50.1 614 M
+(static class arraybuffer<item_t> implements buffer<item_t> {) s
+24.9 602.5 M (63:) s
+50.1 602.5 M
+(   private arrayqueue<item_t> queue;) s
+24.9 591 M (64:) s
+50.1 591 M
+(   private boolean eof = false;) s
+24.9 579.5 M (65:) s
+24.9 568 M (66:) s
+50.1 568 M
+(   public arraybuffer \(int size\) {) s
+24.9 556.5 M (67:) s
+50.1 556.5 M
+(      queue = new arrayqueue<item_t> \(size\);) s
+24.9 545 M (68:) s
+50.1 545 M
+(   }) s
+24.9 533.5 M (69:) s
+24.9 522 M (70:) s
+50.1 522 M
+(   synchronized public void set_eof\(\) {) s
+24.9 510.5 M (71:) s
+50.1 510.5 M
+(      eof = true;) s
+24.9 499 M (72:) s
+50.1 499 M
+(   }) s
+24.9 487.5 M (73:) s
+24.9 476 M (74:) s
+50.1 476 M
+(   synchronized public void put \(item_t item\) {) s
+24.9 464.5 M (75:) s
+50.1 464.5 M
+(      if \(eof\) throw new IllegalStateException \("put"\);) s
+24.9 453 M (76:) s
+50.1 453 M
+(      while \(queue.is_full\(\)\) {) s
+24.9 441.5 M (77:) s
+50.1 441.5 M
+(         try {) s
+24.9 430 M (78:) s
+50.1 430 M
+(            wait\(\);) s
+24.9 418.5 M (79:) s
+50.1 418.5 M
+(         }catch \(InterruptedException exn\) {) s
+24.9 407 M (80:) s
+50.1 407 M
+(            display \("arraybuffer.put: %s", exn.getMessage\(\)\);) s
+24.9 395.5 M (81:) s
+50.1 395.5 M
+(         }) s
+24.9 384 M (82:) s
+50.1 384 M
+(      }) s
+24.9 372.5 M (83:) s
+50.1 372.5 M
+(      queue.push_rear \(item\);) s
+24.9 361 M (84:) s
+50.1 361 M
+(      notifyAll\(\);) s
+24.9 349.5 M (85:) s
+50.1 349.5 M
+(   }) s
+24.9 338 M (86:) s
+24.9 326.5 M (87:) s
+50.1 326.5 M
+(   synchronized public item_t get\(\) {) s
+24.9 315 M (88:) s
+50.1 315 M
+(      while \(queue.is_empty\(\)\) {) s
+24.9 303.5 M (89:) s
+50.1 303.5 M
+(         if \(eof\) return null;) s
+24.9 292 M (90:) s
+50.1 292 M
+(         try {) s
+24.9 280.5 M (91:) s
+50.1 280.5 M
+(            wait\(\);) s
+24.9 269 M (92:) s
+50.1 269 M
+(         }catch \(InterruptedException exn\) {) s
+24.9 257.5 M (93:) s
+50.1 257.5 M
+(            display \("arraybuffer.get: %s", exn.getMessage\(\)\);) s
+24.9 246 M (94:) s
+50.1 246 M
+(         }) s
+24.9 234.5 M (95:) s
+50.1 234.5 M
+(      }) s
+24.9 223 M (96:) s
+50.1 223 M
+(      item_t result = queue.pop_front\(\);) s
+24.9 211.5 M (97:) s
+50.1 211.5 M
+(      notifyAll\(\);) s
+24.9 200 M (98:) s
+50.1 200 M
+(      return result;) s
+24.9 188.5 M (99:) s
+50.1 188.5 M
+(   }) s
+18.6 177 M (100:) s
+50.1 177 M
+(}) s
+18.6 165.5 M (101:) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (waitnotifybuffer.java) def
+/fdir () def
+/ftail (waitnotifybuffer.java) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (08/12/13) def
+/modtimestr (19:35:19) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08a-java-threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18.6 694.5 M (102:) s
+18.6 683 M (103:) s
+50.1 683 M
+(static class producer<item_t> implements Runnable {) s
+18.6 671.5 M (104:) s
+50.1 671.5 M
+(   private buffer<item_t> buf;) s
+18.6 660 M (105:) s
+50.1 660 M
+(   private String name;) s
+18.6 648.5 M (106:) s
+50.1 648.5 M
+(   private long delay_msec;) s
+18.6 637 M (107:) s
+50.1 637 M
+(   private item_t[] data;) s
+18.6 625.5 M (108:) s
+18.6 614 M (109:) s
+50.1 614 M
+(   producer \(buffer<item_t> _buf, String _name, long _delay,) s
+18.6 602.5 M (110:) s
+50.1 602.5 M
+(             item_t[] _data\) {) s
+18.6 591 M (111:) s
+50.1 591 M
+(      buf = _buf;) s
+18.6 579.5 M (112:) s
+50.1 579.5 M
+(      name = _name;) s
+18.6 568 M (113:) s
+50.1 568 M
+(      delay_msec = _delay;) s
+18.6 556.5 M (114:) s
+50.1 556.5 M
+(      data = _data;) s
+18.6 545 M (115:) s
+50.1 545 M
+(   }) s
+18.6 533.5 M (116:) s
+18.6 522 M (117:) s
+50.1 522 M
+(   public void run\(\) {) s
+18.6 510.5 M (118:) s
+50.1 510.5 M
+(      Thread self = Thread.currentThread\(\);) s
+18.6 499 M (119:) s
+50.1 499 M
+(      self.setName \("producer " + name\);) s
+18.6 487.5 M (120:) s
+50.1 487.5 M
+(      display \("starting"\);) s
+18.6 476 M (121:) s
+50.1 476 M
+(      int count = 0;) s
+18.6 464.5 M (122:) s
+50.1 464.5 M
+(      for \(item_t datum: data\) {) s
+18.6 453 M (123:) s
+50.1 453 M
+(         try {) s
+18.6 441.5 M (124:) s
+50.1 441.5 M
+(            Thread.sleep \(delay_msec\);) s
+18.6 430 M (125:) s
+50.1 430 M
+(         }catch \(InterruptedException exn\) {) s
+18.6 418.5 M (126:) s
+50.1 418.5 M
+(            display \("%s", exn.getMessage\(\)\);) s
+18.6 407 M (127:) s
+50.1 407 M
+(         }) s
+18.6 395.5 M (128:) s
+50.1 395.5 M
+(         display \("put \(\\"%s\\"\)", datum\);) s
+18.6 384 M (129:) s
+50.1 384 M
+(         buf.put \(datum\);) s
+18.6 372.5 M (130:) s
+50.1 372.5 M
+(      }) s
+18.6 361 M (131:) s
+50.1 361 M
+(      display \("finished"\);) s
+18.6 349.5 M (132:) s
+50.1 349.5 M
+(   }) s
+18.6 338 M (133:) s
+50.1 338 M
+(}) s
+18.6 326.5 M (134:) s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (waitnotifybuffer.java) def
+/fdir () def
+/ftail (waitnotifybuffer.java) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (08/12/13) def
+/modtimestr (19:35:19) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08a-java-threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18.6 694.5 M (135:) s
+18.6 683 M (136:) s
+50.1 683 M
+(static class consumer<item_t> implements Runnable {) s
+18.6 671.5 M (137:) s
+50.1 671.5 M
+(   private buffer<item_t> buf;) s
+18.6 660 M (138:) s
+50.1 660 M
+(   private String name;) s
+18.6 648.5 M (139:) s
+50.1 648.5 M
+(   long delay_msec;) s
+18.6 637 M (140:) s
+18.6 625.5 M (141:) s
+50.1 625.5 M
+(   consumer \(buffer<item_t> _buf, String _name, long _delay\) {) s
+18.6 614 M (142:) s
+50.1 614 M
+(      buf = _buf;) s
+18.6 602.5 M (143:) s
+50.1 602.5 M
+(      name = _name;) s
+18.6 591 M (144:) s
+50.1 591 M
+(      delay_msec = _delay;) s
+18.6 579.5 M (145:) s
+50.1 579.5 M
+(   }) s
+18.6 568 M (146:) s
+18.6 556.5 M (147:) s
+50.1 556.5 M
+(   public void run\(\) {) s
+18.6 545 M (148:) s
+50.1 545 M
+(      Thread self = Thread.currentThread\(\);) s
+18.6 533.5 M (149:) s
+50.1 533.5 M
+(      self.setName \("consumer " + name\);) s
+18.6 522 M (150:) s
+50.1 522 M
+(      display \("starting"\);) s
+18.6 510.5 M (151:) s
+50.1 510.5 M
+(      for \(;;\) {) s
+18.6 499 M (152:) s
+50.1 499 M
+(         item_t item = buf.get\(\);) s
+18.6 487.5 M (153:) s
+50.1 487.5 M
+(         if \(item == null\) break;) s
+18.6 476 M (154:) s
+50.1 476 M
+(         try {) s
+18.6 464.5 M (155:) s
+50.1 464.5 M
+(            Thread.sleep \(delay_msec\);) s
+18.6 453 M (156:) s
+50.1 453 M
+(         }catch \(InterruptedException exn\) {) s
+18.6 441.5 M (157:) s
+50.1 441.5 M
+(            display \("%s", exn.getMessage\(\)\);) s
+18.6 430 M (158:) s
+50.1 430 M
+(         }) s
+18.6 418.5 M (159:) s
+50.1 418.5 M
+(         display \("get\(\) = \\"%s\\"", item\);) s
+18.6 407 M (160:) s
+50.1 407 M
+(      }) s
+18.6 395.5 M (161:) s
+50.1 395.5 M
+(      display \("finished"\);) s
+18.6 384 M (162:) s
+50.1 384 M
+(   }) s
+18.6 372.5 M (163:) s
+50.1 372.5 M
+(}) s
+18.6 361 M (164:) s
+_R
+S
+%%Page: (5) 5
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 5 def
+/fname (waitnotifybuffer.java) def
+/fdir () def
+/ftail (waitnotifybuffer.java) def
+% User defined strings:
+/pagenumstr (5) def
+/moddatestr (08/12/13) def
+/modtimestr (19:35:19) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08a-java-threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18.6 694.5 M (165:) s
+18.6 683 M (166:) s
+50.1 683 M
+(   static long nanostart = nanoTime\(\);) s
+18.6 671.5 M (167:) s
+18.6 660 M (168:) s
+50.1 660 M
+(   synchronized static void display \(String fmt, Object... args\) {) s
+18.6 648.5 M (169:) s
+50.1 648.5 M
+(      Thread self = Thread.currentThread\(\);) s
+18.6 637 M (170:) s
+50.1 637 M
+(      double millisec = \(nanoTime\(\) - nanostart\) / 1e6;) s
+18.6 625.5 M (171:) s
+50.1 625.5 M
+(      out.printf \("%10.3f: %s\(%d\): ",) s
+18.6 614 M (172:) s
+50.1 614 M
+(                  millisec, self.getName\(\), self.getId\(\)\);) s
+18.6 602.5 M (173:) s
+50.1 602.5 M
+(      out.printf \(fmt + "%n", args\);) s
+18.6 591 M (174:) s
+50.1 591 M
+(      out.flush\(\);) s
+18.6 579.5 M (175:) s
+50.1 579.5 M
+(   }) s
+18.6 568 M (176:) s
+18.6 556.5 M (177:) s
+50.1 556.5 M
+(   public static void main \(String[] args\) {) s
+18.6 545 M (178:) s
+50.1 545 M
+(      display \("starting"\);) s
+18.6 533.5 M (179:) s
+50.1 533.5 M
+(      String[] latin = {) s
+18.6 522 M (180:) s
+50.1 522 M
+(         "pr\356mus", "secundus,", "tertius", "qu\342rtus", "qu\356ntus",) s
+18.6 510.5 M (181:) s
+50.1 510.5 M
+(         "sextus", "septimus", "oct\342vus", "n\364nus", "decimus") s
+18.6 499 M (182:) s
+50.1 499 M
+(      };) s
+18.6 487.5 M (183:) s
+50.1 487.5 M
+(      String[] greek = { // Transliterated, of course.) s
+18.6 476 M (184:) s
+50.1 476 M
+(         "pr\364tos", "deuteros", "tritos", "tetartos", "pentos",) s
+18.6 464.5 M (185:) s
+50.1 464.5 M
+(         "hektos", "hebdomos", "ogdoos", "enatos", "dekatos") s
+18.6 453 M (186:) s
+50.1 453 M
+(      };) s
+18.6 441.5 M (187:) s
+50.1 441.5 M
+(      buffer<String> buf = new arraybuffer<String> \(5\);) s
+18.6 430 M (188:) s
+50.1 430 M
+(      Thread[] producers = {) s
+18.6 418.5 M (189:) s
+50.1 418.5 M
+(         new Thread \(new producer<String> \(buf, "Romans", 100, latin\)\),) s
+18.6 407 M (190:) s
+50.1 407 M
+(         new Thread \(new producer<String> \(buf, "Greeks", 300, greek\)\)) s
+18.6 395.5 M (191:) s
+50.1 395.5 M
+(      };) s
+18.6 384 M (192:) s
+50.1 384 M
+(      Thread[] consumers = {) s
+18.6 372.5 M (193:) s
+50.1 372.5 M
+(         new Thread \(new consumer<String> \(buf, "Gauls", 200\)\),) s
+18.6 361 M (194:) s
+50.1 361 M
+(         new Thread \(new consumer<String> \(buf, "Picts", 500\)\)) s
+18.6 349.5 M (195:) s
+50.1 349.5 M
+(      };) s
+18.6 338 M (196:) s
+50.1 338 M
+(      for \(Thread thread: producers\) thread.start\(\);) s
+18.6 326.5 M (197:) s
+50.1 326.5 M
+(      for \(Thread thread: consumers\) thread.start\(\);) s
+18.6 315 M (198:) s
+50.1 315 M
+(      for \(int itor = 0; itor < producers.length; ++itor\) {) s
+18.6 303.5 M (199:) s
+50.1 303.5 M
+(         try {) s
+18.6 292 M (200:) s
+50.1 292 M
+(            producers[itor].join\(\);) s
+18.6 280.5 M (201:) s
+50.1 280.5 M
+(         }catch \(InterruptedException exn\) {) s
+18.6 269 M (202:) s
+50.1 269 M
+(            display \("join: %s", exn.getMessage\(\)\);) s
+18.6 257.5 M (203:) s
+50.1 257.5 M
+(         }) s
+18.6 246 M (204:) s
+50.1 246 M
+(      }) s
+18.6 234.5 M (205:) s
+50.1 234.5 M
+(      buf.set_eof\(\);) s
+18.6 223 M (206:) s
+50.1 223 M
+(      display \("finished"\);) s
+18.6 211.5 M (207:) s
+50.1 211.5 M
+(   }) s
+18.6 200 M (208:) s
+50.1 200 M
+(}) s
+18.6 188.5 M (209:) s
+18.6 177 M (210:) s
+50.1 177 M
+(//TEST// ./waitnotifybuffer >waitnotifybuffer.lis 2>&1) s
+18.6 165.5 M (211:) s
+50.1 165.5 M
+(//TEST// mkpspdf waitnotifybuffer.ps \\) s
+18.6 154 M (212:) s
+50.1 154 M
+(//TEST//         waitnotifybuffer.java* waitnotifybuffer.lis) s
+18.6 142.5 M (213:) s
+_R
+S
+%%Page: (1) 6
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (waitnotifybuffer.java.log) def
+/fdir () def
+/ftail (waitnotifybuffer.java.log) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/12/13) def
+/modtimestr (19:35:20) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08a-java-threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+31.2 694.5 M (1:) s
+50.1 694.5 M
+(* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting waitnotifybuffer.java) s
+31.2 683 M (2:) s
+50.1 683 M
+(* waitnotifybuffer.java: $Id: waitnotifybuffer.java,v 1.16 2013-08-12) s
+31.2 671.5 M (3:) s
+50.1 671.5 M
+(19:35:19-07 - - $) s
+31.2 660 M (4:) s
+50.1 660 M
+(* javac -Xlint waitnotifybuffer.java) s
+31.2 648.5 M (5:) s
+50.1 648.5 M
+(* jar cfm waitnotifybuffer Manifest waitnotifybuffer$arraybuffer.class) s
+31.2 637 M (6:) s
+50.1 637 M
+(waitnotifybuffer$arrayqueue.class waitnotifybuffer$buffer.class) s
+31.2 625.5 M (7:) s
+50.1 625.5 M
+(waitnotifybuffer$consumer.class waitnotifybuffer$producer.class) s
+31.2 614 M (8:) s
+50.1 614 M
+(waitnotifybuffer.class) s
+31.2 602.5 M (9:) s
+50.1 602.5 M
+(* chmod +x waitnotifybuffer) s
+24.9 591 M (10:) s
+50.1 591 M
+(* rm -f waitnotifybuffer$arraybuffer.class) s
+24.9 579.5 M (11:) s
+50.1 579.5 M
+(waitnotifybuffer$arrayqueue.class waitnotifybuffer$buffer.class) s
+24.9 568 M (12:) s
+50.1 568 M
+(waitnotifybuffer$consumer.class waitnotifybuffer$producer.class) s
+24.9 556.5 M (13:) s
+50.1 556.5 M
+(waitnotifybuffer.class) s
+24.9 545 M (14:) s
+50.1 545 M
+(* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished waitnotifybuffer.java) s
+_R
+S
+%%Page: (1) 7
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (waitnotifybuffer.lis) def
+/fdir () def
+/ftail (waitnotifybuffer.lis) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/12/13) def
+/modtimestr (19:35:23) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08a-java-threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+31.2 694.5 M (1:) s
+50.1 694.5 M
+(     0.046: main\(1\): starting) s
+31.2 683 M (2:) s
+50.1 683 M
+(     8.413: producer Romans\(8\): starting) s
+31.2 671.5 M (3:) s
+50.1 671.5 M
+(     9.293: consumer Gauls\(10\): starting) s
+31.2 660 M (4:) s
+50.1 660 M
+(    10.050: producer Greeks\(9\): starting) s
+31.2 648.5 M (5:) s
+50.1 648.5 M
+(    10.611: consumer Picts\(11\): starting) s
+31.2 637 M (6:) s
+50.1 637 M
+(   109.373: producer Romans\(8\): put \("pr\356mus"\)) s
+31.2 625.5 M (7:) s
+50.1 625.5 M
+(   210.164: producer Romans\(8\): put \("secundus,"\)) s
+31.2 614 M (8:) s
+50.1 614 M
+(   310.675: producer Greeks\(9\): put \("pr\364tos"\)) s
+31.2 602.5 M (9:) s
+50.1 602.5 M
+(   311.385: producer Romans\(8\): put \("tertius"\)) s
+24.9 591 M (10:) s
+50.1 591 M
+(   410.904: consumer Gauls\(10\): get\(\) = "secundus,") s
+24.9 579.5 M (11:) s
+50.1 579.5 M
+(   412.123: producer Romans\(8\): put \("qu\342rtus"\)) s
+24.9 568 M (12:) s
+50.1 568 M
+(   512.856: producer Romans\(8\): put \("qu\356ntus"\)) s
+24.9 556.5 M (13:) s
+50.1 556.5 M
+(   610.226: consumer Picts\(11\): get\(\) = "pr\356mus") s
+24.9 545 M (14:) s
+50.1 545 M
+(   611.450: producer Greeks\(9\): put \("deuteros"\)) s
+24.9 533.5 M (15:) s
+50.1 533.5 M
+(   612.128: consumer Gauls\(10\): get\(\) = "pr\364tos") s
+24.9 522 M (16:) s
+50.1 522 M
+(   613.543: producer Romans\(8\): put \("sextus"\)) s
+24.9 510.5 M (17:) s
+50.1 510.5 M
+(   714.288: producer Romans\(8\): put \("septimus"\)) s
+24.9 499 M (18:) s
+50.1 499 M
+(   812.809: consumer Gauls\(10\): get\(\) = "qu\342rtus") s
+24.9 487.5 M (19:) s
+50.1 487.5 M
+(   814.978: producer Romans\(8\): put \("oct\342vus"\)) s
+24.9 476 M (20:) s
+50.1 476 M
+(   912.198: producer Greeks\(9\): put \("tritos"\)) s
+24.9 464.5 M (21:) s
+50.1 464.5 M
+(   915.736: producer Romans\(8\): put \("n\364nus"\)) s
+24.9 453 M (22:) s
+50.1 453 M
+(  1013.545: consumer Gauls\(10\): get\(\) = "qu\356ntus") s
+24.9 441.5 M (23:) s
+50.1 441.5 M
+(  1110.989: consumer Picts\(11\): get\(\) = "tertius") s
+24.9 430 M (24:) s
+50.1 430 M
+(  1114.312: producer Romans\(8\): put \("decimus"\)) s
+24.9 418.5 M (25:) s
+50.1 418.5 M
+(  1114.988: producer Romans\(8\): finished) s
+24.9 407 M (26:) s
+50.1 407 M
+(  1212.946: producer Greeks\(9\): put \("tetartos"\)) s
+24.9 395.5 M (27:) s
+50.1 395.5 M
+(  1214.300: consumer Gauls\(10\): get\(\) = "deuteros") s
+24.9 384 M (28:) s
+50.1 384 M
+(  1414.989: consumer Gauls\(10\): get\(\) = "septimus") s
+24.9 372.5 M (29:) s
+50.1 372.5 M
+(  1515.003: producer Greeks\(9\): put \("pentos"\)) s
+24.9 361 M (30:) s
+50.1 361 M
+(  1611.736: consumer Picts\(11\): get\(\) = "sextus") s
+24.9 349.5 M (31:) s
+50.1 349.5 M
+(  1615.679: consumer Gauls\(10\): get\(\) = "oct\342vus") s
+24.9 338 M (32:) s
+50.1 338 M
+(  1815.689: producer Greeks\(9\): put \("hektos"\)) s
+24.9 326.5 M (33:) s
+50.1 326.5 M
+(  1816.413: consumer Gauls\(10\): get\(\) = "n\364nus") s
+24.9 315 M (34:) s
+50.1 315 M
+(  2017.098: consumer Gauls\(10\): get\(\) = "decimus") s
+24.9 303.5 M (35:) s
+50.1 303.5 M
+(  2112.482: consumer Picts\(11\): get\(\) = "tritos") s
+24.9 292 M (36:) s
+50.1 292 M
+(  2116.366: producer Greeks\(9\): put \("hebdomos"\)) s
+24.9 280.5 M (37:) s
+50.1 280.5 M
+(  2217.796: consumer Gauls\(10\): get\(\) = "tetartos") s
+24.9 269 M (38:) s
+50.1 269 M
+(  2417.121: producer Greeks\(9\): put \("ogdoos"\)) s
+24.9 257.5 M (39:) s
+50.1 257.5 M
+(  2418.473: consumer Gauls\(10\): get\(\) = "hektos") s
+24.9 246 M (40:) s
+50.1 246 M
+(  2613.251: consumer Picts\(11\): get\(\) = "pentos") s
+24.9 234.5 M (41:) s
+50.1 234.5 M
+(  2619.160: consumer Gauls\(10\): get\(\) = "hebdomos") s
+24.9 223 M (42:) s
+50.1 223 M
+(  2717.802: producer Greeks\(9\): put \("enatos"\)) s
+24.9 211.5 M (43:) s
+50.1 211.5 M
+(  2918.490: consumer Gauls\(10\): get\(\) = "enatos") s
+24.9 200 M (44:) s
+50.1 200 M
+(  3018.480: producer Greeks\(9\): put \("dekatos"\)) s
+24.9 188.5 M (45:) s
+50.1 188.5 M
+(  3019.090: producer Greeks\(9\): finished) s
+24.9 177 M (46:) s
+50.1 177 M
+(  3019.635: main\(1\): finished) s
+24.9 165.5 M (47:) s
+50.1 165.5 M
+(  3114.020: consumer Picts\(11\): get\(\) = "ogdoos") s
+24.9 154 M (48:) s
+50.1 154 M
+(  3114.699: consumer Picts\(11\): finished) s
+24.9 142.5 M (49:) s
+50.1 142.5 M
+(  3219.178: consumer Gauls\(10\): get\(\) = "dekatos") s
+24.9 131 M (50:) s
+50.1 131 M
+(  3219.902: consumer Gauls\(10\): finished) s
+_R
+S
+%%Trailer
+%%Pages: 7
+%%DocumentNeededResources: font Times-Roman Courier-Bold Times-Bold 
+%%EOF

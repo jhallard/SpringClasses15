@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting string2int.cpp
+string2int.cpp:
+     $Id: string2int.cpp,v 1.15 2014-06-20 22:46:10-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 string2int.cpp -o string2int -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f string2int.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished string2int.cpp

@@ -1,0 +1,63 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2009.03.06.22.17.05;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+//
+// C++ example of a Java interface.
+//
+// An interface in java is an abstract class with no methods and
+// no fields.  Java allows single inheritance of classes and
+// multiple inheritance of interfaces.  C++ allows multiple
+// inheritance of classes.
+//
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// stack.h - interface stack
+/////////////////////////////////////////////////////////////////
+
+template <class item_t>
+class stack {
+   public:
+      virtual stack &operator= (const stack &) = 0;
+      virtual ~stack () = 0;
+      virtual bool empty () = 0;
+      virtual void push (const item_t &) = 0;
+      virtual item_t pop () = 0;
+      struct empty_error: public runtime_error {
+         empty_error (): runtime_error ("stack::empty_error") {}
+      }
+}
+
+/////////////////////////////////////////////////////////////////
+// linkedstack.h - class
+/////////////////////////////////////////////////////////////////
+
+template <class item_t>
+class linkedstack: public stack<item_t> {
+}
+@

@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting strvec.cpp
+strvec.cpp:
+     $Id: strvec.cpp,v 1.24 2014-06-20 21:56:35-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 strvec.cpp -o strvec -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f strvec.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished strvec.cpp

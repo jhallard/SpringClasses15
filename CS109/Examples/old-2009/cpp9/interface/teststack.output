@@ -1,0 +1,76 @@
+Reading teststack
+Reading ld.so.1
+Reading rtcapihook.so
+Reading libCstd.so.1
+Reading libCrun.so.1
+Reading libm.so.2
+Reading libc.so.1
+Reading libdl.so.1
+Reading rtcaudit.so
+Reading libmapmalloc.so.1
+Reading libgen.so.1
+Reading rtcboot.so
+Reading librtc.so
+leaks checking - ON
+Running: teststack stack.h arraystack.h linkedstack.h stack.cc arraystack.cc linkedstack.cc teststack.cc Makefile 
+(process id 2208)
+RTC: Enabling Error Checking...
+RTC: Running program...
+
+
+stack type: 
+arraystack<std::basic_string<char, std::char_traits<char>, std::allocator<char>>>
+vector type: 
+std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char>>, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char>>>>
+Pushing: stack.h
+Pushing: arraystack.h
+Pushing: linkedstack.h
+Pushing: stack.cc
+Pushing: arraystack.cc
+Pushing: linkedstack.cc
+Pushing: teststack.cc
+Pushing: Makefile
+Popping: Makefile
+Popping: teststack.cc
+Popping: linkedstack.cc
+Popping: arraystack.cc
+Popping: stack.cc
+Popping: linkedstack.h
+Popping: arraystack.h
+Popping: stack.h
+
+
+stack type: 
+linkedstack<std::basic_string<char, std::char_traits<char>, std::allocator<char>>>
+vector type: 
+std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char>>, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char>>>>
+Pushing: stack.h
+Pushing: arraystack.h
+Pushing: linkedstack.h
+Pushing: stack.cc
+Pushing: arraystack.cc
+Pushing: linkedstack.cc
+Pushing: teststack.cc
+Pushing: Makefile
+Popping: Makefile
+Popping: teststack.cc
+Popping: linkedstack.cc
+Popping: arraystack.cc
+Popping: stack.cc
+Popping: linkedstack.h
+Popping: arraystack.h
+Popping: stack.h
+
+Checking for memory leaks...
+  errors are being redirected to file 'teststack.errs'
+
+Actual leaks report    (actual leaks:            0  total size:          0 bytes)
+
+ 
+
+Possible leaks report  (possible leaks:          0  total size:          0 bytes)
+
+ 
+RTC output redirected to logfile 'teststack.errs'
+
+execution completed, exit code is 0

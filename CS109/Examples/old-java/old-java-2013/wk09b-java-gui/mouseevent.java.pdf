@@ -1,0 +1,274 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/31/12)Tj
+-0.659766 -12.8004 Td
+(22:32:49)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 259.15 736.5 Tm
+(mouseevent.java)Tj
+-72.5258 18 Td
+($cmps109-wm/Examples/wk09b-java-gui/)Tj
+/R10 10 Tf
+-118.625 -35.5 Td
+[(1:)-600(// $Id: mouseevent.java,v 1.12 2012-05-31 22:09:32-07 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(//)]TJ
+T*[(4:)-600(// Shows how to handle mouse events.)]TJ
+T*[(5:)-600(// Mouse is clicked, which is pressed then released.)]TJ
+T*[(6:)-600(// Mouse enters or leaves on a mouseover.)]TJ
+T*[(7:)-600(//)]TJ
+(8:)'
+T*[(9:)-600(import java.awt.*;)]TJ
+-6 -11 Td
+[(10:)-600(import java.awt.event.*;)]TJ
+T*[(11:)-600(import javax.swing.*;)]TJ
+T*[(12:)-600(import static java.lang.System.*;)]TJ
+(13:)'
+T*[(14:)-600(class mouseevent {)]TJ
+(15:)'
+T*[(16:)-600(   static void log_event \(String name, MouseEvent event\) {)]TJ
+T*[(17:)-600(      out.printf \("Mouse %s:%n", name\);)]TJ
+T*[(18:)-600(      Point relative = event.getPoint\(\);)]TJ
+T*[(19:)-600(      Point absolute = event.getLocationOnScreen\(\);)]TJ
+T*[(20:)-600(      out.printf \("   relative = \(%s,%s\), screen = \(%s,%s\)%n",)]TJ
+T*[(21:)-600(                  relative.getX\(\), relative.getY\(\),)]TJ
+T*[(22:)-600(                  absolute.getX\(\), absolute.getY\(\)\);)]TJ
+T*[(23:)-600(      out.printf \("   button = %d, clicks = %d, when = %d%n",)]TJ
+T*[(24:)-600(                  event.getButton\(\), event.getClickCount\(\),)]TJ
+T*[(25:)-600(                  event.getWhen\(\)\);)]TJ
+T*[(26:)-600(      out.printf \("   modifiers ="\);)]TJ
+T*[(27:)-600(      if \(event.isAltDown\(\)\) out.printf \(" Alt"\);)]TJ
+T*[(28:)-600(      if \(event.isAltGraphDown\(\)\) out.printf \(" AltGraph"\);)]TJ
+T*[(29:)-600(      if \(event.isControlDown\(\)\) out.printf \(" Control"\);)]TJ
+T*[(30:)-600(      if \(event.isMetaDown\(\)\) out.printf \(" Meta"\);)]TJ
+T*[(31:)-600(      if \(event.isShiftDown\(\)\) out.printf \(" Shift"\);)]TJ
+T*[(32:)-600(      out.printf \("%n"\);)]TJ
+T*[(33:)-600(   })]TJ
+(34:)'
+T*[(35:)-600(   static class mouse_listener implements MouseListener {)]TJ
+T*[(36:)-600(      public void mouseClicked \(MouseEvent event\) {)]TJ
+T*[(37:)-600(         log_event \("Clicked", event\);)]TJ
+T*[(38:)-600(      })]TJ
+T*[(39:)-600(      public void mouseEntered \(MouseEvent event\) {)]TJ
+T*[(40:)-600(         log_event \("Entered", event\);)]TJ
+T*[(41:)-600(      })]TJ
+T*[(42:)-600(      public void mouseExited \(MouseEvent event\) {)]TJ
+T*[(43:)-600(         log_event \("Exited", event\);)]TJ
+T*[(44:)-600(      })]TJ
+T*[(45:)-600(      public void mousePressed \(MouseEvent event\) {)]TJ
+T*[(46:)-600(         log_event \("Pressed", event\);)]TJ
+T*[(47:)-600(      })]TJ
+T*[(48:)-600(      public void mouseReleased \(MouseEvent event\) {)]TJ
+T*[(49:)-600(         log_event \("Released", event\);)]TJ
+T*[(50:)-600(      })]TJ
+T*[(51:)-600(   })]TJ
+(52:)'
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+3164
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/31/12)Tj
+-0.659766 -12.8004 Td
+(22:32:49)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 259.15 736.5 Tm
+(mouseevent.java)Tj
+-72.5258 18 Td
+($cmps109-wm/Examples/wk09b-java-gui/)Tj
+/R10 10 Tf
+-124.625 -35.5 Td
+(53:)Tj
+11 TL
+T*[(54:)-600(   public static void main \(String[] args\) {)]TJ
+T*[(55:)-600(      JFrame frame = new JFrame \("mouseevent"\);)]TJ
+T*[(56:)-600(      Container pane = frame.getContentPane \(\);)]TJ
+T*[(57:)-600(      JButton button = new JButton \("Click this"\);)]TJ
+T*[(58:)-600(      pane.add \(button\);)]TJ
+T*[(59:)-600(      button.setFont \(new Font \("Helvetica", Font.BOLD, 36\)\);)]TJ
+T*[(60:)-600(      button.addMouseListener \(new mouse_listener \(\)\);)]TJ
+T*[(61:)-600(      frame.setLocation \(256, 256\);)]TJ
+T*[(62:)-600(      frame.pack \(\);)]TJ
+T*[(63:)-600(      frame.setVisible \(true\);)]TJ
+T*[(64:)-600(   })]TJ
+(65:)'
+T*[(66:)-600(})]TJ
+(67:)'
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+1200
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+] /Count 2
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20120531223253)
+/ModDate(D:20120531223253)>>endobj
+xref
+0 17
+0000000000 65535 f 
+0000004850 00000 n 
+0000005358 00000 n 
+0000004784 00000 n 
+0000004516 00000 n 
+0000000009 00000 n 
+0000003223 00000 n 
+0000005156 00000 n 
+0000005027 00000 n 
+0000005225 00000 n 
+0000005093 00000 n 
+0000005290 00000 n 
+0000004898 00000 n 
+0000004649 00000 n 
+0000003243 00000 n 
+0000004495 00000 n 
+0000004968 00000 n 
+trailer
+<< /Size 17 /Root 1 0 R /Info 2 0 R
+/ID [<5C8AA6C8DB18FAFC68DC45612FB53713><5C8AA6C8DB18FAFC68DC45612FB53713>]
+>>
+startxref
+5469
+%%EOF

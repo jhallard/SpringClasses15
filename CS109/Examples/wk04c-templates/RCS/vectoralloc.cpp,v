@@ -1,0 +1,528 @@
+head	1.6;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.6
+date	2013.08.01.20.00.40;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.08.01.19.40.06;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.08.01.19.37.43;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.08.01.19.37.01;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.08.01.19.27.19;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.08.01.01.09.27;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@-
+@
+text
+@// $Id: vectoralloc.cpp,v 1.5 2013-08-01 12:40:06-07 - - $
+
+//
+// Vector using allocate/deallocate/construct/destroy.
+// With iterator/const_iterator.
+//
+
+//#include <algorithm>
+#include <cstddef>
+#include <initializer_list>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <string>
+
+using namespace std;
+
+template <typename T>
+class vectoralloc {
+   public:
+      typedef T value_type;
+      typedef value_type& reference;
+      typedef const value_type& const_reference;
+      typedef value_type* pointer;
+      typedef const value_type* const_pointer;
+      typedef ptrdiff_t difference_type;
+      typedef size_t size_type;
+      template <typename TI, typename Pointer = TI*,
+                typename Reference = TI&> class base_iterator;
+      typedef base_iterator<value_type> iterator;
+      typedef base_iterator<const value_type> const_iterator;
+   private:
+      const static size_type MIN_RESERVE = 4;
+      static allocator<value_type> alloc;
+      size_type _size;
+      size_type _capacity;
+      pointer _data;
+      void destroy_this();
+      void move_that (vectoralloc&&);
+      void copy_that (const vectoralloc&);
+      void construct_data (pointer start, pointer end, pointer dest);
+      inline void clear_data() {_size = _capacity = 0; _data = NULL; }
+
+
+   public:
+      // Replace implicit members.
+      inline vectoralloc() { clear_data(); }
+      vectoralloc (const vectoralloc&);
+      vectoralloc (vectoralloc&&);
+      vectoralloc& operator= (const vectoralloc&);
+      vectoralloc& operator= (vectoralloc&&);
+      ~vectoralloc();
+
+      // More constructors.
+      explicit vectoralloc (size_type size,
+                            const value_type& val = value_type());
+      explicit vectoralloc (initializer_list<value_type> ilist);
+
+      // Iterators: begin, cbegin, end, cend.
+      inline iterator begin()
+             { return iterator (&_data[0]); }
+      inline const_iterator begin() const
+             { return const_iterator (&_data[0]); }
+      inline const_iterator cbegin() const
+             { return const_iterator (&_data[0]); }
+      inline iterator end()
+             { return iterator (&_data[_size]); }
+      inline const_iterator end() const
+             { return const_iterator (&_data[_size]); }
+      inline const_iterator cend() const
+             { return const_iterator (&_data[_size]); }
+
+      // Capacity.
+      inline size_type size() const { return _size; }
+      inline size_type capacity() const { return _capacity; }
+      inline bool empty() const { return size() == 0; }
+      void reserve (size_type);
+
+      // Access: [], front, back.
+      inline reference operator[] (size_type pos) { return _data[pos]; }
+      inline const_reference operator[] (size_type pos) const
+             { return _data[pos]; }
+      inline reference front() { return _data[0]; }
+      inline const_reference front() const { return _data[0]; }
+      inline reference back() { return _data[_size - 1]; }
+      inline const_reference back() const { return _data[_size - 1]; }
+
+      // Modifiers: push_back, pop_back.
+      void push_back (const value_type& value);
+      inline void pop_back() { alloc.destroy (&_data[--_size]); }
+};
+
+
+template <typename T>
+template <typename TI, typename Pointer, typename Reference>
+class vectoralloc<T>::base_iterator {
+   public:
+      typedef Pointer pointer;
+      typedef Reference reference;
+   private:
+      pointer _datum;
+      inline base_iterator (pointer ptr): _datum(ptr) {}
+   public:
+      inline base_iterator(): _datum(NULL) {};
+      // Other implicit members by default OK.
+      inline base_iterator& operator++() { ++_datum; return *this; }
+      inline base_iterator& operator--() { --_datum; return *this; }
+      inline base_iterator operator++ (int)
+             { auto result (*this); ++_datum; return result; }
+      inline base_iterator operator-- (int)
+             { auto result (*this); --_datum; return result; }
+      inline reference operator*() { return *_datum; }
+      inline const reference operator*() const { return *_datum; }
+      inline pointer operator->() { return _datum; }
+      inline const pointer operator->() const { return _datum; }
+      inline bool operator== (const base_iterator& that) const
+             { return _datum == that._datum; }
+      inline bool operator!= (const base_iterator& that) const
+             { return not (*this == that); }
+};
+
+
+template <typename T>
+allocator<typename vectoralloc<T>::value_type> vectoralloc<T>::alloc;
+
+// Private destroy_this.
+template <typename T>
+void vectoralloc<T>::destroy_this() {
+   if (_data) {
+      for (pointer curr = &_data[0]; curr != &_data[_size]; ++curr) {
+         alloc.destroy (curr);
+      }
+   }
+}
+
+// Private move_that: and then clear that.
+template <typename T>
+void vectoralloc<T>::move_that (vectoralloc&& that) {
+   _size = that._size;
+   _capacity = that._capacity;
+   _data = that._data;
+   that.clear_data();
+}
+
+// Private: copy_that.
+template <typename T>
+void vectoralloc<T>::copy_that (const vectoralloc& that) {
+   reserve (that._size);
+   _size = that._size;
+   uninitialized_copy (that.cbegin(), that.cend(), _data);
+   return *this;
+}
+
+// Private: construct_data.
+template <typename T>
+void vectoralloc<T>::construct_data (pointer start, pointer end,
+                                     pointer dest) {
+   while (start != end) alloc.construct (start++, std::move (*dest++));
+}
+
+// Copy constructor.
+template <typename T>
+vectoralloc<T>::vectoralloc (const vectoralloc& that) {
+   clear_data();
+   copy_that (that);
+}
+
+// Copy operator=.
+template <typename T>
+vectoralloc<T>& vectoralloc<T>::operator= (const vectoralloc& that) {
+   if (*this == that) return *this;
+   destroy_this();
+   copy_that (that);
+}
+
+// Move constructor.
+template <typename T>
+vectoralloc<T>::vectoralloc (vectoralloc&& that) {
+   move_that (that);
+}
+
+// Move operator=.
+template <typename T>
+vectoralloc<T>& vectoralloc<T>::operator= (vectoralloc&& that) {
+   if (*this == that) return *this;
+   destroy_this();
+   move_that (that);
+   return *this;
+}
+
+
+// Destructor.
+template <typename T>
+vectoralloc<T>::~vectoralloc() {
+   destroy_this();
+   alloc.deallocate (_data, _capacity);
+}
+
+// Fill constructor.
+template <typename T>
+vectoralloc<T>::vectoralloc (size_type fill, const value_type& val) {
+   clear_data();
+   while (size() < fill) push_back (val);
+}
+
+// Initializer list constructor.
+template <typename T>
+vectoralloc<T>::vectoralloc (initializer_list<value_type> ilist) {
+   clear_data();
+   reserve (ilist.size());
+   uninitialized_copy (ilist.cbegin(), ilist.cend(), _data);
+}
+
+// Reserve minimum uninitialized space.
+template <typename T>
+void vectoralloc<T>::reserve (size_type needed) {
+   if (needed <= _capacity) return;
+   if (needed < MIN_RESERVE) needed = MIN_RESERVE;
+   if (needed < 2 * _capacity) needed = 2 * _capacity;
+   pointer newdata = alloc.allocate (needed);
+   construct_data (&_data[0], &_data[_size], newdata);
+   destroy_this();
+   alloc.deallocate (_data, _capacity);
+   _capacity = needed;
+   _data = newdata;
+}
+
+template <typename T>
+void vectoralloc<T>::push_back (const value_type& that) {
+   reserve (++_size);
+   alloc.construct (&_data[_size - 1], that);
+}
+
+
+int main (int argc, char** argv) {
+   vectoralloc<int> vs;
+   for (int i = 0; i < argc; ++i) {
+      stringstream sstr;
+      sstr << argv[i];
+      int n;
+      sstr >> n;
+      vs.push_back (n);
+   }
+   for (size_t i = 0; i < vs.size(); ++i) {
+      cout << vs[i] << endl;
+   }
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       vectoralloc this is some test data for the vectoralloc \
+//TEST//       >vectoralloc.out 2>&1
+//TEST// pstatus >>vectoralloc.out
+//TEST// mkpspdf vectoralloc.ps vectoralloc.cpp* vectoralloc.out
+*/
+
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectoralloc.cpp,v 1.3 2013-08-01 12:37:01-07 - - $
+d8 1
+a8 1
+#include <algorithm>
+d11 1
+d13 2
+d123 3
+d129 5
+a133 1
+   if (_data) foreach (&_data[0], &_data[_size], alloc.destroy);
+d158 1
+a158 1
+   while (start != end) alloc.construct (start++, std::move (dest++));
+d196 1
+a196 1
+   alloc.dealloc (_data, _capacity);
+d236 11
+a246 3
+   vectoralloc<string> vs;
+   for (int i = 0; i < argc; ++i) vs.push_back (argv[i]);
+   for (int i = 0; i < vs.size(); ++i) cout << vs[i] << endl;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d226 3
+d232 8
+a239 1
+//TEST// mkpspdf vectoralloc.ps vectoralloc.cpp*
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectoralloc.cpp,v 1.2 2013-08-01 12:27:19-07 - - $
+d146 2
+a147 1
+void construct_data (pointer start, pointer end, pointer dest) {
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectoralloc.cpp,v 1.7 2013-07-31 19:55:00-07 - - $
+d30 1
+a30 1
+      const static size_type MIN_RESERVE = 8;
+d38 1
+d144 6
+d206 9
+a214 5
+   if (needed <= capacity()) return;
+   size_t new_capacity = MIN_RESERVE;
+   while (new_capacity < needed) new_capacity <<= 1;
+   
+   //FIXME// Function not implemented.
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectoralloc.cpp,v 1.10 2013-07-31 14:49:08-07 - - $
+d8 1
+d11 1
+d26 3
+a28 3
+                typename Reference = TI&> class vectoralloc_iterator;
+      typedef vectoralloc_iterator<value_type> iterator;
+      typedef vectoralloc_iterator<const value_type> const_iterator;
+d30 2
+d35 6
+a41 1
+
+d43 2
+a44 2
+      vectoralloc();
+      vectoralloc (const vectoralloc& );
+d46 1
+a46 1
+      vectoralloc& operator= (const vectoralloc& );
+d55 13
+a67 7
+      // Iterators.
+      iterator begin();
+      const_iterator begin() const;
+      const_iterator cbegin() const;
+      iterator end();
+      const_iterator end() const;
+      const_iterator cend() const;
+d73 1
+a73 1
+      void reserve (size_type size);
+d75 1
+a75 1
+      // Access.
+d77 2
+a78 2
+      inline const_reference operator[] (size_type pos) const {
+                              return _data[pos]; }
+d84 3
+a86 3
+      // Modifiers.
+      void push_back (const value_type& );
+      void pop_back();
+d89 1
+d92 1
+a92 1
+class vectoralloc<T>::vectoralloc_iterator {
+d98 1
+a98 1
+      vectoralloc_iterator (pointer);
+d100 1
+a100 1
+      vectoralloc_iterator(): _datum(NULL) {};
+d102 14
+a115 10
+      vectoralloc_iterator& operator++();
+      vectoralloc_iterator operator++ (int);
+      vectoralloc_iterator& operator--();
+      vectoralloc_iterator operator-- (int);
+      reference operator*();
+      const reference operator*() const;
+      pointer operator->();
+      const pointer operator->() const;
+      bool operator== (const vectoralloc_iterator& that) const;
+      bool operator!= (const vectoralloc_iterator& that) const;
+d118 2
+d121 2
+a122 1
+vectoralloc<T>::vectoralloc() {
+d125 1
+d127 5
+a131 1
+vectoralloc<T>::vectoralloc (const vectoralloc& ) {
+d134 1
+d136 5
+a140 1
+vectoralloc<T>::vectoralloc (vectoralloc&&) {
+d143 1
+d145 3
+a147 1
+vectoralloc<T>::vectoralloc& operator= (const vectoralloc& ) {
+d150 1
+d152 4
+a155 1
+vectoralloc<T>::vectoralloc& operator= (vectoralloc&&) {
+d158 1
+d160 2
+a161 1
+vectoralloc<T>::~vectoralloc() {
+d164 1
+d166 5
+a170 1
+vectoralloc<T>::vectoralloc (size_type size, const value_type& val = value_type()) {
+d173 2
+d176 3
+a178 1
+vectoralloc<T>::vectoralloc (initializer_list<value_type> ilist) {
+d181 1
+d183 3
+a185 1
+iterator vectoralloc<T>::begin() {
+d188 1
+d190 4
+a193 1
+const_iterator vectoralloc<T>::begin() const {
+d196 1
+d198 6
+a203 1
+const_iterator vectoralloc<T>::cbegin() const {
+d207 3
+a209 1
+iterator vectoralloc<T>::end() {
+d212 3
+a214 18
+template <typename T>
+const_iterator vectoralloc<T>::end() const {
+}
+
+template <typename T>
+const_iterator vectoralloc<T>::cend() const {
+}
+
+template <typename T>
+void vectoralloc<T>::reserve (size_type size) {
+}
+
+template <typename T>
+void vectoralloc<T>::push_back (const value_type& ) {
+}
+
+template <typename T>
+void vectoralloc<T>::pop_back() {
+d217 1
+@

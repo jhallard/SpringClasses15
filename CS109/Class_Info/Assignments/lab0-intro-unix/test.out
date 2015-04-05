@@ -1,0 +1,19 @@
+say_hello
+0x256f148->hello::hello()
+Hello, World!
+0x7fff4271f800->hello::hello (Goodbye, world!)
+Goodbye, world!
+0x7fff4271f7f0->hello::hello (const hello&)
+Hello, World!
+for: foo
+for: bar
+for: baz
+for: qux
+for_each: ./say_hello
+for_each: foo
+for_each: bar
+for_each: baz
+for_each: qux
+0x7fff4271f7f0->hello::~hello()
+0x7fff4271f800->hello::~hello()
+0x256f148->hello::~hello()

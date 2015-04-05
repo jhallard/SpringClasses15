@@ -1,0 +1,48 @@
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Source: foo_g.cpp
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     1	// $Id: foo_g.cpp,v 1.1 2013-08-08 17:47:22-07 - - $
+     2	
+     3	#include <iostream>
+     4	using namespace std;
+     5	
+     6	#define T(X) cout << __func__ << "[" << __LINE__ << "]: " << X
+     7	
+     8	#define U(X) T(#X) << endl; X
+     9	
+    10	#define D(X,Y) X { T(#X) << " " << this << endl; Y; }
+    11	
+    12	struct foo {
+    13	   D(foo(),)
+    14	   D(~foo(),)
+    15	   D(foo (const foo &),)
+    16	   D(foo &operator= (const foo &),return *this)
+    17	};
+    18	
+    19	foo f() {
+    20	   U()
+    21	   U(foo g;)
+    22	   U(return g;)
+    23	}
+    24	
+    25	int main() {
+    26	   U(foo h;)
+    27	   U(h = f();)
+    28	   U(return 0;)
+    29	}
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Output: ./foo_g 2>&1
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     1	main[26]: foo h;
+     2	foo[13]: foo() 0x7fff37ee0ade
+     3	main[27]: h = f();
+     4	f[20]: 
+     5	f[21]: foo g;
+     6	foo[13]: foo() 0x7fff37ee0adf
+     7	f[22]: return g;
+     8	operator=[16]: foo &operator= (const foo &) 0x7fff37ee0ade
+     9	~foo[14]: ~foo() 0x7fff37ee0adf
+    10	main[28]: return 0;
+    11	~foo[14]: ~foo() 0x7fff37ee0ade
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+pstatus: 0x0000 EXIT STATUS = 0

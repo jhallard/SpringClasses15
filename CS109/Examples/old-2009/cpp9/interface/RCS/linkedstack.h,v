@@ -1,0 +1,52 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.1
+date	2009.03.07.04.04.35;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+#ifndef __LINKEDSTACK_H__
+#define __LINKEDSTACK_H__
+
+#include "stack.h"
+
+template <class item_t>
+class linkedstack: public stack<item_t> {
+   public:
+      linkedstack ();
+      linkedstack (const linkedstack &);
+      virtual linkedstack<item_t> &operator= (
+                  const linkedstack<item_t> &);
+      virtual ~linkedstack ();
+      virtual bool empty ();
+      virtual void push (const item_t &);
+      virtual item_t pop ();
+   private:
+      struct node {
+         node (const item_t &, node *);
+         item_t item;
+         node *link;
+      };
+      node *top;
+};
+
+#endif
+
+@

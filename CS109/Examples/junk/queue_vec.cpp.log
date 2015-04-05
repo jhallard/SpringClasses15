@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting queue_vec.cpp
+queue_vec.cpp:
+     $Id: queue_vec.cpp,v 1.10 2014-07-18 15:53:49-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 queue_vec.cpp -o queue_vec -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f queue_vec.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished queue_vec.cpp

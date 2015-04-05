@@ -1,0 +1,5 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting abox.cpp
+* abox.cpp: $Id: abox.cpp,v 1.12 2014-04-10 14:12:07-07 - - $
+* g++ -g -O0 -Wall -Wextra -std=gnu++11 abox.cpp -o abox -lm
+* rm -f abox.o
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished abox.cpp

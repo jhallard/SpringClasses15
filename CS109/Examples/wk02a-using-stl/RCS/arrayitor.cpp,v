@@ -1,0 +1,71 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2015.01.07.01.07.20;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2015.01.07.01.02.20;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: arrayitor.cpp,v 1.1 2015-01-06 17:02:20-08 - - $
+
+//
+// arrayitor - Simple example of an encapsulated array class
+// with an iterator.
+//
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class array {
+   private:
+      string* data {};
+      array() = delete;
+      array (array&) = delete;
+      array (array&&) = delete;
+      array& operator= (array&) = delete;
+      array& operator= (array&&) = delete;
+   public:
+      array (size_t size);
+      ~array();
+      class iterator {
+         bool operator!= (const iterator&);
+         string& operator*();
+      }
+      iterator begin();
+      iterator end();
+};
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d4 26
+a29 1
+// 
+@

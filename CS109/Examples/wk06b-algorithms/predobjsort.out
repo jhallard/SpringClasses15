@@ -1,0 +1,15 @@
+
+initial order:
+ predobjsort hello world foo bar baz quux
+
+default sort order:
+ bar baz foo hello predobjsort quux world
+
+incrcmp<string> order:
+ bar baz foo hello predobjsort quux world
+
+decrcmp<string> order:
+ world quux predobjsort hello foo baz bar
+
+lengthcmp<string> order:
+ bar baz foo quux hello world predobjsort

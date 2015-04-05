@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting mapitor.cpp
+mapitor.cpp:
+     $Id: mapitor.cpp,v 1.10 2014-06-20 22:36:12-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 mapitor.cpp -o mapitor -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f mapitor.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished mapitor.cpp

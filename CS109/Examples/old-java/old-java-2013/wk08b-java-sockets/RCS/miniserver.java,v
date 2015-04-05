@@ -1,0 +1,206 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.5
+date	2013.08.14.03.18.57;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.08.14.03.02.31;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.05.29.23.36.26;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.05.29.23.33.29;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.29.23.21.13;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: miniserver.java,v 1.4 2013-08-13 20:02:31-07 - - $
+
+//
+// Mini server.
+//    Usage:  miniserver hostport
+// Accept a connection from a client and echo back any input.
+//
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import static java.lang.System.*;
+
+class miniserver {
+
+   static void quit (String format, Object... params) {
+      err.printf (format, params);
+      exit (1);
+   }
+
+   static String ident (options opts) {
+      return String.format ("%s: port %d", opts.jarname,
+                            opts.portnumber);
+   }
+
+   static String get_jarname() {
+      String jarpath = getProperty ("java.class.path");
+      int lastslash = jarpath.lastIndexOf ('/');
+      if (lastslash < 0) return jarpath;
+      return jarpath.substring (lastslash + 1);
+   }
+
+   static class options {
+      final String jarname = get_jarname();
+      int portnumber;
+      options (String[] args) {
+         try {
+            if (args.length != 1) throw new NumberFormatException();
+            portnumber = Integer.parseInt (args[0]);
+         }catch (NumberFormatException exn) {
+            quit ("Usage: %s portnumber%n", jarname);
+         }
+      }
+   }
+
+
+
+   public static void main (String[] args) {
+      options opts = new options (args);
+      try {
+         ServerSocket socket = new ServerSocket (opts.portnumber);
+         out.printf ("%s: waiting for client%n", ident (opts));
+         Socket client = socket.accept();
+         out.printf ("%s: socket.accept OK%n", ident (opts));
+         Scanner client_in = new Scanner (client.getInputStream());
+         PrintWriter client_out =
+                     new PrintWriter (client.getOutputStream());
+         for (int count = 1; client_in.hasNextLine(); ++count) {
+            String line = client_in.nextLine();
+                   out.printf ("Client sent: [%d]%s%n", count, line);
+            client_out.printf ("Client sent: [%d]%s%n", count, line);
+            client_out.flush();
+         }
+         socket.close();
+         client.close();
+         out.printf ("%s: finished%n", ident (opts));
+      }catch (IOException exn) {
+         quit ("%s: %s%n", ident (opts), exn);
+      }catch (IllegalArgumentException exn) {
+         quit ("%s: %s%n", ident (opts), exn);
+      }
+   }
+
+}
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: miniserver.java,v 1.3 2012-05-29 16:36:26-07 - - $
+d47 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: miniserver.java,v 1.2 2012-05-29 16:33:29-07 - - $
+d59 2
+a60 2
+            out.printf ("[%d]%s%n", count, line);
+            client_out.printf ("[%d]%s%n", count, line);
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: miniserver.java,v 1.1 2012-05-29 16:21:13-07 - - $
+d26 7
+d34 1
+a34 1
+      final String jarname = getProperty ("java.class.path");
+d46 1
+a50 3
+         InetAddress inet = socket.getInetAddress();
+         out.printf ("%s: socket:port = %s:%s:%d%n", ident (opts),
+                     inet, inet.getHostName(), socket.getLocalPort());
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: miniserver.java,v 1.8 2009-03-05 20:21:41-08 - - $
+d22 1
+a22 1
+      return String.format ("%s: port %d", opts.progname,
+d27 1
+a27 1
+      final String progname = "miniserver";
+d31 1
+a31 1
+            if (args.length != 1) throw new NumberFormatException ();
+d34 1
+a34 1
+            quit ("Usage: %s portnumber%n", progname);
+d43 3
+d47 1
+a47 1
+         Socket client = socket.accept ();
+d49 1
+a49 1
+         Scanner client_in = new Scanner (client.getInputStream ());
+d51 4
+a54 3
+                     new PrintWriter (client.getOutputStream ());
+         for (int count = 1; client_in.hasNextLine (); ++count) {
+            String line = client_in.nextLine ();
+d56 1
+a56 1
+            client_out.flush ();
+d58 2
+a59 2
+         socket.close ();
+         client.close ();
+@

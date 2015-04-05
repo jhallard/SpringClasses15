@@ -1,0 +1,100 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.2
+date	2012.05.24.04.31.15;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.24.04.30.44;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: raceclick.java,v 1.1 2012-05-23 21:30:44-07 - - $
+
+//
+// Show race conditions between two threads that click an int.
+// Unsynchronized clicking the counter 1000000 times each.
+//
+
+import static java.lang.System.*;
+
+class raceclick {
+
+   static class counter {
+      int count = 0;
+   }
+
+   static class racer implements Runnable {
+      int ident;
+      counter counted;
+      racer (int idinit, counter countinit) {
+         ident = idinit;
+         counted = countinit;
+      }
+      public void run () {
+         out.printf ("racer %d starting%n", ident);
+         out.flush();
+         for (int itor = 0; itor < 1000000; ++itor) ++counted.count;
+         out.printf ("racer %d finished, count = %d%n",
+                     ident, counted.count);
+         out.flush();
+      }
+   }
+
+   public static void main (String[] args) {
+      out.printf ("main starting%n");
+      out.flush();
+      counter counted = new counter ();
+      Thread racer1 = new Thread (new racer (1, counted));
+      Thread racer2 = new Thread (new racer (2, counted));
+      racer1.start ();
+      racer2.start ();
+      out.printf ("main finished, count = %d%n", counted.count);
+      out.flush();
+   }
+
+}
+
+//TEST// runprog -x raceclick.lis raceclick
+//TEST// mkpspdf raceclick.ps raceclick.java* raceclick.lis
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.java,v 1.5 2009-02-26 17:04:21-08 - - $
+d25 1
+a25 1
+         out.flush()
+d29 1
+a29 1
+         out.flush()
+d35 1
+a35 1
+      out.flush()
+d42 1
+a42 1
+      out.flush()
+@

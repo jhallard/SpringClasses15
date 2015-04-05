@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting argv.cpp
+argv.cpp:
+     $Id: argv.cpp,v 1.5 2014-03-31 13:02:14-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 argv.cpp -o argv -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f argv.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished argv.cpp

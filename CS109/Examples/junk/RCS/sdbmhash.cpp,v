@@ -1,0 +1,67 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2013.08.09.03.10.46;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.08.09.03.10.25;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: sdbmhash.cpp,v 1.1 2013-08-08 20:10:25-07 - - $
+
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+size_t sdbmhash (const string &str) {
+   size_t hash = 0;
+   for (auto i = str.begin(); i != str.end(); ++i) {
+      hash = *i + (hash << 6) + (hash << 16) - hash;
+   }
+   return hash;
+}
+ 
+int main (int argc, char **argv) {
+   for (char **argi = argv + 1; argi != argv + argc; ++argi) {
+      string arg = *argi;
+      size_t hash = sdbmhash(arg);
+      cout << setw (20) << hash << " " << arg << endl;
+   }
+   return 0;
+}
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hash.cpp,v 1.5 2013-03-11 21:38:15-07 - - $
+d12 1
+a12 1
+   for (auto i = str.begin(); i != end(); ++i) {
+@

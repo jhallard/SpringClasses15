@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting fixarray.cpp
+fixarray.cpp:
+     $Id: fixarray.cpp,v 1.8 2014-05-30 16:43:27-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 fixarray.cpp -o fixarray -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f fixarray.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished fixarray.cpp

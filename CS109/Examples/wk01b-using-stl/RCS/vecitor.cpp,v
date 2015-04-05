@@ -1,0 +1,382 @@
+head	1.15;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.15
+date	2015.04.01.01.00.22;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.06.24.01.25.05;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.06.24.01.24.49;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.06.21.05.02.30;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.30.23.50.23;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.03.28.02.34.13;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.03.28.02.33.57;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.01.04.03.56.01;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.12.13.03.49.13;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.04.21.49.51;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.04.21.48.44;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.04.21.46.42;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.04.21.45.35;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.04.21.44.57;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.04.21.44.33;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.15
+log
+@-
+@
+text
+@// $Id: vecitor.cpp,v 1.14 2014-06-23 18:25:05-07 - - $
+
+//
+// NAME
+//    vecitor - example of iterator over a vector and an array.
+//
+// SYNOPSIS
+//    vecitor
+//
+// DESCRIPTION
+//    Shows the idea of an iterator.  Iterate over an array and a
+//    vector, both using subscripts and using iteration.
+//
+
+#include <cstdlib>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int array[] = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
+constexpr size_t asize = sizeof array / sizeof *array;
+
+vector<int> vec (&array[0], &array[asize]);
+
+void print_array_sub () {
+   cout << "print_array_sub:";
+   for (size_t ai = 0; ai < asize; ++ai) cout << " " << array[ai];
+   cout << endl;
+}
+
+void print_array_itor () {
+   cout << "print_array_itor:";
+   for (const int* aip = array; aip != &array[asize]; ++aip) {
+      cout << " " << *aip;
+   }
+   cout << endl;
+}
+
+void print_vec_sub () {
+   cout << "print_vec_sub:";
+   vector<int>::size_type index = 0;
+   for (; index < vec.size(); ++index) cout << " " << vec[index];
+   cout << endl;
+}
+
+void print_vec_itor () {
+   cout << "print_vec_itor:";
+   auto itor = vec.begin();
+   for (; itor != vec.end(); ++itor) cout << " " << *itor;
+   cout << endl;
+}
+
+
+int main () {
+   print_array_sub ();
+   print_array_itor ();
+   print_vec_sub ();
+   print_vec_itor ();
+   return EXIT_SUCCESS;
+}
+
+//TEST// ./vecitor >vecitor.lis 2>&1
+//TEST// mkpspdf vecitor.ps vecitor.cpp* vecitor.lis
+
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.13 2014-06-23 18:24:49-07 - - $
+d22 1
+a22 1
+const size_t asize = sizeof array / sizeof *array;
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.12 2014-06-20 22:02:30-07 - - $
+d22 1
+a22 1
+const wize_t asize = sizeof array / sizeof *array;
+d28 1
+a28 1
+   for (wize_t ai = 0; ai < asize; ++ai) cout << " " << array[ai];
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.11 2014-05-30 16:50:23-07 - - $
+d22 1
+a22 1
+const int asize = sizeof array / sizeof *array;
+d28 1
+a28 1
+   for (int ai = 0; ai < asize; ++ai) cout << " " << array[ai];
+d43 1
+a43 2
+   vector<int>::size_type end = vec.size ();
+   for (; index < end; ++index) cout << " " << vec[index];
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.10 2014-03-27 19:34:13-07 - - $
+d34 3
+a36 2
+   const int *end = array + asize;
+   for (const int *aip = array; aip != end; ++aip) cout << " " << *aip;
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.9 2014-03-27 19:33:57-07 - - $
+a24 1
+typedef vector<int>::const_iterator vec_const_itor;
+d49 2
+a50 3
+   vec_const_itor itor = vec.begin();
+   const vec_const_itor end = vec.end();
+   for (; itor != end; ++itor) cout << " " << *itor;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.8 2013-01-03 19:56:01-08 - - $
+a57 1
+   load_vec_from_array ();
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.6 2012/04/04 21:49:51 - - $
+d24 1
+a24 1
+vector<int> vec;
+a26 6
+void load_vec_from_array () {
+   for (const int *itor = array; itor < array + asize; ++itor) {
+      vec.push_back (*itor);
+   }
+}
+
+d66 1
+a66 1
+//TEST// runprogram.perl -x vecitor.lis vecitor
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.6 2012-04-04 14:49:51-07 - - $
+d56 2
+a57 2
+   auto itor = vec.cbegin();
+   auto end = vec.cend();
+d73 1
+a73 1
+//TEST// mkpspdf vecitor.ps vecitor.cpp vecitor.cpp.log vecitor.lis
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.5 2012-04-04 14:48:44-07 - - $
+d56 2
+a57 2
+   vec_const_itor itor = vec.begin();
+   const vec_const_itor end = vec.end();
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.3 2012-04-04 14:45:35-07 - - $
+d48 3
+a50 1
+   for (vector::size_type vi = 0; vi < vec.size (); ++vi) cout << " " << vec[ai];
+@
+
+
+1.4
+log
+@-
+@
+text
+@d48 1
+a48 1
+   for (size_type vi = 0; vi < vec.size (); ++vi) cout << " " << vec[ai];
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.2 2012-04-04 14:44:57-07 - - $
+d48 1
+a48 1
+   for (int vi = 0; vi < vec.size (); ++vi) cout << " " << vec[ai];
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecitor.cpp,v 1.1 2012-04-04 14:44:33-07 - - $
+d28 1
+a28 1
+   for (int *itor = array; itor < array + asize; ++itor) {
+d41 2
+a42 2
+   int *end = array + asize;
+   for (int *aip = array; aip != end; ++aip) cout << " " << *aip;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d19 2
+@

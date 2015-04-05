@@ -1,0 +1,547 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(06/06/12)Tj
+-0.659766 -12.8004 Td
+(15:00:56)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 259.473 736.5 Tm
+(sendreceive.java)Tj
+-84.1172 18 Td
+($cmps109-wm/Examples/wk09a-java-sockets/)Tj
+/R10 10 Tf
+-107.355 -35.5 Td
+[(1:)-600(// $Id: sendreceive.java,v 1.7 2012-06-06 15:00:56-07 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(//)]TJ
+T*[(4:)-600(// Simple send receive example.  Start up two processes,)]TJ
+T*[(5:)-600(// receiver \(server\) which accepts messages and prints them,)]TJ
+T*[(6:)-600(// and a sender \(client\) which send messages.  Both loop)]TJ
+T*[(7:)-600(// indefinitely until killed.  )]TJ
+T*[(8:)-600(//    Usage: sendreceive port)]TJ
+T*[(9:)-600(// If the port is positive, server receiver.)]TJ
+-6 -11 Td
+[(10:)-600(// If the port is negative, client sender.)]TJ
+T*[(11:)-600(//)]TJ
+(12:)'
+T*[(13:)-600(import java.io.*;)]TJ
+T*[(14:)-600(import java.net.*;)]TJ
+T*[(15:)-600(import java.util.*;)]TJ
+T*[(16:)-600(import java.util.concurrent.*;)]TJ
+T*[(17:)-600(import static java.lang.System.*;)]TJ
+(18:)'
+T*[(19:)-600(class sendreceive {)]TJ
+(20:)'
+T*[(21:)-600(   static void server_receiver \(int port\) {)]TJ
+T*[(22:)-600(      try {)]TJ
+T*[(23:)-600(         ServerSocket server = new ServerSocket \(port\);)]TJ
+T*[(24:)-600(         print_server_socket \("server: server socket", server\);)]TJ
+T*[(25:)-600(         Socket client = server.accept\(\);)]TJ
+T*[(26:)-600(         print_socket \("server: client socket", client\);)]TJ
+T*[(27:)-600(         Scanner sockin = new Scanner \(client.getInputStream\(\)\);)]TJ
+T*[(28:)-600(         for \(;;\) {)]TJ
+T*[(29:)-600(            String line = sockin.nextLine\(\);)]TJ
+T*[(30:)-600(            out.printf \("server: %s%n", line\);)]TJ
+T*[(31:)-600(         })]TJ
+T*[(32:)-600(      }catch \(IOException exn\) {)]TJ
+T*[(33:)-600(         out.printf \("server: %s%n", exn\);)]TJ
+T*[(34:)-600(      })]TJ
+T*[(35:)-600(   })]TJ
+(36:)'
+T*[(37:)-600(   static void client_sender \(int port\) {)]TJ
+T*[(38:)-600(      try {)]TJ
+T*[(39:)-600(         Socket server = new Socket \("localhost", port\);)]TJ
+T*[(40:)-600(         print_socket \("client: server socket", server\);)]TJ
+T*[(41:)-600(         PrintWriter sockout =)]TJ
+T*[(42:)-600(                     new PrintWriter \(server.getOutputStream\(\)\);)]TJ
+T*[(43:)-600(         for \(int count = 0; ; ++count\) {)]TJ
+T*[(44:)-600(            String line = "Message " + count;)]TJ
+T*[(45:)-600(            out.printf \("client: %s%n", line\);)]TJ
+T*[(46:)-600(            sockout.printf \("%s%n", line\);)]TJ
+T*[(47:)-600(            sockout.flush\(\);)]TJ
+T*[(48:)-600(            if \(sockout.checkError\(\)\) {)]TJ
+T*[(49:)-600(               out.printf \("sender: error: %s%n", server\);)]TJ
+T*[(50:)-600(               break;)]TJ
+T*[(51:)-600(            })]TJ
+T*[(52:)-600(            try {)]TJ
+T*[(53:)-600(               Thread.currentThread\(\).sleep \(1000\);)]TJ
+T*[(54:)-600(            }catch \(InterruptedException exn\) {)]TJ
+T*[(55:)-600(               out.printf \("client: %s%n", exn\);)]TJ
+T*[(56:)-600(            })]TJ
+T*[(57:)-600(         })]TJ
+T*[(58:)-600(      }catch \(IOException exn\) {)]TJ
+T*[(59:)-600(         out.printf \("client: %s%n", exn\);)]TJ
+T*[(60:)-600(      })]TJ
+T*[(61:)-600(   })]TJ
+(62:)'
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+3558
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(06/06/12)Tj
+-0.659766 -12.8004 Td
+(15:00:56)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 259.473 736.5 Tm
+(sendreceive.java)Tj
+-84.1172 18 Td
+($cmps109-wm/Examples/wk09a-java-sockets/)Tj
+/R10 10 Tf
+-113.355 -35.5 Td
+(63:)Tj
+11 TL
+T*[(64:)-600(   static void print_server_socket \(String ident, ServerSocket socket\) {)]TJ
+T*[(65:)-600(      out.printf \("%s: %s%n", ident, socket\);)]TJ
+T*[(66:)-600(      out.printf \("%s: %s%n", "InetAddress", socket.getInetAddress\(\)\);)]TJ
+T*[(67:)-600(      out.printf \("%s: %s%n", "LocalPort", socket.getLocalPort\(\)\);)]TJ
+T*[(68:)-600(   })]TJ
+(69:)'
+T*[(70:)-600(   static void print_socket \(String ident, Socket socket\) {)]TJ
+T*[(71:)-600(      out.printf \("%s: %s%n", ident, socket\);)]TJ
+T*[(72:)-600(      out.printf \("%s: %s%n", "InetAddress", socket.getInetAddress\(\)\);)]TJ
+T*[(73:)-600(      out.printf \("%s: %s%n", "LocalAddress", socket.getLocalAddress\(\)\);)]TJ
+T*[(74:)-600(      out.printf \("%s: %s%n", "LocalPort", socket.getLocalPort\(\)\);)]TJ
+T*[(75:)-600(      out.printf \("%s: %s%n", "Port", socket.getPort\(\)\);)]TJ
+T*[(76:)-600(   })]TJ
+(77:)'
+T*[(78:)-600(   public static void main \(String[] args\) {)]TJ
+T*[(79:)-600(      int port = Integer.parseInt \(args[0]\);)]TJ
+T*[(80:)-600(      if \(port > 0\) server_receiver \(port\);)]TJ
+T*[(81:)-600(               else client_sender \(- port\);)]TJ
+T*[(82:)-600(   })]TJ
+T*[(83:)-600(})]TJ
+(84:)'
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+1730
+endobj
+18 0 obj
+<</Length 19 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(06/06/12)Tj
+-0.659766 -12.8004 Td
+(15:00:03)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 246.438 736.5 Tm
+(sendreceive.8888.log)Tj
+-71.0828 18 Td
+($cmps109-wm/Examples/wk09a-java-sockets/)Tj
+/R10 10 Tf
+-107.355 -35.5 Td
+(1:)Tj
+11 TL
+T*[(2:)-600(::::::::::::::)]TJ
+T*[(3:)-600(sendreceive.+8888.log)]TJ
+T*[(4:)-600(::::::::::::::)]TJ
+(5:)'
+T*[(6:)-600(Script started on Wed Jun  6 14:56:46 2012)]TJ
+T*[(7:)-600(bash-3.2$ sendreceive 8888)]TJ
+T*[(8:)-600(server: server socket: ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=8888])]TJ
+T*[(9:)-600(InetAddress: 0.0.0.0/0.0.0.0)]TJ
+-6 -11 Td
+[(10:)-600(LocalPort: 8888)]TJ
+T*[(11:)-600(server: client socket: Socket[addr=/127.0.0.1,port=49217,localport=8888])]TJ
+T*[(12:)-600(InetAddress: /127.0.0.1)]TJ
+T*[(13:)-600(LocalAddress: /127.0.0.1)]TJ
+T*[(14:)-600(LocalPort: 8888)]TJ
+T*[(15:)-600(Port: 49217)]TJ
+T*[(16:)-600(server: Message 0)]TJ
+T*[(17:)-600(server: Message 1)]TJ
+T*[(18:)-600(server: Message 2)]TJ
+T*[(19:)-600(server: Message 3)]TJ
+T*[(20:)-600(server: Message 4)]TJ
+T*[(21:)-600(Exception in thread "main" java.util.NoSuchElementException: No line found)]TJ
+T*[(22:)-600(        at java.util.Scanner.nextLine\(Scanner.java:1516\))]TJ
+T*[(23:)-600(        at sendreceive.server_receiver\(sendreceive.java:29\))]TJ
+T*[(24:)-600(        at sendreceive.main\(sendreceive.java:79\))]TJ
+T*[(25:)-600(bash-3.2$ exit)]TJ
+(26:)'
+T*[(27:)-600(Script done on Wed Jun  6 14:57:23 2012)]TJ
+(28:)'
+T*[(29:)-600(::::::::::::::)]TJ
+T*[(30:)-600(sendreceive.-8888.log)]TJ
+T*[(31:)-600(::::::::::::::)]TJ
+(32:)'
+T*[(33:)-600(Script started on Wed Jun  6 14:57:06 2012)]TJ
+T*[(34:)-600(bash-3.2$ sendreceive -8888)]TJ
+T*[(35:)-600(client: server socket: Socket[addr=localhost/127.0.0.1,port=8888,localport=49217)]TJ
+-19 -11 Td
+(])Tj
+19 -11 Td
+[(36:)-600(InetAddress: localhost/127.0.0.1)]TJ
+T*[(37:)-600(LocalAddress: /127.0.0.1)]TJ
+T*[(38:)-600(LocalPort: 49217)]TJ
+T*[(39:)-600(Port: 8888)]TJ
+T*[(40:)-600(client: Message 0)]TJ
+T*[(41:)-600(client: Message 1)]TJ
+T*[(42:)-600(client: Message 2)]TJ
+T*[(43:)-600(client: Message 3)]TJ
+T*[(44:)-600(client: Message 4)]TJ
+T*[(45:)-600(bash-3.2$ exit)]TJ
+(46:)'
+T*[(47:)-600(Script done on Wed Jun  6 14:57:21 2012)]TJ
+ET
+Q
+Q
+endstream
+endobj
+19 0 obj
+2519
+endobj
+22 0 obj
+<</Length 23 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(06/06/12)Tj
+-0.659766 -12.8004 Td
+(15:00:14)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 246.438 736.5 Tm
+(sendreceive.9999.log)Tj
+-71.0828 18 Td
+($cmps109-wm/Examples/wk09a-java-sockets/)Tj
+/R10 10 Tf
+-107.355 -35.5 Td
+(1:)Tj
+11 TL
+T*[(2:)-600(::::::::::::::)]TJ
+T*[(3:)-600(sendreceive.+9999.log)]TJ
+T*[(4:)-600(::::::::::::::)]TJ
+(5:)'
+T*[(6:)-600(Script started on Wed Jun  6 14:57:36 2012)]TJ
+T*[(7:)-600(bash-3.2$ sendreceive 9999)]TJ
+T*[(8:)-600(server: server socket: ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=9999])]TJ
+T*[(9:)-600(InetAddress: 0.0.0.0/0.0.0.0)]TJ
+-6 -11 Td
+[(10:)-600(LocalPort: 9999)]TJ
+T*[(11:)-600(server: client socket: Socket[addr=/127.0.0.1,port=34095,localport=9999])]TJ
+T*[(12:)-600(InetAddress: /127.0.0.1)]TJ
+T*[(13:)-600(LocalAddress: /127.0.0.1)]TJ
+T*[(14:)-600(LocalPort: 9999)]TJ
+T*[(15:)-600(Port: 34095)]TJ
+T*[(16:)-600(server: Message 0)]TJ
+T*[(17:)-600(server: Message 1)]TJ
+T*[(18:)-600(server: Message 2)]TJ
+T*[(19:)-600(server: Message 3)]TJ
+T*[(20:)-600(server: Message 4)]TJ
+T*[(21:)-600(server: Message 5)]TJ
+T*[(22:)-600(bash-3.2$ exit)]TJ
+(23:)'
+T*[(24:)-600(Script done on Wed Jun  6 14:58:12 2012)]TJ
+(25:)'
+T*[(26:)-600(::::::::::::::)]TJ
+T*[(27:)-600(sendreceive.-9999.log)]TJ
+T*[(28:)-600(::::::::::::::)]TJ
+(29:)'
+T*[(30:)-600(Script started on Wed Jun  6 14:58:01 2012)]TJ
+T*[(31:)-600(bash-3.2$ sendreceive -9999)]TJ
+T*[(32:)-600(client: server socket: Socket[addr=localhost/127.0.0.1,port=9999,localport=34095)]TJ
+-19 -11 Td
+(])Tj
+19 -11 Td
+[(33:)-600(InetAddress: localhost/127.0.0.1)]TJ
+T*[(34:)-600(LocalAddress: /127.0.0.1)]TJ
+T*[(35:)-600(LocalPort: 34095)]TJ
+T*[(36:)-600(Port: 9999)]TJ
+T*[(37:)-600(client: Message 0)]TJ
+T*[(38:)-600(client: Message 1)]TJ
+T*[(39:)-600(client: Message 2)]TJ
+T*[(40:)-600(client: Message 3)]TJ
+T*[(41:)-600(client: Message 4)]TJ
+T*[(42:)-600(client: Message 5)]TJ
+T*[(43:)-600(client: Message 6)]TJ
+T*[(44:)-600(client: Message 7)]TJ
+T*[(45:)-600(client: Message 8)]TJ
+T*[(46:)-600(sender: error: Socket[addr=localhost/127.0.0.1,port=9999,localport=34095])]TJ
+T*[(47:)-600(bash-3.2$ exit)]TJ
+(48:)'
+T*[(49:)-600(Script done on Wed Jun  6 14:58:15 2012)]TJ
+ET
+Q
+Q
+endstream
+endobj
+23 0 obj
+2470
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+17 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 20 0 R
+>>
+/Contents 18 0 R
+>>
+endobj
+21 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 24 0 R
+>>
+/Contents 22 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+17 0 R
+21 0 R
+] /Count 4
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+20 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+24 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20120606150100)
+/ModDate(D:20120606150100)>>endobj
+xref
+0 25
+0000000000 65535 f 
+0000011193 00000 n 
+0000011819 00000 n 
+0000011113 00000 n 
+0000010575 00000 n 
+0000000009 00000 n 
+0000003617 00000 n 
+0000011617 00000 n 
+0000011488 00000 n 
+0000011686 00000 n 
+0000011554 00000 n 
+0000011751 00000 n 
+0000011241 00000 n 
+0000010708 00000 n 
+0000003637 00000 n 
+0000005419 00000 n 
+0000011311 00000 n 
+0000010843 00000 n 
+0000005440 00000 n 
+0000008011 00000 n 
+0000011370 00000 n 
+0000010978 00000 n 
+0000008032 00000 n 
+0000010554 00000 n 
+0000011429 00000 n 
+trailer
+<< /Size 25 /Root 1 0 R /Info 2 0 R
+/ID [<7ED994CCD2DD1995745A03A271D10B24><7ED994CCD2DD1995745A03A271D10B24>]
+>>
+startxref
+11930
+%%EOF

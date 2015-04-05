@@ -1,0 +1,59 @@
+==26165== Memcheck, a memory error detector
+==26165== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
+==26165== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
+==26165== Command: uninit foo bar baz qux
+==26165== Parent PID: 26164
+==26165== 
+==26165== Conditional jump or move depends on uninitialised value(s)
+==26165==    at 0x38C1281B96: std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C1281E25: std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C129543D: std::ostream& std::ostream::_M_insert<long>(long) (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x400A0C: main (uninit.cpp:24)
+==26165== 
+==26165== Use of uninitialised value of size 8
+==26165==    at 0x38C127D6B3: ??? (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C1281BC2: std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C1281E25: std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C129543D: std::ostream& std::ostream::_M_insert<long>(long) (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x400A0C: main (uninit.cpp:24)
+==26165== 
+==26165== Conditional jump or move depends on uninitialised value(s)
+==26165==    at 0x38C127D6BE: ??? (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C1281BC2: std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C1281E25: std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C129543D: std::ostream& std::ostream::_M_insert<long>(long) (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x400A0C: main (uninit.cpp:24)
+==26165== 
+==26165== Conditional jump or move depends on uninitialised value(s)
+==26165==    at 0x38C1281BF8: std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C1281E25: std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C129543D: std::ostream& std::ostream::_M_insert<long>(long) (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x400A0C: main (uninit.cpp:24)
+==26165== 
+==26165== Conditional jump or move depends on uninitialised value(s)
+==26165==    at 0x38C1281B96: std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C1281E25: std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C129543D: std::ostream& std::ostream::_M_insert<long>(long) (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x400917: foo(int) (uninit.cpp:11)
+==26165==    by 0x400A23: main (uninit.cpp:25)
+==26165== 
+==26165== Conditional jump or move depends on uninitialised value(s)
+==26165==    at 0x38C1281BF8: std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C1281E25: std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x38C129543D: std::ostream& std::ostream::_M_insert<long>(long) (in /usr/lib64/libstdc++.so.6.0.13)
+==26165==    by 0x400917: foo(int) (uninit.cpp:11)
+==26165==    by 0x400A23: main (uninit.cpp:25)
+==26165== 
+==26165== Conditional jump or move depends on uninitialised value(s)
+==26165==    at 0x400A32: main (uninit.cpp:27)
+==26165== 
+==26165== 
+==26165== HEAP SUMMARY:
+==26165==     in use at exit: 0 bytes in 0 blocks
+==26165==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==26165== 
+==26165== All heap blocks were freed -- no leaks are possible
+==26165== 
+==26165== For counts of detected and suppressed errors, rerun with: -v
+==26165== Use --track-origins=yes to see where uninitialised values come from
+==26165== ERROR SUMMARY: 13 errors from 7 contexts (suppressed: 6 from 6)

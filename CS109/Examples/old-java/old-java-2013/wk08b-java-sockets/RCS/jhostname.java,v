@@ -1,0 +1,67 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.2
+date	2013.08.14.02.11.30;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.30.00.08.56;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: jhostname.java,v 1.1 2012-05-29 17:08:56-07 - - $
+
+//
+// Get IP address and hostname of localhost.
+//
+
+import java.net.*;
+import static java.lang.System.*;
+
+class jhostname {
+   public static void main (String[] args) {
+      try {
+         InetAddress addr = InetAddress.getLocalHost ();
+         String hostname = addr.getHostName ();
+         String hostaddr = addr.getHostAddress ();
+         out.printf ("hostname = %s, hostaddr = %s%n",
+                     hostname, hostaddr);
+      }catch (UnknownHostException exn) {
+         err.printf ("hostname: %s%n", exn);
+         exit (1);
+      }
+   }
+}
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: jhostname.java,v 1.6 2009-02-26 21:13:44-08 - - $
+a24 3
+//TEST// jhostname >jhostname.out
+//TEST// mkpspdf jhostname.ps jhostname.java jhostname.out
+
+@

@@ -1,0 +1,54 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2013.08.06.22.19.32;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+#include <iostream>
+
+using namespace std;
+
+struct bigint {
+   char *data;
+   bigint (const char *p): data(p) {}
+}
+
+bigint operator""big (const char *p) {
+   return bigint (p);
+}
+
+struct degrees {
+   double value;
+   degrees (long double d): value(d) {}
+}
+
+constexpr operator""deg (long double d) {
+   return degrees (d);
+}
+
+int main() {
+   bigint b = 12345big;
+   degrees d = 90deg;
+   cout << b.data << endl;
+   cout << d.value << endl;
+   return 0;
+}
+@

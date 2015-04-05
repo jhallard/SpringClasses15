@@ -1,0 +1,27 @@
+==10521== Memcheck, a memory error detector
+==10521== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==10521== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright info
+==10521== Command: testpointer
+==10521== 
+vecpi: 0 1 4 9 16 25 36 49 64 81
+vecn: (0,0) (1,1) (2,4) (3,9) (4,16) (5,25) (6,36) (7,49) (8,64) (9,81)
+vecpn: 0x4c2e6a0->(0,0)
+vecpn: 0x4c2e750->(1,1)
+vecpn: 0x4c2e7a0->(2,4)
+vecpn: 0x4c2e7f0->(3,9)
+vecpn: 0x4c2e840->(4,16)
+vecpn: 0x4c2e910->(5,25)
+vecpn: 0x4c2e960->(6,36)
+vecpn: 0x4c2e9b0->(7,49)
+vecpn: 0x4c2ea00->(8,64)
+vecpn: 0x4c2eb10->(9,81)
+==10521== 
+==10521== HEAP SUMMARY:
+==10521==     in use at exit: 0 bytes in 0 blocks
+==10521==   total heap usage: 29 allocs, 29 frees, 792 bytes allocated
+==10521== 
+==10521== All heap blocks were freed -- no leaks are possible
+==10521== 
+==10521== For counts of detected and suppressed errors, rerun with: -v
+==10521== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 6 from 6)
+pstatus: 0x0000 EXIT STATUS = 0

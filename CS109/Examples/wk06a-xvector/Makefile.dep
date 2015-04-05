@@ -1,0 +1,6 @@
+testbool.o: testbool.cpp xvector.h xvector.tcc
+testint.o: testint.cpp xvector.h xvector.tcc
+testpointer.o: testpointer.cpp xvector.h xvector.tcc
+testsort.o: testsort.cpp xvector.h xvector.tcc
+teststring.o: teststring.cpp xvector.h xvector.tcc
+testvector.o: testvector.cpp xvector.h xvector.tcc

@@ -1,0 +1,63 @@
+bool => 1
+   mangled:   b
+   demangled: bool
+char => 1
+   mangled:   c
+   demangled: char
+uchar => 1
+   mangled:   h
+   demangled: unsigned char
+schar => 1
+   mangled:   a
+   demangled: signed char
+short => 2
+   mangled:   s
+   demangled: short
+ushort => 2
+   mangled:   t
+   demangled: unsigned short
+int => 4
+   mangled:   i
+   demangled: int
+uint => 4
+   mangled:   j
+   demangled: unsigned int
+long => 8
+   mangled:   l
+   demangled: long
+ulong => 8
+   mangled:   m
+   demangled: unsigned long
+float => 4
+   mangled:   f
+   demangled: float
+double => 8
+   mangled:   d
+   demangled: double
+size_t => 8
+   mangled:   m
+   demangled: unsigned long
+foo => 1
+   mangled:   3foo
+   demangled: foo
+bar => 1
+   mangled:   3bar
+   demangled: bar
+baz => 1
+   mangled:   3baz
+   demangled: baz
+tmpl<int> => 4
+   mangled:   4tmplIiE
+   demangled: tmpl<int>
+vector<string> => 24
+   mangled:   St6vectorISsSaISsEE
+   demangled: std::vector<std::string, std::allocator<std::string> >
+vector<int> => 24
+   mangled:   St6vectorIiSaIiEE
+   demangled: std::vector<int, std::allocator<int> >
+list<vector<long>> => 16
+   mangled:   St4listISt6vectorIlSaIlEESaIS2_EE
+   demangled: std::list<std::vector<long, std::allocator<long> >, std::allocator<std::vector<long, std::allocator<long> > > >
+map_string_int => 48
+   mangled:   St3mapISsiSt4lessISsESaISt4pairIKSsiEEE
+   demangled: std::map<std::string, int, std::less<std::string>, std::allocator<std::pair<std::string const, int> > >

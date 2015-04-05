@@ -1,0 +1,789 @@
+head	1.36;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.36
+date	2014.05.02.22.54.53;	author -;	state -;
+branches;
+next	1.35;
+
+1.35
+date	2014.05.02.22.54.38;	author -;	state -;
+branches;
+next	1.34;
+
+1.34
+date	2014.05.02.22.34.03;	author -;	state -;
+branches;
+next	1.33;
+
+1.33
+date	2014.05.02.00.13.59;	author -;	state -;
+branches;
+next	1.32;
+
+1.32
+date	2014.05.02.00.07.50;	author -;	state -;
+branches;
+next	1.31;
+
+1.31
+date	2014.05.02.00.02.37;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2014.05.02.00.02.00;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2014.05.01.23.55.28;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2014.05.01.23.55.15;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2014.05.01.23.51.47;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2014.05.01.23.50.37;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2014.05.01.23.41.54;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2014.05.01.23.39.21;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.05.01.23.38.34;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.05.01.23.37.24;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.05.01.23.12.42;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.05.01.23.10.41;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.05.01.23.09.50;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.05.01.23.09.29;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.05.01.23.09.00;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.05.01.23.07.48;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.01.23.07.29;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.01.23.05.10;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.01.23.03.16;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.01.23.02.32;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.01.23.01.47;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.01.22.59.07;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.01.22.57.07;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.01.22.54.55;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.01.22.52.49;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.01.22.52.34;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.01.22.51.25;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.01.22.51.09;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.01.22.50.58;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.01.22.43.06;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.01.22.42.50;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.36
+log
+@-
+@
+text
+@// $Id: regex.cpp,v 1.35 2014-05-02 15:54:38-07 - - $
+
+#include <iostream>
+#include <regex>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include <libgen.h>
+
+//
+// NAME
+//    regex - test regular expressions
+//
+// SYNOPSIS
+//    regex pattern args...
+//
+// DESCRIPTION
+//    The first argument to the function is a regex pattern which
+//    is compiled into a regex.  The rest of the arguments are
+//    matched agains the regex to see if they match.
+//
+
+int main (int argc, char **argv) {
+   cout << "__GLIBCXX__ = " << __GLIBCXX__ << endl;
+   string progname {basename (argv[0])};
+   if (argc < 3) {
+      cerr << "Usage: " << progname << " regex args..." << endl;
+      exit (1);
+   }
+   string pattern {argv[1]};
+   vector<string> args {&argv[2], &argv[argc]};
+   try {
+      regex reg (pattern, regex::egrep | regex::icase);
+      cout << "Compiled \"" << pattern << "\"" << endl;
+      for (const string& arg: args) {
+         cout << "\"" << arg << "\":";
+         smatch result;
+         if (regex_match (arg, result, reg)) {
+            cout << endl;
+            cout << "  prefix=" << result.prefix() << endl;
+            cout << "  suffix=" << result.suffix() << endl;
+            cout << "  str=" << result.str() << endl;
+            for (const auto& res: result) {
+               cout << "  [" << res << "]" << endl;
+            }
+         }else {
+            cout << " no match" << endl;
+         }
+      }
+   }catch (regex_error& error) {
+      cerr << pattern << ": " << error.what() << ": code "
+           << error.code() << endl;
+      exit (1);
+   }
+   return 0;
+}
+@
+
+
+1.35
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.34 2014-05-02 15:34:03-07 - - $
+a25 1
+   cout << "__GLIBCPP__ = " << __GLIBCPP__ << endl;
+@
+
+
+1.34
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.33 2014-05-01 17:13:59-07 - - $
+d25 2
+@
+
+
+1.33
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.32 2014-05-01 17:07:50-07 - - $
+d11 13
+d26 2
+a27 2
+   if (argc < 2) {
+      cerr << "Usage: " << progname << " regex [args...]" << endl;
+@
+
+
+1.32
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.31 2014-05-01 17:02:37-07 - - $
+d26 4
+d31 1
+a31 1
+               cout << " [" << res << "]";
+d34 1
+a34 1
+            cout << " no match";
+a35 1
+         cout << endl;
+@
+
+
+1.31
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.30 2014-05-01 17:02:00-07 - - $
+d25 6
+a30 3
+         regex_match (arg, result, reg);
+         for (const auto& res: result) {
+            cout << " [" << res << "]";
+@
+
+
+1.30
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.29 2014-05-01 16:55:28-07 - - $
+d25 1
+a25 1
+         regex_search (arg, result, reg);
+@
+
+
+1.29
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.28 2014-05-01 16:55:15-07 - - $
+d12 3
+a14 3
+   if (argc < 3) {
+      cout << "Usage: " << basename(argv[0]) << " regex args..."
+           << endl;
+d23 5
+a27 5
+         cout << "\"" << arg << "\" ";
+         if (regex_match (arg, reg)) {
+            cout << "matches";
+         }else {
+            cout << "does not match";
+d32 1
+a32 1
+      cout << pattern << ": " << error.what() << ": code "
+d34 1
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.27 2014-05-01 16:51:47-07 - - $
+d32 1
+a32 1
+      cout << pattern << ": " << error.what() << ": code 
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.26 2014-05-01 16:50:37-07 - - $
+d32 2
+a33 1
+      cout << pattern << ": " << error.what() << endl;
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.25 2014-05-01 16:41:54-07 - - $
+d21 1
+d23 1
+a23 1
+         cout << pattern << ": " << arg << ": ";
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.24 2014-05-01 16:39:21-07 - - $
+d20 1
+a20 1
+      regex reg (pattern, regex::icase);
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.23 2014-05-01 16:38:34-07 - - $
+d20 1
+a20 1
+      regex reg (pattern);
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.22 2014-05-01 16:37:24-07 - - $
+d23 1
+a23 1
+         if (regex_match (reg, arg)) {
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.21 2014-05-01 16:12:42-07 - - $
+d9 2
+d23 1
+a23 1
+         if (regex_matches (reg, arg)) {
+d31 1
+a31 1
+      cout << hexcolor << ": " << error.what() << endl;
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.20 2014-05-01 16:10:41-07 - - $
+d10 15
+a24 10
+   vector<string> args {&argv[1], &argv[argc]};
+   string hexcolor {"0x[[:xdigit:]]"};
+   regex hexregex (hexcolor, regex::icase);
+   for (const string& arg: args) {
+      smatch results;
+      cout << "\"" << arg << "\"";
+      if (regex_match (arg, results, hexregex)) {
+         cout << " matches ";
+         for (const auto& part: results) {
+            cout << "/" << part << "/";
+a26 2
+      }else {
+         cout << " does not match " << hexcolor << endl;
+d28 2
+d31 1
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.19 2014-05-01 16:09:50-07 - - $
+d11 2
+a12 2
+   string hexcolor {"([[:xdigit:]]{2})"};
+   regex hexregex (hexcolor, regex::icase | regex::egrep);
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.18 2014-05-01 16:09:29-07 - - $
+d11 1
+a11 1
+   string hexcolor {"[[:xdigit:]]{2}"};
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.17 2014-05-01 16:09:00-07 - - $
+d11 1
+a11 1
+   string hexcolor {"[[:xdigit:]]"};
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.16 2014-05-01 16:07:48-07 - - $
+d11 1
+a11 1
+   string hexcolor {"[[:digit:]]"};
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.15 2014-05-01 16:07:29-07 - - $
+d11 1
+a11 1
+   string hexcolor {"0x([[:digit:]])(..)(..)"};
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.14 2014-05-01 16:05:10-07 - - $
+d11 1
+a11 1
+   string hexcolor {"0x([[:xdigit:]])(..)(..)"};
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.13 2014-05-01 16:03:16-07 - - $
+d11 1
+a11 1
+   string hexcolor {"^0x(..)(..)(..)$"};
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.12 2014-05-01 16:02:32-07 - - $
+d11 1
+a11 1
+   string hexcolor {"0x(..)(..)(..)"};
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.11 2014-05-01 16:01:47-07 - - $
+d11 1
+a11 1
+   string hexcolor {"0x([[:xdigit:]]{2}){3}"};
+a12 1
+cout << "OK";
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.10 2014-05-01 15:59:07-07 - - $
+d12 1
+a12 1
+   regex hexregex (hexcolor, icase|egrep);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.9 2014-05-01 15:57:07-07 - - $
+d12 1
+a12 1
+   regex hexregex {hexcolor};
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.8 2014-05-01 15:54:55-07 - - $
+d13 1
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.7 2014-05-01 15:52:49-07 - - $
+d15 1
+d17 5
+d23 1
+a23 1
+         cout << arg << ": does not match " << hexcolor << endl;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.6 2014-05-01 15:52:34-07 - - $
+d11 2
+a12 1
+   regex hexcolor {"0x([[:xdigit:]]{2}){3}"};
+d15 1
+a15 1
+      if (regex_match (arg, results, hexcolor)) {
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.5 2014-05-01 15:51:25-07 - - $
+d16 1
+a16 1
+         cout << arg << ": does not match ";// << hexcolor << endl;
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.4 2014-05-01 15:51:09-07 - - $
+d16 1
+a16 1
+         cout << arg << ": does not match " << hexcolor << endl;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.3 2014-05-01 15:50:58-07 - - $
+d16 1
+a16 1
+         cout << arg << ": does not match " << regex << endl;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.2 2014-05-01 15:43:06-07 - - $
+d16 1
+a16 1
+         cout << arg << ": does not match << regex << endl;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: regex.cpp,v 1.1 2014-05-01 15:42:50-07 - - $
+d13 5
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d4 1
+d6 2
+a7 1
+#include <regex>
+@

@@ -1,0 +1,8 @@
+"1024": good number = 1024
+"56foobar": bad number = 56, trailing junk = "foobar"
+"-45": good number = -45
+"68.9": bad number = 68, trailing junk = ".9"
+"testing": invalid_argument (stoi)
+"007777": good number = 7777
+"0x48": bad number = 0, trailing junk = "x48"
+"2147483648": out_of_range (stoi)

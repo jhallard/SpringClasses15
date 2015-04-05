@@ -1,0 +1,12 @@
+/* a structure to contain an internet address 
+   defined in the include file in.h */
+struct sockaddr_in {
+        short   sin_family; /* should be AF_INET */
+        u_short sin_port;
+        struct  in_addr sin_addr;
+        char    sin_zero[8]; /* not used, must be zero */
+};
+
+struct in_addr {
+   unsigned long s_addr;
+};

@@ -1,0 +1,541 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/09/12)Tj
+-0.659766 -12.8004 Td
+(21:30:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 258.688 736.5 Tm
+(maprefcount.cpp)Tj
+-79.8398 18 Td
+($cmps109-wm/Examples/wk06b-mem-leaks/)Tj
+/R10 10 Tf
+-110.848 -35.5 Td
+[(1:)-600(// $Id: maprefcount.cpp,v 1.2 2012-05-09 21:27:42-07 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(//)]TJ
+T*[(4:)-600(// Illustrate how to avoid leaks may for a map by wrapping each)]TJ
+T*[(5:)-600(// pointer in an auto_ptr.  Thus the map has no pointers itself.)]TJ
+T*[(6:)-600(// But C++11 deprecates auto_ptr in favor of unique_ptr or something)]TJ
+T*[(7:)-600(// else.  We use our own object_ptr and reference counting on the)]TJ
+T*[(8:)-600(// object itself.  Note that object_ptr properly overrides the)]TJ
+T*[(9:)-600(// default four members.  We also handle an object_ptr not having)]TJ
+-6 -11 Td
+[(10:)-600(// an object.)]TJ
+T*[(11:)-600(//)]TJ
+(12:)'
+T*[(13:)-600(#include <iostream>)]TJ
+T*[(14:)-600(#include <map>)]TJ
+(15:)'
+T*[(16:)-600(using namespace std;)]TJ
+(17:)'
+T*[(18:)-600(int seqct = 0;)]TJ
+T*[(19:)-600(struct object {)]TJ
+T*[(20:)-600(   int ref;)]TJ
+T*[(21:)-600(   int seqnr;)]TJ
+T*[(22:)-600(   string value;)]TJ
+T*[(23:)-600(   explicit object \(const string &val\):)]TJ
+T*[(24:)-600(         ref\(1\), seqnr\(++seqct\), value\(val\) {})]TJ
+T*[(25:)-600(};)]TJ
+(26:)'
+T*[(27:)-600(struct object_ptr {)]TJ
+T*[(28:)-600(   object *obj;)]TJ
+T*[(29:)-600(   void incr\(\) { if \(obj\) ++obj->ref; })]TJ
+T*[(30:)-600(   void decr\(\) { if \(obj && --obj->ref == 0\) delete obj; })]TJ
+T*[(31:)-600(   explicit object_ptr \(object *_obj\): obj\(_obj\) {})]TJ
+(32:)'
+T*[(33:)-600(   // Following are the default four.)]TJ
+T*[(34:)-600(   object_ptr\(\): obj\(0\) {})]TJ
+T*[(35:)-600(   object_ptr \(const object_ptr &that\): obj\(that.obj\) { incr\(\); })]TJ
+T*[(36:)-600(   object_ptr &operator= \(const object_ptr &that\) {)]TJ
+T*[(37:)-600(      if \(this != &that\) { decr\(\); obj = that.obj; incr\(\); })]TJ
+T*[(38:)-600(      return *this;)]TJ
+T*[(39:)-600(   })]TJ
+T*[(40:)-600(   ~object_ptr\(\) { decr\(\); })]TJ
+T*[(41:)-600(};)]TJ
+(42:)'
+T*[(43:)-600(typedef map <string, object_ptr> somap_t;)]TJ
+T*[(44:)-600(typedef somap_t::const_iterator somap_conitor;)]TJ
+(45:)'
+T*[(46:)-600(int main \(int argc, char **argv\) {)]TJ
+T*[(47:)-600(   map <string, object_ptr> somap;)]TJ
+(48:)'
+T*[(49:)-600(   // Push each element of argv into map as object.)]TJ
+T*[(50:)-600(   for \(int index = 1; index < argc; ++index\) {)]TJ
+T*[(51:)-600(      string arg = argv[index];)]TJ
+T*[(52:)-600(      somap[arg] = object_ptr \(new object \(arg\)\);)]TJ
+T*[(53:)-600(   })]TJ
+(54:)'
+T*[(55:)-600(   // Iterate over the map, printing out the keys and values.)]TJ
+T*[(56:)-600(   for \(somap_conitor itor = somap.begin\(\);)]TJ
+T*[(57:)-600(        itor != somap.end\(\); ++itor\) {)]TJ
+T*[(58:)-600(      cout << itor->first << " => \(" << itor->second.obj->seqnr << ", ")]TJ
+T*[(59:)-600(           << itor->second.obj->value << "\)" << endl;)]TJ
+T*[(60:)-600(   })]TJ
+(61:)'
+T*[(62:)-600(   return 0;)]TJ
+T*[(63:)-600(})]TJ
+(64:)'
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+3367
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/09/12)Tj
+-0.659766 -12.8004 Td
+(21:30:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 258.688 736.5 Tm
+(maprefcount.cpp)Tj
+-79.8398 18 Td
+($cmps109-wm/Examples/wk06b-mem-leaks/)Tj
+/R10 10 Tf
+-116.848 -35.5 Td
+[(65:)-600(/*)]TJ
+11 TL
+T*[(66:)-600(//TEST// valgrind --leak-check=full --show-reachable=yes \\)]TJ
+T*[(67:)-600(//TEST//       --log-file=maprefcount.out1.grind \\)]TJ
+T*[(68:)-600(//TEST//       maprefcount these are some arguments to check on leak \\)]TJ
+T*[(69:)-600(//TEST//       >maprefcount.out1 2>&1)]TJ
+T*[(70:)-600(//TEST// mkpspdf maprefcount.ps maprefcount.cpp* maprefcount.out*)]TJ
+T*[(71:)-600(*/)]TJ
+(72:)'
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+941
+endobj
+18 0 obj
+<</Length 19 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/09/12)Tj
+-0.659766 -12.8004 Td
+(21:30:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 247.992 736.5 Tm
+(maprefcount.cpp.log)Tj
+-69.1441 18 Td
+($cmps109-wm/Examples/wk06b-mem-leaks/)Tj
+/R10 10 Tf
+-110.848 -35.5 Td
+[(1:)-600(@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting maprefcount.cpp)]TJ
+11 TL
+T*[(2:)-600(maprefcount.cpp: $Id: maprefcount.cpp,v 1.2 2012-05-09 21:27:42-07 - - $)]TJ
+T*[(3:)-600(g++ -g -O0 -Wall -Wextra maprefcount.cpp -o maprefcount -lm)]TJ
+T*[(4:)-600(rm -f maprefcount.o)]TJ
+T*[(5:)-600(@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished maprefcount.cpp)]TJ
+ET
+Q
+Q
+endstream
+endobj
+19 0 obj
+884
+endobj
+22 0 obj
+<</Length 23 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/09/12)Tj
+-0.659766 -12.8004 Td
+(21:30:22)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 256.35 736.5 Tm
+(maprefcount.out1)Tj
+-77.502 18 Td
+($cmps109-wm/Examples/wk06b-mem-leaks/)Tj
+/R10 10 Tf
+-110.848 -35.5 Td
+[(1:)-600(are => \(2, are\))]TJ
+11 TL
+T*[(2:)-600(arguments => \(4, arguments\))]TJ
+T*[(3:)-600(check => \(6, check\))]TJ
+T*[(4:)-600(leak => \(8, leak\))]TJ
+T*[(5:)-600(on => \(7, on\))]TJ
+T*[(6:)-600(some => \(3, some\))]TJ
+T*[(7:)-600(these => \(1, these\))]TJ
+T*[(8:)-600(to => \(5, to\))]TJ
+ET
+Q
+Q
+endstream
+endobj
+23 0 obj
+812
+endobj
+26 0 obj
+<</Length 27 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/09/12)Tj
+-0.659766 -12.8004 Td
+(21:30:22)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 239.746 736.5 Tm
+(maprefcount.out1.grind)Tj
+-60.8984 18 Td
+($cmps109-wm/Examples/wk06b-mem-leaks/)Tj
+/R10 10 Tf
+-110.848 -35.5 Td
+[(1:)-600(==1501== Memcheck, a memory error detector)]TJ
+11 TL
+T*[(2:)-600(==1501== Copyright \(C\) 2002-2009, and GNU GPL'd, by Julian Seward et al.)]TJ
+T*[(3:)-600(==1501== Using Valgrind-3.5.0 and LibVEX; rerun with -h for copyright info)]TJ
+T*[(4:)-600(==1501== Command: maprefcount these are some arguments to check on leak)]TJ
+T*[(5:)-600(==1501== Parent PID: 1500)]TJ
+T*[(6:)-600(==1501== )]TJ
+T*[(7:)-600(==1501== )]TJ
+T*[(8:)-600(==1501== HEAP SUMMARY:)]TJ
+T*[(9:)-600(==1501==     in use at exit: 0 bytes in 0 blocks)]TJ
+-6 -11 Td
+[(10:)-600(==1501==   total heap usage: 24 allocs, 24 frees, 746 bytes allocated)]TJ
+T*[(11:)-600(==1501== )]TJ
+T*[(12:)-600(==1501== All heap blocks were freed -- no leaks are possible)]TJ
+T*[(13:)-600(==1501== )]TJ
+T*[(14:)-600(==1501== For counts of detected and suppressed errors, rerun with: -v)]TJ
+T*[(15:)-600(==1501== ERROR SUMMARY: 0 errors from 0 contexts \(suppressed: 4 from 4\))]TJ
+ET
+Q
+Q
+endstream
+endobj
+27 0 obj
+1460
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+17 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 20 0 R
+>>
+/Contents 18 0 R
+>>
+endobj
+21 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 24 0 R
+>>
+/Contents 22 0 R
+>>
+endobj
+25 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 28 0 R
+>>
+/Contents 26 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+17 0 R
+21 0 R
+25 0 R
+] /Count 5
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+20 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+24 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+28 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Encoding 29 0 R/Subtype/Type1>>
+endobj
+29 0 obj
+<</Type/Encoding/Differences[
+126/tilde]>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20120509213022)
+/ModDate(D:20120509213022)>>endobj
+xref
+0 30
+0000000000 65535 f 
+0000008592 00000 n 
+0000009352 00000 n 
+0000008505 00000 n 
+0000007832 00000 n 
+0000000009 00000 n 
+0000003426 00000 n 
+0000009150 00000 n 
+0000008946 00000 n 
+0000009219 00000 n 
+0000009012 00000 n 
+0000009284 00000 n 
+0000008640 00000 n 
+0000007965 00000 n 
+0000003446 00000 n 
+0000004439 00000 n 
+0000008710 00000 n 
+0000008100 00000 n 
+0000004459 00000 n 
+0000005395 00000 n 
+0000008769 00000 n 
+0000008235 00000 n 
+0000005415 00000 n 
+0000006279 00000 n 
+0000008828 00000 n 
+0000008370 00000 n 
+0000006299 00000 n 
+0000007811 00000 n 
+0000008887 00000 n 
+0000009091 00000 n 
+trailer
+<< /Size 30 /Root 1 0 R /Info 2 0 R
+/ID [<1FBA073C0EB4164F46E7CB00332C3BBE><1FBA073C0EB4164F46E7CB00332C3BBE>]
+>>
+startxref
+9463
+%%EOF

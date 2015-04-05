@@ -1,0 +1,557 @@
+head	1.24;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.24
+date	2014.06.21.04.56.35;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.06.21.04.56.00;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.06.21.04.55.22;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.03.28.02.30.00;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.03.28.02.29.06;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.03.28.02.28.19;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.03.28.02.26.27;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.03.28.02.25.34;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.03.28.02.21.33;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.01.29.23.20.14;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.01.29.23.19.47;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.01.19.02.43.09;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.01.19.02.41.57;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.01.08.02.10.19;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.01.08.02.01.50;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.01.08.02.01.16;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.01.04.03.56.23;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.01.04.03.54.45;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.04.23.58.02;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.04.23.57.27;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.03.30.06.07.43;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2011.01.05.05.23.18;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2011.01.05.05.22.31;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.01.05.05.21.46;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.24
+log
+@-
+@
+text
+@// $Id: strvec.cpp,v 1.23 2014-06-20 21:56:00-07 - - $
+
+//
+// NAME
+//    strvec - a few random operations on a vector of strings
+//
+
+#include <algorithm>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void print (const string& s) { cout << "for_each: " << s << endl; }
+
+int main () {
+   // Load array into vector.
+   vector<string> vecstr {"this", "is", "an", "array", "of", "words"};
+
+   // Print using indices.
+   for (size_t index = 0; index < vecstr.size(); ++index) {
+      cout << "indexing: " << vecstr[index] << endl;
+   }
+
+   // Print using explicit types for iterators.
+   for (vector<string>::const_iterator itor = vecstr.cbegin();
+        itor != vecstr.cend(); ++itor) {
+      cout << "iterator: " << *itor << endl;
+   }
+
+   // Print using auto feature.
+   for (auto itor = vecstr.cbegin(); itor != vecstr.cend(); ++itor) {
+      cout << "auto itor: " << *itor << endl;
+   }
+
+   // Print using for-each loop.
+   for (const auto& str: vecstr) cout << "for colon: " << str << endl;
+
+   // Print using <algorithm>for_each and a lambda.
+   for_each (vecstr.cbegin(), vecstr.cend(),
+             [](const string& s) {cout << "lambda: " << s << endl;});
+
+   // Print using <algorithm>for_each and a function.
+   for_each (vecstr.cbegin(), vecstr.cend(), print);
+
+   return EXIT_SUCCESS;
+}
+
+//TEST// valgrind ./strvec foo bar baz qux quux >strvec.lis 2>&1
+//TEST// mkpspdf strvec.ps strvec.cpp* strvec.lis
+
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.22 2014-06-20 21:55:22-07 - - $
+d34 1
+a34 1
+   for (auto& itor = vecstr.cbegin(); itor != vecstr.cend(); ++itor) {
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.21 2014-03-27 19:30:00-07 - - $
+d34 1
+a34 2
+   for (const auto& itor = vecstr.cbegin();
+        itor != vecstr.cend(); ++itor) {
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.20 2014-03-27 19:29:06-07 - - $
+d23 1
+a23 1
+   for (unsigned index = 0; index < vecstr.size(); ++index) {
+d34 1
+a34 1
+   for (auto itor = vecstr.cbegin();
+d40 1
+a40 1
+   for (auto str: vecstr) cout << "for colon: " << str << endl;
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.19 2014-03-27 19:28:19-07 - - $
+d40 1
+a40 1
+   for (auto str: vecstr) cout << "for-each: " << str << endl;
+d52 1
+a52 1
+//TEST// ./strvec foo bar baz qux quux >strvec.lis 2>&1
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.18 2014-03-27 19:26:27-07 - - $
+d34 1
+a34 1
+   for (const auto itor = vecstr.cbegin();
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.17 2014-03-27 19:25:34-07 - - $
+a48 5
+   while (vecstr.size() > 0) {
+      cout << "second: " << vecstr.back() << endl;
+      vecstr.pop_back();
+   }
+
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.16 2014-03-27 19:21:33-07 - - $
+a19 1
+   int length = sizeof wordarray / sizeof *wordarray;
+d44 1
+a44 1
+             [](string s) {cout << "for_each: " << s << endl;});
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.15 2014-01-29 15:20:14-08 - - $
+d16 1
+a16 2
+string wordarray[] = {"this", "is", "an", "array", "of", "words"};
+void print (const string &s) { cout << "for_each: " << s << endl; }
+d19 1
+a19 1
+   vector<string> vecstr;
+d21 1
+a21 5
+
+   // Load array into vector.
+   for (string *itor = wordarray; itor != wordarray + length; ++itor) {
+      vecstr.push_back (*itor);
+   }
+d35 2
+a36 1
+   for (auto itor = vecstr.cbegin(); itor != vecstr.cend(); ++itor) {
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.14 2014-01-29 15:19:47-08 - - $
+d62 1
+a62 1
+//TEST// runprogram.perl -x strvec.lis ./strvec foo bar baz qux quux
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.13 2013-01-18 18:43:09-08 - - $
+d49 1
+a49 1
+             [](string s) {cout "for_each: " << s << endl;});
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.12 2013-01-18 18:41:57-08 - - $
+d44 6
+a49 5
+// // Print using <algorithm>for_each and a lambda.
+// // Not supported in g++ (GCC) 4.4.6 20110731
+// for_each (vecstr.cbegin(), vecstr.cend(),
+//           [](string s) {cout "for_each: " << s << endl;});
+//
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.11 2013-01-07 18:10:19-08 - - $
+d17 1
+d51 1
+a51 2
+   void prt (const string &s) { cout << "for_each: " << s << endl; }
+   for_each (vecstr.cbegin(), vecstr.cend(), prt);
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.10 2013-01-07 18:01:50-08 - - $
+d49 4
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.8 2013-01-03 19:56:23-08 - - $
+d43 5
+a47 3
+   // Print using <algorithm>for_each and a lambda.
+   for_each (vecstr.cbegin(), vecstr.cend(),
+             [](string s) {cout "for_each: " << s << endl;});
+@
+
+
+1.9
+log
+@-
+@
+text
+@d8 1
+d11 1
+a12 1
+#include <string>
+d45 1
+a45 1
+             [](auto s) {cout "for_each: " << s << endl;});
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.7 2013-01-03 19:54:45-08 - - $
+d20 2
+d26 1
+d31 1
+d37 1
+d42 4
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.6 2012-04-04 16:58:02-07 - - $
+d46 1
+a46 1
+//TEST// mkpspdf strvec.ps strvec.cpp strvec.lis
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.5 2012-04-04 16:57:27-07 - - $
+d23 1
+d25 6
+a30 1
+      cout << "first: " << vecstr[index] << endl;
+d32 5
+d41 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.4 2012-03-29 23:07:43-07 - - $
+d17 1
+a17 1
+int main (int argc, char **argv) {
+d23 1
+a23 1
+   for (int index = 0; index < vecstr.size(); ++index) {
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.3 2011-01-04 21:23:18-08 - - $
+d23 1
+a23 1
+   for (int index = 0; index < length; ++index) {
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.2 2011-01-04 21:22:31-08 - - $
+a17 1
+   cout << "This is " << argv[0] << "(" << argc << ")" << endl;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cpp,v 1.1 2011-01-04 21:21:46-08 - - $
+d17 2
+a18 2
+int main () {
+   cout << "This is " << argv[0] << endl;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strvec.cc,v 1.1 2010-01-07 20:16:53-08 - - $
+d18 1
+a18 1
+   cout << "This is " << getexecname() << endl;
+@

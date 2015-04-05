@@ -1,0 +1,79 @@
+head	1.3;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.3
+date	2013.08.15.19.43.13;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.08.15.19.42.26;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.08.15.19.42.05;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@-
+@
+text
+@// $Id: delegate.cpp,v 1.2 2013-08-15 12:42:26-07 - - $
+
+#include <iostream>
+using namespace std;
+
+struct del {
+   int a;
+   del(): del(4) {cout<<__LINE__<<endl;}
+   del(int a): a(a) {cout<<__LINE__<<endl;}
+   ~del() {cout <<__LINE__<<endl;}
+};
+
+#define T(X) cout << #X << endl; X
+
+int main() {
+   T(del x;)
+   T(cout << x.a << endl;)
+   T(del y{9};)
+   T(cout << y.a << endl;)
+   T(return 0;)
+}
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: delegate.cpp,v 1.1 2013-08-15 12:42:05-07 - - $
+d13 1
+a13 1
+#define T(X) cout << #T << endl; X
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 4
+a4 1
+// $Id$
+@

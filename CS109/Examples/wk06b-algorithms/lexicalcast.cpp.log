@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting lexicalcast.cpp
+lexicalcast.cpp:
+     $Id: lexicalcast.cpp,v 1.6 2015-02-05 19:08:00-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 lexicalcast.cpp -o lexicalcast -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f lexicalcast.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished lexicalcast.cpp

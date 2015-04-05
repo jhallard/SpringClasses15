@@ -1,0 +1,7 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting predefmacros.cpp
+* predefmacros.cpp: $Id: predefmacros.cpp,v 1.35 2014-03-27 19:17:41-07
+- - $
+* g++ -g -O0 -Wall -Wextra -std=gnu++11 predefmacros.cpp -o
+predefmacros -lm
+* rm -f predefmacros.o
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished predefmacros.cpp

@@ -1,0 +1,97 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2014.04.18.22.43.32;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.04.15.01.40.50;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: button.cpp,v 1.1 2014-04-14 18:40:50-07 - - $
+
+#include <FL/Fl.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Window.H>
+#include <iostream>
+#include <libgen.h>
+using namespace std;
+
+int clicks = 0;
+
+#define SHOW cout << __func__ << "[" << __LINE__ << "]: " \
+                  << clicks << " clicks." << endl;
+
+void click (Fl_Widget*, void*) {
+   ++clicks;
+   SHOW;
+}
+
+void quit (Fl_Widget*, void*) {
+   SHOW;
+   cout << "Quitting." << endl;
+   exit (1);
+}
+
+int main (int argc, char** argv) {
+   (void) argc;
+   Fl_Window window (200, 100, basename (argv[0]));
+   Fl_Button button (50, 25, 100, 50, "Click me.");
+   button.callback (click, nullptr);
+   window.show();
+   window.callback (quit);
+   return Fl::run();
+}
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d4 1
+a5 1
+#include <FL/Fl_Button.H>
+d7 1
+d10 8
+a17 7
+struct userstruct {
+   string value;
+};
+
+void function (Fl_Widget*, void* userdata) {
+   userstruct* data = reinterpret_cast<userstruct*> (userdata);
+   cerr << __func__ << ": " << data->value << endl;
+d21 2
+a22 1
+   cerr << __func__ << ": quitting." << endl;
+d26 5
+a30 5
+int main() {
+   Fl_Window window (400, 200, "Button clicker");
+   Fl_Button button (10, 10, 100, 25, "Click me.");
+   userstruct userdata {"userdata"};
+   button.callback (function, &userdata);
+@

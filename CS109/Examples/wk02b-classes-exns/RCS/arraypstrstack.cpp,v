@@ -1,0 +1,137 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2012.04.13.19.49.47;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id: linkstrstack.cpp,v 1.1 2012-04-13 12:40:11-07 - - $
+
+//
+// linkstrstack - show the linked list implementation of a stackk
+//
+
+#include <cstddef>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// linkstrstack.h
+/////////////////////////////////////////////////////////////////
+
+class linkstrstack {
+   private:
+      static const int INITSIZE = 16;
+      static const int EMPTY = -1;
+      int asize;
+      int top;
+      string *array;
+      linkstrstack (const linkstrstack &); // Disabled.
+      linkstrstack &operator= (const linkstrstack &); // Disabled.
+      bool full();
+      void realloc();
+   public:
+      linkstrstack();
+      ~linkstrstack();
+      void push (const string &);
+      void pop();
+      string &top();
+      const string &top() const;
+      size_t size() const;
+      bool empty() const;
+};
+
+
+/////////////////////////////////////////////////////////////////
+// linkstrstack.cpp
+/////////////////////////////////////////////////////////////////
+
+linkstrstack::linkstrstack(): asize (INITSIZE), top (EMPTY),
+                              array (new string[
+
+linkstrstack::~linkstrstack() {
+   delete array;
+}
+
+bool full() {
+   return top == asize - 1;
+}
+
+void realloc() {
+   string *newarray = new string
+}
+
+void linkstrstack::push (const string &item) {
+   if (full()) realloc();
+   array[++top] = item;
+}
+
+void linkstrstack::pop() {
+   if (empty()) throw out_of_range ("linkstrstack::pop()");
+   top--;
+}
+
+string &linkstrstack::top() {
+   if (empty()) throw out_of_range ("linkstrstack::top()");
+   return array[top];
+}
+
+const string &linkstrstack::top() const {
+   if (empty()) throw out_of_range ("linkstrstack::top()");
+   return array[top];
+}
+
+size_t linkstrstack::size() const {
+   return top - EMPTY;
+}
+
+bool linkstrstack::empty() const {
+   return size() == 0;
+}
+
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+int main (int argc, char **argv) {
+
+   linkstrstack stkstr;
+   for (int argi = 1; argi < argc; ++argi) {
+      stkstr.push (argv[argi]);
+   }
+   while (stkstr.size() > size_t (argc / 2)) {
+      cout << stkstr.top() << endl;
+      stkstr.pop();
+   }
+
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=linkstrstack.out.grind \
+//TEST//       linkstrstack this is some test data for the stack \
+//TEST//       >linkstrstack.out 2>&1
+//TEST// mkpspdf linkstrstack.ps linkstrstack.cpp* linkstrstack.out*
+*/
+
+@

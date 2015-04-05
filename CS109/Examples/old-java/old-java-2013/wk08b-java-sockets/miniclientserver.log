@@ -1,0 +1,31 @@
+::::::::::::::
+miniserver.log
+::::::::::::::
+bash-2$ miniserver 8888
+miniserver: port 8888: waiting for client
+miniserver: port 8888: socket.accept OK
+Client sent: [1]Stdin read: This is the first message.
+Client sent: [2]Stdin read: Second message.
+Client sent: [3]Stdin read: THird message.
+miniserver: port 8888: finished
+bash-3$ exit
+exit
+
+::::::::::::::
+miniclient.log
+::::::::::::::
+bash-2$ miniclient 8888
+miniclient: localhost 8888: socket OK
+miniclient: This is the first message.
+Stdin read: This is the first message.
+Server said: Client sent: [1]Stdin read: This is the first message.
+miniclient: Second message.
+Stdin read: Second message.
+Server said: Client sent: [2]Stdin read: Second message.
+miniclient: THird message.
+Stdin read: THird message.
+Server said: Client sent: [3]Stdin read: THird message.
+miniclient: miniclient: localhost 8888: finished
+bash-3$ exit
+exit
+

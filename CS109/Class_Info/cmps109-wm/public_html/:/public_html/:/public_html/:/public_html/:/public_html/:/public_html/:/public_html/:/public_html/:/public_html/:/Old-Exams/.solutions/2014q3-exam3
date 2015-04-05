@@ -1,0 +1,204 @@
+$Id: 2014q3-exam2,v 1.2 2014-08-14 13:53:15-07 - - $
+Answers to 2013q3-test2, page 1
+________________________________________________________________________
+Question 1. [1]
+
+for (auto i = c.begin(); i != c.end(); ++i) f (*i);
+
+________________________________________________________________________
+Question 2. [2]
+
+universal, inheritance    |  unversal, template
+                          |
+ad hoc, overloading       |  ad hoc, conversion
+
+________________________________________________________________________
+Question 3. [3]
+
+int main() 
+   map<string,string> m;
+   string key; string value;
+   while (cin >> key >> value) m.insert ({key,value});
+                         //// or:/// m[key] = value;
+   for (auto i&: m) cout << i.first << " " << i.second << endl;
+   return 0;
+}
+
+________________________________________________________________________
+Question 4. [4]
+
+template <typename Itor, typename Cont>
+void merge (Itor b1, Itor e1, Itor b2, Itor e2, Cont c) {
+   while (b1 != e1 and b2 != e2) {
+      c.push_back (*b1 < *b2 ? *b1++ : *b2++);
+   }
+   while (b1 != e1) c.push_back (*b1++);
+   while (b2 != e2) c.push_back (*b2++);
+}
+
+Answers to 2013q3-test2, page 2
+________________________________________________________________________
+Question 5. [3]
+
+void draw_square (GLfloat xpos, GLfloat ypos,
+                  GLfloat width, GLubyte* color) {
+   glBegin (GL_POLYGON);
+   glColor3ubv (color);
+   glVertex2f (xpos, ypos);
+   glVertex2f (xpos + width, ypos);
+   glVertex2f (xpos + width, ypos + width);
+   glVertex2f (xpos, ypos + width);
+   glEnd();
+}
+
+________________________________________________________________________
+Question 6(a). [2]
+
+class shape {
+   protected:
+      shape(){};
+   public:
+      virtual double area() const = 0;
+      virtual double perimeter() const = 0;
+      virtual ~shape(){}
+};
+
+________________________________________________________________________
+Question 6(b). [2]
+
+class rectangle: public shape {
+   private:
+      double width; double height;
+   public:
+      rectangle(): width(0), height(0){}
+      rectangle (double w, double h): width(w), height(h){}
+      virtual double area() const override { return width * height; }
+      virtual double perimeter const override {
+                     return 2 * (width + height); }
+}
+
+________________________________________________________________________
+Question 6(c). [1]
+
+class square: public rectangle {
+   public:
+      square(){}
+      square (double w): rectangle(w,w){}
+}
+
+________________________________________________________________________
+Question 7. [2]
+
+ostream& operator<< (ostream& out, const shape* p) {
+   p->print (out);
+   return out;
+}
+
+Answers to 2013q3-test2, page 3
+________________________________________________________________________
+Question 8(a). [1]
+
+friend ostream& operator<< (ostream&, complex);
+                              //// or:// const complex&
+
+________________________________________________________________________
+Question 8(b). [1]
+
+complex operator* (complex); /// or param: const complex&
+
+________________________________________________________________________
+Question 9(a). [2]
+
+friend ostream& operator<< (ostream& out, complex c) {
+   cout << "(" << c.real << "," << c.imag << "i)";
+   return cout;
+}
+
+________________________________________________________________________
+Question 9(b). [2]
+
+complex complex::operator* (complex c) {
+   return {real * c.real - imag * c.imag,
+           real * c.imag + imag * real};
+}
+
+________________________________________________________________________
+Question 10. [2]
+
+double inner_product (const vector<double>& v1,
+                      const vector<double>& v2) {
+   if (v1.size() != v2.size()) throw domain_error ("inner_product");
+   double prod = 0;
+   for (size_t i = 0; i < v1.size(); ++i) {
+      prod += v1[i] * v2[i];
+   }
+   return prod;
+}
+
+________________________________________________________________________
+Question 11. [2]
+
+template <typename Value>
+void print (const vector<Value>& v) {
+   bool space = false;
+   for (const auto i&: v) {
+      if (space) cout << " ";
+      cout << i;
+      space = true;
+   }
+}
+// And many other correct solutions.
+
+Answers to 2013q3-test2, page 4
+
+ 1.     (B) &*p
+
+ 2.     (B) double d();
+
+ 3.     (A) operator()
+
+ 4.     (C) v[v.size()-1]
+
+ 5.     (B) v[0]
+
+ 6.     (A) # comment
+
+ 7.     (C) protected
+
+ 8.     (B) virtual void f() = 0;
+
+ 9.     (A) AF_INET
+
+10.     (B) {0x00, 0xFF, 0x00};
+
+11.     (D) $ O ( n + 1 ) $
+
+12.     (C) $ O ( n ) $
+
+
+Answers to 2013q3-test2, page 5
+
+ 1.     (D) virtual
+
+ 2.     (B)      65535
+
+ 3.     (D) race condition
+
+ 4.     (A) T(T&&);
+
+ 5.     (A) p is good, f is an error.
+
+ 6.     (A) operator()
+
+ 7.     (A) deque
+
+ 8.     (B) t1.join();
+
+ 9.     (B) copy operator=
+
+10.     (B) (x) = private, (y) = public
+
+11.     (C) reinterpret_cast
+
+12.     (D) move operator=
+

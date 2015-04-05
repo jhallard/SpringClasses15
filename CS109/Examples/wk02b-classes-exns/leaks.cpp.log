@@ -1,0 +1,5 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting leaks.cpp
+* leaks.cpp: $Id: leaks.cpp,v 1.4 2014-04-10 14:17:42-07 - - $
+* g++ -g -O0 -Wall -Wextra -std=gnu++11 leaks.cpp -o leaks -lm
+* rm -f leaks.o
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished leaks.cpp

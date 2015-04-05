@@ -1,0 +1,243 @@
+head	1.9;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.9
+date	2015.02.06.03.05.17;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2015.02.06.03.04.37;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2015.02.06.03.04.26;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2015.02.06.03.04.05;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2015.02.06.03.02.17;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2015.02.06.03.01.53;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2015.02.06.02.59.18;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2015.02.06.02.59.07;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.06.12.22.20.21;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@-
+@
+text
+@// $Id: demangle.cpp,v 1.8 2015-02-05 19:04:37-08 - - $
+
+// Demangle a typeid(X).name() string
+
+#include <cstdlib>
+#include <iostream>
+#include <list>
+#include <map>
+#include <memory>
+#include <string>
+#include <typeinfo>
+#include <vector>
+
+using namespace std;
+
+#include <cxxabi.h>
+template <typename type>
+string demangle (const type &object) {
+   const char *const name = typeid (object).name();
+   int status;
+   char* demangled = abi::__cxa_demangle (name, nullptr, 0, &status);
+   if (demangled == nullptr) return name;
+   string result {status == 0 ? demangled : name};
+   free (demangled);
+   return result;
+}
+
+class foo { }; 
+class bar: foo { }; 
+class baz: bar { }; 
+template <typename T> class tmpl { T x; };
+
+template <typename type>
+void print_demangled (const string &str, const type &obj) {
+   cout << str << " => " << sizeof obj << endl;
+   cout << "   mangled:   " << typeid(obj).name() << endl;
+   cout << "   demangled: " << demangle (obj) << endl;
+}
+
+#define DEMANGLE(X) print_demangled (#X, X())
+int main() {
+   using schar = signed char;
+   using uchar = unsigned char;
+   using ushort = unsigned short;
+   using uint = unsigned int;
+   using ulong = unsigned long;
+   using map_string_int = map<string,int>;
+   DEMANGLE (bool);
+   DEMANGLE (char);
+   DEMANGLE (uchar);
+   DEMANGLE (schar);
+   DEMANGLE (short);
+   DEMANGLE (ushort);
+   DEMANGLE (int);
+   DEMANGLE (uint);
+   DEMANGLE (long);
+   DEMANGLE (ulong);
+   DEMANGLE (float);
+   DEMANGLE (double);
+   DEMANGLE (size_t);
+   DEMANGLE (foo);
+   DEMANGLE (bar);
+   DEMANGLE (baz);
+   DEMANGLE (tmpl<int>);
+   DEMANGLE (vector<string>);
+   DEMANGLE (vector<int>);
+   DEMANGLE (list<vector<long>>);
+   DEMANGLE (map_string_int);
+   return 0;
+}
+
+//TEST// demangle >demangle.out 2>&1
+//TEST// mkpspdf demangle.ps demangle.cpp* demangle.out
+
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: demangle.cpp,v 1.7 2015-02-05 19:04:26-08 - - $
+d23 1
+a23 1
+   string result {status != 0 ? demangled : name};
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: demangle.cpp,v 1.6 2015-02-05 19:04:05-08 - - $
+d21 1
+a21 1
+   char* demangled = abi::__cxa_demangle (name, nullptr, 0, &statusi);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: demangle.cpp,v 1.1 2014-06-12 15:20:21-07 - - $
+d21 1
+a21 2
+   const char* demangled =
+               abi::__cxa_demangle (name, nullptr, 0, &statusi);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d21 6
+a26 4
+   unique_ptr<char*,void(*)(void*)> demangled {
+               abi::__cxa_demangle (name, nullptr, 0, &statusi), free};
+   if (status != 0 || demangled == nullptr) return name;
+   return *demangled;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d21 1
+a21 1
+   unique_ptr<char,void(*)(void*)> demangled {
+@
+
+
+1.3
+log
+@-
+@
+text
+@d24 1
+a24 1
+   return demangled;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d24 1
+a24 1
+   return *demangled;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: demangle.cpp,v 1.8 2014-06-12 14:19:43-07 - - $
+d22 3
+a24 3
+               abi::__cxa_demangle (name, NULL, 0, &statusi), free};
+   if (status != 0 || demangled == NULL) return name;
+   return demangled;
+@

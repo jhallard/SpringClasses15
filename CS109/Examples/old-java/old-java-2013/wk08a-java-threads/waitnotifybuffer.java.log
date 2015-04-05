@@ -1,0 +1,14 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting waitnotifybuffer.java
+* waitnotifybuffer.java: $Id: waitnotifybuffer.java,v 1.16 2013-08-12
+19:35:19-07 - - $
+* javac -Xlint waitnotifybuffer.java
+* jar cfm waitnotifybuffer Manifest waitnotifybuffer$arraybuffer.class
+waitnotifybuffer$arrayqueue.class waitnotifybuffer$buffer.class
+waitnotifybuffer$consumer.class waitnotifybuffer$producer.class
+waitnotifybuffer.class
+* chmod +x waitnotifybuffer
+* rm -f waitnotifybuffer$arraybuffer.class
+waitnotifybuffer$arrayqueue.class waitnotifybuffer$buffer.class
+waitnotifybuffer$consumer.class waitnotifybuffer$producer.class
+waitnotifybuffer.class
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished waitnotifybuffer.java

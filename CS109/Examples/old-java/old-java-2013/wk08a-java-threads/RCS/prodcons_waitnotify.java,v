@@ -1,0 +1,374 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.4
+date	2012.05.25.04.18.37;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.05.25.04.18.18;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.05.25.04.12.47;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.25.03.42.03;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@// $Id: prodcons_waitnotify.java,v 1.3 2012-05-24 21:18:18-07 - - $
+
+//
+// Producer-consumer example using wait and notify on a
+// bounded buffer.  Producer blocks when queue is full, and
+// consumer blocks when queue is empty.
+//
+
+import static java.lang.System.*;
+import java.util.*;
+
+class prodcons_waitnotify {
+
+static class arrayqueue<item_t> {
+   private static final int EMPTY = -1;
+   private int front = EMPTY;
+   private int rear = EMPTY;
+   private item_t[] items;
+
+   @@SuppressWarnings ("unchecked")
+   public arrayqueue (int size) {
+      items = (item_t[]) new Object[size];
+   }
+
+   public boolean is_empty() {
+      return front == EMPTY;
+   }
+
+   public boolean is_full() {
+      return (rear + 1) % items.length == front;
+   }
+
+   public void push_rear (item_t item) {
+      if (is_full()) throw new
+            IllegalStateException ("arrayqueue.push_rear");
+      if (is_empty()) front = rear = 0;
+                 else rear = (rear + 1) % items.length;
+      items[rear] = item;
+   }
+
+   item_t pop_front() {
+      if (is_empty()) throw new
+            IllegalStateException ("arrayqueue.pop_front");
+      item_t result = items[front];
+      if (front == rear) front = rear = EMPTY;
+                    else front = (front + 1) % items.length;
+      return result;
+   }
+}
+
+
+interface buffer<item_t> {
+   void put (item_t item);
+   item_t get();
+   void set_eof();
+}
+
+static class arraybuffer<item_t> implements buffer<item_t> {
+   private arrayqueue<item_t> queue;
+   private boolean eof = false;
+
+   public arraybuffer (int size) {
+      queue = new arrayqueue<item_t> (size);
+   }
+
+   synchronized public void set_eof() {
+      eof = true;
+   }
+
+   synchronized public void put (item_t item) {
+      if (eof) throw new IllegalStateException ("put");
+      while (queue.is_full()) {
+         try {
+            wait();
+         }catch (InterruptedException exn) {
+            display ("arraybuffer.put: %s", exn.getMessage());
+         }
+      }
+      queue.push_rear (item);
+      notifyAll();
+   }
+
+   synchronized public item_t get() {
+      while (queue.is_empty()) {
+         if (eof) return null;
+         try {
+            wait();
+         }catch (InterruptedException exn) {
+            display ("arraybuffer.get: %s", exn.getMessage());
+         }
+      }
+      item_t result = queue.pop_front();
+      notifyAll();
+      return result;
+   }
+
+}
+
+
+static class producer<item_t> implements Runnable {
+
+   private buffer<item_t> buf;
+   private String name;
+   private long delay_msec;
+   private item_t[] data;
+
+   producer (buffer<item_t> _buf, String _name, long _delay,
+             item_t[] _data) {
+      buf = _buf;
+      name = _name;
+      delay_msec = _delay;
+      data = _data;
+   }
+
+   public void run() {
+      Thread self = Thread.currentThread();
+      self.setName ("producer " + name);
+      display ("starting");
+      for (item_t datum: data) {
+         try {
+            self.sleep (delay_msec);
+         }catch (InterruptedException exn) {
+            display ("%s", exn.getMessage());
+         }
+         display ("put (\"%s\")", datum);
+         buf.put (datum);
+      }
+      display ("finished");
+   }
+
+}
+
+static class consumer<item_t> implements Runnable {
+
+   private buffer<item_t> buf;
+   private String name;
+   long delay_msec;
+
+   consumer (buffer<item_t> _buf, String _name, long _delay) {
+      buf = _buf;
+      name = _name;
+      delay_msec = _delay;
+   }
+
+   public void run() {
+      Thread self = Thread.currentThread();
+      self.setName ("consumer " + name);
+      display ("starting");
+      for (;;) {
+         item_t item = buf.get();
+         if (item == null) break;
+         try {
+            Thread.currentThread().sleep (delay_msec);
+         }catch (InterruptedException exn) {
+            display ("%s", exn.getMessage());
+         }
+         display ("get() = \"%s\"", name, item);
+      }
+      display ("finished");
+   }
+   
+}
+
+
+   static long nanostart = nanoTime();
+
+   synchronized static void display (String fmt, Object... args) {
+      Thread self = Thread.currentThread();
+      double millisec = (nanoTime() - nanostart) / 1e6;
+      out.printf ("%10.3f: %s(%d): ",
+                  millisec, self.getName(), self.getId());
+      out.printf (fmt + "%n", args);
+      out.flush();
+   }
+
+   public static void main (String[] args) {
+      display ("starting");
+      String[] latin = {
+         "prîmus", "secundus,", "tertius", "quârtus", "quîntus",
+         "sextus", "septimus", "octâvus", "nônus", "decimus"
+      };
+      String[] greek = { // Transliterated, of course.
+         "prôtos", "deuteros", "tritos", "tetartos", "pentos",
+         "hektos", "hebdomos", "ogdoos", "enatos", "dekatos"
+      };
+      buffer<String> buf = new arraybuffer<String> (5);
+      Thread[] producers = {
+         new Thread (new producer<String> (buf, "Latin", 100, latin)),
+         new Thread (new producer<String> (buf, "Greek", 300, greek))
+      };
+      Thread[] consumers = {
+         new Thread (new consumer<String> (buf, "Gauls", 200)),
+         new Thread (new consumer<String> (buf, "Picts", 500))
+      };
+      for (Thread thread: producers) thread.start();
+      for (Thread thread: consumers) thread.start();
+      for (int itor = 0; itor < producers.length; ++itor) {
+         try {
+            producers[itor].join();
+         }catch (InterruptedException exn) {
+            display ("join: %s", exn.getMessage());
+         }
+      }
+      buf.set_eof();
+      display ("finished");
+   }
+
+}
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: prodcons_waitnotify.java,v 1.2 2012-05-24 21:12:47-07 - - $
+d14 1
+a14 1
+class arrayqueue<item_t> {
+d58 1
+a58 1
+class arraybuffer<item_t> implements buffer<item_t> {
+d100 1
+a100 1
+class producer<item_t> implements Runnable {
+d133 1
+a133 1
+class consumer<item_t> implements Runnable {
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d12 2
+d76 1
+a76 1
+            show.printf ("arraybuffer.put: %s", exn.getMessage());
+d89 1
+a89 1
+            show.printf ("arraybuffer.get: %s", exn.getMessage());
+d107 2
+a108 1
+   producer (buffer _buf, String _name, long _delay, item_t[] _data) {
+d118 1
+a118 1
+      show.printf ("starting");
+d123 1
+a123 1
+            show.printf ("%s", exn.getMessage());
+d125 2
+a126 2
+         show.printf ("put (\"%s\")", datum);
+         outbuf.put (datum);
+d128 1
+a128 1
+      show.printf ("finished");
+d139 1
+a139 1
+   consumer (buffer _buf, String _name, long _delay) {
+d148 1
+a148 1
+      show.printf ("starting");
+d155 1
+a155 1
+            show.printf ("%s", exn.getMessage());
+d157 1
+a157 1
+         show.printf ("get() = \"%s\"", name, item);
+d159 1
+a159 1
+      show.printf ("finished");
+a164 1
+class show {
+d166 2
+a167 1
+   synchronized public static void printf (String fmt, Object... args) {
+a174 3
+}
+
+class main {
+d177 1
+a177 1
+      stamp.printf ("starting");
+d186 1
+a186 1
+      buffer<String> buf = new fixedbuffer (5);
+d192 2
+a193 2
+         new Thread (new consumer (buf, "Gauls", 200)),
+         new Thread (new consumer (buf, "Picts", 500))
+d201 1
+a201 1
+            show.printf ("join: %s", exn.getMessage());
+d205 1
+a205 1
+      show.printf ("finished");
+@
+
+
+1.1
+log
+@-
+@
+text
+@d17 2
+a18 2
+   public class arrayqueue_empty extends RuntimeException {}
+   public class arrayqueue_full extends RuntimeException {}
+d22 2
+a23 1
+   public boolean empty() {
+d26 2
+a27 1
+   public boolean full() {
+d30 1
+d32 4
+a35 3
+      if (full()) throw new arrayqueue_full();
+      if (empty ()) front = rear = 0;
+               else rear = (rear + 1) % items.length;
+d38 4
+a41 2
+   item_t pop_front () {
+      if (empty ()) throw new arrayqueue_empty();
+d47 80
+d129 81
+@

@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting accumulate.cpp
+accumulate.cpp: $Id: accumulate.cpp,v 1.4 2012-06-05 20:48:14-07 - - $
+g++ -g -O0 -Wall -Wextra accumulate.cpp -o accumulate -lm
+rm -f accumulate.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished accumulate.cpp

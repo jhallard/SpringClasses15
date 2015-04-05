@@ -1,0 +1,95 @@
+webserver: port 8888: waiting for client
+webserver: port 8888: socket.accept OK
+webserver: port 8888: worker 1: starting
+RECD: GET / HTTP/1.1
+RECD: Host: unix1.ic.ucsc.edu:8888
+RECD: User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:10.0.5) Gecko/20120606 Firefox/10.0.5
+RECD: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+RECD: Accept-Language: en-us,en;q=0.5
+RECD: Accept-Encoding: gzip, deflate
+RECD: DNT: 1
+RECD: Connection: keep-alive
+RECD: 
+SENT: HTTP/1.1 200 OK
+SENT: Server: webserver: port 8888
+SENT: Content-Type: text/html
+SENT: Content-Length: 452
+SENT: 
+SENT: <PRE>
+SENT: Server RCS Id: $Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $
+SENT: From HostName: unix1.ic.ucsc.edu
+SENT: From HostAddress: 128.114.108.152
+SENT: Server InetAddress: 0.0.0.0/0.0.0.0
+SENT: Server LocalPort: 8888
+SENT: Client InetAddress: /128.114.108.152
+SENT: Client LocalAddress: /128.114.108.152
+SENT: Client LocalPort: 8888
+SENT: Client Port: 52327
+SENT: Page sent: 2013 Aug 13 Tue 19:16:53.993
+SENT: 
+SENT: This is the README file in this directory.
+SENT: 
+SENT: $Id: README,v 1.1 2012-05-29 18:09:34-07 - - $
+webserver: port 8888: worker 1: finished
+webserver: port 8888: socket.accept OK
+webserver: port 8888: worker 2: starting
+RECD: GET /favicon.ico HTTP/1.1
+RECD: Host: unix1.ic.ucsc.edu:8888
+RECD: User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:10.0.5) Gecko/20120606 Firefox/10.0.5
+RECD: Accept: image/png,image/*;q=0.8,*/*;q=0.5
+RECD: Accept-Language: en-us,en;q=0.5
+RECD: Accept-Encoding: gzip, deflate
+RECD: DNT: 1
+RECD: Connection: keep-alive
+RECD: 
+java.io.FileNotFoundException: favicon.ico (No such file or directory)
+SENT: HTTP/1.1 200 OK
+SENT: Server: webserver: port 8888
+SENT: Content-Type: text/html
+SENT: Content-Length: 414
+SENT: 
+SENT: <PRE>
+SENT: Server RCS Id: $Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $
+SENT: From HostName: unix1.ic.ucsc.edu
+SENT: From HostAddress: 128.114.108.152
+SENT: Server InetAddress: 0.0.0.0/0.0.0.0
+SENT: Server LocalPort: 8888
+SENT: Client InetAddress: /128.114.108.152
+SENT: Client LocalAddress: /128.114.108.152
+SENT: Client LocalPort: 8888
+SENT: Client Port: 52328
+SENT: Page sent: 2013 Aug 13 Tue 19:16:54.046
+SENT: 
+SENT: IOException: favicon.ico (No such file or directory)
+webserver: port 8888: worker 2: finished
+webserver: port 8888: socket.accept OK
+webserver: port 8888: worker 3: starting
+RECD: GET /favicon.ico HTTP/1.1
+RECD: Host: unix1.ic.ucsc.edu:8888
+RECD: User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:10.0.5) Gecko/20120606 Firefox/10.0.5
+RECD: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+RECD: Accept-Language: en-us,en;q=0.5
+RECD: Accept-Encoding: gzip, deflate
+RECD: DNT: 1
+RECD: Connection: keep-alive
+RECD: 
+java.io.FileNotFoundException: favicon.ico (No such file or directory)
+SENT: HTTP/1.1 200 OK
+SENT: Server: webserver: port 8888
+SENT: Content-Type: text/html
+SENT: Content-Length: 414
+SENT: 
+SENT: <PRE>
+SENT: Server RCS Id: $Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $
+SENT: From HostName: unix1.ic.ucsc.edu
+SENT: From HostAddress: 128.114.108.152
+SENT: Server InetAddress: 0.0.0.0/0.0.0.0
+SENT: Server LocalPort: 8888
+SENT: Client InetAddress: /128.114.108.152
+SENT: Client LocalAddress: /128.114.108.152
+SENT: Client LocalPort: 8888
+SENT: Client Port: 52329
+SENT: Page sent: 2013 Aug 13 Tue 19:16:54.054
+SENT: 
+SENT: IOException: favicon.ico (No such file or directory)
+webserver: port 8888: worker 3: finished

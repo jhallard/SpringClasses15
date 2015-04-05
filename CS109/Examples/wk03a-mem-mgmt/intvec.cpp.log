@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting intvec.cpp
+intvec.cpp: $Id: intvec.cpp,v 1.24 2014-04-14 13:16:36-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 intvec.cpp -o intvec -lm
+rm -f intvec.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished intvec.cpp

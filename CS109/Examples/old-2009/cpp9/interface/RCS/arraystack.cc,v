@@ -1,0 +1,142 @@
+head	1.3;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.3
+date	2009.03.07.04.04.35;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2009.03.06.22.54.04;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2009.03.06.22.17.05;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@-
+@
+text
+@// $Id: arraystack.cc,v 1.2 2009-03-06 14:54:04-08 - - $
+
+#include "arraystack.h"
+
+const int EMPTY = -1;
+const int INITSIZE = 8;
+
+template <class item_t>
+arraystack<item_t>::arraystack ():
+            top (EMPTY), size(INITSIZE), data (new item_t[INITSIZE]) {
+}
+
+template <class item_t>
+arraystack<item_t>::arraystack (const arraystack<item_t> &that) {
+   *this = that;
+}
+
+template <class item_t>
+arraystack<item_t> &arraystack<item_t>::operator= (
+            const arraystack<item_t> &that) {
+   if (this == &that) return *this;
+   delete data;
+   top = that.top;
+   size = that.size;
+   for (int itor = 0; itor < top; ++itor) data[itor] = that.data[itor];
+   return *this;
+}
+
+template <class item_t>
+arraystack<item_t>::~arraystack () {
+   delete[] data;
+}
+
+template <class item_t>
+bool arraystack<item_t>::empty () {
+   return top == EMPTY;
+}
+
+template <class item_t>
+void arraystack<item_t>::push (const item_t &item) {
+   if (top == size - 1) {
+      item_t *newdata = new item_t[size *= 2];
+      for (int itor = 0; itor < top; ++itor) newdata[itor] = data[itor];
+      delete[] data;
+      data = newdata;
+   }
+   data[++top] = item;
+}
+
+template <class item_t>
+item_t arraystack<item_t>::pop () {
+   if (empty ()) throw new empty_error ();
+   return data[top--];
+}
+
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: arraystack.cc,v 1.1 2009-03-06 14:17:05-08 - - $
+d6 1
+a6 1
+const int INITSIZE = 16;
+d31 1
+a31 1
+   delete data;
+d44 1
+a44 1
+      delete data;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 6
+a6 1
+// $Id$
+d9 2
+a10 1
+stack (): top (EMPTY), size(INITSIZE), data (new item_t[INITSIZE]) {
+d14 1
+a14 1
+stack (const stack &that) {
+d19 3
+a21 2
+virtual stack &operator= (const stack &that) {
+   if (this = &that) return *this;
+d30 1
+a30 1
+virtual ~stack () {
+d35 1
+a35 1
+virtual bool empty () {
+d40 1
+a40 1
+virtual void push (const item_t &item) {
+d51 1
+a51 1
+virtual item_t pop () {
+@

@@ -1,0 +1,364 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.5
+date	2013.07.29.20.57.32;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.02.20.02.13.42;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.02.20.02.12.50;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.02.20.02.11.17;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.02.20.02.10.45;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: myvector.cpp,v 1.4 2013-02-19 18:13:42-08 - - $
+
+//
+// Template class myvector showing implementation of a vector,
+// with its iterators.
+//
+
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// general utilities
+/////////////////////////////////////////////////////////////////
+
+template <typename one_t, typename two_t>
+struct tpair {
+   one_t one;
+   two_t two;
+   tpair (const one_t _one, const two_t _two): one(_one), two(_two) {}
+   tpair (): one(one_t()), two(two_t()) {}
+};
+
+
+/////////////////////////////////////////////////////////////////
+// interface myvector.h
+/////////////////////////////////////////////////////////////////
+
+template <typename value_t>
+class myvector {
+   private:
+      size_t _size;
+      size_t _capacity;
+      value_t *_data;
+      void copydata (value_t *data);
+      static const size_t RESERVE = 8;
+
+   public:
+      class iterator;
+      friend class myvector<value_t>::iterator;
+
+      explicit myvector (size_t size = 0);
+      myvector (const myvector &);
+      myvector &operator= (const myvector &);
+      ~myvector() {delete[] _data;}
+
+      const value_t &operator[] (size_t pos) const; // x = a[i];
+      value_t &operator[] (size_t pos); // a[i] = x;
+
+      inline bool empty () const {return _size == 0;}
+      inline size_t size () const {return _size;}
+      inline size_t capacity () const {return _capacity;}
+      void resize (size_t size);
+      void reserve (size_t capacity);
+
+      void push_back (const value_t &);
+      void pop_back();
+      const value_t &back() const;
+      value_t &back();
+
+      typename myvector<value_t>::iterator begin();
+      typename myvector<value_t>::iterator end();
+};
+
+template <typename value_t>
+class myvector<value_t>::iterator {
+   friend class myvector<value_t>;
+   private:
+      value_t *value;
+      iterator (value_t *value): value(value) {};
+   public:
+      iterator(): value(NULL) {};
+      iterator (const iterator &) = default;
+      iterator &operator= (const iterator &) = default;
+      ~iterator () = default;
+      iterator &operator++(); // ++itor
+      iterator operator++ (int); // itor++
+      bool operator== (const iterator &) const;
+      bool operator!= (const iterator &) const;
+      value_t &operator*() const;
+      value_t *operator->() const;
+};
+
+
+/////////////////////////////////////////////////////////////////
+// implementation myvector
+/////////////////////////////////////////////////////////////////
+
+template <typename value_t>
+void myvector<value_t>::copydata (value_t *data) {
+   for (size_t pos = 0; pos < _size; ++pos) {
+      _data[pos] = data[pos];
+   }
+}
+
+template <typename value_t>
+myvector<value_t>::myvector (size_t size):
+            _size(size), _capacity(size) {
+   _data = new value_t[_capacity];
+};
+
+template <typename value_t>
+myvector<value_t>::myvector (const myvector &that):
+            _size(that.size), _capacity(that.size) {
+   _data = new value_t[_size];
+   copydata (that._data);
+}
+
+template <typename value_t>
+myvector<value_t> &myvector<value_t>::operator= (const myvector &that) {
+   if (this == &that) return *this;
+   if (capacity < that.size) {
+      delete[] _data;
+      _capacity = that.size;
+      _data = new value_t[capacity];
+   }
+   _size = that.size;
+   copydata (that._data);
+   return *this;
+}
+
+template <typename value_t>
+const value_t &myvector<value_t>::operator[] (size_t pos) const {
+   return _data[pos];
+}
+
+template <typename value_t>
+value_t &myvector<value_t>::operator[] (size_t pos) {
+   return _data[pos];
+}
+
+
+template <typename value_t>
+void myvector<value_t>::resize (size_t size) {
+   if (size < _size) reserve (size);
+   _size = size;
+}
+
+template <typename value_t>
+void myvector<value_t>::reserve (size_t capacity) {
+   if (capacity < RESERVE) capacity = RESERVE;
+   if (_capacity < capacity) {
+      value_t *olddata = _data;
+      _capacity = capacity;
+      _data = new value_t[_capacity];
+      if (olddata != NULL) {
+         copydata (olddata);
+         delete[] olddata;
+      }
+   }
+}
+
+template <typename value_t>
+void myvector<value_t>::push_back (const value_t &value) {
+   if (_size == _capacity) reserve (2 * _capacity);
+   _data[_size++] = value;
+}
+
+template <typename value_t>
+void myvector<value_t>::pop_back() {
+   --size;
+}
+
+template <typename value_t>
+const value_t &myvector<value_t>::back() const {
+   return _data[_size - 1];
+}
+
+template <typename value_t>
+value_t &myvector<value_t>::back() {
+   return _data[_size - 1];
+}
+
+template <typename value_t>
+typename myvector<value_t>::iterator myvector<value_t>::begin() {
+   return iterator (_data);
+}
+
+template <typename value_t>
+typename myvector<value_t>::iterator myvector<value_t>::end() {
+   return iterator (_data + _size);
+}
+
+
+template <typename value_t>
+typename myvector<value_t>::iterator &
+myvector<value_t>::iterator::operator++() {
+   ++value;
+   return *this;
+}
+
+template <typename value_t>
+typename myvector<value_t>::iterator
+myvector<value_t>::iterator::operator++(int) {
+   iterator result = *this;
+   ++value;
+   return result;
+}
+
+template <typename value_t>
+bool myvector<value_t>::iterator::operator==
+(const iterator &that) const {
+   return value == that.value;
+}
+
+template <typename value_t>
+bool myvector<value_t>::iterator::operator!=
+(const iterator &that) const {
+   return ! (*this == that);
+}
+
+template <typename value_t>
+value_t &myvector<value_t>::iterator::operator*() const {
+   return *value;
+}
+
+template <typename value_t>
+value_t *myvector<value_t>::iterator::operator->() const {
+   return value;
+}
+
+
+/////////////////////////////////////////////////////////////////
+// main program test harness
+/////////////////////////////////////////////////////////////////
+
+typedef tpair<string, int> sipair_t;
+typedef myvector<sipair_t> vec_t;
+typedef vec_t::iterator vecitor_t;
+
+int main (int argc, char **argv) {
+   vec_t vec;
+   for (int pos = 1; pos < argc; ++pos) {
+      vec.push_back (sipair_t (argv[pos], pos));
+   }
+   for (vecitor_t itor = vec.begin(); itor != vec.end(); ++itor) {
+      cout << itor->one << ", " << itor->two << endl;
+   }
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=myvector.out.grind \
+//TEST//       myvector this is some test data for the myvector \
+//TEST//       >myvector.out 2>&1
+//TEST// mkpspdf myvector.ps myvector.cpp* myvector.out*
+*/
+
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: myvector.cpp,v 1.3 2013-02-19 18:12:50-08 - - $
+d65 19
+a83 18
+      
+      class iterator {
+         friend class myvector<value_t>;
+         private:
+            value_t *value;
+            iterator (value_t *value): value(value) {};
+         public:
+            iterator(): value(NULL) {};
+            iterator (const iterator &) = default;
+            iterator &operator= (const iterator &) = default;
+            ~iterator () = default;
+            iterator &operator++(); // ++itor
+            iterator operator++ (int); // itor++
+            bool operator== (const iterator &) const;
+            bool operator!= (const iterator &) const;
+            value_t &operator*() const;
+            value_t *operator->() const;
+      };
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: myvector.cpp,v 1.1 2013-02-19 18:10:45-08 - - $
+d133 1
+d185 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d92 1
+a92 1
+   for (value_t *pos = _data; pos != _data + _size; ++pos) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: myvector.cpp,v 1.1 2013-02-19 16:57:03-08 - - $
+a225 2
+myvector<int> vi;
+
+d231 1
+@

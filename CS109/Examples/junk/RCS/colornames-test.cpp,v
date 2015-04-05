@@ -1,0 +1,126 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.5
+date	2014.04.26.00.14.54;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.04.26.00.10.33;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.04.26.00.09.35;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.04.26.00.08.41;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.04.26.00.08.01;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: colornames-test.cpp,v 1.4 2014-04-25 17:10:33-07 - - $
+
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include "colornames.h"
+
+int main (int argc, char **argv) {
+   vector<string> args (&argv[0], &argv[argc]);
+   for (string arg: args) {
+      auto num = color_names.find (arg);
+      cout << arg << ": ";
+      if (num == color_names.end()) {
+         cout << "not found" << endl;
+      }else {
+         cout << "red " << (int)num->second.red
+              << ", green " << (int)num->second.green
+              << ", blue " << (int)num->second.blue << endl;
+      }
+   }
+}
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: colornames-test.cpp,v 1.3 2014-04-25 17:09:35-07 - - $
+d18 3
+a20 3
+         cout << "red " << num->second.red
+              << ", green " << num->second.green
+              << ", blue " << num->second.blue << endl;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: colornames-test.cpp,v 1.2 2014-04-25 17:08:41-07 - - $
+d18 3
+a20 3
+         cout << "red " << num->red
+              << ", green " << num->green
+              << ", blue " << num->blue << endl;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: colornames-test.cpp,v 1.1 2014-04-25 17:08:01-07 - - $
+d16 1
+a16 1
+         cout "not found" << endl;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d15 1
+a15 1
+      if (numeric == color_names.end()) {
+@

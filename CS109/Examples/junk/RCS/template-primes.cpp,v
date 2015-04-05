@@ -1,0 +1,80 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2014.07.17.21.10.05;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.07.17.21.09.11;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: template-primes.cpp,v 1.1 2014-07-17 14:09:11-07 - - $
+
+#include <iostream>
+using namespace std;
+
+template <int i>
+struct D {
+   D (void*);
+   operator int();
+};
+
+template <int p, int i>
+struct is_prime {
+   enum { prime = (p%i) and is_prime<(i>2?p:0),i>::prime };
+};
+
+template<> struct is_prime<0,0> { enum { prime = 1 }; };
+
+template<> struct is_prime<0,1> { enum { prime = 1 }; };
+
+struct Prime_print {
+   Prime_prime<i-1> a;
+   enum { prime = is_prime<i,i-1>::prime };
+   void f() { D<i> d = prime; }
+};
+
+struct Prime_print<2> {
+   enum { prime = 1; }
+   void f() { D<2> d = prime; }
+}
+
+void foo() {
+   Prime_print<10> a;
+}
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d17 1
+a17 1
+struct is_prime<0,0> { enum { prime = 1 }; };
+d19 1
+a19 1
+struct is_prime<0,1> { enum { prime = 1 }; };
+@

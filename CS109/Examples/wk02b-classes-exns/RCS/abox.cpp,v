@@ -1,0 +1,479 @@
+head	1.12;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.12
+date	2014.04.10.21.12.07;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.04.10.21.10.46;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.07.03.19.48.18;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.07.03.01.59.14;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.07.03.01.56.23;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.07.03.01.53.50;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.07.03.01.53.39;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.13.23.51.30;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.11.03.03.39;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.11.03.02.11;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.11.01.13.54;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.11.01.13.05;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.12
+log
+@-
+@
+text
+@// $Id: abox.cpp,v 1.11 2014-04-10 14:10:46-07 - - $
+
+// Class abox showing default ctor, copy ctor, operator=, dtor.
+
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <typeinfo>
+#include <vector>
+
+using namespace std;
+
+#define LINE "[" << __LINE__ << "] "
+#define IDENT(name) \
+        cout << LINE << reinterpret_cast<const void*> (this) \
+             << "->" << name << ": value=" << value << endl; 
+#define SHOW(STMT) \
+        cout << LINE << "SHOW(" << #STMT << "):" << endl; \
+        STMT; \
+        cout << endl;
+
+/////////////////////////////////////////////////////////////////
+// abox.h
+/////////////////////////////////////////////////////////////////
+
+class abox {
+   private:
+      int value;
+   public:
+      abox();                          // default ctor
+      abox (const abox&);              // copy ctor
+      abox& operator= (const abox&);   // copy operator=
+      ~abox();                         // dtor
+      abox (abox&&);                   // C++11 move ctor
+      abox& operator= (abox&&);        // C++11 move operator=
+      abox (int);                      // implicit int->abox conv
+      operator int() const;            // implicit abox->int conv
+      abox& operator++();              // prefix ++
+      abox operator++ (int);           // postfix ++
+};
+
+/////////////////////////////////////////////////////////////////
+// abox.cpp
+/////////////////////////////////////////////////////////////////
+
+abox::abox(): value(0) { // default ctor
+   IDENT ("abox::abox()");
+}
+
+abox::abox (const abox& init): value(init.value) { // copy ctor
+   IDENT ("abox::abox(const abox&)");
+}
+
+abox& abox::operator= (const abox& that) { // copy operator=
+   if (this != &that) {
+      this->value = that.value;
+   }
+   IDENT ("abox::operator= (const abox&)");
+   return *this;
+}
+
+abox::~abox() { // dtor
+   IDENT ("abox::~abox()");
+}
+
+abox::abox (abox&& init): value(init.value) { // C++11 move ctor
+   IDENT ("abox::abox(abox&&)");
+}
+
+abox& abox::operator= (abox&& that) { // C++11 move operator=
+   if (this != &that) {
+      this->value = that.value;
+   }
+   IDENT ("abox::operator= (abox&&)");
+   return *this;
+}
+
+abox::abox (int init): value(init) { // implicit int->abox conv
+   IDENT ("abox::abox(int)");
+}
+
+abox::operator int() const { // implicit abox->int conv
+   IDENT ("abox::operator int()");
+   return value;
+}
+
+abox& abox::operator++() { // prefix ++
+   ++value;
+   return *this;
+}
+
+abox abox::operator++ (int) { // postfix ++
+   abox result = value;
+   value++;
+   return result;
+}
+
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+void ref_fn (const abox& that) {
+   SHOW (cout << "ref_fn, that=" << that << endl);
+}
+
+void value_fn (const abox that) {
+   SHOW (cout << "value_fn, that=" << that << endl);
+}
+
+int main() {
+   SHOW (abox a);
+   SHOW (abox b = a);
+   SHOW (abox c (a));
+   SHOW (abox d = 6);
+   SHOW (b = 3);
+   SHOW (ref_fn (6));
+   SHOW (ref_fn (a));
+   SHOW (value_fn (a));
+   SHOW (abox ii = 255);
+   SHOW (int i = ii);
+   SHOW (cout << i << endl);
+   cout << '\f' << endl;
+   SHOW (abox *p = new abox (6));
+   SHOW (delete p);
+   SHOW (abox *bb = new abox[3]);
+   SHOW (delete[] bb);
+   SHOW (vector<abox> vb);
+   SHOW (vb.push_back (6));
+   SHOW (vb.push_back (8));
+   SHOW (cout << (a = d++) << endl;);
+   SHOW (cout << (a = ++d) << endl;);
+   return EXIT_SUCCESS;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=abox.lis.grind abox >abox.lis 2>&1
+//TEST// mkpspdf abox.ps abox.cpp* abox.lis*
+*/
+
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.10 2013-07-03 12:48:18-07 - - $
+d30 1
+a30 1
+      abox ();                         // default ctor
+d33 1
+a33 1
+      ~abox ();                        // dtor
+d37 2
+a38 2
+      operator int () const;           // implicit abox->int conv
+      abox& operator++ ();             // prefix ++
+d46 1
+a46 1
+abox::abox (): value(0) { // default ctor
+d62 1
+a62 1
+abox::~abox () { // dtor
+d82 2
+a83 2
+abox::operator int () const { // implicit abox->int conv
+   IDENT ("abox::operator int ()");
+d87 1
+a87 1
+abox& abox::operator++ () { // prefix ++
+d111 1
+a111 1
+int main () {
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.9 2013-07-02 18:59:14-07 - - $
+d31 2
+a32 2
+      abox (const abox &);             // copy ctor
+      abox &operator= (const abox &);  // copy operator=
+d34 2
+a35 2
+      abox (abox &&);                  // C++11 move ctor
+      abox &operator= (abox &&);       // C++11 move operator=
+d38 1
+a38 1
+      abox &operator++ ();             // prefix ++
+d50 2
+a51 2
+abox::abox (const abox &init): value(init.value) { // copy ctor
+   IDENT ("abox::abox(const abox &)");
+d54 1
+a54 1
+abox &abox::operator= (const abox &that) { // copy operator=
+d58 1
+a58 1
+   IDENT ("abox::operator= (const abox &)");
+d66 2
+a67 2
+abox::abox (abox &&init): value(init.value) { // C++11 move ctor
+   IDENT ("abox::abox(abox &&)");
+d70 1
+a70 1
+abox &abox::operator= (abox &&that) { // C++11 move operator=
+d74 1
+a74 1
+   IDENT ("abox::operator= (abox &&)");
+d87 1
+a87 1
+abox &abox::operator++ () { // prefix ++
+d103 1
+a103 1
+void ref_fn (const abox &that) {
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.8 2013-07-02 18:56:23-07 - - $
+d34 2
+a35 2
+      abox (const abox &&);            // C++11 move ctor
+      abox &operator= (const abox &&); // C++11 move operator=
+d66 2
+a67 2
+abox::abox (const abox &&init): value(init.value) { // C++11 move ctor
+   IDENT ("abox::abox(const abox &&)");
+d70 1
+a70 1
+abox &abox::operator= (const abox &&that) { // C++11 move operator=
+d74 1
+a74 1
+   IDENT ("abox::operator= (const abox &&)");
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.7 2013-07-02 18:53:50-07 - - $
+d46 1
+a46 1
+abox::abox (): value(0) {
+d50 1
+a50 1
+abox::abox (const abox &init): value(init.value) {
+d54 1
+a54 1
+abox &abox::operator= (const abox &that) {
+d62 1
+a62 1
+abox::~abox () {
+d66 1
+a66 1
+abox::abox (const abox &&init): value(init.value) {
+d70 1
+a70 1
+abox &abox::operator= (const abox &&that) {
+d78 1
+a78 1
+abox::abox (int init): value(init) {
+d82 1
+a82 1
+abox::operator int () const {
+d87 1
+a87 1
+abox &abox::operator++ () { // prefix
+d92 1
+a92 1
+abox abox::operator++ (int) { // postfix
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.6 2013-07-02 18:53:39-07 - - $
+d66 12
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.5 2012-04-13 16:51:30-07 - - $
+d34 1
+a34 1
+      abox (const abos &&);            // C++11 move ctor
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.4 2012-04-10 20:03:39-07 - - $
+d30 10
+a39 8
+      abox ();                        // default ctor
+      abox (const abox &);            // copy ctor
+      abox &operator= (const abox &); // operator=
+      ~abox ();                       // dtor
+      abox (int);                     // implicit int->abox conv
+      operator int () const;          // implicit abox->int conv
+      abox &operator++ ();            // prefix ++
+      abox operator++ (int);          // postfix ++
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.3 2012-04-10 20:02:11-07 - - $
+d53 3
+a55 2
+   if (this == &that) return *this;
+   this->value = that.value;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.2 2012-04-10 18:13:54-07 - - $
+d13 1
+d15 1
+a15 2
+        cout << "[" << __LINE__ << "] " \
+             << reinterpret_cast<const void*> (this) \
+d18 1
+a18 1
+        cout << "SHOW(" << #STMT << "):" << endl; \
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.1 2012-04-10 18:13:05-07 - - $
+d14 2
+a15 1
+        cout << reinterpret_cast<const void*> (this) \
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: abox.cpp,v 1.29 2012-04-10 18:11:10-07 - - $
+d73 1
+a73 1
+   return this;
+@

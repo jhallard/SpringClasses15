@@ -1,0 +1,271 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/30/12)Tj
+-0.659766 -12.8004 Td
+(19:47:17)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 258.759 736.5 Tm
+(fontfamilies.java)Tj
+-72.134 18 Td
+($cmps109-wm/Examples/wk09b-java-gui/)Tj
+/R10 10 Tf
+-118.625 -35.5 Td
+[(1:)-600(// $Id: fontfamilies.java,v 1.1 2012-05-30 19:47:17-07 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(//)]TJ
+T*[(4:)-600(// Print all Java font names.)]TJ
+T*[(5:)-600(//)]TJ
+(6:)'
+T*[(7:)-600(import java.awt.*;)]TJ
+T*[(8:)-600(import java.util.*;)]TJ
+T*[(9:)-600(import static java.lang.System.*;)]TJ
+-6 -11 Td
+[(10:)-600(import static java.util.Collections.*;)]TJ
+(11:)'
+T*[(12:)-600(class fontfamilies {)]TJ
+T*[(13:)-600(   public static void main \(String[] args\) {)]TJ
+T*[(14:)-600(      GraphicsEnvironment grenv =)]TJ
+T*[(15:)-600(      GraphicsEnvironment.getLocalGraphicsEnvironment\(\);)]TJ
+T*[(16:)-600(      for \(String fontname: grenv.getAvailableFontFamilyNames\(\)\) {)]TJ
+T*[(17:)-600(         out.printf \("%s%n", fontname\);)]TJ
+T*[(18:)-600(      })]TJ
+T*[(19:)-600(   })]TJ
+T*[(20:)-600(})]TJ
+(21:)'
+T*[(22:)-600(//TEST// fontfamilies >fontfamilies.log)]TJ
+T*[(23:)-600(//TEST// mkpspdf fontfamilies.ps fontfamilies.java fontfamilies.log)]TJ
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+1481
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/30/12)Tj
+-0.659766 -12.8004 Td
+(19:47:18)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 261.474 736.5 Tm
+(fontfamilies.log)Tj
+-74.8496 18 Td
+($cmps109-wm/Examples/wk09b-java-gui/)Tj
+/R10 10 Tf
+-118.625 -35.5 Td
+[(1:)-600(Bitstream Charter)]TJ
+11 TL
+T*[(2:)-600(Bitstream Vera Sans)]TJ
+T*[(3:)-600(Bitstream Vera Sans Mono)]TJ
+T*[(4:)-600(Bitstream Vera Serif)]TJ
+T*[(5:)-600(Century Schoolbook L)]TJ
+T*[(6:)-600(Courier)]TJ
+T*[(7:)-600(Courier 10 Pitch)]TJ
+T*[(8:)-600(Cursor)]TJ
+T*[(9:)-600(DejaVu LGC Sans)]TJ
+-6 -11 Td
+[(10:)-600(DejaVu LGC Sans Condensed)]TJ
+T*[(11:)-600(DejaVu LGC Sans Light)]TJ
+T*[(12:)-600(DejaVu LGC Sans Mono)]TJ
+T*[(13:)-600(DejaVu LGC Serif)]TJ
+T*[(14:)-600(DejaVu LGC Serif Condensed)]TJ
+T*[(15:)-600(Dialog)]TJ
+T*[(16:)-600(DialogInput)]TJ
+T*[(17:)-600(Dingbats)]TJ
+T*[(18:)-600(Hershey)]TJ
+T*[(19:)-600(Liberation Mono)]TJ
+T*[(20:)-600(Liberation Sans)]TJ
+T*[(21:)-600(Liberation Serif)]TJ
+T*[(22:)-600(Lucida Bright)]TJ
+T*[(23:)-600(Lucida Sans)]TJ
+T*[(24:)-600(Lucida Sans Typewriter)]TJ
+T*[(25:)-600(Luxi Mono)]TJ
+T*[(26:)-600(Luxi Sans)]TJ
+T*[(27:)-600(Luxi Serif)]TJ
+T*[(28:)-600(Monospaced)]TJ
+T*[(29:)-600(Nimbus Mono L)]TJ
+T*[(30:)-600(Nimbus Roman No9 L)]TJ
+T*[(31:)-600(Nimbus Sans L)]TJ
+T*[(32:)-600(Nimbus Sans L Condensed)]TJ
+T*[(33:)-600(SansSerif)]TJ
+T*[(34:)-600(Serif)]TJ
+T*[(35:)-600(Standard Symbols L)]TJ
+T*[(36:)-600(URW Bookman L)]TJ
+T*[(37:)-600(URW Chancery L)]TJ
+T*[(38:)-600(URW Gothic L)]TJ
+T*[(39:)-600(URW Palladio L)]TJ
+T*[(40:)-600(Utopia)]TJ
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+1812
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+] /Count 2
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20120530194718)
+/ModDate(D:20120530194718)>>endobj
+xref
+0 17
+0000000000 65535 f 
+0000003779 00000 n 
+0000004287 00000 n 
+0000003713 00000 n 
+0000003445 00000 n 
+0000000009 00000 n 
+0000001540 00000 n 
+0000004085 00000 n 
+0000003956 00000 n 
+0000004154 00000 n 
+0000004022 00000 n 
+0000004219 00000 n 
+0000003827 00000 n 
+0000003578 00000 n 
+0000001560 00000 n 
+0000003424 00000 n 
+0000003897 00000 n 
+trailer
+<< /Size 17 /Root 1 0 R /Info 2 0 R
+/ID [<C67DC5CEB550946A66FCF510B6B8DD83><C67DC5CEB550946A66FCF510B6B8DD83>]
+>>
+startxref
+4398
+%%EOF

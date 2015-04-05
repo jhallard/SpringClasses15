@@ -1,0 +1,404 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(06/06/12)Tj
+-0.659766 -12.8004 Td
+(14:30:48)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 259.066 736.5 Tm
+(sigactionintr.cpp)Tj
+-79.1336 18 Td
+($cmps109-wm/Examples/wk10a-algorithms/)Tj
+/R10 10 Tf
+-111.933 -35.5 Td
+[(1:)-600(// $Id: sigactionintr.cpp,v 1.6 2012-06-06 14:30:48-07 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(//)]TJ
+T*[(4:)-600(// Program does nothing except echo input line by line.)]TJ
+T*[(5:)-600(// However, at every SIGINT \(Ctrl/C\), it prints a message)]TJ
+T*[(6:)-600(// acknowledging the Ctrl/C, but the program does not abort)]TJ
+T*[(7:)-600(// as is usual without a signal.)]TJ
+T*[(8:)-600(//)]TJ
+(9:)'
+-6 -11 Td
+[(10:)-600(#include <cerrno>)]TJ
+T*[(11:)-600(#include <csignal>)]TJ
+T*[(12:)-600(#include <cstdlib>)]TJ
+T*[(13:)-600(#include <iostream>)]TJ
+T*[(14:)-600(#include <stdexcept>)]TJ
+(15:)'
+T*[(16:)-600(#include <signal.h>)]TJ
+T*[(17:)-600(#include <unistd.h>)]TJ
+(18:)'
+T*[(19:)-600(using namespace std;)]TJ
+(20:)'
+T*[(21:)-600(string progname;)]TJ
+(22:)'
+T*[(23:)-600(string basename \(const string &arg\) {)]TJ
+T*[(24:)-600(   return arg.substr \(arg.find_last_of \('/'\) + 1\);)]TJ
+T*[(25:)-600(})]TJ
+(26:)'
+T*[(27:)-600(void syserror \(const string &object\) {)]TJ
+T*[(28:)-600(   throw runtime_error \(object + ": " + strerror \(errno\)\);)]TJ
+T*[(29:)-600(})]TJ
+(30:)'
+T*[(31:)-600(void print_pid\(\) {)]TJ
+T*[(32:)-600(   static int pid = getpid\(\);)]TJ
+T*[(33:)-600(   cout << "[" << pid << "]" << progname << ": ";)]TJ
+T*[(34:)-600(})]TJ
+(35:)'
+T*[(36:)-600(extern "C" {)]TJ
+T*[(37:)-600(   static volatile int action_count = 0;)]TJ
+T*[(38:)-600(   void action_handler \(int signo\) {)]TJ
+T*[(39:)-600(      ++action_count;)]TJ
+T*[(40:)-600(      print_pid\(\);)]TJ
+T*[(41:)-600(      cout << "Caught signal " << signo)]TJ
+T*[(42:)-600(           << ", action_count " << action_count << endl;)]TJ
+T*[(43:)-600(   })]TJ
+T*[(44:)-600(})]TJ
+(45:)'
+T*[(46:)-600(void shell\(\) {)]TJ
+T*[(47:)-600(   // Fake shell.  Just loop printing messages.  Watch for SIGINT.)]TJ
+T*[(48:)-600(   cout << "Entering shell." << endl;)]TJ
+T*[(49:)-600(   for \(int count = 0; ; ++count\) {)]TJ
+T*[(50:)-600(      sleep \(1\);)]TJ
+T*[(51:)-600(      print_pid\(\);)]TJ
+T*[(52:)-600(      cout << "Shell count " << count)]TJ
+T*[(53:)-600(           << ", action_count " << action_count << endl;)]TJ
+T*[(54:)-600(      if \(action_count > 9\) throw runtime_error \("action_count > 9"\);)]TJ
+T*[(55:)-600(   })]TJ
+T*[(56:)-600(})]TJ
+(57:)'
+T*[(58:)-600(int main \(int argc, char **argv\) {)]TJ
+T*[(59:)-600(   argc = argc; // warning: unused parameter 'argc')]TJ
+T*[(60:)-600(   progname = basename \(argv[0]\);)]TJ
+(61:)'
+T*[(62:)-600(   try {)]TJ
+(63:)'
+T*[(64:)-600(      // Initialize signal handler.)]TJ
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+3030
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(06/06/12)Tj
+-0.659766 -12.8004 Td
+(14:30:48)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 259.066 736.5 Tm
+(sigactionintr.cpp)Tj
+-79.1336 18 Td
+($cmps109-wm/Examples/wk10a-algorithms/)Tj
+/R10 10 Tf
+-117.933 -35.5 Td
+[(65:)-600(      struct sigaction newaction, oldaction;)]TJ
+11 TL
+T*[(66:)-600(      sigemptyset \(&newaction.sa_mask\);)]TJ
+T*[(67:)-600(      newaction.sa_handler = action_handler;)]TJ
+T*[(68:)-600(      newaction.sa_flags = 0;)]TJ
+T*[(69:)-600(      int sigaction_rc = sigaction \(SIGINT, &newaction, &oldaction\);)]TJ
+T*[(70:)-600(      if \(sigaction_rc < 0\) syserror \("sigaction \(SIGINT\)"\);)]TJ
+T*[(71:)-600(      cout << progname << ": " << "signal \(SIGINT\) = " << sigaction_rc)]TJ
+T*[(72:)-600(           << endl;)]TJ
+(73:)'
+T*[(74:)-600(      cout << "Just before calling shell." << endl;)]TJ
+T*[(75:)-600(      shell\(\);)]TJ
+T*[(76:)-600(      )]TJ
+T*[(77:)-600(   }catch \(exception &error\) {)]TJ
+T*[(78:)-600(      cerr << progname << ": " << error.what\(\) << endl;)]TJ
+T*[(79:)-600(      return EXIT_FAILURE;)]TJ
+T*[(80:)-600(   })]TJ
+T*[(81:)-600(   return EXIT_SUCCESS;)]TJ
+T*[(82:)-600(})]TJ
+(83:)'
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+1445
+endobj
+18 0 obj
+<</Length 19 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(06/06/12)Tj
+-0.659766 -12.8004 Td
+(14:32:54)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 260.228 736.5 Tm
+(sigactionintr.out)Tj
+-80.2953 18 Td
+($cmps109-wm/Examples/wk10a-algorithms/)Tj
+/R10 10 Tf
+-111.933 -35.5 Td
+[(1:)-600(bash-3.2$ ./sigactionintr)]TJ
+11 TL
+T*[(2:)-600(sigactionintr: signal \(SIGINT\) = 0)]TJ
+T*[(3:)-600(Just before calling shell.)]TJ
+T*[(4:)-600(Entering shell.)]TJ
+T*[(5:)-600([26113]sigactionintr: Shell count 0, action_count 0)]TJ
+T*[(6:)-600([26113]sigactionintr: Shell count 1, action_count 0)]TJ
+T*[(7:)-600([26113]sigactionintr: Shell count 2, action_count 0)]TJ
+T*[(8:)-600([26113]sigactionintr: Caught signal 2, action_count 1)]TJ
+T*[(9:)-600([26113]sigactionintr: Shell count 3, action_count 1)]TJ
+-6 -11 Td
+[(10:)-600([26113]sigactionintr: Shell count 4, action_count 1)]TJ
+T*[(11:)-600([26113]sigactionintr: Shell count 5, action_count 1)]TJ
+T*[(12:)-600([26113]sigactionintr: Caught signal 2, action_count 2)]TJ
+T*[(13:)-600([26113]sigactionintr: Shell count 6, action_count 2)]TJ
+T*[(14:)-600([26113]sigactionintr: Shell count 7, action_count 2)]TJ
+T*[(15:)-600([26113]sigactionintr: Shell count 8, action_count 2)]TJ
+T*[(16:)-600([26113]sigactionintr: Caught signal 2, action_count 3)]TJ
+T*[(17:)-600([26113]sigactionintr: Shell count 9, action_count 3)]TJ
+T*[(18:)-600([26113]sigactionintr: Shell count 10, action_count 3)]TJ
+T*[(19:)-600([26113]sigactionintr: Caught signal 2, action_count 4)]TJ
+T*[(20:)-600([26113]sigactionintr: Shell count 11, action_count 4)]TJ
+T*[(21:)-600([26113]sigactionintr: Caught signal 2, action_count 5)]TJ
+T*[(22:)-600([26113]sigactionintr: Shell count 12, action_count 5)]TJ
+T*[(23:)-600([26113]sigactionintr: Shell count 13, action_count 5)]TJ
+T*[(24:)-600([26113]sigactionintr: Caught signal 2, action_count 6)]TJ
+T*[(25:)-600([26113]sigactionintr: Shell count 14, action_count 6)]TJ
+T*[(26:)-600([26113]sigactionintr: Caught signal 2, action_count 7)]TJ
+T*[(27:)-600([26113]sigactionintr: Shell count 15, action_count 7)]TJ
+T*[(28:)-600([26113]sigactionintr: Shell count 16, action_count 7)]TJ
+T*[(29:)-600([26113]sigactionintr: Shell count 17, action_count 7)]TJ
+T*[(30:)-600([26113]sigactionintr: Caught signal 2, action_count 8)]TJ
+T*[(31:)-600([26113]sigactionintr: Shell count 18, action_count 8)]TJ
+T*[(32:)-600([26113]sigactionintr: Caught signal 2, action_count 9)]TJ
+T*[(33:)-600([26113]sigactionintr: Shell count 19, action_count 9)]TJ
+T*[(34:)-600([26113]sigactionintr: Caught signal 2, action_count 10)]TJ
+T*[(35:)-600([26113]sigactionintr: Shell count 20, action_count 10)]TJ
+T*[(36:)-600(sigactionintr: action_count > 9)]TJ
+T*[(37:)-600(bash-3.2$ exit)]TJ
+ET
+Q
+Q
+endstream
+endobj
+19 0 obj
+2950
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+17 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 20 0 R
+>>
+/Contents 18 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+17 0 R
+] /Count 3
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+20 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20120606143311)
+/ModDate(D:20120606143311)>>endobj
+xref
+0 21
+0000000000 65535 f 
+0000008126 00000 n 
+0000008693 00000 n 
+0000008053 00000 n 
+0000007650 00000 n 
+0000000009 00000 n 
+0000003089 00000 n 
+0000008491 00000 n 
+0000008362 00000 n 
+0000008560 00000 n 
+0000008428 00000 n 
+0000008625 00000 n 
+0000008174 00000 n 
+0000007783 00000 n 
+0000003109 00000 n 
+0000004606 00000 n 
+0000008244 00000 n 
+0000007918 00000 n 
+0000004627 00000 n 
+0000007629 00000 n 
+0000008303 00000 n 
+trailer
+<< /Size 21 /Root 1 0 R /Info 2 0 R
+/ID [<A84BEFB132D858E0676C0F9C1889360A><A84BEFB132D858E0676C0F9C1889360A>]
+>>
+startxref
+8804
+%%EOF

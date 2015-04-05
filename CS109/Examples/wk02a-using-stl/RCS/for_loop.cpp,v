@@ -1,0 +1,557 @@
+head	1.24;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.24
+date	2014.06.27.20.08.31;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.06.27.20.07.08;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.06.27.20.06.37;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.06.27.20.05.07;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.06.27.20.03.38;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.06.27.20.03.19;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.06.27.20.02.59;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.06.27.20.02.47;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.06.27.19.34.41;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.06.27.19.33.55;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.06.27.19.33.36;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.06.27.19.32.39;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.06.27.19.32.20;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.06.27.19.32.01;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.06.27.19.31.37;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.06.27.19.31.20;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.06.27.19.26.20;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.06.27.19.25.22;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.06.27.19.23.03;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.06.27.19.22.46;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.06.27.19.22.30;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.06.27.19.21.46;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.06.27.19.21.21;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.06.27.19.21.00;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.24
+log
+@-
+@
+text
+@// $Id: for_loop.cpp,v 1.23 2014-06-27 13:07:08-07 - - $
+
+//
+// Simple class range which allows a range of integral values
+// to be used in a foreach loop in the same way as iterators
+// may be used.
+//
+
+#include <iostream>
+using namespace std;
+
+template <typename Discrete> class range;
+template <typename Discrete>
+ostream& operator<< (ostream& out, const range<Discrete>& range_) {
+   return out << "range(" << range_.begin_ << "," << range_.end_ << ")";
+}
+
+template <typename Discrete>
+class range {
+   private:
+      Discrete begin_ {};
+      Discrete end_ {};
+   public:
+      range() {}
+      range (Discrete begin, Discrete end): begin_(begin), end_(end) {}
+      class iterator;
+      iterator begin() { return {begin_}; }
+      iterator end() { return {end_}; }
+      friend ostream& operator<< <> (ostream&, const range<Discrete>&);
+};
+
+template <typename Discrete>
+class range<Discrete>::iterator {
+   private:
+      friend class range<Discrete>;
+      Discrete value {};
+      iterator (Discrete value): value(value) {}
+   public:
+      iterator() {}
+      Discrete operator*() { return value; }
+      iterator operator++() { ++value; return *this; }
+      Discrete operator!= (range::iterator other) {
+         return value != other.value;
+      }
+};
+
+
+int main (int, char**) {
+   range<int> integers (1, 11);
+   cout << "integers range is " << integers << endl;
+   for (int val: integers) {
+      cout << (val != *integers.begin() ? " " : "") << val;
+   }
+   cout << endl;
+   for (range<int>::iterator itor = integers.begin();
+        itor != integers.end(); ++itor) {
+      cout << (itor != integers.begin() ? " " : "") << *itor;
+   }
+   cout << endl;
+   range<char> chars (' ', '~' + 1);
+   cout << "chars range is " << chars << endl;
+   for (char chr: chars) {
+      cout << chr;
+      if ((chr & 0x1F) == 0x1F) cout << endl;
+   }
+   cout << endl;
+   return 0;
+}
+
+//TEST// ./for_loop >for_loop.out 2>&1
+//TEST// mkpspdf for_loop.ps for_loop.cpp* for_loop.out
+
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.22 2014-06-27 13:06:37-07 - - $
+d51 1
+a51 1
+   for (auto val: integers) {
+d55 2
+a56 1
+   for (auto itor = integers.begin(); itor != integers.end(); ++itor) {
+d62 1
+a62 1
+   for (auto chr: chars) {
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.21 2014-06-27 13:05:07-07 - - $
+d47 1
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.20 2014-06-27 13:03:38-07 - - $
+d58 1
+a58 1
+   range<char> chars (' ', 0x7F);
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.19 2014-06-27 13:03:19-07 - - $
+d48 4
+a51 4
+   range<int> sample (1, 11);
+   cout << "sample range is " << sample << endl;
+   for (auto val: sample) {
+      cout << (val != *sample.begin() ? " " : "") << val;
+d54 2
+a55 2
+   for (auto itor = sample.begin(); itor != sample.end(); ++itor) {
+      cout << (itor != sample.begin() ? " " : "") << *itor;
+d58 3
+a60 1
+   for (auto chr: range<char> (' ', 0x7F)) {
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.18 2014-06-27 13:02:59-07 - - $
+d66 1
+a66 1
+//TEST// ./for_loop.cpp >for_loop.out 2>&1
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.17 2014-06-27 13:02:47-07 - - $
+d60 1
+a60 1
+      if ((chr & 0x1F) == 0) cout << endl;
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.13 2014-06-27 12:32:39-07 - - $
+d60 1
+a60 1
+      if (chr & 0x1F == 0) cout << endl;
+@
+
+
+1.16
+log
+@-
+@
+text
+@d12 6
+d29 1
+a29 3
+      friend
+      template <typename Discrete>
+      ostream& operator<< (ostream&, const range&);
+d47 1
+a47 7
+template <typename Discrete>
+ostream& operator<< (ostream& out, const range<Discrete>& range_) {
+   cout << "range(" << range_.begin_ << "," << range_.end_ << ")";
+   return out;
+}
+
+int main (int argc, char** argv) {
+d50 3
+a52 1
+   for (auto i: sample) cout << (i != *sample.begin() ? " " : "") << i;
+d54 2
+a55 2
+   for (auto i = sample.begin(); i != sample.end; ++i) {
+      cout << (i == sample.begin() ? "" : " ") << i;
+d58 4
+a61 1
+   for (auto c: range<char> (' ', 0x7F) cout << c;
+@
+
+
+1.15
+log
+@-
+@
+text
+@d23 3
+a25 1
+      friend ostream& operator<< (ostream&, const range<Discrete>&);
+@
+
+
+1.14
+log
+@-
+@
+text
+@d23 1
+a23 1
+      friend ostream& operator<< (ostream&, const range<>&);
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.12 2014-06-27 12:32:20-07 - - $
+d23 1
+a23 1
+      friend ostream& operator<< (ostream&, const range&);
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.11 2014-06-27 12:32:01-07 - - $
+d50 1
+a50 1
+   for (auto i: sample) cout << (i != sample.begin() ? " " : "") << i;
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.10 2014-06-27 12:31:37-07 - - $
+d50 1
+a50 1
+   for (auto i: sample) cout << (i == sample.begin() ? "" : " ") << i;
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.9 2014-06-27 12:31:20-07 - - $
+d41 2
+a42 1
+ostream& operator<< (ostream& out, const range& range_) {
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.5 2014-06-27 12:22:46-07 - - $
+d42 1
+a42 1
+   cout << "range(" << begin_ << "," << end_ << ")";
+@
+
+
+1.8
+log
+@-
+@
+text
+@d23 1
+d41 5
+d48 8
+a55 1
+   for (auto i: sample) cout << i << " ";
+@
+
+
+1.7
+log
+@-
+@
+text
+@d28 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d34 1
+a34 1
+      Discrete operator!= (Discrete other) {
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.2 2014-06-27 12:21:21-07 - - $
+d40 1
+a40 1
+   range sample (1, 11);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d26 1
+a26 1
+class range::iterator {
+@
+
+
+1.3
+log
+@-
+@
+text
+@d20 1
+a20 12
+      class iterator {
+         private:
+            Discrete value {};
+            iterator (Discrete value): value(value) {}
+         public:
+            iterator() {}
+            Discrete operator*() { return value; }
+            iterator operator++() { ++value; return *this; }
+            Discrete operator!= (Discrete other) {
+               return value != other.value;
+            }
+      };
+d25 14
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: for_loop.cpp,v 1.1 2014-06-27 12:21:00-07 - - $
+a19 2
+      iterator begin() { return {begin_}; }
+      iterator end() { return {end_}; }
+d32 2
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d33 1
+a33 1
+      }
+@

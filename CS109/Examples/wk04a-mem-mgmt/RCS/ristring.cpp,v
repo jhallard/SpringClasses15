@@ -1,0 +1,587 @@
+head	1.16;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.16
+date	2013.07.13.02.51.58;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.07.13.02.51.23;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2013.07.13.02.50.35;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.07.13.02.47.27;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.07.13.02.46.02;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.07.13.02.45.39;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.07.13.02.45.23;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.07.13.02.44.04;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.07.13.02.42.45;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.07.13.02.42.09;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.07.13.02.40.33;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.07.13.02.39.36;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.07.13.02.38.38;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.02.16.01.11.50;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.01.26.02.55.50;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.21.01.05.44;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.16
+log
+@-
+@
+text
+@// $Id: ristring.cpp,v 1.15 2013-07-12 19:51:23-07 - - $
+
+//
+// NAME
+//    ristring - reference counted immutable string
+//
+// DESCRIPTION
+//    Shows how to use reference counting on immutable objects.
+//    If this were changed to mutable, then we should probably
+//    implement them as copy-on-write (COW).
+//
+
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// ristring.h
+/////////////////////////////////////////////////////////////////
+
+class ristring {
+   private:
+      class repr_t;
+      repr_t *repr;
+      ristring () = delete;
+      void decrement ();
+   public:
+      // override implicit members
+      ristring (const ristring &);             // copy ctor
+      ristring &operator= (const ristring &);  // operator=
+      ~ristring ();                            // dtor
+      // other members
+      ristring (const char *const);            // "" ctor
+      ristring &operator= (const char *const); // "" operator=
+      char operator[] (int index) const;       // charat
+      int size () const;                       // strlen
+      friend ostream &operator<< (ostream &, const ristring &);
+      ostream &show (ostream &, const string &label);
+};
+
+class ristring::repr_t {
+   friend class ristring;
+   private:
+      int ref_count;
+      const ssize_t isize;
+      const char *const buffer;
+      // Default members.
+      repr_t () = delete;
+      repr_t (const repr_t &) = delete;
+      repr_t &operator= (const repr_t &) = delete;
+      ~repr_t ();
+      // Ctor and fields.
+      repr_t (const char *const string);
+      friend ostream &operator<< (ostream &, const ristring &);
+};
+
+/////////////////////////////////////////////////////////////////
+// ristring.cpp
+/////////////////////////////////////////////////////////////////
+
+// strdup(3) calls malloc(3), which is to be freed with free(3),
+// not with delete[].  Do not mix malloc/new with free/delete.
+const char *strnew (const char *const str) {
+   char *tmp = new char[strlen (str) + 1];
+   strcpy (tmp, str);
+   return tmp;
+}
+
+ristring::ristring (const ristring &that) {
+   repr = that.repr;
+   ++repr->ref_count;
+}
+
+ristring &ristring::operator= (const ristring &that) {
+   if (this != &that) {
+      decrement ();
+      repr = that.repr;
+      ++repr->ref_count;
+   }
+   return *this;
+}
+
+ristring::ristring (const char *const that) {
+   repr = new repr_t (that);
+}
+
+ristring::~ristring () {
+   decrement ();
+}
+
+char ristring::operator[] (int index) const {
+   return repr->buffer[index];
+}
+
+int ristring::size () const {
+   return repr->isize;
+}
+
+void ristring::decrement () {
+   --repr->ref_count;
+   if (repr->ref_count == 0) delete repr;
+}
+
+ostream &ristring::show (ostream &out, const string &label) {
+   out << label << ": " << static_cast <const void*> (this)
+       << "->irstring {repr=" << repr
+       << "-> {" << endl
+       << "   ref_count=" << repr->ref_count
+       << ", isize=" << repr->isize
+       << ", buffer=" << static_cast <const void*> (repr->buffer)
+       << "->\"" << repr->buffer << "\"" << endl
+       << "}}" << endl;
+   return out;
+}
+
+
+ristring::repr_t::repr_t (const char *const string):
+      ref_count (1), isize (strlen (string)), buffer (strnew (string)) {
+}
+
+ristring::repr_t::~repr_t () {
+   delete[] buffer;
+}
+
+ostream &operator<< (ostream &out, const ristring &that) {
+   out << that.repr->buffer;
+   return out;
+}
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+int main (int argc, char **argv) {
+   cout << argv[0] << " " << argc << endl;
+   ristring first = "Hello, world!";
+   first.show (cout, "first") << endl;
+   cout << first << endl;
+   for (int index = 0; index < first.size (); ++index) {
+      cout << "|" << first[index];
+   }
+   cout << "|" << endl;
+   ristring second = "foobar";
+   second.show (cout, "second") << endl;
+   second = first;
+   ristring third = first;
+   ristring fourth (first);
+   cout << second << endl;
+   cout << third << endl;
+   cout << fourth << endl;
+   second.show (cout, "fourth") << endl;
+   return EXIT_SUCCESS;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=ristring.out.grind \
+//TEST//       ristring >ristring.out 2>&1
+//TEST// mkpspdf ristring.ps ristring.cpp* ristring.out*
+*/
+
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.14 2013-07-12 19:50:35-07 - - $
+d139 1
+a139 1
+   first.show ("first", cout) << endl;
+d146 1
+a146 1
+   second.show ("second", cout) << endl;
+d153 1
+a153 1
+   second.show ("fourth", cout) << endl;
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.13 2013-07-12 19:47:27-07 - - $
+d139 1
+a139 1
+   first.show (cout) << endl;
+d146 1
+a146 1
+   second.show (cout) << endl;
+a147 1
+   second.show (cout) << endl;
+d153 1
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.12 2013-07-12 19:46:02-07 - - $
+d40 1
+a40 1
+      ostream &show (ostream &);
+d106 2
+a107 2
+ostream &ristring::show (ostream &out) {
+   out << static_cast <const void*> (this)
+d109 2
+a110 1
+       << "-> {ref_count=" << repr->ref_count
+d113 2
+a114 1
+       << "->\"" << repr->buffer << "\"}}";
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.11 2013-07-12 19:45:39-07 - - $
+d46 2
+a47 2
+      int count;
+      const int isize;
+d73 1
+a73 1
+   ++repr->count;
+d80 1
+a80 1
+      ++repr->count;
+d102 2
+a103 2
+   --repr->count;
+   if (repr->count == 0) delete repr;
+d109 1
+a109 1
+       << "-> {count=" << repr->count
+d118 1
+a118 1
+      count (1), isize (strlen (string)), buffer (strnew (string)) {
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.10 2013-07-12 19:45:23-07 - - $
+a28 1
+      ostream &show (ostream &);
+d40 1
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.9 2013-07-12 19:44:04-07 - - $
+d137 1
+a137 1
+   first.show (out) << endl;
+d144 1
+a144 1
+   second.show (out) << endl;
+d146 1
+a146 1
+   second.show (out) << endl;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.8 2013-07-12 19:42:45-07 - - $
+d137 1
+a137 1
+   first.show();
+d144 1
+a144 1
+   second.show();
+d146 1
+a146 1
+   second.show();
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.7 2013-07-12 19:42:09-07 - - $
+a105 1
+
+d116 1
+d129 1
+a129 1
+
+d137 1
+d144 1
+d146 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.6 2013-07-12 19:40:33-07 - - $
+a26 1
+
+a29 1
+
+a34 1
+
+d40 1
+a40 2
+
+   friend ostream &operator<< (ostream &, const ristring &);
+d56 1
+a56 1
+   friend ostream &operator<< (ostream &, const ristring &);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.5 2013-07-12 19:39:36-07 - - $
+a18 4
+#define IDENT(NAME) \
+        cout << "[" << __LINE__ << "]: " << NAME << ":" << endl; \
+        show (cout) << endl;
+
+d41 1
+a41 1
+      char operator[] (int index) const; // charat
+a57 2
+      repr_t (repr_t &&) = delete;
+      repr_t &operator= (repr_t &&) = delete;
+a77 1
+   IDENT ("ristring (const ristring &)");
+a85 1
+   IDENT ("ristring &operator= (const ristring &)");
+a90 1
+   IDENT ("ristring (const char *const that)");
+a93 1
+   IDENT ("~ristring ()");
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.4 2013-07-12 19:38:38-07 - - $
+a27 2
+      friend ostream &operator<< (ostream &, const ristring &);
+
+d48 1
+d66 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.3 2013-02-15 17:11:50-08 - - $
+d53 14
+a66 12
+   int count;
+   const int isize;
+   const char *const buffer;
+   // Default members.
+   repr_t () = delete;
+   repr_t (const repr_t &) = delete;
+   repr_t &operator= (const repr_t &) = delete;
+   ~repr_t ();
+   repr_t (repr_t &&) = delete;
+   repr_t &operator= (repr_t &&) = delete;
+   // Ctor and fields.
+   repr_t (const char *const string);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.2 2013-01-25 18:55:50-08 - - $
+d31 1
+a31 12
+      struct repr_t {
+         int count;
+         const int isize;
+         const char *const buffer;
+         // Default members.
+         repr_t () = delete;
+         repr_t (const repr_t &) = delete;
+         repr_t &operator= (const repr_t &) = delete;
+         ~repr_t ();
+         // Ctor and fields.
+         repr_t (const char *const string);
+      };
+d51 15
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.1 2012-04-20 18:05:44-07 - - $
+d36 3
+a38 3
+         repr_t (); // DISABLE.
+         repr_t (const repr_t &); // DISABLE.
+         repr_t &operator= (const repr_t &); // DISABLE.
+d45 1
+a45 1
+      ristring (); // DISABLE: what is default value of an immutable?
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ristring.cpp,v 1.7 2012-04-13 20:32:08-07 - - $
+d58 1
+a58 1
+      const char operator[] (int index) const; // charat
+d101 1
+a101 1
+const char ristring::operator[] (int index) const {
+@

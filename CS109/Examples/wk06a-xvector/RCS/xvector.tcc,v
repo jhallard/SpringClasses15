@@ -1,0 +1,1595 @@
+head	1.37;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.37
+date	2015.02.03.21.07.18;	author -;	state -;
+branches;
+next	1.36;
+
+1.36
+date	2014.07.09.20.00.06;	author -;	state -;
+branches;
+next	1.35;
+
+1.35
+date	2014.07.09.19.47.57;	author -;	state -;
+branches;
+next	1.34;
+
+1.34
+date	2014.07.09.19.31.00;	author -;	state -;
+branches;
+next	1.33;
+
+1.33
+date	2013.08.21.20.53.50;	author -;	state -;
+branches;
+next	1.32;
+
+1.32
+date	2013.08.20.00.27.20;	author -;	state -;
+branches;
+next	1.31;
+
+1.31
+date	2013.08.17.01.47.27;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2013.08.17.01.34.54;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2013.08.16.01.00.27;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2013.08.16.00.02.15;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2013.08.15.02.51.59;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2013.08.15.02.48.56;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2013.08.15.02.47.19;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2013.08.15.02.15.55;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2013.08.15.02.15.37;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2013.08.15.01.33.10;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2013.08.15.01.31.16;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2013.08.14.21.54.28;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2013.08.14.21.52.06;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2013.08.14.21.39.32;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2013.08.14.21.16.03;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2013.08.14.02.48.51;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.08.14.02.07.31;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2013.08.14.00.27.16;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.08.13.23.53.23;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.08.13.23.26.24;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.08.13.22.15.30;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.08.13.21.53.57;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.08.13.02.14.51;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.08.13.01.55.17;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.08.13.00.32.33;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.08.12.21.58.55;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.08.08.19.29.28;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.08.07.20.45.39;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.08.07.20.10.04;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.08.07.01.31.50;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.08.07.01.20.49;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.37
+log
+@-
+@
+text
+@// $Id: xvector.tcc,v 1.36 2014-07-09 13:00:06-07 - - $
+
+#include <memory>
+#include <utility>
+
+//
+// XVECTOR-BASE MEMBERS AND FUNCTIONS.
+//
+
+template <typename Type>
+xvector_base<Type>::xvector_base (xvector_base&& that):
+   begin (that.begin),
+   end (that.end),
+   limit (that.limit) {
+   that.begin = that.end = that.limit = nullptr;
+}
+
+template <typename Type>
+xvector_base<Type>&
+xvector_base<Type>::operator= (xvector_base&& that) {
+   if (this != &that) {
+      if (begin) alloc.deallocate (begin, limit - begin);
+      begin = that.begin;
+      end = that.end;
+      limit = that.limit;
+      that.begin = that.end = that.limit = nullptr;
+   }
+   return *this;
+}
+
+template <typename Type>
+xvector_base<Type>::xvector_base (size_t capacity):
+   begin (alloc.allocate (capacity)),
+   end (begin),
+   limit (&begin[capacity]) {
+}
+
+
+//
+// XVECTOR CONSTRUCTORS, OPERATOR=, DESTRUCTOR.
+//
+
+// Copy constructor.
+template <typename Type>
+xvector<Type>::xvector (const xvector& that): base (that.capacity()) {
+   uninitialized_copy (that.cbegin(), that.cend(), base.begin);
+   base.end = base.begin + that.size();
+}
+
+// Copy operator=.
+template <typename Type>
+xvector<Type>& xvector<Type>::operator= (const xvector& that) {
+   if (*this != that) {
+      resize (0);
+      reserve (that.size());
+      uninitialized_copy (that.cbegin(), that.cend(), base.begin);
+      base.end = base.begin + that.size();
+   }
+   return *this;
+}
+
+// Move constructor.
+template <typename Type>
+xvector<Type>::xvector (xvector&& that):
+   base (std::move (that.base)) {
+}
+
+// Move operator=.
+template <typename Type>
+xvector<Type>& xvector<Type>::operator= (xvector&& that) {
+   if (*this != that) base = std::move (that);
+   return *this;
+}
+
+// Fill constructor.
+template <typename Type>
+xvector<Type>::xvector (size_type fill_size, const value_type& val):
+   base (fill_size) {
+   base.end = &base.begin[fill_size];
+   uninitialized_fill (base.begin, base.end, val);
+}
+
+// Initializer list constructor.
+template <typename Type>
+xvector<Type>::xvector (initializer_list<value_type> list):
+   base (list.size()) {
+   uninitialized_copy (list.begin(), list.end(), base.begin);
+   base.end = base.begin + list.size();
+}
+
+
+//
+// XVECTOR OTHER FUNCTION MEMBERS.
+//
+
+// Reserve minimum uninitialized space.
+template <typename Type>
+void xvector<Type>::reserve (size_type capacity_) {
+   if (capacity_ <= capacity()) return;
+   if (capacity_ < MIN_RESERVE) capacity_ = MIN_RESERVE;
+   if (capacity_ < 2 * capacity()) capacity_ = 2 * capacity();
+   xvector_base<value_type> new_base (capacity_);
+   new_base.end = &new_base.begin[size()];
+   if (base.begin and size() > 0) {
+      uninitialized_copy (begin(), end(), new_base.begin);
+      resize (0);
+   }
+   base = std::move (new_base);
+}
+
+// Increase or decrease size of vector.
+template <typename Type>
+void xvector<Type>::resize (size_type size_, const value_type &val) {
+   while (size_ < size()) pop_back();
+   while (size_ > size()) push_back (val);
+}
+
+template <typename Type>
+void xvector<Type>::push_back (const value_type& that) {
+   reserve (size() + 1);
+   base.alloc.construct (base.end++, that);
+}
+
+template <typename Type>
+void xvector<Type>::push_back (value_type&& that) {
+   reserve (size() + 1);
+   *base.end++ = std::move (that);
+}
+
+template <typename Type>
+void xvector<Type>::pop_back() {
+   base.alloc.destroy (--base.end);
+}
+
+
+//
+// XVECTOR RELATIONAL OPERATORS == and <
+//
+template <typename Type>
+bool operator== (const xvector<Type>& lhs, const xvector<Type>& rhs) {
+   if (lhs.size() != rhs.size()) return false;
+   auto lhs_itor = lhs.cbegin();
+   auto rhs_itor = rhs.cbegin();
+   for (; lhs_itor != lhs.cend(); ++lhs_itor, ++rhs_itor) {
+      if (*lhs_itor != *rhs_itor) return false;
+   }
+   return true;
+}
+    
+template <typename Type>
+bool operator< (const xvector<Type>& lhs, const xvector<Type>& rhs) {
+   auto lhs_itor = lhs.cbegin();
+   auto rhs_itor = rhs.cbegin();
+   for (; lhs_itor != lhs.cend(); ++lhs_itor, ++rhs_itor) {
+      if (rhs_itor == rhs.cend()) return false;
+      if (*lhs_itor < *rhs_itor) return true;
+      if (*rhs_itor < *lhs_itor) return false;
+   }
+   return rhs_itor != rhs.cend();
+}
+    
+
+//
+// XVECTOR::ITERATOR FUNCTIONS.
+//
+
+template <typename Type>
+xvector_iterator<Type> xvector_iterator<Type>::operator++ (int) {
+   xvector_iterator<Type> result {*this};
+   ++base;
+   return result;
+}
+
+template <typename Type>
+xvector_iterator<Type> xvector_iterator<Type>::operator-- (int) {
+   xvector_iterator<Type> result {*this};
+   --base;
+   return result;
+}
+
+template <typename Type>
+inline xvector_iterator<Type>
+xvector_iterator<Type>::operator+ (const difference_type offset) {
+   xvector_iterator result {*this};
+   return result += offset;
+}
+
+template <typename Type>
+inline xvector_iterator<Type>
+xvector_iterator<Type>::operator- (const difference_type offset) {
+   xvector_iterator result {*this};
+   return result -= offset;
+}
+
+@
+
+
+1.36
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.35 2014-07-09 12:47:57-07 - - $
+d15 1
+a15 1
+   that.begin = that.end = that.limit = NULL;
+d26 1
+a26 1
+      that.begin = that.end = that.limit = NULL;
+@
+
+
+1.35
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.34 2014-07-09 12:31:00-07 - - $
+d159 1
+a159 1
+   if (rhs_itor != rhs.cend()) return true;
+d162 1
+@
+
+
+1.34
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.33 2013-08-21 13:53:50-07 - - $
+d19 2
+a20 1
+xvector_base<Type>& xvector_base<Type>::operator= (xvector_base&& that) {
+d137 27
+a163 1
+// XVECTOR-ITERATOR FUNCTIONS.
+d181 2
+a182 2
+xvector_iterator<Type>
+inline xvector_iterator<Type>::operator+ (const difference_type offset) {
+d188 2
+a189 2
+xvector_iterator<Type>
+inline xvector_iterator<Type>::operator- (const difference_type offset) {
+@
+
+
+1.33
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.32 2013-08-19 17:27:20-07 - - $
+d10 2
+a11 2
+template <typename T>
+xvector_base<T>::xvector_base (xvector_base&& that):
+d18 2
+a19 2
+template <typename T>
+xvector_base<T>& xvector_base<T>::operator= (xvector_base&& that) {
+d30 2
+a31 2
+template <typename T>
+xvector_base<T>::xvector_base (size_t capacity):
+d43 2
+a44 2
+template <typename T>
+xvector<T>::xvector (const xvector& that): base (that.capacity()) {
+d50 2
+a51 2
+template <typename T>
+xvector<T>& xvector<T>::operator= (const xvector& that) {
+d62 2
+a63 2
+template <typename T>
+xvector<T>::xvector (xvector&& that):
+d68 2
+a69 2
+template <typename T>
+xvector<T>& xvector<T>::operator= (xvector&& that) {
+d75 2
+a76 2
+template <typename T>
+xvector<T>::xvector (size_type fill_size, const value_type& val):
+d83 2
+a84 2
+template <typename T>
+xvector<T>::xvector (initializer_list<value_type> list):
+d96 2
+a97 2
+template <typename T>
+void xvector<T>::reserve (size_type capacity_) {
+d111 2
+a112 2
+template <typename T>
+void xvector<T>::resize (size_type size_, const value_type &val) {
+d117 2
+a118 2
+template <typename T>
+void xvector<T>::push_back (const value_type& that) {
+d123 2
+a124 2
+template <typename T>
+void xvector<T>::push_back (value_type&& that) {
+d129 2
+a130 2
+template <typename T>
+void xvector<T>::pop_back() {
+d139 3
+a141 3
+template <typename T>
+xvector_iterator<T> xvector_iterator<T>::operator++ (int) {
+   xvector_iterator<T> result {*this};
+d146 3
+a148 3
+template <typename T>
+xvector_iterator<T> xvector_iterator<T>::operator-- (int) {
+   xvector_iterator<T> result {*this};
+d153 3
+a155 3
+template <typename T>
+xvector_iterator<T>
+inline xvector_iterator<T>::operator+ (const difference_type offset) {
+d160 3
+a162 3
+template <typename T>
+xvector_iterator<T>
+inline xvector_iterator<T>::operator- (const difference_type offset) {
+@
+
+
+1.32
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.31 2013-08-16 18:47:27-07 - - $
+d124 6
+@
+
+
+1.31
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.30 2013-08-16 18:34:54-07 - - $
+d103 1
+a103 1
+   if (base.begin && size() > 0) {
+d149 1
+a149 1
+xvector_iterator<T>::operator+ (const difference_type offset) {
+d156 1
+a156 1
+xvector_iterator<T>::operator- (const difference_type offset) {
+@
+
+
+1.30
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.1 2013-08-16 14:45:25-07 - - $
+d128 1
+@
+
+
+1.29
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.27 2013-08-14 19:51:59-07 - - $
+d63 1
+a63 1
+inline xvector<T>::xvector (xvector&& that):
+d133 1
+a133 2
+inline xvector_iterator<T>
+xvector_iterator<T>::operator++ (int) {
+d140 1
+a140 2
+inline xvector_iterator<T>
+xvector_iterator<T>::operator-- (int) {
+d146 14
+@
+
+
+1.28
+log
+@-
+@
+text
+@a2 1
+#include <algorithm>
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.26 2013-08-14 19:48:56-07 - - $
+d3 1
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.25 2013-08-14 19:47:19-07 - - $
+d37 1
+d90 1
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.24 2013-08-14 19:15:55-07 - - $
+d7 1
+a7 1
+// XVECTOR BASE MEMBERS AND FUNCTIONS.
+d38 1
+a38 1
+// CONSTRUCTORS, OPERATOR=, DESTRUCTOR.
+d90 1
+a90 1
+// OTHER FUNCTION MEMBERS.
+d127 1
+a127 1
+// XVECTOR ITERATOR FUNCTIONS.
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.23 2013-08-14 19:15:37-07 - - $
+a5 3
+#define TRACE(X) cout << "[" << __LINE__ << "]" << __func__ << ": " \
+                      << #X << " = " << X << endl;
+
+a10 8
+allocator<T> xvector_base<T>::alloc;
+
+template <typename T>
+inline xvector_base<T>::xvector_base ():
+   begin(NULL), end(NULL), limit(NULL) {
+}
+
+template <typename T>
+a30 5
+inline xvector_base<T>::~xvector_base() {
+   alloc.deallocate (begin, limit - begin);
+}
+
+template <typename T>
+a40 5
+// Default constructor.
+template <typename T>
+inline xvector<T>::xvector() {
+}
+
+a72 6
+// Destructor.
+template <typename T>
+inline xvector<T>::~xvector() {
+   resize (0);
+}
+
+a92 16
+template <typename T>
+inline typename xvector<T>::size_type xvector<T>::size() const {
+   return base.end - base.begin;
+}
+
+template <typename T>
+inline typename xvector<T>::size_type
+xvector<T>::xvector<T>::capacity() const {
+   return base.limit - base.begin;
+}
+
+template <typename T>
+inline bool xvector<T>::empty() const {
+   return size() == 0;
+} 
+
+d127 1
+a127 1
+// XVECTOR ITERATOR CREATION.
+d131 5
+a135 37
+inline typename xvector<T>::iterator xvector<T>::begin() {
+   return iterator (base.begin);
+}
+
+template <typename T>
+inline typename xvector<T>::const_iterator xvector<T>::begin() const {
+   return const_iterator (base.begin);
+}
+
+template <typename T>
+inline typename xvector<T>::const_iterator xvector<T>::cbegin() const {
+   return const_iterator (base.begin);
+}
+
+template <typename T>
+inline typename xvector<T>::iterator xvector<T>::end() {
+   return iterator (base.end);
+} 
+
+template <typename T>
+inline typename xvector<T>::const_iterator xvector<T>::end() const {
+   return const_iterator (base.end);
+}
+
+template <typename T>
+inline typename xvector<T>::const_iterator xvector<T>::cend() const {
+   return const_iterator (base.end);
+}
+
+//
+// XVECTOR ACCESSORS.
+//
+
+template <typename T>
+inline typename xvector<T>::reference
+xvector<T>::operator[] (size_type pos) {
+   return base.begin[pos];
+d139 4
+a142 56
+inline typename xvector<T>::const_reference
+xvector<T>::operator[] (size_type pos) const {
+   return base.begin[pos];
+}
+
+template <typename T>
+inline typename xvector<T>::reference xvector<T>::front() {
+   return base.begin[0];
+}
+
+template <typename T>
+inline typename xvector<T>::const_reference xvector<T>::front() const {
+   return base.begin[0];
+}
+
+template <typename T>
+inline typename xvector<T>::reference xvector<T>::back() {
+   return base.end[-1];
+}
+
+template <typename T>
+inline typename xvector<T>::const_reference xvector<T>::back() const {
+   return base.end[-1];
+}
+
+//
+// XVECTOR ITERATOR FUNCTIONS.
+//
+
+template <typename T, typename U>
+xvector_iterator<T,U>::xvector_iterator(): current (NULL) {
+}
+
+template <typename T, typename U>
+xvector_iterator<T,U>::xvector_iterator (pointer ptr): current (ptr) {
+}
+
+template <typename T, typename U>
+inline xvector_iterator<T,U>&
+xvector_iterator<T,U>::operator++() {
+   ++current;
+   return *this;
+}
+
+template <typename T, typename U>
+inline xvector_iterator<T,U>&
+xvector_iterator<T,U>::operator--() {
+   --current;
+   return *this;
+}
+
+template <typename T, typename U>
+inline xvector_iterator<T,U>
+xvector_iterator<T,U>::operator++ (int) {
+   xvector_iterator<T,U> result {*this};
+   ++current;
+a145 50
+template <typename T, typename U>
+inline xvector_iterator<T,U>
+xvector_iterator<T,U>::operator-- (int) {
+   xvector_iterator<T,U> result {*this};
+   --current;
+   return result;
+}
+
+template <typename T, typename U>
+inline typename xvector_iterator<T,U>::reference
+xvector_iterator<T,U>::operator*() {
+   return *current;
+}
+
+template <typename T, typename U>
+inline typename xvector_iterator<T,U>::const_reference
+xvector_iterator<T,U>::operator*() const {
+   return *current;
+}
+
+template <typename T, typename U>
+inline typename xvector_iterator<T,U>::pointer
+xvector_iterator<T,U>::operator->() {
+   return current;
+}
+
+template <typename T, typename U>
+inline typename xvector_iterator<T,U>::const_pointer
+xvector_iterator<T,U>::operator->() const {
+   return current;
+}
+
+template <typename T, typename U>
+inline bool xvector_iterator<T,U>::operator==
+(const xvector_iterator<T,U>& that) const {
+   return current == that.current;
+}
+
+template <typename T, typename U>
+inline bool xvector_iterator<T,U>::operator!=
+(const xvector_iterator<T,U>& that) const {
+   return not (*this == that);
+}
+
+template <typename T, typename U>
+inline xvector_iterator<T,U>::operator
+xvector_iterator<T, const value_type>() const {
+    return xvector_iterator<T, const value_type> (current);
+}
+
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.22 2013-08-14 18:33:10-07 - - $
+d83 2
+a84 1
+inline xvector<T>::xvector (xvector&& that): base (std::move (that.base)) {
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.20 2013-08-14 14:54:28-07 - - $
+d17 2
+a18 1
+xvector_base<T>::xvector_base (): begin(NULL), end(NULL), limit(NULL) {
+d42 1
+a42 1
+xvector_base<T>::~xvector_base() {
+d59 1
+a59 1
+xvector<T>::xvector() {
+d83 1
+a83 1
+xvector<T>::xvector (xvector&& that): base (std::move (that.base)) {
+d95 1
+a95 1
+xvector<T>::~xvector() {
+d120 1
+a120 1
+typename xvector<T>::size_type xvector<T>::size() const {
+d125 1
+a125 1
+typename xvector<T>::size_type
+d131 1
+a131 1
+bool xvector<T>::empty() const {
+d173 1
+a173 1
+typename xvector<T>::iterator xvector<T>::begin() {
+d178 1
+a178 1
+typename xvector<T>::const_iterator xvector<T>::begin() const {
+d183 1
+a183 1
+typename xvector<T>::const_iterator xvector<T>::cbegin() const {
+d188 1
+a188 1
+typename xvector<T>::iterator xvector<T>::end() {
+d193 1
+a193 1
+typename xvector<T>::const_iterator xvector<T>::end() const {
+d198 1
+a198 1
+typename xvector<T>::const_iterator xvector<T>::cend() const {
+d207 2
+a208 1
+typename xvector<T>::reference xvector<T>::operator[] (size_type pos) {
+d213 1
+a213 1
+typename xvector<T>::const_reference
+d219 1
+a219 1
+typename xvector<T>::reference xvector<T>::front() {
+d224 1
+a224 1
+typename xvector<T>::const_reference xvector<T>::front() const {
+d229 1
+a229 1
+typename xvector<T>::reference xvector<T>::back() {
+d234 1
+a234 1
+typename xvector<T>::const_reference xvector<T>::back() const {
+d242 2
+a243 2
+template <typename T> template <typename U>
+xvector<T>::iterator_base<U>::iterator_base(): current (NULL) {
+d246 2
+a247 3
+template <typename T> template <typename U>
+xvector<T>::iterator_base<U>::iterator_base (pointer ptr):
+   current (ptr) {
+d250 3
+a252 3
+template <typename T> template <typename U>
+typename xvector<T>::template iterator_base<U>&
+xvector<T>::iterator_base<U>::operator++() {
+d257 3
+a259 3
+template <typename T> template <typename U>
+typename xvector<T>::template iterator_base<U>&
+xvector<T>::iterator_base<U>::operator--() {
+d264 4
+a267 4
+template <typename T> template <typename U>
+typename xvector<T>::template iterator_base<U>
+xvector<T>::iterator_base<U>::operator++ (int) {
+   xvector<T>::iterator_base<U> result {*this};
+d272 4
+a275 4
+template <typename T> template <typename U>
+typename xvector<T>::template iterator_base<U>
+xvector<T>::iterator_base<U>::operator-- (int) {
+   xvector<T>::iterator_base<U> result {*this};
+d280 3
+a282 3
+template <typename T> template <typename U>
+typename xvector<T>::template iterator_base<U>::reference
+xvector<T>::iterator_base<U>::operator*() {
+d286 3
+a288 3
+template <typename T> template <typename U>
+typename xvector<T>::template iterator_base<U>::const_reference
+xvector<T>::iterator_base<U>::operator*() const {
+d292 3
+a294 3
+template <typename T> template <typename U>
+typename xvector<T>::template iterator_base<U>::pointer
+xvector<T>::iterator_base<U>::operator->() {
+d298 3
+a300 3
+template <typename T> template <typename U>
+typename xvector<T>::template iterator_base<U>::const_pointer
+xvector<T>::iterator_base<U>::operator->() const {
+d304 3
+a306 3
+template <typename T> template <typename U>
+bool xvector<T>::iterator_base<U>::operator==
+(const xvector<T>::iterator_base<U>& that) const {
+d310 3
+a312 3
+template <typename T> template <typename U>
+bool xvector<T>::iterator_base<U>::operator!=
+(const xvector<T>::iterator_base<U>& that) const {
+d316 4
+a319 4
+template <typename T> template <typename U>
+xvector<T>::iterator_base<U>::operator
+xvector<T>::iterator_base<const value_type>() const {
+    return xvector<T>::iterator_base<const value_type> (current);
+@
+
+
+1.21
+log
+@-
+@
+text
+@a51 1
+
+a113 1
+
+a166 1
+
+a200 1
+
+a235 1
+
+a302 1
+
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.19 2013-08-14 14:52:06-07 - - $
+d57 5
+d245 13
+a257 3
+template <typename T>
+xvector_iterator<T>& xvector_iterator<T>::operator++() {
+   ++current_ptr;
+d261 4
+a264 3
+template <typename T>
+xvector_iterator<T>& xvector_iterator<T>::operator--() {
+   --current_ptr;
+d268 5
+a272 4
+template <typename T>
+xvector_iterator<T> xvector_iterator<T>::operator++ (int) {
+   xvector_iterator<T> result {*this};
+   ++current_ptr;
+d276 5
+a280 4
+template <typename T>
+xvector_iterator<T> xvector_iterator<T>::operator-- (int) {
+   xvector_iterator<T> result {*this};
+   --current_ptr;
+d284 4
+a287 4
+template <typename T>
+typename xvector_iterator<T>::reference
+xvector_iterator<T>::operator*() {
+   return *current_ptr;
+d290 4
+a293 4
+template <typename T>
+typename xvector_iterator<T>::const_reference
+xvector_iterator<T>::operator*() const {
+   return *current_ptr;
+d296 4
+a299 4
+template <typename T>
+typename xvector_iterator<T>::pointer
+xvector_iterator<T>::operator->() {
+   return current_ptr;
+d302 4
+a305 4
+template <typename T>
+typename xvector_iterator<T>::const_pointer
+xvector_iterator<T>::operator->() const {
+   return current_ptr;
+d309 4
+a312 4
+template <typename T>
+bool xvector_iterator<T>::operator==
+(const xvector_iterator& that) const {
+   return current_ptr == that.current_ptr;
+d315 3
+a317 3
+template <typename T>
+bool xvector_iterator<T>::operator!=
+(const xvector_iterator& that) const {
+d321 4
+a324 4
+template <typename T>
+xvector_iterator<T>::operator
+xvector_iterator<const value_type>() const {
+    return xvector_iterator<const value_type> (current_ptr);
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.18 2013-08-14 14:39:32-07 - - $
+d290 1
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.17 2013-08-14 14:16:03-07 - - $
+d241 1
+a241 1
+iterator_base<T>& iterator_base<T>::operator++() {
+d247 1
+a247 1
+iterator_base<T>& iterator_base<T>::operator--() {
+d253 2
+a254 2
+iterator_base<T> iterator_base<T>::operator++ (int) {
+   iterator_base<T> result {*this};
+d260 2
+a261 2
+iterator_base<T> iterator_base<T>::operator-- (int) {
+   iterator_base<T> result {*this};
+d267 2
+a268 1
+typename iterator_base<T>::reference iterator_base<T>::operator*() {
+d273 2
+a274 2
+typename iterator_base<T>::const_reference
+iterator_base<T>::operator*() const {
+d279 2
+a280 1
+typename iterator_base<T>::pointer iterator_base<T>::operator->() {
+d285 2
+a286 2
+typename iterator_base<T>::const_pointer
+iterator_base<T>::operator->() const {
+d291 2
+a292 1
+bool iterator_base<T>::operator== (const iterator_base& that) const {
+d297 2
+a298 1
+bool iterator_base<T>::operator!= (const iterator_base& that) const {
+d303 3
+a305 2
+iterator_base<T>::operator iterator_base<const value_type>() const {
+    return iterator_base<const value_type> (current_ptr);
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.16 2013-08-13 19:48:51-07 - - $
+a56 6
+// Default constructor.
+template <typename T>
+xvector<T>::xvector () {
+   // xvector_base default ctor does it all.
+}
+
+d240 62
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.15 2013-08-13 19:07:31-07 - - $
+a4 1
+using namespace std;
+d57 6
+d241 6
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.14 2013-08-13 17:27:16-07 - - $
+a94 1
+
+d165 5
+d200 5
+a235 4
+
+//
+// XVECTOR ITERATOR BASE MEMBERS.
+//
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.13 2013-08-13 16:53:23-07 - - $
+d117 16
+d166 65
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.12 2013-08-13 16:26:24-07 - - $
+d18 4
+d42 5
+d77 5
+d89 7
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.11 2013-08-13 15:15:30-07 - - $
+d3 3
+a5 1
+#include <stdexcept>
+a43 13
+//
+// PRIVATE UTILITY FUNCTIONS.
+//
+
+// Private: copy from that.
+// Destroy current elements and copy elements from another buffer.
+template <typename T>
+void xvector<T>::copy_from_that (const xvector& that) {
+   reserve (that.size());
+   uninitialized_copy (that.cbegin(), that.cend(), base.begin);
+   base.end = base.begin + that.size();
+}
+
+d51 3
+a53 2
+xvector<T>::xvector (const xvector& that) {
+   copy_from_that (that);
+d61 3
+a63 1
+      copy_from_that (that);
+a67 5
+// Move constructor.
+template <typename T>
+xvector<T>::xvector (xvector&& that): base (std::move (that.base)) {
+}
+
+a74 6
+// Destructor.
+template <typename T>
+xvector<T>::~xvector() {
+   resize (0);
+}
+
+d77 4
+a80 2
+xvector<T>::xvector (size_type fill, const value_type& val) {
+   resize (fill, val);
+d85 2
+a86 2
+xvector<T>::xvector (initializer_list<value_type> list) {
+   reserve (list.size());
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.10 2013-08-13 14:53:57-07 - - $
+d17 3
+a19 1
+   begin (that.begin), end (that.end), limit (that.limit) {
+d25 7
+a31 5
+   if (begin) alloc.deallocate (begin, limit - begin);
+   begin = that.begin;
+   end = that.end;
+   limit = that.limit;
+   that.begin = that.end = that.limit = NULL;
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.9 2013-08-12 19:14:51-07 - - $
+d42 1
+a42 1
+// Private: copy_from_that.
+a45 1
+   resize (0);
+d65 4
+a68 1
+   if (*this != that) copy_from_that (that);
+d117 4
+a120 2
+   if (base.begin) uninitialized_copy (begin(), end(), new_base.begin);
+   resize (0);
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.8 2013-08-12 18:55:17-07 - - $
+d8 23
+d32 5
+a36 1
+allocator<typename xvector<T>::value_type> xvector<T>::alloc;
+a41 9
+// Private: deallocate_this.
+// Destroy all elements and deallocate the buffer.
+template <typename T>
+void xvector<T>::deallocate_this() {
+   resize (0);
+   if (begin_) alloc.deallocate (begin_, capacity());
+   set_pointers (NULL, NULL, NULL);
+}
+
+d48 2
+a49 11
+   uninitialized_copy (that.cbegin(), that.cend(), begin_);
+   end_ = begin_ + that.size();
+}
+
+// Private: move_from_that: and then clear that.
+// Destroy current elements and move data from another vector.
+template <typename T>
+void xvector<T>::move_from_that (xvector&& that) {
+   deallocate_this();
+   set_pointers (that.begin_, that.end_, that.limit_);
+   that.set_pointers (NULL, NULL, NULL);
+d72 1
+a72 2
+xvector<T>::xvector (xvector&& that) {
+   move_from_that (that);
+d78 1
+a78 1
+   if (*this != that) move_from_that (that);
+d85 1
+a85 1
+   deallocate_this();
+d98 2
+a99 2
+   uninitialized_copy (list.begin(), list.end(), begin_);
+   end_ = begin_ + list.size();
+d113 5
+a117 7
+   pointer new_begin = alloc.allocate (capacity_);
+   size_type size_ = size();
+   if (begin_) {
+      uninitialized_copy (begin(), end(), new_begin);
+      deallocate_this();
+   }
+   set_pointers (new_begin, &new_begin[size_], &new_begin[capacity_]);
+d130 1
+a130 1
+   alloc.construct (end_++, that);
+d135 1
+a135 1
+   alloc.destroy (--end_);
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.7 2013-08-12 17:32:33-07 - - $
+d83 1
+a83 1
+   while (size() < fill) push_back (val);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.6 2013-08-12 14:58:55-07 - - $
+d15 1
+a15 1
+// Private: deallocate.
+d18 1
+a18 1
+void xvector<T>::deallocate() {
+a23 9
+// Private: move_from_that: and then clear that.
+// Destroy current elements and move data from another vector.
+template <typename T>
+void xvector<T>::move_from_that (xvector&& that) {
+   deallocate();
+   set_pointers (that.begin_, that.end_, that.limit_);
+   that.set_pointers (NULL, NULL, NULL);
+}
+
+d34 9
+d77 1
+a77 1
+   deallocate();
+d109 1
+a109 1
+      deallocate();
+d111 1
+a111 1
+   set_pointers (new_begin, new_begin + size_, new_begin + capacity_);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.5 2013-08-08 12:29:28-07 - - $
+a14 7
+// Private: destroy_this.
+// Destroy all elements in the current buffer before replacing them.
+template <typename T>
+void xvector<T>::destroy_this() {
+   while (begin_ != end_) pop_back();
+}
+
+d19 1
+a19 1
+   destroy_this();
+d37 1
+a37 1
+   destroy_this();
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.4 2013-08-07 13:45:39-07 - - $
+a14 7
+// Private: set_pointers.
+// Reset the pointers to point at a different buffer or null.
+template <typename T>
+void xvector_base<T>::set_pointers (T* begin, T* end, T* limit) {
+   begin_ = begin; end_ = end; limit_ = limit;
+}
+
+d19 1
+a19 1
+   while (begin_ != end_) alloc.destroy (--end_);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.3 2013-08-07 13:10:04-07 - - $
+d8 3
+a21 3
+template <typename T>
+allocator<typename xvector<T>::value_type> xvector<T>::alloc;
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.2 2013-08-06 18:31:50-07 - - $
+d141 5
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.1 2013-08-06 18:20:49-07 - - $
+d29 9
+d42 1
+a42 1
+   destroy_this();
+d91 1
+a91 2
+   destroy_this();
+   if (begin_) alloc.deallocate (begin_, capacity());
+d123 1
+a123 2
+      destroy_this();
+      alloc.deallocate (begin_, capacity());
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: xvector.tcc,v 1.14 2013-08-06 15:50:31-07 - - $
+d121 7
+@

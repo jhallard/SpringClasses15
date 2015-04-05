@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting vecsort.cpp
+vecsort.cpp:
+     $Id: vecsort.cpp,v 1.28 2015-03-31 18:29:40-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 vecsort.cpp -o vecsort -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f vecsort.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished vecsort.cpp

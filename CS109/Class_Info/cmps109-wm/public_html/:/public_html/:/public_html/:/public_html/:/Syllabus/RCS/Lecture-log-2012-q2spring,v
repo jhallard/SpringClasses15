@@ -1,0 +1,607 @@
+head	1.26;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.26
+date	2013.01.03.23.27.55;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2013.01.03.23.27.33;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2012.06.07.00.45.24;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2012.06.04.23.49.34;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2012.06.02.01.12.02;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2012.05.25.23.52.19;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2012.05.21.23.46.30;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2012.05.19.01.13.56;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2012.05.17.01.46.55;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2012.05.15.18.42.15;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2012.05.11.23.47.03;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2012.05.09.23.53.42;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.05.07.23.59.38;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.05.02.02.10.20;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.04.28.03.07.48;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.04.26.00.11.13;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.04.24.02.58.32;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.21.01.03.08;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.18.23.47.48;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.13.23.51.00;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.11.23.50.41;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.10.21.25.23;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.06.23.56.42;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.04.23.53.41;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.03.23.20.27;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.03.29.22.39.21;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.26
+log
+@-
+@
+text
+@
+Winter 2013
+CMPS-109 -- Advanced Programming
+
+week  1:
+ 1. Mon Jan  7 -
+ 2. Wed Jan  9 -
+ 3. Fri Jan 11 -
+
+week  2:
+ 4. Mon Jan 14 -
+ 5. Wed Jan 16 -
+ 6. Fri Jan 18 -
+
+week  3:
+ 7. Mon Jan 21 - HOLIDAY.
+ 8. Wed Jan 23 -
+ 9. Fri Jan 25 -
+
+week  4:
+10. Mon Jan 28 -
+11. Wed Jan 30 -
+12. Fri Feb  1 -
+
+week  5:
+13. Mon Feb  4 -
+14. Wed Feb  6 - TEST 1.
+15. Fri Feb  8 -
+
+week  6:
+16. Mon Feb 11 -
+17. Wed Feb 13 -
+18. Fri Feb 15 -
+
+week  7:
+19. Mon Feb 18 - HOLIDAY.
+20. Wed Feb 20 -
+21. Fri Feb 22 -
+
+week  8:
+22. Mon Feb 25 -
+23. Wed Feb 27 - TEST 2.
+24. Fri Mar  1 -
+
+week  9:
+25. Mon Mar  4 -
+26. Wed Mar  6 -
+27. Fri Mar  8 -
+
+week 10:
+28. Mon Mar 11 -
+29. Wed Mar 13 -
+30. Fri Mar 15 -
+31. Mon Mar 18 -
+
+$Id: Lecture-log-2012-q2spring,v 1.24 2012-06-06 17:45:24-07 -
+@
+
+
+1.25
+log
+@-
+@
+text
+@a0 1
+31. Mon Mar 18 -
+d2 1
+a2 1
+Winter 2010
+d54 1
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+d7 3
+a9 3
+ 1. Mon Apr  2 - syllabus, overview of course, intro C++
+ 2. Wed Apr  4 - Examples/wk01-lec0{1,2}*
+ 3. Fri Apr  6 - asg1: yshell.*, commands.*
+d12 3
+a14 3
+ 4. Mon Apr  9 - asg1 discussion; more Examples.
+ 5. Wed Apr 11 - text.ch.8,9; wk02a-using-stl
+ 6. Fri Apr 13 - wk02b-classes-exns examples; leak, dangling, uninit
+d17 3
+a19 3
+ 7. Mon Apr 16 - ch.17 - vectors & free store
+ 8. Wed Apr 18 - asg2 spec, headers; bigint.cpp
+ 9. Fri Apr 20 - asg2; wk3 examples
+d22 3
+a24 3
+10. Mon Apr 23 - wk4 examples; start ch.18
+11. Wed Apr 25 - finish ch.18; ex: ristring; start inheritance
+12. Fri Apr 27 - wk04b-inheritance; ch.14
+d27 3
+a29 3
+13. Mon Apr 30 - Review; intro prog 3.
+14. Wed May  2 - TEST 1.
+15. Fri May  4 - prog 3 except object, interp
+d32 3
+a34 3
+16. Mon May  7 - return test; prog 3 objects
+17. Wed May  9 - finish prog3; ch.14 inheritance
+18. Fri May 11 - wk06b-mem-leaks/; start ch.19
+d37 3
+a39 3
+19. Mon May 14 - finish ch.19
+20. Wed May 16 - prog4
+21. Fri May 18 - prog4; template stack; start ch.20
+d42 3
+a44 3
+22. Mon May 21 - finish ch.20
+23. Wed May 23 - TEST 2.
+24. Fri May 25 - JBD ch.18; wk08a-java-threads
+d47 3
+a49 3
+25. Mon May 28 - HOLIDAY.
+26. Wed May 30 - wk08a-java-threads
+27. Fri Jun  1 - wk09a-java-sockets; wk09b-java-gui
+d52 3
+a54 3
+28. Mon Jun  4 - finish Java GUI; finish C++ ch.20
+29. Wed Jun  6 - C++ ch.21 algorithms & iterators
+30. Fri Jun  8 -
+d56 1
+a56 1
+$Id: Lecture-log-2012-q2spring,v 1.23 2012-06-04 16:49:34-07 - - $
+@
+
+
+1.23
+log
+@-
+@
+text
+@d52 1
+a52 1
+29. Wed Jun  6 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.22 2012-06-01 18:12:02-07 - - $
+@
+
+
+1.22
+log
+@-
+@
+text
+@d51 1
+a51 1
+28. Mon Jun  4 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.21 2012-05-25 16:52:19-07 - - $
+@
+
+
+1.21
+log
+@-
+@
+text
+@d47 2
+a48 2
+26. Wed May 30 -
+27. Fri Jun  1 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.20 2012-05-21 16:46:30-07 - - $
+@
+
+
+1.20
+log
+@-
+@
+text
+@d43 1
+a43 1
+24. Fri May 25 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.19 2012-05-18 18:13:56-07 - - $
+@
+
+
+1.19
+log
+@-
+@
+text
+@d41 1
+a41 1
+22. Mon May 21 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.18 2012-05-16 18:46:55-07 - - $
+@
+
+
+1.18
+log
+@-
+@
+text
+@d38 1
+a38 1
+21. Fri May 18 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.17 2012-05-15 11:42:15-07 - - $
+@
+
+
+1.17
+log
+@-
+@
+text
+@d37 1
+a37 1
+20. Wed May 16 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.16 2012-05-11 16:47:03-07 - - $
+@
+
+
+1.16
+log
+@-
+@
+text
+@d36 1
+a36 1
+19. Mon May 14 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.15 2012-05-09 16:53:42-07 - - $
+@
+
+
+1.15
+log
+@-
+@
+text
+@d33 1
+a33 1
+18. Fri May 11 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.14 2012-05-07 16:59:38-07 - - $
+@
+
+
+1.14
+log
+@-
+@
+text
+@d32 1
+a32 1
+17. Wed May  9 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.13 2012-05-01 19:10:20-07 - - $
+@
+
+
+1.13
+log
+@-
+@
+text
+@d28 1
+a28 1
+15. Fri May  4 -
+d31 1
+a31 1
+16. Mon May  7 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.12 2012-04-27 20:07:48-07 - - $
+@
+
+
+1.12
+log
+@-
+@
+text
+@d26 1
+a26 1
+13. Mon Apr 30 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.11 2012-04-25 17:11:13-07 - - $
+@
+
+
+1.11
+log
+@-
+@
+text
+@d23 1
+a23 1
+12. Fri Apr 27 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.10 2012-04-23 19:58:32-07 - - $
+@
+
+
+1.10
+log
+@-
+@
+text
+@d22 1
+a22 1
+11. Wed Apr 25 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.9 2012-04-20 18:03:08-07 - - $
+@
+
+
+1.9
+log
+@-
+@
+text
+@d21 1
+a21 1
+10. Mon Apr 23 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.8 2012-04-18 16:47:48-07 - - $
+@
+
+
+1.8
+log
+@-
+@
+text
+@d18 1
+a18 1
+ 9. Fri Apr 20 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.7 2012-04-13 16:51:00-07 - - $
+@
+
+
+1.7
+log
+@-
+@
+text
+@d16 2
+a17 2
+ 7. Mon Apr 16 -
+ 8. Wed Apr 18 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.6 2012-04-11 16:50:41-07 - - $
+@
+
+
+1.6
+log
+@-
+@
+text
+@d13 1
+a13 1
+ 6. Fri Apr 13 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.5 2012-04-10 14:25:23-07 - - $
+@
+
+
+1.5
+log
+@-
+@
+text
+@d12 1
+a12 1
+ 5. Wed Apr 11 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.4 2012-04-06 16:56:42-07 - - $
+@
+
+
+1.4
+log
+@-
+@
+text
+@d11 1
+a11 1
+ 4. Mon Apr  9 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.3 2012-04-04 16:53:41-07 - - $
+@
+
+
+1.3
+log
+@-
+@
+text
+@d8 1
+a8 1
+ 3. Fri Apr  6 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.2 2012-04-03 16:20:27-07 - - $
+@
+
+
+1.2
+log
+@-
+@
+text
+@d7 1
+a7 1
+ 2. Wed Apr  4 -
+d55 1
+a55 1
+$Id: Lecture-log-2012-q2spring,v 1.1 2012-03-29 15:39:21-07 - - $
+@
+
+
+1.1
+log
+@-
+@
+text
+@d6 1
+a6 1
+ 1. Mon Apr  2 -
+d55 1
+a55 1
+$Id: 2010-q1winter-lecture-log,v 1.1 2010-12-02 17:57:33-08 - - $
+@

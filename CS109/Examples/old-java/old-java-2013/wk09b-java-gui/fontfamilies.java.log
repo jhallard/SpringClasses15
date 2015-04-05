@@ -1,0 +1,7 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting fontfamilies.java
+fontfamilies.java: $Id: fontfamilies.java,v 1.1 2012-05-30 19:47:17-07 - - $
+javac -Xlint fontfamilies.java
+jar cfm fontfamilies Manifest fontfamilies.class
+chmod +x fontfamilies
+rm -f fontfamilies.class
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished fontfamilies.java

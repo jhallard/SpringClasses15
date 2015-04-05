@@ -1,0 +1,766 @@
+head	1.32;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.32
+date	2013.06.29.02.51.19;	author -;	state -;
+branches;
+next	1.31;
+
+1.31
+date	2013.06.29.02.49.37;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2013.06.29.02.49.00;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2013.06.29.02.48.17;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2013.06.29.02.47.56;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2013.06.29.02.44.42;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2013.06.29.02.43.52;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2013.06.29.02.43.01;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2012.04.13.04.10.49;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2012.04.13.04.10.05;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2012.04.13.04.07.34;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2012.04.13.04.05.57;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2012.04.13.04.05.22;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2012.04.12.21.50.20;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2012.04.12.21.50.10;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2012.04.12.21.48.36;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2012.04.12.19.43.12;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2012.04.12.19.41.54;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.04.12.19.41.14;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.04.12.19.36.17;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.04.12.19.36.02;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.04.12.19.31.36;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.04.12.19.30.16;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.12.19.29.51;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.12.19.29.10;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.12.19.13.22;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.12.19.10.07;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.12.19.08.13;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.12.19.07.44;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.12.19.06.12;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.12.19.05.49;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.12.19.05.31;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.32
+log
+@-
+@
+text
+@// $Id: exceptions.cpp,v 1.31 2013-06-28 19:49:37-07 - - $
+
+// Illustrate some exceptions.
+
+#include <cstdlib>
+#include <iostream>
+#include <typeinfo>
+#include <vector>
+
+using namespace std;
+
+#define SHOW(STMT) \
+        cout << __func__ << "[" << __LINE__ << "]: SHOW (" \
+             << #STMT << ")" << endl; \
+        STMT
+
+void fn_bad_alloc() {
+   SHOW (vector<int> v0(-5);)
+}
+
+void fn_out_of_range() {
+   SHOW (vector<int> v1(10);)
+   SHOW (v1.at(-5) = 8;)
+}
+
+void fn_pop_empty_vector() {
+   SHOW (vector<int> v2(10);)
+   SHOW (v2.pop_back();)
+}
+
+void fn_back_empty_vector() {
+   SHOW (vector<int> v3(10);)
+   SHOW (cout << ".... " << v3.back() << endl;)
+}
+
+int main (int argc, char **argv) {
+   for (int argi = 1; argi < argc; ++argi) {
+      for (char *chari = argv[argi]; *chari != '\0'; ++chari) {
+         try {
+            switch (*chari) {
+               case 'b': fn_bad_alloc(); break;
+               case 'o': fn_out_of_range(); break;
+               case 'p': fn_pop_empty_vector(); break;
+               case 'e': fn_back_empty_vector(); break;
+            }
+         }catch (exception &err) {
+            cout << ".... exception " << typeid (err).name() 
+                 << ", what = \"" << err.what() << "\"" << endl;
+         }
+      }
+   }
+   fn_bad_alloc(); // Throw an uncaught exception.
+   return 0;
+}
+
+//TEST// ./exceptions b o p e 2>&1 >exceptions.lis
+//TEST// mkpspdf exceptions.ps exceptions.cpp* exceptions.lis
+
+@
+
+
+1.31
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.30 2013-06-28 19:49:00-07 - - $
+d13 3
+a15 3
+           cout << __func__ << "[" << __LINE__ << "]: " \
+                << "   SHOW (" << #STMT << ")" << endl; \
+           STMT
+d33 1
+a33 1
+   SHOW (cout << v3.back() << endl;)
+d47 1
+a47 1
+            cout << "   exception " << typeid (err).name() 
+@
+
+
+1.30
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.29 2013-06-28 19:48:17-07 - - $
+a35 5
+void fn_divide_by_zero() {
+   int a = 0;
+   cout << 10 / a << endl;
+}
+
+a44 1
+               case 'z': fn_divide_by_zero(); break;
+d56 1
+a56 1
+//TEST// ./exceptions b o p e z 2>&1 >exceptions.lis
+@
+
+
+1.29
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.28 2013-06-28 19:47:56-07 - - $
+d37 2
+a38 1
+   int a = 10 / 0;
+d62 1
+a62 1
+//TEST// ./exceptions b o p e 2>&1 >exceptions.lis
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.27 2013-06-28 19:44:42-07 - - $
+d12 1
+a12 1
+#define SHOW(STMT) { \
+d15 1
+a15 2
+           STMT \
+        }
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.26 2013-06-28 19:43:52-07 - - $
+d12 5
+a16 4
+#define SHOW(STMT) \
+        cout << __func__ << "[" << __LINE__ << "]:" << endl \
+             << "   SHOW (" << #STMT << ")" << endl; \
+        STMT
+d18 1
+a18 1
+void fn_bad_alloc () {
+d22 1
+a22 1
+void fn_out_of_range () {
+d27 1
+a27 1
+void fn_pop_empty_vector () {
+d32 1
+a32 1
+void fn_back_empty_vector () {
+d37 4
+d46 5
+a50 4
+               case 'b': fn_bad_alloc (); break;
+               case 'o': fn_out_of_range (); break;
+               case 'p': fn_pop_empty_vector (); break;
+               case 'e': fn_back_empty_vector (); break;
+d53 2
+a54 2
+            cout << "   exception " << typeid (err).name () 
+                 << ", what = \"" << err.what () << "\"" << endl;
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.25 2013-06-28 19:43:01-07 - - $
+d56 2
+a57 2
+//TEST// ./exceptions b o p e 2>&1 exceptions.out
+//TEST// mkpspdf exceptions.ps exceptions.cpp* exceptions.out
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.24 2012-04-12 21:10:49-07 - - $
+d7 1
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.23 2012-04-12 21:10:05-07 - - $
+d55 2
+a56 2
+//TEST// runprogram -x exceptions.lis ./exceptions b o p e
+//TEST// mkpspdf exceptions.ps exceptions.cpp exceptions.lis
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.22 2012-04-12 21:07:34-07 - - $
+d33 1
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.21 2012-04-12 21:05:57-07 - - $
+d31 2
+a32 2
+   SHOW (vector<int> v2(10);)
+   SHOW (cout << v2.back() << endl;)
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.20 2012-04-12 21:05:22-07 - - $
+d30 4
+d42 1
+d54 1
+a54 1
+//TEST// runprogram -x exceptions.lis ./exceptions b o p
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.19 2012-04-12 14:50:20-07 - - $
+d37 1
+d49 1
+a49 1
+//TEST// runprogram -x exceptions.lis ./exceptions b o
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.18 2012-04-12 14:50:10-07 - - $
+d25 5
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.17 2012-04-12 14:48:36-07 - - $
+d43 1
+a43 1
+//TEST// runprogram -x exceptions.lis ./exceptions
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.16 2012-04-12 12:43:12-07 - - $
+d39 1
+a39 1
+   throw exception ();
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.15 2012-04-12 12:41:54-07 - - $
+d39 1
+d42 4
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.14 2012-04-12 12:41:14-07 - - $
+d12 2
+a13 2
+        cout << __func__ << "[" << __LINE__ << "]: " \
+             << "SHOW (" << #STMT << ")" << endl; \
+d34 1
+a34 1
+            cout << "exception " << typeid (err).name () 
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.13 2012-04-12 12:36:17-07 - - $
+d11 4
+a14 2
+#define SHOW(STMT) cout << __func__ << "[" << __LINE__ << "]: "
+                        << "SHOW (" << #STMT << ")" << endl; STMT
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.12 2012-04-12 12:36:02-07 - - $
+d11 2
+a12 1
+#define SHOW(STMT) cout << "SHOW (" << #STMT << ")" << endl; STMT
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.11 2012-04-12 12:31:36-07 - - $
+d26 1
+a26 1
+            switch (chari) {
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.10 2012-04-12 12:30:16-07 - - $
+d13 9
+d23 6
+a28 16
+   if (argc != 2) abort ();
+   char *chitor = argv[1];
+   for (;;) {
+      try {
+         switch (*chitor++) {
+            case '\0': {
+               SHOW (return 0;)
+            }
+            case '0': {
+               SHOW (vector<int> v0(-5);)
+               break;
+            }
+            case '1': {
+               SHOW (vector<int> v1(10);)
+               v1.at(-5) = 8;
+               break;
+d30 3
+a33 3
+      }catch (exception &err) {
+         cout << "exception " << typeid (err).name () 
+              << ", what = \"" << err.what () << "\"" << endl;
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.9 2012-04-12 12:29:51-07 - - $
+d11 2
+d20 1
+a20 1
+               return 0;
+d23 1
+a23 1
+               vector<int> v0(-5);
+d27 1
+a27 1
+               vector<int> v1(10);
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.8 2012-04-12 12:29:10-07 - - $
+d32 1
+a32 1
+              << "what = \"" << err.what () << "\"" << endl;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.7 2012-04-12 12:13:22-07 - - $
+d30 1
+a30 1
+      }catch (exception err) {
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.6 2012-04-12 12:10:07-07 - - $
+d31 2
+a32 1
+         cout << err.what () << endl;
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.5 2012-04-12 12:08:13-07 - - $
+d6 1
+d13 19
+a31 9
+   switch (argv[1][0]) {
+      case '0': {
+         vector<int> v0(-5);
+         break;
+      }
+      case '1': {
+         vector<int> v1(10);
+         v1.at(-5) = 8;
+         break;
+d34 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.4 2012-04-12 12:07:44-07 - - $
+d12 2
+a13 2
+   switch (argv[1][0] - '0') {
+      case 0: {
+d17 1
+a17 1
+      case 1: {
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.3 2012-04-12 12:06:12-07 - - $
+d13 9
+a21 5
+      case 0: vector<int> v0(-5);
+              break;
+      case 1: vector<int> v1(10);
+              v1.at(-5) = 8;
+              break;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.2 2012-04-12 12:05:49-07 - - $
+d5 1
+d11 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: exceptions.cpp,v 1.1 2012-04-12 12:05:31-07 - - $
+d14 1
+a14 1
+              v.at(-5) = 8;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d5 4
+@

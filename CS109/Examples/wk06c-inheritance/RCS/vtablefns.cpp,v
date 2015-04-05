@@ -1,0 +1,707 @@
+head	1.26;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.26
+date	2015.02.11.01.55.14;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2013.07.20.03.26.16;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2013.07.20.03.25.32;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2013.07.20.03.22.50;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2013.07.20.03.20.19;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2013.07.20.03.19.45;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2013.07.20.03.19.24;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2013.07.20.03.16.22;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2013.07.20.03.15.03;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2013.07.20.03.14.16;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2013.07.20.03.13.41;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2012.04.25.05.51.16;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.04.25.05.50.59;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.04.25.05.50.06;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.04.25.05.49.39;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.04.25.05.48.58;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.04.25.05.48.38;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.25.05.48.16;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.25.05.47.53;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.25.05.47.17;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.25.05.47.01;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.25.05.44.05;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.25.05.37.51;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.25.05.36.23;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.25.05.35.51;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.25.05.28.06;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.26
+log
+@-
+@
+text
+@// $Id: vtablefns.cpp,v 1.25 2013-07-19 20:26:16-07 - - $
+
+// Illustrate inheritance and virtual function tables.
+// Print out the name of the function actually called.
+
+#include <iostream>
+#include <string>
+#include <typeinfo>
+
+using namespace std;
+#define TRACE(STMT) cout << "TRACE (" << #STMT << ")" << endl; STMT
+
+string next() {
+   static string name = "(0)";
+   ++name[1];
+   return name;
+}
+
+struct AAA {
+   string aname;
+   AAA (const AAA&) = delete;
+   AAA& operator= (const AAA&) = delete;
+   AAA(): aname(next()) { show ("AAA::AAA()" + aname) << endl; }
+   virtual ~AAA() { show ("AAA::~AAA()" + aname) << endl; }
+   virtual string f () const { return "AAA::f()" + aname; }
+   virtual string g () const { return "AAA::g()" + aname; }
+   ostream& show (const string& str) const;
+};
+
+struct BBB: public AAA {
+   string bname;
+   BBB(): bname(next()) { show ("BBB::BBB()" + aname + bname) << endl; }
+   virtual ~BBB() { show ("BBB::~BBB()" + aname + bname) << endl; }
+   virtual string f () const { return "BBB::f()" + aname + bname; }
+};
+
+struct CCC: public AAA {
+   string cname;
+   CCC(): cname(next()) { show ("CCC::CCC()" + aname + cname) << endl; }
+   virtual ~CCC() { show ("CCC::~CCC()" + aname + cname) << endl; }
+   virtual string g () const { return "CCC::g()" + aname + cname; }
+};
+
+ostream& AAA::show (const string& str) const {
+   cout << this << "->" << str << ": typeid = \""
+        << typeid (*this).name () << "\""; return cout;
+   return cout;
+}
+
+void tester (const AAA& p) {
+   p.show ("tester") << ": f = " << p.f() 
+        << ", g = " << p.g() << endl << "." << endl;
+}
+
+int main() {
+   TRACE (AAA a; tester (a);)
+   TRACE (BBB b; tester (b);)
+   TRACE (CCC c; tester (c);)
+   TRACE (return 0;)
+}
+
+//TEST// grind="valgrind --leak-check=full --show-reachable=yes"
+//TEST// $grind vtablefns >vtablefns.out 2>&1
+//TEST// mkpspdf vtablefns.ps vtablefns.cpp* vtablefns.out*
+
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.24 2013-07-19 20:25:32-07 - - $
+d21 2
+a22 2
+   AAA (const AAA &) = delete;
+   AAA &operator= (const AAA &) = delete;
+d27 1
+a27 1
+   ostream &show (const string &str) const;
+d44 1
+a44 1
+ostream &AAA::show (const string &str) const {
+d50 1
+a50 1
+void tester (const AAA &p) {
+d62 2
+a63 3
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       vtablefns >vtablefns.out 2>&1
+a64 1
+*/
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.23 2013-07-19 20:22:50-07 - - $
+a2 1
+//
+a61 1
+
+a63 1
+//TEST//       --log-file=vtablefns.out.grind \
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.22 2013-07-19 20:20:19-07 - - $
+d15 3
+a17 3
+   static string label = "(0)";
+   ++label[1];
+   return label;
+d21 1
+a21 1
+   string alabel;
+d24 4
+a27 4
+   AAA(): alabel(next()) { show ("AAA::AAA()") << endl; }
+   virtual ~AAA() { show ("AAA::~AAA()") << endl; }
+   virtual string f () const { return "AAA::f()" + alabel; }
+   virtual string g () const { return "AAA::g()" + alabel; }
+d32 4
+a35 4
+   string blabel;
+   BBB(): blabel(next()) { show ("BBB::BBB()") << endl; }
+   virtual ~BBB() { show ("BBB::~BBB()") << endl; }
+   virtual string f () const { return "BBB::f()" + alabel + blabel; }
+d39 4
+a42 4
+   string clabel;
+   CCC(): clabel(next()) { show ("CCC::CCC()") << endl; }
+   virtual ~CCC() { show ("CCC::~CCC()") << endl; }
+   virtual string g () const { return "CCC::g()" + alabel + clabel; }
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.21 2013-07-19 20:19:45-07 - - $
+d14 6
+d24 1
+a24 1
+   AAA() { show ("AAA::AAA()") << endl; }
+d33 1
+a33 1
+   BBB() { show ("BBB::BBB()") << endl; }
+d40 1
+a40 1
+   CCC() { show ("CCC::CCC()") << endl; }
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.20 2013-07-19 20:19:24-07 - - $
+d36 1
+a36 1
+   virtual string g () const { return "CCC::g() + alabel + clabel"; }
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.19 2013-07-19 20:16:22-07 - - $
+d15 1
+a15 1
+   string alabel
+d26 1
+a26 1
+   string blabel
+d33 1
+a33 1
+   string clabel
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.18 2013-07-19 20:15:03-07 - - $
+d15 1
+d20 2
+a21 2
+   virtual string f () const { return "AAA::f()"; }
+   virtual string g () const { return "AAA::g()"; }
+d26 1
+d29 1
+a29 1
+   virtual string f () const { return "BBB::f()"; }
+d33 1
+d36 1
+a36 1
+   virtual string g () const { return "CCC::g()"; }
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.17 2013-07-19 20:14:16-07 - - $
+d37 1
+a37 1
+   cout << this << " " << str << ", typeid = \""
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.16 2013-07-19 20:13:41-07 - - $
+d9 1
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.15 2012-04-24 22:51:16-07 - - $
+d47 4
+a50 5
+   AAA a; tester (a);
+   BBB b; tester (b);
+   CCC c; tester (c);
+   cout << "return 0" << endl;
+   return 0;
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.14 2012-04-24 22:50:59-07 - - $
+d11 1
+d13 7
+a19 6
+
+struct A {
+   A() { show ("A::A()") << endl; }
+   virtual ~A() { show ("A::~A()") << endl; }
+   virtual string f () const { return "A::f()"; }
+   virtual string g () const { return "A::g()"; }
+d23 4
+a26 4
+struct B: public A {
+   B() { show ("B::B()") << endl; }
+   virtual ~B() { show ("B::~B()") << endl; }
+   virtual string f () const { return "B::f()"; }
+d29 4
+a32 4
+struct C: public A {
+   C() { show ("C::C()") << endl; }
+   virtual ~C() { show ("C::~C()") << endl; }
+   virtual string g () const { return "C::g()"; }
+d35 1
+a35 1
+ostream &A::show (const string &str) const {
+d41 1
+a41 1
+void tester (const A &p) {
+d47 3
+a49 3
+   A a; tester (a);
+   B b; tester (b);
+   C c; tester (c);
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.13 2012-04-24 22:50:06-07 - - $
+d18 1
+a18 1
+   ostream &show const (const string &str);
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.12 2012-04-24 22:49:39-07 - - $
+d18 1
+a18 1
+   ostream &show (const string &str);
+d33 1
+a33 1
+ostream &A::show (const string &str) {
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.11 2012-04-24 22:48:58-07 - - $
+d40 1
+a40 1
+   p->show ("tester") << ": f = " << p.f() 
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.10 2012-04-24 22:48:38-07 - - $
+d34 2
+a35 2
+   cout << this << " " << "typeid = \"" << typeid (*this).name ()
+        << "\"";
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.6 2012-04-24 22:47:01-07 - - $
+d33 1
+a33 1
+ostream &show (const string &str) {
+@
+
+
+1.9
+log
+@-
+@
+text
+@d15 1
+a15 1
+   virtual ~A() { show ("A::~A()" << endl; }
+@
+
+
+1.8
+log
+@-
+@
+text
+@d15 1
+a15 1
+   virtual ~A() { show (this, "A::~A()" << endl; }
+d23 1
+a23 1
+   virtual ~B() { show (this, "B::~B()") << endl; }
+d29 1
+a29 1
+   virtual ~C() { show (this, "C::~C()") << endl; }
+@
+
+
+1.7
+log
+@-
+@
+text
+@d14 1
+a14 1
+   A() { show (this, "A::A()") << endl; }
+d22 1
+a22 1
+   B() { show (this, "B::B()") << endl; }
+d28 1
+a28 1
+   C() { show (this, "C::C()") << endl; }
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.4 2012-04-24 22:37:51-07 - - $
+a18 2
+   return cout;
+}
+@
+
+
+1.5
+log
+@-
+@
+text
+@a11 5
+ostream &show (const void *obj, const string &str) {
+   cout << obj << " " << "typeid = \"" << typeid (*obj).name ()
+        << "\"";
+   return cout;
+}
+d18 3
+d35 6
+d42 1
+a42 2
+   show (&p, "tester")
+   cout << &p << " tester: typeid = " << typeid(p).name() << ": f = " << p.f() 
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.3 2012-04-24 22:36:23-07 - - $
+d12 6
+d19 2
+a20 2
+   A() { cout << "A::A()" << " " << this << endl; }
+   virtual ~A() { cout << "A::~A()" << " " << this << endl; }
+d26 2
+a27 2
+   B() { cout << "B::B()" << " " << this << endl; }
+   virtual ~B() { cout << "B::~B()" << " " << this << endl; }
+d32 2
+a33 2
+   C() { cout << "C::C()" << " " << this << endl; }
+   virtual ~C() { cout << "C::~C()" << " " << this << endl; }
+d37 3
+a39 3
+void test_vtable (const A &p) {
+   cout << "test_vtable " << &p
+        << ", typeid = " << typeid(p).name() << ": f = " << p.f() 
+d44 3
+a46 3
+   A a; test_vtable (a);
+   B b; test_vtable (b);
+   C c; test_vtable (c);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vtablefns.cpp,v 1.2 2012-04-24 22:35:51-07 - - $
+d32 2
+a33 1
+   cout << "typeid = " << typeid(p).name() << ": f = " << p.f() 
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d44 8
+@
+
+
+1.1
+log
+@-
+@
+text
+@d13 4
+a16 3
+   virtual string f () { return __func__; }
+   virtual string g () { return "A::f"; }
+   virtual ~A() {}
+d20 3
+a22 1
+   virtual string f () { return "B::f"; }
+d26 3
+a28 1
+   virtual string g () { return "C::g"; }
+d31 1
+a31 1
+void test_vtable (A &p) {
+d33 1
+a33 1
+        << ", g = " << p.g() << endl;
+d37 4
+a40 3
+   test_vtable (A());
+   test_vtable (B());
+   test_vtable (C());
+@

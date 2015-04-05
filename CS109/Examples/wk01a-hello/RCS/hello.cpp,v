@@ -1,0 +1,187 @@
+head	1.8;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.8
+date	2014.03.28.01.59.06;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.03.28.01.57.07;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.01.04.03.11.36;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.12.13.03.47.43;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.12.13.03.46.29;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2011.01.05.05.00.41;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2011.01.05.04.44.19;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.01.05.04.40.47;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@-
+@
+text
+@// $Id: hello.cpp,v 1.7 2014-03-27 18:57:07-07 - - $
+
+//
+// NAME
+//    hello - the classic ``hello world'' program
+//
+// SYNOPSIS
+//    hello
+//
+// DESCRIPTION
+//    Prints out the message ``Hello, world!''.
+//
+
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+
+int main (int argc, char **argv) {
+   cout << "Hello, world!" << endl;
+   cout << "My name is " << argv[0] << endl;
+   cerr << argc << endl;
+   return EXIT_SUCCESS;
+}
+
+//TEST// ./hello 1>hello.out 2>hello.err
+//TEST// echo EXIT STATUS = $? >hello.exit
+//TEST// catnv hello.cpp.log hello.out hello.err hello.exit >hello.lis
+//TEST// rm -v hello.cpp.log hello.out hello.err hello.exit
+//TEST// mkpspdf hello.ps hello.cpp hello.lis
+
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hello.cpp,v 1.6 2013-01-03 19:11:36-08 - - $
+d22 1
+d28 2
+a29 2
+//TEST// catnv-rm hello.cpp.log hello.out hello.err hello.exit \
+//TEST//          >hello.lis
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hello.cpp,v 1.5 2012-12-12 19:47:43-08 - - $
+d25 5
+a29 2
+//TEST// runprogram.perl -x hello.lis ./hello
+//TEST// mkpspdf hello.ps hello.cpp* hello.lis
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hello.cpp,v 1.4 2012-12-12 19:46:29-08 - - $
+d26 1
+a26 1
+//TEST// mkpspdf hello.ps hello.cpp hello.cpp.log hello.lis
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hello.cpp,v 1.3 2011-01-04 21:00:41-08 - - $
+d26 1
+a26 1
+//TEST// mkpspdf hello.ps hello.cpp hello.lis
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hello.cpp,v 1.2 2011-01-04 20:44:19-08 - - $
+a19 1
+   (void) argc; // SUPPRESS: warning: unused parameter 'argc'
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hello.cpp,v 1.1 2011-01-04 20:40:47-08 - - $
+d20 1
+a20 1
+   (void) argc; // warning: unused parameter 'argc'
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hello.cpp,v 1.2 2011-01-04 20:29:02-08 - - $
+d28 1
+@

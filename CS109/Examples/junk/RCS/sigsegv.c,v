@@ -1,0 +1,173 @@
+head	1.7;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.7
+date	2014.06.12.03.02.46;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.06.12.03.02.26;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.06.12.03.02.14;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.06.12.03.01.57;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.06.12.03.01.30;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.06.12.03.00.41;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.06.12.03.00.19;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@-
+@
+text
+@// $Id: sigsegv.c,v 1.6 2014-06-11 20:02:26-07 - - $
+
+#include <execinfo.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+void handler (int sig) {
+   fprintf (stderr, "Caught signal %d (%s)\n", sig, strsignal (sig));
+   // get void*'s for all entries on the stack
+   void *array[10];
+   size_t size = backtrace (array, sizeof array / sizeof *array);
+
+   // print out all the frames to stderr
+   backtrace_symbols_fd(array, size, STDERR_FILENO);
+   exit(1);
+}
+
+void baz() {
+   int *foo = (int*)-1; // make a bad pointer
+   printf("%d\n", *foo); // causes segfault
+}
+
+void bar() { baz(); }
+void foo() { bar(); }
+
+int main (void) {
+   signal(SIGSEGV, handler);   // install our handler
+   foo(); // this will call foo, bar, and baz.  baz segfaults.
+}
+
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sigsegv.c,v 1.5 2014-06-11 20:02:14-07 - - $
+a16 1
+   fprintf(stderr, "Error: signal %d:\n", sig);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sigsegv.c,v 1.4 2014-06-11 20:01:57-07 - - $
+d11 1
+a11 1
+   printf (stderr, "Caught signal %d (%s)\n", sig, strsignal (sig));
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sigsegv.c,v 1.3 2014-06-11 20:01:30-07 - - $
+d11 1
+a11 1
+   printf (stderr, "Caught signal %d (%s)\n", sig, strsigno (sig));
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sigsegv.c,v 1.2 2014-06-11 20:00:41-07 - - $
+a2 1
+#include <stdio.h>
+d5 1
+d7 1
+d11 1
+a11 1
+   printf (stderr, "Caught signal %d (%s)\n", sig, strerror (sig));
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sigsegv.c,v 1.1 2014-06-11 20:00:19-07 - - $
+d9 2
+a10 1
+void handler(int sig) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d28 1
+a28 1
+int main(int argc, char **argv) {
+@

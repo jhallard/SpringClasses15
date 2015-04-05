@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting semaphilo.cpp
+semaphilo.cpp:
+     $Id: semaphilo.cpp,v 1.22 2014-06-04 12:13:15-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 semaphilo.cpp -o semaphilo -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f semaphilo.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished semaphilo.cpp

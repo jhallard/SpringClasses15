@@ -1,0 +1,143 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.4
+date	2014.05.21.02.51.15;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.21.02.46.50;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.21.00.19.36;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.21.00.18.06;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@// $Id: showhost.cpp,v 1.3 2014-05-20 19:46:50-07 - - $
+
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include <arpa/inet.h>
+#include <errno.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+
+int main (int argc, char** argv) {
+   string progname (argv[0]);
+   vector<string> args (&argv[1], &argv[argc]);
+
+   for (const string& hostname: args) {
+      if (args.size() > 1) cout << endl;
+      hostent* host = gethostbyname (hostname.c_str());
+      if (host == nullptr) {
+         cout << hostname << ": " << hstrerror (h_errno) << endl;
+      }else {
+         cout << "Hostname:  " << hostname << endl;
+         cout << "h_name:    " << host->h_name << endl;
+         for (char** alias = host->h_aliases; *alias; ++alias) {
+            cout << "h_alias:   " << *alias << endl;
+         }
+         for (in_addr** addr_list = (in_addr**) host->h_addr_list;
+              *addr_list; ++addr_list) {
+            cout << "h_addr:    " << inet_ntoa (**addr_list) << endl;
+         }
+      }
+   }
+
+   return 0;
+}
+
+/*
+//TEST// showhost www.soe.ucsc.edu soe.ucsc.edu \
+//TEST//          www.ucsc.edu unix.ucsc.edu \
+//TEST//          unix1.lt.ucsc.edu unix2.lt.ucsc.edu \
+//TEST//          www.google.com www.nohost.zone >showhost.output
+//TEST// mkpspdf showhost.ps showhost.cpp* showhost.output
+*/
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showhost.cpp,v 1.2 2014-05-20 17:19:36-07 - - $
+d20 1
+d22 12
+a33 8
+      cout << "Hostname:  " << hostname << endl;
+      cout << "h_name:    " << host->h_name << endl;
+      for (char** alias = host->h_aliases; *alias; ++alias) {
+         cout << "h_alias:   " << *alias << endl;
+      }
+      for (in_addr** addr_list = (in_addr**) host->h_addr_list;
+           *addr_list; ++addr_list) {
+         cout << "h_addr:    " << inet_ntoa (**addr_list) << endl;
+d44 1
+a44 1
+//TEST//          www.google.com > showhost.output
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showhost.cpp,v 1.1 2014-05-20 17:18:06-07 - - $
+d34 9
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showhost.cpp,v 1.5 2014-05-20 17:13:36-07 - - $
+d21 2
+a22 2
+      cout << "Host name:  " << hostname << endl;
+      cout << "h_name:     " << host->h_name << endl;
+d24 1
+a24 1
+         cout << "h_alias:  " << *alias << endl;
+d28 1
+a28 1
+         cout << "h_addr:     " << inet_ntoa (**addr_list) << endl;
+@

@@ -1,0 +1,18 @@
+"./string2int"
+        failure: int from_string (./string2int)
+"1024"
+        success: number = 1024
+"56foobar"
+        failure: int from_string (56foobar)
+"-45"
+        success: number = -45
+"68.9"
+        failure: int from_string (68.9)
+"testing"
+        failure: int from_string (testing)
+"007777"
+        success: number = 7777
+"0x48"
+        failure: int from_string (0x48)
+"2147483648"
+        failure: int from_string (2147483648)

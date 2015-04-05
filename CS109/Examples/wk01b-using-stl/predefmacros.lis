@@ -1,0 +1,22 @@
+Thu Mar 27 19:17:42 PDT 2014
+uname --kernel-name = Linux
+uname --nodename = unix1.lt.ucsc.edu
+uname --kernel-release = 2.6.32-358.23.2.el6.x86_64
+uname --kernel-version = #1 SMP Wed Oct 16 18:37:12 UTC 2013
+uname --machine = x86_64
+uname --processor = x86_64
+uname --hardware-platform = x86_64
+uname --operating-system = GNU/Linux
+__FILE__ = "predefmacros.cpp"
+__LINE__ = "62"
+__func__ = "main"
+__DATE__ = "Mar 27 2014"
+__TIME__ = "19:17:41"
+__STDC__ = "1"
+__cplusplus = "201103"
+__unix__ = "1"
+__linux__ = "1"
+__x86_64__ = "1"
+__GNUC__ = "4"
+__GNUC_MINOR__ = "8"
+__GNUC_PATCHLEVEL__ = "1"

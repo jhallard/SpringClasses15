@@ -1,0 +1,204 @@
+head	1.9;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.9
+date	2014.06.03.20.19.51;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.06.03.20.19.27;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.06.03.20.19.10;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.31.05.34.00;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.31.05.33.37;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.31.01.11.53;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.31.01.11.29;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.31.01.08.02;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.31.01.07.48;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@-
+@
+text
+@// $Id: hellothread.cpp,v 1.8 2014-06-03 13:19:27-07 - - $
+
+// Hello to threads.
+
+#include <iostream>
+#include <thread>
+using namespace std;
+
+void hello() {
+   cout << "Hello, threads." << endl;
+}
+
+int main () {
+   thread t1 (hello);
+   t1.join();
+   return 0;
+}
+
+//TEST// hellothread >hellothread.out
+//TEST// mkpspdf hellothread.ps hellothread.cpp* hellothread.out
+
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hellothread.cpp,v 1.7 2014-06-03 13:19:10-07 - - $
+a14 2
+   cout << "thread::hardware_concurrency() = "
+        << thread::hardware_concurrency() << endl;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hellothread.cpp,v 1.6 2014-05-30 22:34:00-07 - - $
+d15 2
+a16 2
+   cout << "thread::hardware_concurrency = "
+        << thread::hardware_concurrency << endl;
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hellothread.cpp,v 1.5 2014-05-30 22:33:37-07 - - $
+d15 2
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hellothread.cpp,v 1.4 2014-05-30 18:11:53-07 - - $
+d10 1
+a10 1
+   cout << WHERE << "Hello, threads." << endl;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hellothread.cpp,v 1.3 2014-05-30 18:11:29-07 - - $
+a8 2
+#define WHERE __LINE__ << ":" << __func__ << ": "
+
+a13 1
+   cout << WHERE << endl;
+a14 1
+   cout << WHERE << endl;
+a15 1
+   cout << WHERE << endl;
+d18 4
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hellothread.cpp,v 1.2 2014-05-30 18:08:02-07 - - $
+d9 1
+a9 1
+#define WHERE __LINE__ << ":" __func__ << ": "
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hellothread.cpp,v 1.1 2014-05-30 18:07:48-07 - - $
+d9 2
+d12 1
+a12 1
+   cout << "Hello, threads." << endl;
+d16 1
+d18 1
+d20 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d7 1
+@

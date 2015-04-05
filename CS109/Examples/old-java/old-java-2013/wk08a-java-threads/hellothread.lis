@@ -1,0 +1,59 @@
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+log: hellothread.log
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+     1	Script  : /afs/cats.ucsc.edu/courses/cmps012b-wm/bin/runprog
+     2	limit c :    0 max core file size (KB)
+     3	limit f : 4194303 max output file size (KB)
+     4	limit t : 4294967295 max CPU time (sec)
+     5	stdin   : /dev/null
+     6	stdout  : hellothread.out
+     7	stderr  : hellothread.err
+     8	log     : hellothread.log
+     9	listing : hellothread.lis
+    10	Command : hellothread
+    11	starting: pid 9120: 19:32:08.00
+    12	finished: pid 9120: 19:32:16.00, real 8.00, user 0.08, sys 0.03
+    13	pstatus: 0x0000 EXIT STATUS = 0
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stdin: /dev/null
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stdout: hellothread.out
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+     1	     0.048: main(1): starting
+     2	     6.818: main(1): finished
+     3	     7.039: World(9): starting
+     4	     7.039: Hello(8): starting
+     5	   508.741: Hello(8): slept 500 msec, 0th time
+     6	   807.663: World(9): slept 800 msec, 0th time
+     7	  1009.266: Hello(8): slept 500 msec, 1th time
+     8	  1509.772: Hello(8): slept 500 msec, 2th time
+     9	  1608.162: World(9): slept 800 msec, 1th time
+    10	  2010.288: Hello(8): slept 500 msec, 3th time
+    11	  2408.657: World(9): slept 800 msec, 2th time
+    12	  2510.798: Hello(8): slept 500 msec, 4th time
+    13	  3011.309: Hello(8): slept 500 msec, 5th time
+    14	  3209.154: World(9): slept 800 msec, 3th time
+    15	  3511.801: Hello(8): slept 500 msec, 6th time
+    16	  4009.653: World(9): slept 800 msec, 4th time
+    17	  4012.320: Hello(8): slept 500 msec, 7th time
+    18	  4512.807: Hello(8): slept 500 msec, 8th time
+    19	  4810.222: World(9): slept 800 msec, 5th time
+    20	  5013.329: Hello(8): slept 500 msec, 9th time
+    21	  5013.829: Hello(8): finished
+    22	  5610.943: World(9): slept 800 msec, 6th time
+    23	  6415.443: World(9): slept 800 msec, 7th time
+    24	  7216.185: World(9): slept 800 msec, 8th time
+    25	  8016.969: World(9): slept 800 msec, 9th time
+    26	  8020.779: World(9): finished
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stderr: hellothread.err
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+

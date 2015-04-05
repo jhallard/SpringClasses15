@@ -1,0 +1,7 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting initializer.cpp
+* initializer.cpp: $Id: initializer.cpp,v 1.5 2014-03-26 17:51:31-07 -
+- $
+* g++ -g -O0 -Wall -Wextra -std=gnu++11 initializer.cpp -o initializer
+-lm
+* rm -f initializer.o
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished initializer.cpp

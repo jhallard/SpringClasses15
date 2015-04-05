@@ -1,0 +1,60 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2013.08.16.01.45.48;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.08.16.01.45.22;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: const.cpp,v 1.1 2013-08-15 18:45:22-07 - - $
+
+template <typename T>
+class foo {
+   T x;
+public:
+   foo (const T& y = T()): x(y) {}
+   bar() {
+      cout << is_const(T)::value << endl;
+   }
+};
+
+int main() {
+   foo (int) a;
+   foo (const int) b;
+   a.bar();
+   b.bar();
+}
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d5 2
+a6 1
+   T x
+@

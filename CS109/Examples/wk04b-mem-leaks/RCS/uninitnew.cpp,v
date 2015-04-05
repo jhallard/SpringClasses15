@@ -1,0 +1,95 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2014.04.23.01.55.00;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.11.00.07.28;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: uninitnew.cpp,v 1.1 2012-05-10 17:07:28-07 - - $o
+
+//
+// Illustrates the uninitialized behavior of areas returned by
+// new when there is no default ctor, as for primitives and pointers.
+// Allocate an array, print non-zero entries, then free the array.
+// check for memory leak.
+//
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void f(int n) {
+   cout << n << ":";
+   int *p = new int[n];
+   for (int i = 0; i < n; ++i) {
+      if (p[i]!=0) cout << " " << dec << i << "=" << hex << p[i] << ";";
+      p[i] = 0xDEADBEEF;
+   }
+   cout << endl;
+   delete[] p;
+}
+
+void g() {
+   vector<int*> vi(5);
+   cout << "g:";
+   for (size_t i = 0; i < vi.size(); ++i) cout << " " << vi[i];
+   cout << endl;
+}
+
+int main() {
+   f(10);
+   f(5);
+   f(6);
+   f(100);
+   f(8);
+   g();
+   return 0;
+}
+
+//TEST// alias grind='valgrind --leak-check=full --show-reachable=yes'
+//TEST// grind uninitnew >uninitnew.out 2>&1
+//TEST// mkpspdf uninitnew.ps uninitnew.cpp* uninitnew.out
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: uninitnew.cpp,v 1.14 2012-05-03 17:15:57-07 - - $o
+d44 3
+a46 7
+/*
+//TEST// uninitnew >uninitnew.out1 2>&1
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=uninitnew.out2.grind \
+//TEST//       uninitnew >uninitnew.out2 2>&1
+//TEST// mkpspdf uninitnew.ps uninitnew.cpp* uninitnew.out*
+*/
+@

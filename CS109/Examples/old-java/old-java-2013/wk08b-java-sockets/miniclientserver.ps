@@ -1,0 +1,1128 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: Enscript Output
+%%For: Wesley Mackey
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Tue Aug 13 20:25:44 2013
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier-Bold /F-gs-font MF
+/F-gs-font 10.5 10.5 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 536 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 708 def
+/d_header_w 536 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 536 def
+/d_footer_h 0 def
+/d_output_w 536 def
+/d_output_h 708 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (miniserver.java) def
+/fdir () def
+/ftail (miniserver.java) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/13/13) def
+/modtimestr (20:18:57) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+31.2 694.5 M (1:) s
+50.1 694.5 M
+(// $Id: miniserver.java,v 1.5 2013-08-13 20:18:57-07 - - $) s
+31.2 683 M (2:) s
+31.2 671.5 M (3:) s
+50.1 671.5 M
+(//) s
+31.2 660 M (4:) s
+50.1 660 M
+(// Mini server.) s
+31.2 648.5 M (5:) s
+50.1 648.5 M
+(//    Usage:  miniserver hostport) s
+31.2 637 M (6:) s
+50.1 637 M
+(// Accept a connection from a client and echo back any input.) s
+31.2 625.5 M (7:) s
+50.1 625.5 M
+(//) s
+31.2 614 M (8:) s
+31.2 602.5 M (9:) s
+50.1 602.5 M
+(import java.io.*;) s
+24.9 591 M (10:) s
+50.1 591 M
+(import java.net.*;) s
+24.9 579.5 M (11:) s
+50.1 579.5 M
+(import java.util.*;) s
+24.9 568 M (12:) s
+50.1 568 M
+(import static java.lang.System.*;) s
+24.9 556.5 M (13:) s
+24.9 545 M (14:) s
+50.1 545 M
+(class miniserver {) s
+24.9 533.5 M (15:) s
+24.9 522 M (16:) s
+50.1 522 M
+(   static void quit \(String format, Object... params\) {) s
+24.9 510.5 M (17:) s
+50.1 510.5 M
+(      err.printf \(format, params\);) s
+24.9 499 M (18:) s
+50.1 499 M
+(      exit \(1\);) s
+24.9 487.5 M (19:) s
+50.1 487.5 M
+(   }) s
+24.9 476 M (20:) s
+24.9 464.5 M (21:) s
+50.1 464.5 M
+(   static String ident \(options opts\) {) s
+24.9 453 M (22:) s
+50.1 453 M
+(      return String.format \("%s: port %d", opts.jarname,) s
+24.9 441.5 M (23:) s
+50.1 441.5 M
+(                            opts.portnumber\);) s
+24.9 430 M (24:) s
+50.1 430 M
+(   }) s
+24.9 418.5 M (25:) s
+24.9 407 M (26:) s
+50.1 407 M
+(   static String get_jarname\(\) {) s
+24.9 395.5 M (27:) s
+50.1 395.5 M
+(      String jarpath = getProperty \("java.class.path"\);) s
+24.9 384 M (28:) s
+50.1 384 M
+(      int lastslash = jarpath.lastIndexOf \('/'\);) s
+24.9 372.5 M (29:) s
+50.1 372.5 M
+(      if \(lastslash < 0\) return jarpath;) s
+24.9 361 M (30:) s
+50.1 361 M
+(      return jarpath.substring \(lastslash + 1\);) s
+24.9 349.5 M (31:) s
+50.1 349.5 M
+(   }) s
+24.9 338 M (32:) s
+24.9 326.5 M (33:) s
+50.1 326.5 M
+(   static class options {) s
+24.9 315 M (34:) s
+50.1 315 M
+(      final String jarname = get_jarname\(\);) s
+24.9 303.5 M (35:) s
+50.1 303.5 M
+(      int portnumber;) s
+24.9 292 M (36:) s
+50.1 292 M
+(      options \(String[] args\) {) s
+24.9 280.5 M (37:) s
+50.1 280.5 M
+(         try {) s
+24.9 269 M (38:) s
+50.1 269 M
+(            if \(args.length != 1\) throw new NumberFormatException\(\);) s
+24.9 257.5 M (39:) s
+50.1 257.5 M
+(            portnumber = Integer.parseInt \(args[0]\);) s
+24.9 246 M (40:) s
+50.1 246 M
+(         }catch \(NumberFormatException exn\) {) s
+24.9 234.5 M (41:) s
+50.1 234.5 M
+(            quit \("Usage: %s portnumber%n", jarname\);) s
+24.9 223 M (42:) s
+50.1 223 M
+(         }) s
+24.9 211.5 M (43:) s
+50.1 211.5 M
+(      }) s
+24.9 200 M (44:) s
+50.1 200 M
+(   }) s
+24.9 188.5 M (45:) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (miniserver.java) def
+/fdir () def
+/ftail (miniserver.java) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (08/13/13) def
+/modtimestr (20:18:57) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+24.9 694.5 M (46:) s
+24.9 683 M (47:) s
+24.9 671.5 M (48:) s
+50.1 671.5 M
+(   public static void main \(String[] args\) {) s
+24.9 660 M (49:) s
+50.1 660 M
+(      options opts = new options \(args\);) s
+24.9 648.5 M (50:) s
+50.1 648.5 M
+(      try {) s
+24.9 637 M (51:) s
+50.1 637 M
+(         ServerSocket socket = new ServerSocket \(opts.portnumber\);) s
+24.9 625.5 M (52:) s
+50.1 625.5 M
+(         out.printf \("%s: waiting for client%n", ident \(opts\)\);) s
+24.9 614 M (53:) s
+50.1 614 M
+(         Socket client = socket.accept\(\);) s
+24.9 602.5 M (54:) s
+50.1 602.5 M
+(         out.printf \("%s: socket.accept OK%n", ident \(opts\)\);) s
+24.9 591 M (55:) s
+50.1 591 M
+(         Scanner client_in = new Scanner \(client.getInputStream\(\)\);) s
+24.9 579.5 M (56:) s
+50.1 579.5 M
+(         PrintWriter client_out =) s
+24.9 568 M (57:) s
+50.1 568 M
+(                     new PrintWriter \(client.getOutputStream\(\)\);) s
+24.9 556.5 M (58:) s
+50.1 556.5 M
+(         for \(int count = 1; client_in.hasNextLine\(\); ++count\) {) s
+24.9 545 M (59:) s
+50.1 545 M
+(            String line = client_in.nextLine\(\);) s
+24.9 533.5 M (60:) s
+50.1 533.5 M
+(                   out.printf \("Client sent: [%d]%s%n", count, line\);) s
+24.9 522 M (61:) s
+50.1 522 M
+(            client_out.printf \("Client sent: [%d]%s%n", count, line\);) s
+24.9 510.5 M (62:) s
+50.1 510.5 M
+(            client_out.flush\(\);) s
+24.9 499 M (63:) s
+50.1 499 M
+(         }) s
+24.9 487.5 M (64:) s
+50.1 487.5 M
+(         socket.close\(\);) s
+24.9 476 M (65:) s
+50.1 476 M
+(         client.close\(\);) s
+24.9 464.5 M (66:) s
+50.1 464.5 M
+(         out.printf \("%s: finished%n", ident \(opts\)\);) s
+24.9 453 M (67:) s
+50.1 453 M
+(      }catch \(IOException exn\) {) s
+24.9 441.5 M (68:) s
+50.1 441.5 M
+(         quit \("%s: %s%n", ident \(opts\), exn\);) s
+24.9 430 M (69:) s
+50.1 430 M
+(      }catch \(IllegalArgumentException exn\) {) s
+24.9 418.5 M (70:) s
+50.1 418.5 M
+(         quit \("%s: %s%n", ident \(opts\), exn\);) s
+24.9 407 M (71:) s
+50.1 407 M
+(      }) s
+24.9 395.5 M (72:) s
+50.1 395.5 M
+(   }) s
+24.9 384 M (73:) s
+24.9 372.5 M (74:) s
+50.1 372.5 M
+(}) s
+_R
+S
+%%Page: (1) 3
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (miniclient.java) def
+/fdir () def
+/ftail (miniclient.java) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/13/13) def
+/modtimestr (20:22:20) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+31.2 694.5 M (1:) s
+50.1 694.5 M
+(// $Id: miniclient.java,v 1.8 2013-08-13 20:22:20-07 - - $) s
+31.2 683 M (2:) s
+31.2 671.5 M (3:) s
+50.1 671.5 M
+(//) s
+31.2 660 M (4:) s
+50.1 660 M
+(// Mini client.) s
+31.2 648.5 M (5:) s
+50.1 648.5 M
+(//    Usage:  miniclient hostname hostport) s
+31.2 637 M (6:) s
+50.1 637 M
+(// Reads stdin and copies to the port.  Then copies the answer) s
+31.2 625.5 M (7:) s
+50.1 625.5 M
+(// back from the port to stdout.  Runs only in lock step with) s
+31.2 614 M (8:) s
+50.1 614 M
+(// strict alternation for the server.) s
+31.2 602.5 M (9:) s
+50.1 602.5 M
+(//) s
+24.9 591 M (10:) s
+24.9 579.5 M (11:) s
+50.1 579.5 M
+(import java.io.*;) s
+24.9 568 M (12:) s
+50.1 568 M
+(import java.net.*;) s
+24.9 556.5 M (13:) s
+50.1 556.5 M
+(import java.util.*;) s
+24.9 545 M (14:) s
+50.1 545 M
+(import static java.lang.System.*;) s
+24.9 533.5 M (15:) s
+24.9 522 M (16:) s
+50.1 522 M
+(class miniclient {) s
+24.9 510.5 M (17:) s
+24.9 499 M (18:) s
+50.1 499 M
+(   static void quit \(String format, Object... params\) {) s
+24.9 487.5 M (19:) s
+50.1 487.5 M
+(      err.printf \(format, params\);) s
+24.9 476 M (20:) s
+50.1 476 M
+(      exit \(1\);) s
+24.9 464.5 M (21:) s
+50.1 464.5 M
+(   }) s
+24.9 453 M (22:) s
+24.9 441.5 M (23:) s
+50.1 441.5 M
+(   static String ident \(options opts\) {) s
+24.9 430 M (24:) s
+50.1 430 M
+(      return String.format \("%s: %s %d", opts.jarname,) s
+24.9 418.5 M (25:) s
+50.1 418.5 M
+(                            opts.hostname, opts.portnumber\);) s
+24.9 407 M (26:) s
+50.1 407 M
+(   }) s
+24.9 395.5 M (27:) s
+24.9 384 M (28:) s
+50.1 384 M
+(   static String get_jarname\(\) {) s
+24.9 372.5 M (29:) s
+50.1 372.5 M
+(      String jarpath = getProperty \("java.class.path"\);) s
+24.9 361 M (30:) s
+50.1 361 M
+(      int lastslash = jarpath.lastIndexOf \('/'\);) s
+24.9 349.5 M (31:) s
+50.1 349.5 M
+(      if \(lastslash < 0\) return jarpath;) s
+24.9 338 M (32:) s
+50.1 338 M
+(      return jarpath.substring \(lastslash + 1\);) s
+24.9 326.5 M (33:) s
+50.1 326.5 M
+(   }) s
+24.9 315 M (34:) s
+24.9 303.5 M (35:) s
+50.1 303.5 M
+(   static class options {) s
+24.9 292 M (36:) s
+50.1 292 M
+(      final String jarname = get_jarname\(\);) s
+24.9 280.5 M (37:) s
+50.1 280.5 M
+(      String hostname = "localhost";) s
+24.9 269 M (38:) s
+50.1 269 M
+(      int portnumber;) s
+24.9 257.5 M (39:) s
+50.1 257.5 M
+(      options \(String[] args\) {) s
+24.9 246 M (40:) s
+50.1 246 M
+(         try {) s
+24.9 234.5 M (41:) s
+50.1 234.5 M
+(            if \(args.length < 1\) throw new NumberFormatException \(\);) s
+24.9 223 M (42:) s
+50.1 223 M
+(            portnumber = Integer.parseInt \(args[0]\);) s
+24.9 211.5 M (43:) s
+50.1 211.5 M
+(            if \(args.length > 1\) hostname = args[1];) s
+24.9 200 M (44:) s
+50.1 200 M
+(         }catch \(NumberFormatException exn\) {) s
+24.9 188.5 M (45:) s
+50.1 188.5 M
+(            quit \("Usage: %s hostname portnumber%n", jarname\);) s
+24.9 177 M (46:) s
+50.1 177 M
+(         }) s
+24.9 165.5 M (47:) s
+50.1 165.5 M
+(      }) s
+24.9 154 M (48:) s
+50.1 154 M
+(   }) s
+24.9 142.5 M (49:) s
+_R
+S
+%%Page: (2) 4
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (miniclient.java) def
+/fdir () def
+/ftail (miniclient.java) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (08/13/13) def
+/modtimestr (20:22:20) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+24.9 694.5 M (50:) s
+24.9 683 M (51:) s
+50.1 683 M
+(   public static void main \(String[] args\) {) s
+24.9 671.5 M (52:) s
+50.1 671.5 M
+(      Scanner stdin = new Scanner \(System.in\);) s
+24.9 660 M (53:) s
+50.1 660 M
+(      options opts = new options \(args\);) s
+24.9 648.5 M (54:) s
+50.1 648.5 M
+(      try {) s
+24.9 637 M (55:) s
+50.1 637 M
+(         Socket socket = new Socket \(opts.hostname, opts.portnumber\);) s
+24.9 625.5 M (56:) s
+50.1 625.5 M
+(         out.printf \("%s: socket OK%n", ident \(opts\)\);) s
+24.9 614 M (57:) s
+50.1 614 M
+(         Scanner serve_in = new Scanner \(socket.getInputStream \(\)\);) s
+24.9 602.5 M (58:) s
+50.1 602.5 M
+(         PrintWriter serve_out =) s
+24.9 591 M (59:) s
+50.1 591 M
+(                     new PrintWriter \(socket.getOutputStream \(\)\);) s
+24.9 579.5 M (60:) s
+50.1 579.5 M
+(         for\(;;\) {) s
+24.9 568 M (61:) s
+50.1 568 M
+(            out.printf \("%s: ", opts.jarname\);) s
+24.9 556.5 M (62:) s
+50.1 556.5 M
+(            if \(! stdin.hasNextLine \(\)\) break;) s
+24.9 545 M (63:) s
+50.1 545 M
+(            String line = stdin.nextLine\(\);) s
+24.9 533.5 M (64:) s
+50.1 533.5 M
+(                  out.printf \("Stdin read: %s%n", line\);) s
+24.9 522 M (65:) s
+50.1 522 M
+(            serve_out.printf \("Stdin read: %s%n", line\);) s
+24.9 510.5 M (66:) s
+50.1 510.5 M
+(            serve_out.flush \(\);) s
+24.9 499 M (67:) s
+50.1 499 M
+(            if \(serve_in.hasNextLine \(\)\) {) s
+24.9 487.5 M (68:) s
+50.1 487.5 M
+(               out.printf \("Server said: %s%n", serve_in.nextLine \(\)\);) s
+24.9 476 M (69:) s
+50.1 476 M
+(            }else {) s
+24.9 464.5 M (70:) s
+50.1 464.5 M
+(               quit \("%s: no reply%n", ident \(opts\)\);) s
+24.9 453 M (71:) s
+50.1 453 M
+(            }) s
+24.9 441.5 M (72:) s
+50.1 441.5 M
+(         }) s
+24.9 430 M (73:) s
+50.1 430 M
+(         socket.close \(\);) s
+24.9 418.5 M (74:) s
+50.1 418.5 M
+(         out.printf \("%s: finished%n", ident \(opts\)\);) s
+24.9 407 M (75:) s
+50.1 407 M
+(      }catch \(IOException exn\) {) s
+24.9 395.5 M (76:) s
+50.1 395.5 M
+(         quit \("%s: %s%n", ident \(opts\), exn.getMessage\(\)\);) s
+24.9 384 M (77:) s
+50.1 384 M
+(      }catch \(IllegalArgumentException exn\) {) s
+24.9 372.5 M (78:) s
+50.1 372.5 M
+(         quit \("%s: %s%n", ident \(opts\), exn.getMessage\(\)\);) s
+24.9 361 M (79:) s
+50.1 361 M
+(      }) s
+24.9 349.5 M (80:) s
+50.1 349.5 M
+(   }) s
+24.9 338 M (81:) s
+24.9 326.5 M (82:) s
+50.1 326.5 M
+(}) s
+24.9 315 M (83:) s
+_R
+S
+%%Page: (1) 5
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (miniclientserver.log) def
+/fdir () def
+/ftail (miniclientserver.log) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/13/13) def
+/modtimestr (20:25:09) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+31.2 694.5 M (1:) s
+50.1 694.5 M
+(::::::::::::::) s
+31.2 683 M (2:) s
+50.1 683 M
+(miniserver.log) s
+31.2 671.5 M (3:) s
+50.1 671.5 M
+(::::::::::::::) s
+31.2 660 M (4:) s
+50.1 660 M
+(bash-2$ miniserver 8888) s
+31.2 648.5 M (5:) s
+50.1 648.5 M
+(miniserver: port 8888: waiting for client) s
+31.2 637 M (6:) s
+50.1 637 M
+(miniserver: port 8888: socket.accept OK) s
+31.2 625.5 M (7:) s
+50.1 625.5 M
+(Client sent: [1]Stdin read: This is the first message.) s
+31.2 614 M (8:) s
+50.1 614 M
+(Client sent: [2]Stdin read: Second message.) s
+31.2 602.5 M (9:) s
+50.1 602.5 M
+(Client sent: [3]Stdin read: THird message.) s
+24.9 591 M (10:) s
+50.1 591 M
+(miniserver: port 8888: finished) s
+24.9 579.5 M (11:) s
+50.1 579.5 M
+(bash-3$ exit) s
+24.9 568 M (12:) s
+50.1 568 M
+(exit) s
+24.9 556.5 M (13:) s
+24.9 545 M (14:) s
+50.1 545 M
+(::::::::::::::) s
+24.9 533.5 M (15:) s
+50.1 533.5 M
+(miniclient.log) s
+24.9 522 M (16:) s
+50.1 522 M
+(::::::::::::::) s
+24.9 510.5 M (17:) s
+50.1 510.5 M
+(bash-2$ miniclient 8888) s
+24.9 499 M (18:) s
+50.1 499 M
+(miniclient: localhost 8888: socket OK) s
+24.9 487.5 M (19:) s
+50.1 487.5 M
+(miniclient: This is the first message.) s
+24.9 476 M (20:) s
+50.1 476 M
+(Stdin read: This is the first message.) s
+24.9 464.5 M (21:) s
+50.1 464.5 M
+(Server said: Client sent: [1]Stdin read: This is the first message.) s
+24.9 453 M (22:) s
+50.1 453 M
+(miniclient: Second message.) s
+24.9 441.5 M (23:) s
+50.1 441.5 M
+(Stdin read: Second message.) s
+24.9 430 M (24:) s
+50.1 430 M
+(Server said: Client sent: [2]Stdin read: Second message.) s
+24.9 418.5 M (25:) s
+50.1 418.5 M
+(miniclient: THird message.) s
+24.9 407 M (26:) s
+50.1 407 M
+(Stdin read: THird message.) s
+24.9 395.5 M (27:) s
+50.1 395.5 M
+(Server said: Client sent: [3]Stdin read: THird message.) s
+24.9 384 M (28:) s
+50.1 384 M
+(miniclient: miniclient: localhost 8888: finished) s
+24.9 372.5 M (29:) s
+50.1 372.5 M
+(bash-3$ exit) s
+24.9 361 M (30:) s
+50.1 361 M
+(exit) s
+24.9 349.5 M (31:) s
+_R
+S
+%%Trailer
+%%Pages: 5
+%%DocumentNeededResources: font Times-Roman Courier-Bold Times-Bold 
+%%EOF

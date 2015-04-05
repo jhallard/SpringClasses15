@@ -1,0 +1,91 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2013.01.09.01.03.14;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.10.00.40.46;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: strstream2int.cpp,v 1.1 2012-04-09 17:40:46-07 - - $
+
+//
+// NAME
+//    str2int-stream - print out argv elements that are ints
+//
+// SYNOPSIS
+//    str2int-stream [string...]
+//
+// DESCRIPTION
+//    Prints out its arguments that are ints, and which are not.
+//    Fail1 if an int is not recognized.
+//    Fail2 if an int is recognized followed by junk.
+//
+
+#include <sstream>
+#include <iostream>
+
+using namespace std;
+
+int main (int argc, char **argv) {
+   cout << boolalpha;
+   for (int argi = 1; argi < argc; ++argi) {
+      string arg = argv[argi];
+      cout << "argv[" << argi << "] = \"" << arg << "\", ";
+      istringstream stream (arg);
+      int num = 0;
+      stream >> num;
+      if (stream.fail ()) {
+         cout << "Fail1: int not recognized." << endl;
+         continue;
+      }
+      string junk = "";
+      stream >> junk;
+      if (! stream.fail ()) {
+         cout << "Fail2: number = " << num
+              << ", trailing junk = \"" << junk << "\"" << endl;
+         continue;
+      }
+      cout << "Good: number = " << num << endl;
+   }
+}
+
+/*
+//TEST// runprogram.perl -x strstream2int.lis ./strstream2int \
+//TEST//       1024 56foobar -45 68.9 testing 007777 0x48 2147483648
+//TEST// mkpspdf strstream2int.ps strstream2int.cpp* strstream2int.lis
+*/
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strstream2int.cpp,v 1.4 2012-04-03 20:32:47-07 - - $
+d47 1
+a47 1
+//TEST// mkpspdf strstream2int.ps strstream2int.cpp strstream2int.lis
+@

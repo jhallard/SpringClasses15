@@ -1,0 +1,133 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2012.04.13.19.37.55;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id: strstack.cpp,v 1.24 2012-04-13 12:34:05-07 - - $
+
+//
+// strstack - show the linked list implementation of a stackk
+//
+
+#include <cstddef>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// strstack.h
+/////////////////////////////////////////////////////////////////
+
+class strstack {
+   private:
+      struct node {
+         string item;
+         node *link;
+      };
+      node *topnode;
+      int count;
+      strstack (const strstack &); // Disabled.
+      strstack &operator= (const strstack &); // Disabled.
+   public:
+      strstack();
+      ~strstack();
+      void push (const string &);
+      void pop();
+      string &top();
+      const string &top() const;
+      size_t size() const;
+      bool empty() const;
+};
+
+
+/////////////////////////////////////////////////////////////////
+// strstack.cpp
+/////////////////////////////////////////////////////////////////
+
+strstack::strstack(): topnode (0), count(0) { }
+
+strstack::~strstack() {
+   while (! empty()) pop();
+}
+
+void strstack::push (const string &item) {
+   node *tmp = new node();
+   tmp->item = item;
+   tmp->link = topnode;
+   topnode = tmp;
+   ++count;
+}
+
+void strstack::pop() {
+   if (empty()) throw out_of_range ("strstack::pop()");
+   node *tmp = topnode;
+   topnode = topnode->link;
+   delete tmp;
+   --count;
+}
+
+string &strstack::top() {
+   if (empty()) throw out_of_range ("strstack::top()");
+   return topnode->item;
+}
+
+const string &strstack::top() const {
+   if (empty()) throw out_of_range ("strstack::top()");
+   return topnode->item;
+}
+
+size_t strstack::size() const {
+   return count;
+}
+
+bool strstack::empty() const {
+   return count == 0;
+}
+
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+int main (int argc, char **argv) {
+
+   strstack stkstr;
+   for (int argi = 1; argi < argc; ++argi) {
+      stkstr.push (argv[argi]);
+   }
+   while (stkstr.size() > size_t (argc / 2)) {
+      cout << stkstr.top() << endl;
+      stkstr.pop();
+   }
+
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=strstack.out.grind \
+//TEST//       strstack this is some test data for the stack \
+//TEST//       >strstack.out 2>&1
+//TEST// mkpspdf strstack.ps strstack.cpp* strstack.out*
+*/
+
+@

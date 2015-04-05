@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting slicing.cpp
+slicing.cpp:
+     $Id: slicing.cpp,v 1.9 2015-02-10 17:51:17-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 slicing.cpp -o slicing -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f slicing.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished slicing.cpp

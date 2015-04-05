@@ -1,0 +1,471 @@
+head	1.18;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.18
+date	2014.05.29.22.28.06;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.05.29.20.36.42;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.05.29.20.34.07;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.29.20.33.41;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.29.20.22.58;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.29.20.22.45;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.29.20.01.50;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.29.20.01.22;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.29.19.53.40;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.29.19.43.53;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.29.19.42.26;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.29.19.41.30;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.29.19.35.35;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.29.19.34.19;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.29.19.33.51;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.29.19.33.05;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.29.19.32.29;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.29.19.05.37;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.18
+log
+@-
+@
+text
+@// $Id: cpbytes.cpp,v 1.17 2014-05-29 13:36:42-07 - - $
+
+//
+// NAME
+//    cpbytes - copy binary file
+//
+// SYNOPSIS
+//    cpbytes infile outfile
+//
+// DESCRIPTION
+//    Uses ifstream and ofstream to copy bytes from the infile
+//    to the outfile.
+//
+
+#include <cerrno>
+#include <cstring>
+#include <fstream>
+#include <ios>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+using namespace std;
+
+string execname;
+struct cpbytes_exit: public exception {};
+
+struct sys_errno: public runtime_error {
+   sys_errno (const string& obj):
+              runtime_error (obj + ": " + strerror (errno)){}
+};
+
+void usage (const string& execname) {
+   cerr << "Usage: " << execname << " infile outfile" << endl;
+   throw cpbytes_exit();
+}
+
+
+int main (int argc, char** argv) {
+   execname = argv[0];
+   int exit_status {EXIT_SUCCESS};
+   try {
+      if (argc != 3) usage (execname);
+      string infilename {argv[1]};
+      string outfilename {argv[2]};
+      ifstream infile {infilename};
+      if (infile.fail()) throw sys_errno (infilename);
+      ofstream outfile {outfilename};
+      if (outfile.fail()) throw sys_errno (outfilename);
+      while (not infile.eof()) {
+         char buffer[0x100];
+         infile.read (buffer, sizeof buffer);
+         outfile.write (buffer, infile.gcount());
+      }
+   }catch (sys_errno& error) {
+      cerr << execname << ": " << error.what() << endl;
+      exit_status = EXIT_FAILURE;
+   }catch (cpbytes_exit&) {
+      exit_status = EXIT_FAILURE;
+   }
+   return exit_status;
+}
+
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.16 2014-05-29 13:34:07-07 - - $
+d62 1
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.15 2014-05-29 13:33:41-07 - - $
+d37 1
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.14 2014-05-29 13:22:58-07 - - $
+d29 1
+a29 1
+              runtime_error (obj + strerror (errno)){}
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.13 2014-05-29 13:22:45-07 - - $
+d20 1
+d24 1
+d26 5
+a30 1
+string execname;
+a36 11
+template <typename Fstream>
+Stream openfile (Fstream& file, const string& filename) {
+   if (filename == "-") return;
+   file.open (filename);
+   if (file.ios::fail()) {
+         cerr << execname << ": " << filename << ": "
+              << strerror (errno) << endl;
+         throw cpbytes_exit();
+   }
+}
+
+d44 4
+a47 4
+      ifstream infile;
+      openfile (infile, infilename);
+      ofstream outfile;
+      openfile (outfile, outfilename);
+d53 3
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.9 2014-05-29 12:43:53-07 - - $
+d49 1
+a49 1
+      istream infile;
+d51 1
+a51 1
+      ostream outfile;
+@
+
+
+1.12
+log
+@-
+@
+text
+@d31 8
+a38 13
+template <typename Fstream, typename Stream>
+Stream openfile (Fstream& file, const string& filename,
+                 Stream default) {
+   Stream result;
+   if (filename == "-") result = default;
+   else {
+      file.open (filename);
+      if (file.ios::fail()) {
+            cerr << execname << ": " << filename << ": "
+                 << strerror (errno) << endl;
+            throw cpbytes_exit();
+      }
+      result = file;
+a39 2
+   cout << execname << ": open(" << filename << "): OK" << endl;
+   return result;
+d49 4
+a52 2
+      istream infile = openfile (ifstream(), infilename, cin);
+      ostream outfile = openfile (ofstream(), outfilename, cout);
+@
+
+
+1.11
+log
+@-
+@
+text
+@d31 1
+a31 1
+template <class Fstream, Stream>
+@
+
+
+1.10
+log
+@-
+@
+text
+@d8 1
+a8 1
+//    cpbytes srcfile dstfile
+d11 2
+a12 2
+//    Uses ifstream and ofstream to copy bytes from the srcfile
+//    to the dstfile.
+d27 1
+a27 1
+   cerr << "Usage: " << execname << " srcfile dstfile" << endl;
+d31 13
+a43 7
+template <class File>
+void openfile (File& file, const string& filename) {
+   file.open (filename);
+   if (file.ios::fail()) {
+         cerr << execname << ": " << filename << ": "
+              << strerror (errno) << endl;
+         throw cpbytes_exit();
+d46 1
+d54 5
+a58 7
+      string srcfilename {argv[1]};
+      string dstfilename {argv[2]};
+      ifstream srcfile;
+      openfile (srcfile, srcfilename);
+      ofstream dstfile;
+      openfile (dstfile, dstfilename);
+      while (not srcfile.eof()) {
+d60 2
+a61 2
+         srcfile.read (buffer, sizeof buffer);
+         dstfile.write (buffer, srcfile.gcount());
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.6 2014-05-29 12:35:35-07 - - $
+d53 1
+a53 1
+      for(;;) {
+d55 2
+a56 4
+         streamsize nbytes = srcfile.readsome (buffer, sizeof buffer);
+         cout << "nbytes=" << nbytes << endl;
+         if (srcfile.ios::eof()) break;
+         dstfile.write (buffer, nbytes);
+@
+
+
+1.8
+log
+@-
+@
+text
+@d56 2
+a57 1
+         if (srcfile.ios::eofbit) break;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d48 1
+a48 1
+      string dstfilename {argv[1]};
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.5 2014-05-29 12:34:19-07 - - $
+d39 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.4 2014-05-29 12:33:51-07 - - $
+d34 1
+a34 1
+   if (file.ios::fail) {
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.3 2014-05-29 12:33:05-07 - - $
+d19 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.2 2014-05-29 12:32:29-07 - - $
+d17 1
+a17 1
+#include <iomanip>
+a18 3
+#include <iostream>
+#include <istream>
+#include <ostream>
+d22 1
+a22 1
+struct cpbytes_exit: public exception {}
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: cpbytes.cpp,v 1.1 2014-05-29 12:05:37-07 - - $
+d15 2
+d26 1
+d44 1
+a44 1
+   string execname {argv[0]};
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d6 56
+@

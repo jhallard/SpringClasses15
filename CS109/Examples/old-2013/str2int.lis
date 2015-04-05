@@ -1,0 +1,41 @@
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+log: str2int.log
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+     1	Script  : /afs/cats.ucsc.edu/courses/cmps012b-wm/bin/runprogram.perl
+     2	limit c :    0 max core file size (KB)
+     3	limit f : 4194303 max output file size (KB)
+     4	limit t : 4294967295 max CPU time (sec)
+     5	stdin   : /dev/null
+     6	stdout  : str2int.out
+     7	stderr  : str2int.err
+     8	log     : str2int.log
+     9	listing : str2int.lis
+    10	Command : ./str2int 1024 56foobar -45 68.9 testing 007777 0x48 2147483648
+    11	starting: pid 20330: 19:43:44.00
+    12	finished: pid 20330: 19:43:44.00, real 0.00, user 0.00, sys 0.00
+    13	pstatus: 0x0000 EXIT STATUS = 0
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stdin: /dev/null
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stdout: str2int.out
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+     1	"1024" = 1024
+     2	"56foobar": invalid int: 56foobar
+     3	"-45" = -45
+     4	"68.9": invalid int: 68.9
+     5	"testing": invalid int: testing
+     6	"007777" = 7777
+     7	"0x48": invalid int: 0x48
+     8	"2147483648" = -2147483648
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stderr: str2int.err
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+

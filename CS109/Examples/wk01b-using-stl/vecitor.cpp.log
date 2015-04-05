@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting vecitor.cpp
+vecitor.cpp:
+     $Id: vecitor.cpp,v 1.15 2015-03-31 18:00:22-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 vecitor.cpp -o vecitor -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f vecitor.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished vecitor.cpp

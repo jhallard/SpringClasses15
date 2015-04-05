@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting arrayptr.cpp
+arrayptr.cpp:
+     $Id: arrayptr.cpp,v 1.4 2015-01-07 15:50:18-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 arrayptr.cpp -o arrayptr -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f arrayptr.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished arrayptr.cpp

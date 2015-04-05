@@ -1,0 +1,120 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.4
+date	2014.04.23.01.58.28;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.04.23.01.57.23;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.04.23.01.56.21;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.10.04.14.54;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@// $Id: vectorleak.cpp,v 1.3 2014-04-22 18:57:23-07 - - $
+
+//
+// Illustrate how leaks may happen when a vector of pointers is
+// created.  If the vector is not explicitly cleared, when it is
+// deleted, the objects it access are not deleted.
+//
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main (int argc, char **argv) {
+   vector<string*> vs;
+   for (int index = 1; index < argc; ++index) {
+      vs.push_back (new string (argv[index]));
+   }
+   auto begin = vs.begin();
+   for (auto itor = begin; itor != vs.end(); ++itor) {
+      cout << itor - begin << ": " << *itor << "->" << **itor << endl;
+   }
+   return 0;
+}
+
+/*
+//TEST// alias grind='valgrind --leak-check=full --show-reachable=yes'
+//TEST// grind vectorleak these are some arguments to check on leak \
+//TEST//       >vectorleak.out 2>&1
+//TEST// mkpspdf vectorleak.ps vectorleak.cpp* vectorleak.out
+*/
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectorleak.cpp,v 1.2 2014-04-22 18:56:21-07 - - $
+d19 2
+a20 1
+   for (auto itor = vs.begin(); itor != vs.end(); ++itor) {
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectorleak.cpp,v 1.1 2012-05-09 21:14:54-07 - - $
+d19 1
+a19 4
+   typedef vector<string*>::const_iterator vsconitor;
+   const vsconitor begin = vs.begin();
+   const vsconitor end = vs.end();
+   for (vsconitor itor = begin; itor != end; ++itor) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectorleak.cpp,v 1.6 2012-05-03 16:17:44-07 - - $
+d29 2
+a30 3
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=vectorleak.out.grind \
+//TEST//       vectorleak these are some arguments to check on leak \
+d32 1
+a32 1
+//TEST// mkpspdf vectorleak.ps vectorleak.cpp* vectorleak.out*
+@

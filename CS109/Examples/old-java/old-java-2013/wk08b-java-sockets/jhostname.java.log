@@ -1,0 +1,7 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting jhostname.java
+jhostname.java: $Id: jhostname.java,v 1.1 2012-05-29 17:08:56-07 - - $
+javac -Xlint jhostname.java
+jar cfm jhostname Manifest jhostname.class
+chmod +x jhostname
+rm -f jhostname.class
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished jhostname.java

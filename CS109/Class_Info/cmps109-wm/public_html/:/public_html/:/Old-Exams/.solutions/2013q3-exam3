@@ -1,0 +1,176 @@
+$Id: 2013q3-test3,v 1.3 2013-08-28 16:51:09-07 - - $
+Answers to 2013q3-test3, page 1
+
+________________________________________________________________________
+Question 1. [1]
+
+#include <iostream>
+using namespace std;
+int main() { // argc, argv OK too, but not necessary if unused
+   cout << "Hello, World!" << endl;
+   return 0;
+}
+
+________________________________________________________________________
+Question 2. [2]
+
+template <typename biitor_t>
+void reverse (biitor_t begin, biitor_t end) {
+   while (begin != end && begin != --end) {
+      swap (*begin, *end);
+      ++begin;
+   }
+}
+
+________________________________________________________________________
+Question 3. [2]
+
+template <typename Iter>
+void print (const Iter &begin, const Iter &end) {
+   for (auto i = begin; itor != end; ++itor) {
+      if (i != begin) cout << " ";
+      cout << *i;
+   }
+}
+
+________________________________________________________________________
+Question 4. [2]
+
+template <typename T>
+void swap (T &a, T &b) {
+   T t = std::move(a);
+   a = std::move(b);
+   b = std::move(t);
+}
+
+________________________________________________________________________
+Question 5. [3]
+
+template <typename Iiter, typename Oiter>
+void copy (Iiter ini, const Iter &end, Oiter outi) {
+   while (ini != end) *outi++ = *ini++;
+}
+
+
+Answers to 2013q3-test3, page 2
+
+________________________________________________________________________
+Question 6. [1]
+
+struct accc: unary_function <double, void> {
+   double &sum;
+   accc (double &sum): sum (sum) {}
+   void operator() (double num) { sum += num; }
+};
+
+________________________________________________________________________
+Question 7(a). [2]
+
+class complex {
+   double real;
+   double imag;
+public:
+   complex (double r = 0, double i = 0);
+   friend ostream &operator<< (ostream &, const complex&);
+   complex operator+ (complex);
+};
+
+________________________________________________________________________
+Question 7(b)(i). [1]
+
+complex::complex (double r, double i): real(r), imag(i) {}
+
+________________________________________________________________________
+Question 7(b)(ii). [1]
+
+complex complex::operator+ (complex t) {
+   return complex (real + t.real, imag + t.imag);
+}
+
+________________________________________________________________________
+Question 7(b)(iii). [1]
+
+ostream &operator<< (ostream &out, const complex& c) {
+   out << "(" << c.real << "," << c.imag << ")";
+   return out;
+}
+
+________________________________________________________________________
+Question 8(a). [2]
+
+class say {
+   String s;
+   say (String t) { s = t; }
+   public void run() {
+      out.printf ("%s%n", s);
+   }
+}
+
+________________________________________________________________________
+Question 8(b). [2]
+
+void main (String[] args) {
+   (new Thread (new say ("Hello"))).start();
+   (new Thread (new say ("World"))).start();
+}
+
+
+Answers to 2013q3-test3, page 3
+
+[2] universal, inheritance
+    universal, generic
+    ad hoc, overloading
+    ad hoc, conversion
+
+ 1.    (C) Resource Acquisition Is Initialization
+
+ 2.    (B) cyclic graph
+
+ 3.    (D) vector<int> v;
+
+ 4.    (A) delete p;
+
+ 5.    (D) virtual
+
+ 6.    (C) overrides
+
+ 7.    (D) $ O ( m n ) $
+
+ 8.    (D) the time the function is called.
+
+ 9.    (C) operator->
+
+10.    (A) daemon
+
+
+Answers to 2013q3-test3, page 4
+
+[2] class foo {
+       foo();
+       foo (const foo &);
+       foo (foo &&);
+       foo &operator= (const foo &);
+       foo &operator= (foo &&);
+       ~foo();
+    };
+
+ 1.    (C) &v[0]
+
+ 2.    (C) ostream&, const foo&
+
+ 3.    (C) reinterpret_cast
+
+ 4.    (C) (x) = static; (y) = class
+
+ 5.    (A) run
+
+ 6.    (A) accept
+
+ 7.    (C) race condition
+
+ 8.    (C) lower left
+
+ 9.    (A) can not be instantiated.
+
+10.    (A) $ O ( 1  ) $
+

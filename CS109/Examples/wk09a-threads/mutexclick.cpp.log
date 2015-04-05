@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting mutexclick.cpp
+mutexclick.cpp:
+     $Id: mutexclick.cpp,v 1.5 2014-05-30 22:46:35-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 mutexclick.cpp -o mutexclick -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f mutexclick.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished mutexclick.cpp

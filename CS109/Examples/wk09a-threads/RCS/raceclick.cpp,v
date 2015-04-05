@@ -1,0 +1,351 @@
+head	1.16;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.16
+date	2014.05.31.05.45.27;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.31.05.45.10;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.31.05.44.49;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.31.05.40.08;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.31.05.39.36;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.31.05.37.09;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.31.05.36.27;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.31.05.35.58;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.31.02.00.02;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.31.01.59.49;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.31.01.52.21;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.31.01.29.23;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.31.01.28.48;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.31.01.27.17;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.31.01.26.31;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.31.01.26.15;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.16
+log
+@-
+@
+text
+@// $Id: raceclick.cpp,v 1.15 2014-05-30 22:45:10-07 - - $
+
+// Hello to threads.
+
+#include <iostream>
+#include <thread>
+#include <vector>
+using namespace std;
+
+constexpr size_t LOOPS = 1000000;
+
+void racer (size_t id, size_t* counter) {
+   cout << "racer " << id << " looping " << LOOPS << " times" << endl;
+   for (size_t i = 0; i < LOOPS; ++i) ++*counter;
+   cout << "racer " << id << " finished counter " << *counter << endl;
+}
+
+int main () {
+   size_t counter {0};
+   cout << "main starting" << endl;
+   vector<thread> vecthr;
+   for (size_t i = 0; i < 4; ++i) {
+      vecthr.push_back (thread (racer, i, &counter));
+   }
+   for (auto& t: vecthr) t.join();
+   cout << "main finished counter " << counter << endl;
+   return 0;
+}
+
+//TEST// alias TIME='/usr/bin/time -f "%E elapsed, %S kernel, %U user"'
+//TEST// for i in 1 2 3 4
+//TEST// do
+//TEST//    TIME raceclick >raceclick.out$i 2>&1
+//TEST// done
+//TEST// more raceclick.out* >raceclick.lis </dev/null
+//TEST// mkpspdf raceclick.ps raceclick.cpp* raceclick.lis
+
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.14 2014-05-30 22:44:49-07 - - $
+d33 1
+a33 1
+//TEST//    TIME realraceclick >raceclick.out$i 2>&1
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.13 2014-05-30 22:40:08-07 - - $
+d30 1
+a30 1
+//TEST// alias TIME="/usr/bin/time -f "%E elapsed, %S kernel, %U user"
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.12 2014-05-30 22:39:36-07 - - $
+d30 5
+a34 2
+//TEST// for i in 1 2 3 4; do
+//TEST// time raceclick >raceclick.out$i 2>&1; done
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.11 2014-05-30 22:37:09-07 - - $
+d31 1
+a31 1
+//TEST// /usr/bin/time raceclick >raceclick.out$i 2>&1; done
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.10 2014-05-30 22:36:27-07 - - $
+d30 2
+a31 1
+//TEST// for i in 1 2 3 4; do raceclick >raceclick.out$i; done
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.9 2014-05-30 22:35:58-07 - - $
+d22 1
+a22 1
+   for (size_t i = 0; i < 5; ++i) {
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.8 2014-05-30 19:00:02-07 - - $
+d30 1
+a30 1
+//TEST// for i in 1 2 3 4; do raceclick >raceclick.out1; done
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.7 2014-05-30 18:59:49-07 - - $
+d30 4
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.6 2014-05-30 18:52:21-07 - - $
+d7 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.3 2014-05-30 18:27:17-07 - - $
+d20 5
+a24 4
+   thread t1 (racer, 1LU, &counter);
+   thread t2 (racer, 2LU, &counter);
+   t1.join();
+   t2.join();
+@
+
+
+1.5
+log
+@-
+@
+text
+@d9 6
+a14 4
+void racer (size_t id, size_t& counter) {
+   cout << "racer " << id << " starting counter " << counter << endl;
+   for (size_t i = 0; i < 1000000; ++i) ++counter;
+   cout << "racer " << id << " finished counter " << counter << endl;
+d20 5
+a24 3
+   thread t1 (racer, 1LU, counter);
+   thread t2 (racer, 2LU, counter);
+   cout << "main finished" << endl;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d18 2
+a19 2
+   thread (racer, 1LU, counter) t1;
+   thread (racer, 2LU, counter) t2;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.2 2014-05-30 18:26:31-07 - - $
+d18 2
+a19 2
+   thread (racer, 1, counter) t1;
+   thread (racer, 2, counter) t2;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.1 2014-05-30 18:26:15-07 - - $
+d18 2
+a19 2
+   thread (racer, 1, counter);
+   thread (racer, 2, counter);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hellothread.cpp,v 1.4 2014-05-30 18:11:53-07 - - $
+d18 2
+a19 2
+   thread (racer (1, counter));
+   thread (racer (2, counter));
+@

@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting astring.cpp
+astring.cpp:
+     $Id: astring.cpp,v 1.30 2015-01-26 14:28:34-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 astring.cpp -o astring -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f astring.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished astring.cpp

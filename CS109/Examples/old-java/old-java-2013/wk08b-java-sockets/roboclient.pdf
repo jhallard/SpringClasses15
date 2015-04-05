@@ -1,0 +1,323 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/29/12)Tj
+-0.659766 -12.8004 Td
+(20:56:50)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 264.127 736.5 Tm
+(roboclient.java)Tj
+-88.7719 18 Td
+($cmps109-wm/Examples/wk09a-java-sockets/)Tj
+/R10 10 Tf
+-107.355 -35.5 Td
+[(1:)-600(// $Id: roboclient.java,v 1.5 2012-05-29 20:56:50-07 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(//)]TJ
+T*[(4:)-600(// Roboclient hostname port username delaysec cycles message message...)]TJ
+T*[(5:)-600(//)]TJ
+T*[(6:)-600(// The roboclient connects to hostname:port with the username.)]TJ
+T*[(7:)-600(// Then it writes messages given by the trailing words in args)]TJ
+T*[(8:)-600(// the number of cycles followed by a certain delay in seconds.)]TJ
+T*[(9:)-600(// Then it quits.  Useful for testing the server.)]TJ
+-6 -11 Td
+[(10:)-600(//)]TJ
+(11:)'
+T*[(12:)-600(import java.io.*;)]TJ
+T*[(13:)-600(import java.net.*;)]TJ
+T*[(14:)-600(import java.util.*;)]TJ
+T*[(15:)-600(import static java.lang.System.*;)]TJ
+(16:)'
+T*[(17:)-600(class roboclient {)]TJ
+(18:)'
+T*[(19:)-600(   static void quit \(String format, Object... params\) {)]TJ
+T*[(20:)-600(      err.printf \(format, params\);)]TJ
+T*[(21:)-600(      exit \(1\);)]TJ
+T*[(22:)-600(   })]TJ
+(23:)'
+T*[(24:)-600(   static String ident \(options opts\) {)]TJ
+T*[(25:)-600(      return String.format \("%s: %s %d", opts.progname,)]TJ
+T*[(26:)-600(                            opts.hostname, opts.portnumber\);)]TJ
+T*[(27:)-600(   })]TJ
+(28:)'
+T*[(29:)-600(   static class options {)]TJ
+T*[(30:)-600(      final String progname = "roboclient";)]TJ
+T*[(31:)-600(      String hostname;)]TJ
+T*[(32:)-600(      int portnumber;)]TJ
+T*[(33:)-600(      String username;)]TJ
+T*[(34:)-600(      long delaysec;)]TJ
+T*[(35:)-600(      int cycles;)]TJ
+T*[(36:)-600(      String robomessage;)]TJ
+T*[(37:)-600(      options \(String[] args\) {)]TJ
+T*[(38:)-600(         try {)]TJ
+T*[(39:)-600(            if \(args.length < 5\) throw new NumberFormatException \(\);)]TJ
+T*[(40:)-600(            hostname = args[0];)]TJ
+T*[(41:)-600(            portnumber = Integer.parseInt \(args[1]\);)]TJ
+T*[(42:)-600(            username = args[2];)]TJ
+T*[(43:)-600(            delaysec = Long.parseLong \(args[3]\);)]TJ
+T*[(44:)-600(            cycles = Integer.parseInt \(args[4]\);)]TJ
+T*[(45:)-600(            robomessage = "roboclient";)]TJ
+T*[(46:)-600(            for \(String arg: args\) robomessage += " " + arg;)]TJ
+T*[(47:)-600(         }catch \(NumberFormatException exn\) {)]TJ
+T*[(48:)-600(            quit \("Usage: %s hostname port username delaysec cycles ")]TJ
+T*[(49:)-600(                + "message message%n", progname\);)]TJ
+T*[(50:)-600(         })]TJ
+T*[(51:)-600(      })]TJ
+T*[(52:)-600(   })]TJ
+(53:)'
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+2975
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/29/12)Tj
+-0.659766 -12.8004 Td
+(20:56:50)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 264.127 736.5 Tm
+(roboclient.java)Tj
+-88.7719 18 Td
+($cmps109-wm/Examples/wk09a-java-sockets/)Tj
+/R10 10 Tf
+-113.355 -35.5 Td
+(54:)Tj
+11 TL
+T*[(55:)-600(   static class reader implements Runnable {)]TJ
+T*[(56:)-600(      Socket socket;)]TJ
+T*[(57:)-600(      Scanner scanner;)]TJ
+T*[(58:)-600(      reader \(Socket _socket, Scanner _scanner\) {)]TJ
+T*[(59:)-600(         scanner = _scanner;)]TJ
+T*[(60:)-600(         socket = _socket;)]TJ
+T*[(61:)-600(      })]TJ
+T*[(62:)-600(      public void run \(\) {)]TJ
+T*[(63:)-600(         while \(! socket.isInputShutdown\(\) && scanner.hasNextLine \(\)\) {)]TJ
+T*[(64:)-600(            out.printf \("%s%n", scanner.nextLine \(\)\);)]TJ
+T*[(65:)-600(         })]TJ
+T*[(66:)-600(         scanner.close \(\);)]TJ
+T*[(67:)-600(      })]TJ
+T*[(68:)-600(   })]TJ
+(69:)'
+T*[(70:)-600(   static class writer implements Runnable {)]TJ
+T*[(71:)-600(      Socket socket;)]TJ
+T*[(72:)-600(      options opts;)]TJ
+T*[(73:)-600(      PrintWriter writer;)]TJ
+T*[(74:)-600(      writer \(Socket _socket, options _opts, PrintWriter _writer\) {)]TJ
+T*[(75:)-600(         socket = _socket;)]TJ
+T*[(76:)-600(         opts = _opts;)]TJ
+T*[(77:)-600(         writer = _writer;)]TJ
+T*[(78:)-600(      })]TJ
+T*[(79:)-600(      public void run \(\) {)]TJ
+T*[(80:)-600(         writer.printf \("%s%n", opts.username\);)]TJ
+T*[(81:)-600(         writer.flush \(\);)]TJ
+T*[(82:)-600(         for \(int count = 0; count < opts.cycles; ++count\) {)]TJ
+T*[(83:)-600(            if \(socket.isOutputShutdown\(\)\) break;)]TJ
+T*[(84:)-600(            try {)]TJ
+T*[(85:)-600(                Thread.currentThread \(\).sleep \(opts.delaysec * 1000\);)]TJ
+T*[(86:)-600(            }catch \(InterruptedException error\) {)]TJ
+T*[(87:)-600(            })]TJ
+T*[(88:)-600(            writer.printf \("%s%n", opts.robomessage\);)]TJ
+T*[(89:)-600(            writer.flush \(\);)]TJ
+T*[(90:)-600(         })]TJ
+T*[(91:)-600(         writer.close \(\);)]TJ
+T*[(92:)-600(      })]TJ
+T*[(93:)-600(   })]TJ
+(94:)'
+T*[(95:)-600(   public static void main \(String[] args\) {)]TJ
+T*[(96:)-600(      Scanner stdin = new Scanner \(System.in\);)]TJ
+T*[(97:)-600(      options opts = new options \(args\);)]TJ
+T*[(98:)-600(      try {)]TJ
+T*[(99:)-600(         Socket socket = new Socket \(opts.hostname, opts.portnumber\);)]TJ
+-6 -11 Td
+[(100:)-600(         out.printf \("%s: socket OK%n", ident \(opts\)\);)]TJ
+T*[(101:)-600(         Thread reading = new Thread \(new reader \(socket,)]TJ
+T*[(102:)-600(                          new Scanner \(socket.getInputStream \(\)\)\)\);)]TJ
+T*[(103:)-600(         Thread writing = new Thread \(new writer \(socket, opts,)]TJ
+T*[(104:)-600(                          new PrintWriter \(socket.getOutputStream \(\)\)\)\);)]TJ
+T*[(105:)-600(         reading.start \(\);)]TJ
+T*[(106:)-600(         writing.start \(\);)]TJ
+T*[(107:)-600(      }catch \(IOException exn\) {)]TJ
+T*[(108:)-600(         quit \("%s: %s%n", ident \(opts\), exn\);)]TJ
+T*[(109:)-600(      }catch \(IllegalArgumentException exn\) {)]TJ
+T*[(110:)-600(         quit \("%s: %s%n", ident \(opts\), exn\);)]TJ
+T*[(111:)-600(      })]TJ
+T*[(112:)-600(   })]TJ
+(113:)'
+T*[(114:)-600(})]TJ
+(115:)'
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+3585
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+] /Count 2
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20120529210005)
+/ModDate(D:20120529210005)>>endobj
+xref
+0 17
+0000000000 65535 f 
+0000007046 00000 n 
+0000007554 00000 n 
+0000006980 00000 n 
+0000006712 00000 n 
+0000000009 00000 n 
+0000003034 00000 n 
+0000007352 00000 n 
+0000007223 00000 n 
+0000007421 00000 n 
+0000007289 00000 n 
+0000007486 00000 n 
+0000007094 00000 n 
+0000006845 00000 n 
+0000003054 00000 n 
+0000006691 00000 n 
+0000007164 00000 n 
+trailer
+<< /Size 17 /Root 1 0 R /Info 2 0 R
+/ID [<AE4A6284333631831F137E34528183F3><AE4A6284333631831F137E34528183F3>]
+>>
+startxref
+7665
+%%EOF

@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting for_loop.cpp
+for_loop.cpp:
+     $Id: for_loop.cpp,v 1.24 2014-06-27 13:08:31-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 for_loop.cpp -o for_loop -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f for_loop.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished for_loop.cpp

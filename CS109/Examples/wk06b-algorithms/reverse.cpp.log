@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting reverse.cpp
+reverse.cpp:
+     $Id: reverse.cpp,v 1.31 2015-02-05 19:10:01-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 reverse.cpp -o reverse -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f reverse.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished reverse.cpp

@@ -1,0 +1,56 @@
+::::::::::::::
+mutexclick.out1
+::::::::::::::
+main starting
+racer 0 looping 1000000 times
+racer 1 looping 1000000 times
+racer racer 23 looping 1000000 looping 1000000 times
+ times
+racer 1 finished counter 3527625
+racer 3 finished counter 3557958
+racer 0 finished counter 3968156
+racer 2 finished counter 4000000
+main finished counter 4000000
+0:01.28 elapsed, 3.34 kernel, 1.24 user
+::::::::::::::
+mutexclick.out2
+::::::::::::::
+main starting
+racer 0 looping 1000000 times
+racer 1 looping 1000000 times
+racer 2 looping 1000000 times
+racer 3 looping 1000000 times
+racer 1 finished counter 3851827
+racer 2 finished counter 3903853
+racer 3 finished counter 3944624
+racer 0 finished counter 4000000
+main finished counter 4000000
+0:01.58 elapsed, 4.29 kernel, 1.43 user
+::::::::::::::
+mutexclick.out3
+::::::::::::::
+main starting
+racer 0 looping 1000000 times
+racer 1 looping 1000000 times
+racer 2 looping 1000000 times
+racer 3 looping 1000000 times
+racer 1 finished counter 3829866
+racer 0 finished counter 3977342
+racer 2 finished counter 3983534
+racer 3 finished counter 4000000
+main finished counter 4000000
+0:02.56 elapsed, 7.30 kernel, 1.90 user
+::::::::::::::
+mutexclick.out4
+::::::::::::::
+main starting
+racer 0 looping 1000000 times
+racer 1 looping 1000000 times
+racer 2 looping 1000000 times
+racer 3 looping 1000000 times
+racer 1 finished counter 3569648
+racer 2 finished counter 3880671
+racer 3 finished counter 3919142
+racer 0 finished counter 4000000
+main finished counter 4000000
+0:01.61 elapsed, 4.37 kernel, 1.48 user

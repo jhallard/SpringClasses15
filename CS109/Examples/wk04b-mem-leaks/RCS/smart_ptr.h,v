@@ -1,0 +1,72 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.1
+date	2013.07.23.01.17.30;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+template <typename T>
+class smart_ptr {
+   private:
+      T *ptr;
+      unsigned *count;
+      incr() { ++*count; }
+      decr() { if (--*count == 0) { delete ptr; delete count; }}
+      static unsigned *nil() {
+         static unsigned count = 1;
+         return &count;
+      }
+   public:
+      smart_ptr(): ptr(NULL), count(nil()) {}
+      smart_ptr (const smart_ptr<T>& o): ptr(o.ptr), count(o.count) {
+         incr();
+      }
+      smart_ptr<T>& operator= (const smart_ptr<T>& o) {
+         if (ptr == o.ptr) return *this;
+         decr();
+         this->ptr = o.ptr;
+         this->count = o.count;
+         incr();
+         return *this;
+      }
+      ~smart_ptr() { decr(); }
+      smart_ptr (smart_ptr<T>&& o): ptr(o.ptr), count(o.count) {
+         o.ptr = NULL;
+         o.count = nil();
+      }
+      smart_ptr<T>& operator= (smart_ptr<T>&& o) {
+         if (ptr == o.ptr) return *this;
+         ptr = o.ptr;
+         count = o.count;
+         o.ptr = NULL;
+         o.count = nil();
+         return *this;
+      }
+      T& operator*() { return *ptr; }
+      T* operator->() { return ptr; }
+      const T& operator*() const { return *ptr; }
+      const T* operator->() const { return ptr; }
+      bool operator== (const smart_ptr<T>& o) { return ptr == o.ptr; }
+      bool operator< (const smart_ptr<T>& o) { return ptr < o.ptr; }
+      explicit operator bool() const { return ptr != NULL; }
+      long users() const { return count; }
+      bool unique() const { return users() == 1; }
+}
+@

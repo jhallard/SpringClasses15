@@ -1,0 +1,120 @@
+$Id: 2014q2-test1,v 1.1 2014-05-02 12:18:33-07 - - $
+Answers to 2013q3-test1, page 1
+
+________________________________________________________________________
+Question 1.
+
+(a) foo();                       // default ctor
+    foo (const foo&);            // copy ctor
+    foo& operator= (const foo&); // copy operator=
+    ~foo();                      // dtor
+
+(b) foo (foo&&);                 // move ctor
+    foo& operator= (foo&&);      // move operator=
+
+________________________________________________________________________
+Question 2.
+
+for (const auto& i = m.cbegin(); i != m.end(); ++i) {
+   cout << i->first << " = " << i->second << endl;
+}
+
+________________________________________________________________________
+Question 3.
+
+for (const auto& i: m) cout << i.first << " = " << i.second << endl;
+
+________________________________________________________________________
+Question 4.
+
+template <typename container>
+void reverse (container& con) {
+   auto b = v.begin();
+   auto e = v.end();
+   while (b != e) {
+      --e;
+      if (b == e) break;
+      swap (*b, *e);
+      ++b;
+   }
+}
+
+
+Answers to 2013q3-test1, page 2
+
+________________________________________________________________________
+Question 5.
+
+template <typename T>
+void split (const T& p, T& first, T& second) {
+   bool swing = true;
+   for (const auto& i: p) {
+      if (swing) first.push_back (i);
+            else second.push_back (i);
+      swing = not swing;
+   }
+}
+
+________________________________________________________________________
+Question 6.
+
+quux& quux::opeator= (const quux& that) {
+   if (this == &that) return *this;
+   i = that.i;
+   s = that.s;
+   if (vip == nullptr) vip = new vector<int> (that->vip);
+                  else *vip = that->vip;
+   if (ct == nullptr) ct = new counter (that->ct);
+                 else *ct = *(that->ct);
+   return *this;
+}
+
+________________________________________________________________________
+Question 7.
+
+template <typename T>
+class stack {
+   private:
+      vector<T> data;
+      typedef typename vector<value_type>::const_reverse_iterator
+              const_iterator;
+   public:
+      void push (const T& i) { data.push_back(i); }
+      void pop () { data.pop_back(); }
+      T top() { return data.back(); }
+      size_t size() { return data.size(); }
+      bool empty() { return data.empty(); }
+      const_iterator begin() { return data.crbegin(); }
+      const_iterator end() { return data.crend(); }
+}
+
+________________________________________________________________________
+Question 8.
+
+
+Answers to 2013q3-test1, page 3
+
+ 1.     (D) vector
+
+ 2.     (C) shared_ptr
+
+ 3.     (C) ostream& operator<< (ostream&, const foo&);
+
+ 4.     (B) s != t and &s == &t
+
+ 5.     (A) pointer
+
+ 6.     (B) void update (foo&);
+
+ 7.     (D) this->x
+
+ 8.     (D) foo operator-- (int);
+
+ 9.     (B) memory leak
+
+10.     (D) v[10]
+
+11.     (B) map
+
+12.     (B) catch (exn &e)
+

@@ -1,0 +1,31 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2011.01.05.05.09.38;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@#!/bin/sh
+# $Id: mk,v 1.2 2011-01-04 20:42:58-08 - - $
+if [ $# == 0 ] ; then echo Usage: $0 program... 1>&2; exit 1; fi
+for prog in $*
+do
+   mkc $1
+   perl -ne 'print if s|//TEST//||' $1 | sh -x
+done
+@

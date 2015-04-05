@@ -1,0 +1,7 @@
+vector<string*> = 0x4c2b058
+string* = 0x4c2b0c8 -> shared_ptr
+string* = 0x4c2b1e8 -> foo
+string* = 0x4c2b308 -> bar
+string* = 0x4c2b448 -> baz
+string* = 0x4c2b508 -> qux
+We are done.

@@ -1,0 +1,9 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting raceclick.java
+* raceclick.java: $Id: raceclick.java,v 1.2 2012-05-23 21:31:15-07 -
+- $
+* javac -Xlint raceclick.java
+* jar cfm raceclick Manifest raceclick$counter.class
+raceclick$racer.class raceclick.class
+* chmod +x raceclick
+* rm -f raceclick$counter.class raceclick$racer.class raceclick.class
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished raceclick.java

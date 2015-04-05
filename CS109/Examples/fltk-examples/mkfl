@@ -1,0 +1,6 @@
+#!/bin/sh
+# $Id$
+export FLTK_DIR=/afs/cats.ucsc.edu/courses/cmps109-wm/usr/fltk
+export CPLUS_INCLUDE_PATH=$FLTK_DIR/include
+export LIBRARY_PATH=$FLTK_DIR/lib
+mkc -lfltk -lfltk_gl -lX11 -ldl $*

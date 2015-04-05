@@ -1,0 +1,198 @@
+
+
+
+SEND(2)                   SYSTEM CALLS                    SEND(2)
+
+
+
+NAME
+     send, sendto, sendmsg - send a message from a socket
+
+SYNOPSIS
+     #include <sys/types.h>
+     #include <sys/socket.h>
+
+     int send(s, msg, len, flags)
+     int s;
+     char *msg;
+     int len, flags;
+
+     int sendto(s, msg, len, flags, to, tolen)
+     int s;
+     char *msg;
+     int len, flags;
+     struct sockaddr *to;
+     int tolen;
+
+     int sendmsg(s, msg, flags)
+     int s;
+     struct msghdr *msg;
+     int flags;
+
+DESCRIPTION
+     s is a socket created with socket(2).  send(), sendto(), and
+     sendmsg()  are used to transmit a message to another socket.
+     send() may be used only when the socket is  in  a  connected
+     state, while sendto() and sendmsg() may be used at any time.
+
+     The address of the target is given by to with tolen specify-
+     ing  its  size.   The length of the message is given by len.
+     If the message is too long to pass  atomically  through  the
+     underlying  protocol,  then  the error EMSGSIZE is returned,
+     and the message is not transmitted.
+
+     No indication of failure to deliver is implicit in a send().
+     Return values of -1 indicate some locally detected errors.
+
+     If no buffer space is available at the socket  to  hold  the
+     message  to  be  transmitted,  then  send() normally blocks,
+     unless the socket has been placed in non-blocking I/O  mode.
+     The  select(2) call may be used to determine when it is pos-
+     sible to send more data.
+
+     If  the  process  calling  send(),  sendmsg()  or   sendto()
+     receives  a  signal before any data are buffered to be sent,
+     the system call is  restarted  unless  the  calling  process
+     explicitly  set  the  signal  to interrupt these calls using
+     sigvec() or sigaction() (see the discussions of SV_INTERRUPT
+     on sigvec(2), and SA_INTERRUPT on sigaction(3V)).
+
+
+
+
+Sun Release 4.1   Last change: 21 January 1990                  1
+
+
+
+
+
+
+SEND(2)                   SYSTEM CALLS                    SEND(2)
+
+
+
+     The flags parameter is formed by ORing one or  more  of  the
+     following:
+
+     MSG_OOB             Send  ``out-of-band''  data  on  sockets
+                         that  support this notion.  The underly-
+                         ing protocol must  also  support  ``out-
+                         of-band''    data.     Currently,   only
+                         SOCK_STREAM  sockets  created   in   the
+                         AF_INET  address  family support out-of-
+                         band data.
+
+     MSG_DONTROUTE       The SO_DONTROUTE option is turned on for
+                         the  duration of the operation.  This is
+                         usually used only by diagnostic or rout-
+                         ing programs.
+
+     See recv(2) for a description of the msghdr structure.
+
+RETURN VALUES
+     On success, these functions return the number of bytes sent.
+     On  failure,  they  return  -1 and set errno to indicate the
+     error.
+
+ERRORS
+     EBADF               s is an invalid descriptor.
+
+     EFAULT              The data was specified to be sent  to  a
+                         non-existent  or  protected  part of the
+                         process address space.
+
+     EINTR               The calling process  received  a  signal
+                         before  any data could be buffered to be
+                         sent, and the signal was set  to  inter-
+                         rupt the system call.
+
+     EINVAL              len is not the size of a  valid  address
+                         for the specified address family.
+
+     EMSGSIZE            The socket requires that message be sent
+                         atomically,  and the size of the message
+                         to be sent made this impossible.
+
+     ENOBUFS             The system was  unable  to  allocate  an
+                         internal   buffer.   The  operation  may
+                         succeed when buffers become available.
+
+     ENOBUFS             The output queue for a network interface
+                         was full.  This generally indicates that
+                         the interface has stopped  sending,  but
+                         may be caused by transient congestion.
+
+     ENOTSOCK            s is a descriptor  for  a  file,  not  a
+
+
+
+Sun Release 4.1   Last change: 21 January 1990                  2
+
+
+
+
+
+
+SEND(2)                   SYSTEM CALLS                    SEND(2)
+
+
+
+                         socket.
+
+     EWOULDBLOCK         The socket is  marked  non-blocking  and
+                         the requested operation would block.
+
+SEE ALSO
+     connect(2), fcntl(2V),  getsockopt(2),  recv(2),  select(2),
+     socket(2), write(2V)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sun Release 4.1   Last change: 21 January 1990                  3
+
+
+

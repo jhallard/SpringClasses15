@@ -1,0 +1,33 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2009.02.27.04.49.08;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id: buffer.java,v 1.1 2009-02-26 19:47:12-08 - - $
+
+interface buffer <item_t> {
+
+   void put (item_t item);
+   item_t get ();
+   void producers_finished ();
+
+}
+
+@

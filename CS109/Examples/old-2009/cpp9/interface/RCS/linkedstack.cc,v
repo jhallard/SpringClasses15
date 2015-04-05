@@ -1,0 +1,122 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2009.03.06.22.54.04;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2009.03.06.22.17.05;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: linkedstack.cc,v 1.1 2009-03-06 14:17:05-08 - - $
+
+#include "linkedstack.h"
+
+template <class item_t>
+linkedstack<item_t>::linkedstack (): top (NULL) {
+}
+
+template <class item_t>
+linkedstack<item_t>::linkedstack (const linkedstack<item_t> &that) {
+   *this = that;
+}
+
+template <class item_t>
+linkedstack<item_t> &linkedstack<item_t>::operator= (
+            const linkedstack<item_t> &that) {
+   if (this == &that) return *this;
+   while (! empty ()) pop ();
+   node **end = &top;
+   for (node *itor = that.top; itor != NULL; itor = itor->link) {
+      *end = new node (itor->item, NULL);
+      end = &(*end)->link;
+   }
+}
+
+template <class item_t>
+linkedstack<item_t>::~linkedstack () {
+   while (! empty ()) pop ();
+}
+
+template <class item_t>
+bool linkedstack<item_t>::empty () {
+   return top == NULL;
+}
+
+template <class item_t>
+void linkedstack<item_t>::push (const item_t &item) {
+   top = new node (item, top);
+}
+
+template <class item_t>
+item_t linkedstack<item_t>::pop () {
+   if (empty ()) throw new empty_error ();
+   item_t result = top->item;
+   node *oldtop = top;
+   top = top->link;
+   delete oldtop;
+   return result;
+}
+
+template <class item_t>
+linkedstack<item_t>::node::node (const item_t &item, node *link):
+            item (item), link (link) {
+}
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 3
+a3 1
+// $Id$
+d6 1
+a6 1
+stack (): top (NULL) {
+d10 1
+a10 1
+stack (const stack &) {
+d15 3
+a17 2
+virtual stack &operator= (const stack &that) {
+   if (this = &that) return *this;
+d22 1
+a22 1
+      end = &(end->link);
+d27 1
+a27 1
+virtual ~stack () {
+d32 1
+a32 1
+virtual bool empty () {
+d37 1
+a37 1
+virtual void push (const item_t &item) {
+d42 1
+a42 1
+virtual item_t pop () {
+d52 1
+a52 1
+linkedstack<item_t>::node (const item_t &item, node *link):
+@

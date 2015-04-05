@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting ristring.cpp
+ristring.cpp: $Id: ristring.cpp,v 1.16 2013-07-12 19:51:58-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++0x ristring.cpp -o ristring -lm
+rm -f ristring.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished ristring.cpp

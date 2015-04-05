@@ -1,0 +1,880 @@
+head	1.31;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.31
+date	2015.02.06.03.10.01;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2013.08.12.19.34.04;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2013.08.12.19.33.53;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2012.06.02.04.15.08;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2012.06.02.04.13.59;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2012.06.02.04.13.05;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2012.06.02.04.11.49;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2012.06.02.04.11.07;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2012.06.02.04.10.35;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2012.06.02.04.10.03;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2012.06.02.03.59.22;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2012.06.02.03.49.16;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2012.06.02.03.48.04;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2012.06.02.03.47.54;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2012.06.02.03.39.03;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2012.06.02.03.25.23;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2012.06.02.03.24.50;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.06.02.03.24.12;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.06.02.03.23.59;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.06.02.03.20.19;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.06.02.03.18.04;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.06.02.03.17.33;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.06.02.03.17.05;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.06.02.03.09.11;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.06.02.03.08.45;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.06.02.03.00.45;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.06.02.02.57.39;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.06.02.02.47.44;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.06.02.02.46.57;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.06.02.02.22.07;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.06.02.02.20.09;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.31
+log
+@-
+@
+text
+@// $Id: reverse.cpp,v 1.30 2013-08-12 12:34:04-07 - - $
+
+//
+// Show how to reverse a collection using a pair of iterators.
+// Reverse requires a bidirectionaly iterator, with ++ and --.
+// Also show that pointers can be used as iterators.
+//
+
+#include <iostream>
+#include <list>
+#include <typeinfo>
+#include <vector>
+
+#include <cxxabi.h>
+
+using namespace std;
+
+template <typename itor_t>
+void xswap (const itor_t &itor1, const itor_t &itor2) {
+   typeof (*itor1) tmp = std::move (*itor1);
+   *itor1 = std::move (*itor2);
+   *itor2 = std::move (tmp);
+}
+
+// Reverse a collection from each end.
+// Uses a bidirectional iterator.
+// Xreverse avoids clash with <algorithm>reverse
+// Pass itors by value so we don't need an extra local copy.
+template <typename biitor_t>
+void xreverse (biitor_t begin, biitor_t end) {
+   while (begin != end && begin != --end) {
+      xswap (begin, end);
+      ++begin;
+   }
+}
+
+
+// Print a range using an iterator.
+template <typename itor_t>
+void print (const itor_t &begin, const itor_t &end) {
+   cout << "  ";
+   for (itor_t itor = begin; itor != end; ++itor) cout << " " << *itor;
+   cout << endl;
+}
+
+// Demangle typeinfo names
+void print_type (const char *const label, const type_info &info) {
+   const char *const name = info.name();
+   cout << "   typeid(" << label << ") = " << name << endl;
+   int status;
+   char *unmangled = abi::__cxa_demangle (name, 0, 0, &status);
+   cout << "      unmangled = " << unmangled << endl;
+   free (unmangled); // C code allocated by malloc.
+}
+
+// Print, reverse, print, reverse.
+template <typename itor_t>
+void print_reverse_twice (const itor_t &begin, const itor_t &end) {
+   print_type ("itor", typeid (typeof (end)));
+   print_type ("*itor", typeid (typeof (*end)));
+   for (int count = 0; count < 2; ++count) {
+      print (begin, end);
+      xreverse (begin, end);
+   }
+}
+
+// Load container with data.
+// itor_t must be convertable to container_t::const_iterator.
+template <typename container_t, typename itor_t>
+void load_container (container_t &cont, itor_t begin, itor_t end) {
+   for (itor_t itor = begin; itor != end; ++itor) {
+      cont.push_back (*itor);
+   }
+}
+
+
+// Put argv into a vector, xreverse, then print.
+// Use iterator-style to process argv.
+void testvector (char **argv, char **argend) {
+   cout << endl << __func__ << ":" << endl;
+   vector<string> vec;
+   load_container (vec, argv, argend);
+   print_reverse_twice (vec.begin(), vec.end());
+}
+
+// Put argv into a vector, xreverse, then print.
+// Use iterator-style to process argv.
+// NOTE: Same code, just a different data structure.
+void testlist (char **argv, char **argend) {
+   cout << endl << __func__ << ":" << endl;
+   list<string> lis;
+   load_container (lis, argv, argend);
+   print_reverse_twice (lis.begin(), lis.end());
+}
+
+// Now actually just use real pointers as iterators.
+// NOTE: Same code, just an array instead of iterators.
+void testcharstar (char **argv, char **argend) {
+   cout << endl << __func__ << ":" << endl;
+   print_reverse_twice (argv, argend);
+}
+
+// Now actually just use an array of ints.
+// NOTE: Same code, just an array instead of iterators.
+void testintarray () {
+   cout << endl << __func__ << ":" << endl;
+   int array[] = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
+   int *end = array + sizeof array / sizeof *array;
+   print_reverse_twice (&*array, end);
+}
+
+// Main program to call each one in turn.
+int main (int argc, char **argv) {
+   testvector (argv + 1, argv + argc);
+   testlist (argv + 1, argv + argc);
+   testcharstar (argv + 1, argv + argc);
+   testintarray ();
+   return 0;
+}
+
+//TEST// ./reverse foo bar baz qux hello world >reverse.out 2>&1
+//TEST// mkpspdf reverse.ps reverse.cpp* reverse.out
+
+@
+
+
+1.30
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.29 2013-08-12 12:33:53-07 - - $
+d28 1
+@
+
+
+1.29
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.28 2012-06-01 21:15:08-07 - - $
+d31 1
+a31 1
+      xswap (begin1, end1);
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.27 2012-06-01 21:13:59-07 - - $
+a17 1
+// Swapper would be better with move rather than copy semantics.
+d19 4
+a22 4
+void swapper (const itor_t &itor1, const itor_t &itor2) {
+   typeof (*itor1) tmp = *itor1;
+   *itor1 = *itor2;
+   *itor2 = tmp;
+d29 4
+a32 6
+void xreverse (const biitor_t &begin, const biitor_t &end) {
+   biitor_t end1 (end);
+   for (biitor_t begin1 = begin; begin1 != end1; ++begin1) {
+      --end1;
+      if (begin1 == end1) break;
+      swapper (begin1, end1);
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.26 2012-06-01 21:13:05-07 - - $
+d54 1
+a54 1
+   cout << "   unmangled = " << unmangled << endl;
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.25 2012-06-01 21:11:49-07 - - $
+d39 1
+a57 1
+
+d78 1
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.24 2012-06-01 21:11:07-07 - - $
+a17 10
+// Demangle typeinfo names
+void print_type (const char *const label, const type_info &info) {
+   const char *const name = info.name();
+   cout << "   typeid(" << label << ") = " << name << endl;
+   int status;
+   char *unmangled = abi::__cxa_demangle (name, 0, 0, &status);
+   cout << "   unmangled = " << unmangled << endl;
+   free (unmangled); // C code allocated by malloc.
+}
+
+d47 11
+a68 1
+
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.23 2012-06-01 21:10:35-07 - - $
+a56 1
+
+d68 1
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.22 2012-06-01 21:10:03-07 - - $
+d57 1
+a77 1
+
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.21 2012-06-01 20:59:22-07 - - $
+a26 8
+const char *demangle (const type_info &info) {
+   static char buffer[4096];
+   static size_t bufsiz = sizeof buffer;
+   int status;
+   abi::__cxa_demangle (info.name(), buffer, &bufsiz, &status);
+   if (status != 0) strcpy (buffer, info.name());
+   return buffer;
+}
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.20 2012-06-01 20:49:16-07 - - $
+d19 8
+d29 1
+d31 1
+a31 1
+   abi::__cxa_demangle (info.name(), buffer, sizeof buffer, &status);
+d68 2
+a69 2
+   cout << " typeid(itor) = " << typeid (typeof (end)).name() << endl;
+   cout << " typeid(*itor) = " << typeid (typeof (*end)).name() << endl;
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.19 2012-06-01 20:48:04-07 - - $
+d11 1
+d14 2
+d18 9
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.18 2012-06-01 20:47:54-07 - - $
+a27 1
+   biitor_t begin1 (begin);
+d29 1
+a29 1
+   for (; begin1 != end1; ++begin1) {
+d110 1
+a110 1
+//TEST// mkpspdf reverse.ps reverse.cpp reverse.out
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.17 2012-06-01 20:39:03-07 - - $
+a49 1
+   TYPEID(*begin);
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.16 2012-06-01 20:25:23-07 - - $
+a14 4
+#define FUNC (cout << endl << __func__ << ":" << endl)
+#define TYPEID(T) (cout << "   typeid(" #T ") = " \
+                        << typeid (typeof (T)).name() << endl)
+
+d48 2
+a49 1
+   TYPEID(begin);
+d70 1
+a70 1
+   FUNC;
+d80 1
+a80 1
+   FUNC;
+d89 1
+a89 1
+   FUNC;
+d96 1
+a96 1
+   FUNC;
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.15 2012-06-01 20:24:50-07 - - $
+d15 4
+d44 1
+d52 2
+d73 1
+a73 1
+   cout << __func__ << ":" << endl;
+d83 1
+a83 1
+   cout << __func__ << ":" << endl;
+d92 1
+a92 1
+   cout << __func__ << ":" << endl;
+d99 2
+a100 2
+   cout << __func__ << ":" << endl;
+   static int *array = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
+d102 1
+a102 1
+   print_reverse_twice (array, end);
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.14 2012-06-01 20:24:12-07 - - $
+d93 1
+a93 1
+   static int array[] = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.13 2012-06-01 20:23:59-07 - - $
+d103 1
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.12 2012-06-01 20:20:19-07 - - $
+d93 1
+a93 1
+   static int array = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.11 2012-06-01 20:18:04-07 - - $
+d89 9
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.10 2012-06-01 20:17:33-07 - - $
+d54 1
+a54 1
+// itor_t must be container_t::const_iterator.
+d57 1
+a57 1
+   for (char **itor = begin; itor != end; ++itor) {
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.9 2012-06-01 20:17:05-07 - - $
+d6 1
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.8 2012-06-01 20:09:11-07 - - $
+d54 1
+a54 1
+template <typename container_t>
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.7 2012-06-01 20:08:45-07 - - $
+d53 1
+d55 1
+a55 1
+void load_container (container_t &cont, char **begin, char **end) {
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.6 2012-06-01 20:00:45-07 - - $
+d60 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.5 2012-06-01 19:57:39-07 - - $
+d15 2
+a16 2
+template <typename itor>
+void swapper (const itor &itor1, const itor &itor2) {
+d25 4
+a28 4
+template <typename biitor>
+void xreverse (const biitor &begin, const biitor &end) {
+   biitor begin1 (begin);
+   biitor end1 (end);
+d37 3
+a39 3
+template <typename itor>
+void print (const itor &begin, const itor &end) {
+   for (itor it = begin; it != end; ++it) cout << " " << *it;
+d43 17
+d65 2
+a66 4
+   for (; argv != argend; ++argv) vec.push_back (*argv);
+   print (vec.begin(), vec.end());
+   xreverse (vec.begin(), vec.end());
+   print (vec.begin(), vec.end());
+d75 2
+a76 4
+   for (; argv != argend; ++argv) lis.push_back (*argv);
+   print (lis.begin(), lis.end());
+   xreverse (lis.begin(), lis.end());
+   print (lis.begin(), lis.end());
+d83 1
+a83 5
+   print (argv, argend);
+   xreverse (argv, argend);
+   print (argv, argend);
+   // Reverse it again to keep the original order.
+   xreverse (argv, argend);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.4 2012-06-01 19:47:44-07 - - $
+d17 1
+a17 1
+   typename itor::value_type tmp = *itor1;
+d66 11
+d81 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.3 2012-06-01 19:46:57-07 - - $
+d14 1
+a14 1
+// Xswap would be better with move rather than copy semantics.
+d16 1
+a16 1
+void xswap (const itor &itor1, const itor &itor2) {
+d32 1
+a32 1
+      xswap (begin1, end1);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: reverse.cpp,v 1.1 2012-06-01 19:20:09-07 - - $
+d73 3
+@
+
+
+1.2
+log
+@-
+@
+text
+@d8 2
+a9 1
+#include <iostream.
+a10 1
+#include <list>
+d12 3
+a14 1
+// Swap would be better with move rather than copy semantics.
+d16 4
+a19 4
+void swap (const itor &it1, const itor &it2) {
+   itor::value_type tmp = *it1;
+   *it1 = *it2;
+   *it2 = tmp;
+d24 1
+d26 7
+a32 5
+void reverse (const biitor &begin, const biitor &end) {
+   for (biitor itb = begin, biitor ite = end; itb != ite; ++itb) {
+      --ite;
+      if (itb == ite) break;
+      swap (itb, ite);
+d39 1
+a39 1
+   for (itor it = begin; itor!= end; ++itor) cout << " " << *itor;
+d43 1
+a43 1
+// Put argv into a vector, reverse, then print.
+d50 1
+a50 1
+   reverse (vec.begin(), vec.end());
+d54 1
+a54 1
+// Put argv into a vector, reverse, then print.
+d62 1
+a62 1
+   reverse (lis.begin(), lis.end());
+a65 11
+// Lastly, reverse argv itself using just pointers as iterators.
+// NOTE: Same code, just a different data structure.
+void testcharstar (char **argv, char **argend) {
+   cout << __func__ << ":" << endl;
+   print (argv, argend);
+   reverse (argv, argend);
+   print (argv, argend);
+   reverse (argv, argend);
+   print (argv, argend);
+}
+
+d67 3
+a69 4
+int main (int argc, char **argv) ){
+   testvector (argv, argv + argc);
+   testlist (argv, argv + argc);
+   testcharstar (argv, argv + argc);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d14 4
+a17 4
+void swap (const itor &i1, const itor &i2) {
+   itor::value_type t = *i1;
+   *i1 = *i2;
+   *i2 = t;
+d24 4
+a27 4
+   for (biitor itor = begin; begin != end; ++begin) {
+      --end;
+      if (begin == end) break;
+      swap (begin, end);
+@

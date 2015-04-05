@@ -1,0 +1,32 @@
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Source: binarylit.cpp
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     1	// $Id: binarylit.cpp,v 1.16 2013-07-25 19:42:18-07 - - $
+     2	
+     3	#include <bitset>
+     4	#include <climits>
+     5	#include <iomanip>
+     6	#include <iostream>
+     7	
+     8	using namespace std;
+     9	
+    10	const size_t shortbits = CHAR_BIT * sizeof (short);
+    11	
+    12	int main() {
+    13	   short a = 0b10001111;
+    14	   bitset<shortbits> b {a};
+    15	   cout << b << endl;
+    16	   cout << setw(shortbits) << oct << a << endl;
+    17	   cout << setw(shortbits) << dec << a << endl;
+    18	   cout << setw(shortbits) << uppercase << hex << a << endl;
+    19	   return 0;
+    20	}
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Output: ./binarylit 2>&1
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     1	0000000010001111
+     2	             217
+     3	             143
+     4	              8F
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+pstatus: 0x0000 EXIT STATUS = 0

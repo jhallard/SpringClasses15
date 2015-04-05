@@ -1,0 +1,46 @@
+childwait(12644):  0.00902 Main starting.
+childwait(12644):  0.00932 Child 12645 created.
+childwait(12645):  0.00936 Child 0 starting.
+childwait(12645):  2.00971 Child 0 message 0.
+childwait(12645):  4.00983 Child 0 message 1.
+childwait(12644):  5.00966 Child 12646 created.
+childwait(12646):  5.00970 Child 1 starting.
+childwait(12645):  6.00994 Child 0 message 2.
+childwait(12646):  7.00995 Child 1 message 0.
+childwait(12645):  8.01004 Child 0 message 3.
+childwait(12646):  9.01006 Child 1 message 1.
+childwait(12645): 10.01018 Child 0 message 4.
+childwait(12645): 10.01033 Child 0 finished.
+childwait(12674): 10.01020 Child 2 starting.
+childwait(12646): 11.01022 Child 1 message 2.
+childwait(12674): 12.01050 Child 2 message 0.
+childwait(12646): 13.01034 Child 1 message 3.
+childwait(12674): 14.01063 Child 2 message 1.
+childwait(12646): 15.01054 Child 1 message 4.
+childwait(12646): 15.01065 Child 1 finished.
+childwait(12644): 15.01060 Child 12715 created.
+childwait(12644): 15.01074 Child pid 12645 status 0 signal 0 core 0
+childwait(12715): 15.01065 Child 3 starting.
+childwait(12674): 16.01080 Child 2 message 2.
+childwait(12715): 17.01101 Child 3 message 0.
+childwait(12674): 18.01093 Child 2 message 3.
+childwait(12715): 19.01113 Child 3 message 1.
+childwait(12674): 20.01115 Child 2 message 4.
+childwait(12674): 20.01121 Child 2 finished.
+childwait(12644): 20.01129 Child pid 12646 status 1 signal 0 core 0
+childwait(12716): 20.01121 Child 4 starting.
+childwait(12715): 21.01125 Child 3 message 2.
+childwait(12716): 22.01151 Child 4 message 0.
+childwait(12715): 23.01137 Child 3 message 3.
+childwait(12716): 24.01170 Child 4 message 1.
+childwait(12715): 25.01151 Child 3 message 4.
+childwait(12715): 25.01155 Child 3 finished.
+childwait(12716): 26.01183 Child 4 message 2.
+childwait(12716): 28.01197 Child 4 message 3.
+childwait(12716): 30.01216 Child 4 message 4.
+childwait(12716): 30.01221 Child 4 finished.
+childwait(12644): 30.04338 Waiting for Godot.
+childwait(12644): 30.04348 Child pid 12715 status 3 signal 0 core 0
+childwait(12644): 35.04358 Waiting for Godot.
+childwait(12644): 35.04372 Child pid 12716 status 4 signal 0 core 0
+childwait(12644): 35.06292 Main finished.

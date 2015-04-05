@@ -1,0 +1,136 @@
+$Id: 2013q3-test2,v 1.4 2013-08-07 20:04:36-07 - - $
+Answers to 2013q3-test1, page 1
+
+________________________________________________________________________
+Question 1. [1]
+
+typedef double (*mathfn) (double);
+typedef map<string,mathfn> mathmap;
+
+________________________________________________________________________
+Question 2. [1]
+
+int sum (const vector<int> &v) {
+   int s = 0;
+   for (i = 0; i < v.size(); ++i) s+= v[i];
+   return s;
+}
+
+ALTERNATE: for (auto i = v.cbegin(); i != v.cend(); ++i) s += *i;
+
+________________________________________________________________________
+Question 3(a). [1]
+
+typedef map<string,size> wordmap;
+typedef wordmap::value_type wordpair;
+
+________________________________________________________________________
+Question 3(b). [2]
+
+bool precedes (const wordpair &a, const wordpair &b) {
+   return a.second > b.second
+       || (a.second == b.second && a.first < b.first);
+}
+
+________________________________________________________________________
+Question 3(c). [5]
+
+void printmap (const wordmap &map) {
+   vector<wordpair> vec;
+   for (auto &i = map.cbegin(); i != map.cend(); ++i) {
+      vec.push_back (*i);
+   }
+   sort (vec.begin(), vec.end(), precedes);
+   ssize_t c = 0;
+   for (auto &i = vec.cbegin(); c < 100 && i != vec.cend(); ++i, ++c) {
+      cout << setw(10) << i->second << " " << i->first << endl;
+   }
+}
+
+ALTERNATE DECL:  vector<wordpair> vec (map.cbegin(), map.cend());
+
+
+Answers to 2013q3-test1, page 2
+
+________________________________________________________________________
+Question 4(a). [2]
+
+class shape {
+   private:
+      shape (const shape&) = delete;
+      shape& operator= (const shape&) = delete;
+   public:
+      virtual ~shape() {}
+      virtual double area() = 0;
+      virtual double boundary() = 0;
+};
+
+________________________________________________________________________
+Question 4(b). [2]
+
+class circle: public shape {
+   private:
+      double radius;
+   public:
+      explicit circle (double r = 0): radius(r) {}
+      virtual double area() { return M_PI * radius * radius; }
+      virtual double boundary() { return 2 * M_PI * radius; }
+};
+
+________________________________________________________________________
+Question 4(c). [2]
+
+class rectangle: public shape {
+   private:
+      double width, height;
+   public:
+      explicit rectangle (double w = 0, double h = 0):
+               width(w), height(h) {}
+      virtual double area() { return width * height; }
+      virtual double boundary() { return 2 * (width + height); }
+};
+
+________________________________________________________________________
+Question 5. [4]
+
+vector<int> merge (const vector<int> v1, const vector<int> v2) {
+   vector<int> v;
+   auto i1 = v1.cbegin();
+   auto i2 = v2.cbegin();
+   while (i1 != v1.cend() && i2 != v2.cend()) {
+      if (*i1 < *i2) v.push_back (*i1++);
+                else v.push_back (*i2++);
+   }
+   while (i1 != v1.cend()) v.push_back (*i1++);
+   while (i2 != v2.cend()) v.push_back (*i2++);
+   return v;
+}
+
+
+Answers to 2013q3-test1, page 3
+
+ 1.    (C) cout << **i;
+
+ 2.    (C) shared_ptr<node>
+
+ 3.    (B) class foo and all of its subclases.
+
+ 4.    (B) (x) = private and (y) = public
+
+ 5.    (C) foo (foo &&);
+
+ 6.    (C) b = d;
+
+ 7.    (C) new vector<int> (10)
+
+ 8.    (D) p + p
+
+ 9.    (B) $<
+
+10.    (D) the destructor
+
+11.    (A) foo &operator= (const foo &); // C++98
+       (B) foo &operator= (foo &&); // C++11
+
+12.    (C) x = 3; y = 14;
+

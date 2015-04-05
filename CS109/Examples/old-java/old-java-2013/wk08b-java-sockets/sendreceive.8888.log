@@ -1,0 +1,47 @@
+
+::::::::::::::
+sendreceive.+8888.log
+::::::::::::::
+
+Script started on Wed Jun  6 14:56:46 2012
+bash-3.2$ sendreceive 8888
+server: server socket: ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=8888]
+InetAddress: 0.0.0.0/0.0.0.0
+LocalPort: 8888
+server: client socket: Socket[addr=/127.0.0.1,port=49217,localport=8888]
+InetAddress: /127.0.0.1
+LocalAddress: /127.0.0.1
+LocalPort: 8888
+Port: 49217
+server: Message 0
+server: Message 1
+server: Message 2
+server: Message 3
+server: Message 4
+Exception in thread "main" java.util.NoSuchElementException: No line found
+	at java.util.Scanner.nextLine(Scanner.java:1516)
+	at sendreceive.server_receiver(sendreceive.java:29)
+	at sendreceive.main(sendreceive.java:79)
+bash-3.2$ exit
+
+Script done on Wed Jun  6 14:57:23 2012
+
+::::::::::::::
+sendreceive.-8888.log
+::::::::::::::
+
+Script started on Wed Jun  6 14:57:06 2012
+bash-3.2$ sendreceive -8888
+client: server socket: Socket[addr=localhost/127.0.0.1,port=8888,localport=49217]
+InetAddress: localhost/127.0.0.1
+LocalAddress: /127.0.0.1
+LocalPort: 49217
+Port: 8888
+client: Message 0
+client: Message 1
+client: Message 2
+client: Message 3
+client: Message 4
+bash-3.2$ exit
+
+Script done on Wed Jun  6 14:57:21 2012

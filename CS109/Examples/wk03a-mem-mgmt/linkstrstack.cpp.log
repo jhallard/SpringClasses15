@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting linkstrstack.cpp
+linkstrstack.cpp: $Id: linkstrstack.cpp,v 1.4 2013-08-08 14:45:56-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 linkstrstack.cpp -o linkstrstack -lm
+rm -f linkstrstack.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished linkstrstack.cpp

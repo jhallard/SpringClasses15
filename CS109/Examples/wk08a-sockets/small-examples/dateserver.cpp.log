@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting dateserver.cpp
+dateserver.cpp:
+     $Id: dateserver.cpp,v 1.14 2014-05-23 13:26:36-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 dateserver.cpp -o dateserver -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f dateserver.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished dateserver.cpp

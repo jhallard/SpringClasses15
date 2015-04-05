@@ -1,0 +1,9 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting stl-template-list.cpp
+stl-template-list.cpp:
+     $Id: stl-template-list.cpp,v 1.7 2014-07-08 22:33:25-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 stl-template-list.cpp -o stl-template-list -lglut -lGLU -lGL -lX11 -lrt -lm
+stl-template-list.cpp:19:1: warning: multi-line comment [-Wcomment]
+ //TEST// more stl-template-list.cpp stl-template-list.out \
+ ^
+rm -f stl-template-list.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished stl-template-list.cpp

@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting str2int.cpp
+str2int.cpp: $Id: str2int.cpp,v 1.2 2013-01-08 17:02:53-08 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++0x str2int.cpp -o str2int -lm
+rm -f str2int.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished str2int.cpp

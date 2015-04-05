@@ -1,0 +1,13 @@
+# Makefile.deps created Fri Mar  6 20:49:37 PST 2009
+stack.o : stack.cc
+stack.o : stack.h
+arraystack.o : arraystack.cc
+arraystack.o : arraystack.h
+arraystack.o : stack.h
+linkedstack.o : linkedstack.cc
+linkedstack.o : linkedstack.h
+linkedstack.o : stack.h
+teststack.o : teststack.cc
+teststack.o : arraystack.h
+teststack.o : stack.h
+teststack.o : linkedstack.h

@@ -1,0 +1,7 @@
+INET_UNIX_YEARS = 70
+INET_UNIX_DAYS = 25567
+INET_UNIX_SECONDS = 2208988800
+IPPORT_TIMESERVER = 37
+IPPORT_DAYTIME = 13
+tick.ucla.edu = tick.ucla.edu = 164.67.62.194
+inettime: connect(164.67.62.194:37): Connection timed out

@@ -1,0 +1,60 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2011.01.05.05.11.05;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id: arrayptr.cpp,v 1.1 2011-01-04 21:09:25-08 - - $
+
+//
+// Print out addresses of array elements.  Show how to use a 
+// pointer to iterate over an array instead of an index.  Show
+// how to get the index by subtracting pointers.
+//
+// Note:  + and - have higher precedences than << and >>.
+//
+
+#include <cstdlib>
+#include <iomanip>
+#include <iostream>
+
+using namespace std;
+
+ostream &operator<< (ostream &out, bool boolean) {
+   return out << (boolean ? "true" : "false");
+}
+
+void function () {
+   cout << "(void*) function " << (void*) function << endl;
+   cout << "function " << function << endl;
+}
+
+int main (int argc, char **argv) {
+   for (char **itor = argv; *itor != NULL; ++itor) {
+      cout << itor - argv << " " << (void*) itor
+           << " \"" << *itor << "\"" << endl;
+   }
+   function();
+   return EXIT_SUCCESS;
+}
+
+//TEST// runprogram.perl -x arrayptr.lis ./arrayptr foo bar baz qux quux
+//TEST// mkpspdf arrayptr.ps arrayptr.cpp arrayptr.lis
+
+@

@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting args.cpp
+args.cpp:
+     $Id: args.cpp,v 1.5 2015-03-31 17:55:46-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 args.cpp -o args -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f args.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished args.cpp

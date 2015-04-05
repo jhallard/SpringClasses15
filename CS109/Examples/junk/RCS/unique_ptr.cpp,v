@@ -1,0 +1,45 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2014.06.07.01.30.08;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+#include <iostream>
+#include <memory>
+#include <string>
+using namespace std;
+
+using tree_ptr = unique_ptr<tree>;
+class tree {
+   private:
+      string value;
+      tree_ptr left;
+      tree_ptr right;
+   public:
+      tree();
+      tree (const string& val, tree_ptr left = {}, tree_ptr right = {});
+      tree (const tree&);
+      tree (tree&&);
+      tree& operator= (const tree&);
+      tree& operator= (tree&&);
+      ~tree();
+}
+@

@@ -1,0 +1,8 @@
+argv = 0x7fff7af10268
+argv[0] = 0x7fff7af10d64 -> "./arrayptr"
+argv[1] = 0x7fff7af10d6f -> "foo"
+argv[2] = 0x7fff7af10d73 -> "bar"
+argv[3] = 0x7fff7af10d77 -> "baz"
+argv[4] = 0x7fff7af10d7b -> "qux"
+argv[5] = 0x7fff7af10d7f -> "quux"
+main = 0x400ac0

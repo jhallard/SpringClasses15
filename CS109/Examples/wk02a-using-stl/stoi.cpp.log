@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting stoi.cpp
+stoi.cpp:
+     $Id: stoi.cpp,v 1.15 2014-04-09 15:28:50-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 stoi.cpp -o stoi -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f stoi.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished stoi.cpp

@@ -1,0 +1,53 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.2
+date	2013.03.01.03.48.14;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.03.01.03.47.34;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: time.java,v 1.1 2013-02-28 19:47:34-08 - - $
+
+import java.util.Calendar;
+import static java.lang.System.*;
+
+class time {
+   public static void main (String[] args) {
+      Calendar now = Calendar.getInstance();
+      out.printf ("%1$tY %1$tb %1$td %1$ta %1$tT.%1$tN%n", now);
+   }
+}
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d9 1
+a9 1
+      out.printf ("%1$tY %1$tb %1$td %1$ta %1$tT.%1$tL%n", now);
+@

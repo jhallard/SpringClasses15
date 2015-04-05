@@ -1,0 +1,462 @@
+head	1.13;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.13
+date	2013.08.26.20.50.09;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.08.26.20.49.46;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.08.26.20.41.15;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.08.26.20.37.10;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.08.26.20.32.46;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.08.14.03.36.49;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.08.14.03.35.56;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.08.14.03.35.18;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.05.30.03.56.50;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.05.30.03.53.24;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.05.30.03.52.20;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.05.30.03.39.35;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.30.03.35.29;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.13
+log
+@-
+@
+text
+@// $Id: roboclient.java,v 1.12 2013-08-26 13:49:46-07 - - $
+
+//
+// Roboclient hostname port username delaysec cycles message message...
+//
+// The roboclient connects to hostname:port with the username.
+// Then it writes messages given by the trailing words in args
+// the number of cycles followed by a certain delay in seconds.
+// Then it quits.  Useful for testing the server.
+//
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import static java.lang.System.*;
+
+class roboclient {
+
+   static void quit (String format, Object... params) {
+      err.printf (format, params);
+      exit (1);
+   }
+
+   static String ident (options opts) {
+      return String.format ("%s: %s %d", opts.progname,
+                            opts.hostname, opts.portnumber);
+   }
+
+   static class options {
+      final String progname = "roboclient";
+      String hostname;
+      int portnumber;
+      String username;
+      double delaysec;
+      int cycles;
+      String robomessage;
+      options (String[] args) {
+         try {
+            if (args.length < 5) throw new NumberFormatException();
+            hostname = args[0];
+            portnumber = Integer.parseInt (args[1]);
+            username = args[2];
+            delaysec = Double.parseDouble (args[3]);
+            cycles = Integer.parseInt (args[4]);
+            robomessage = "";
+            for (int i = 5; i < args.length; ++i) {
+               robomessage += " " + args[i];
+            }
+         }catch (NumberFormatException exn) {
+            quit ("Usage: %s hostname port username delaysec cycles "
+                + "message message%n", progname);
+         }
+      }
+   }
+
+
+   static class reader implements Runnable {
+      Socket socket;
+      Scanner scanner;
+      reader (Socket _socket, Scanner _scanner) {
+         scanner = _scanner;
+         socket = _socket;
+      }
+      public void run() {
+         for(;;) {
+            if (socket.isInputShutdown()) {
+               out.printf ("reader: socket.isInputShutdown%n");
+               break;
+            }
+            if (! scanner.hasNextLine()) {
+               out.printf ("reader: ! scanner.hasNextLine%n");
+               break;
+            }
+            out.printf ("%s%n", scanner.nextLine());
+         }
+         scanner.close();
+      }
+   }
+
+   static class writer implements Runnable {
+      Socket socket;
+      options opts;
+      PrintWriter writer;
+      writer (Socket _socket, options _opts, PrintWriter _writer) {
+         socket = _socket;
+         opts = _opts;
+         writer = _writer;
+      }
+      public void run() {
+         writer.printf ("%s%n", opts.username);
+         writer.flush();
+         for (int count = 0; count < opts.cycles; ++count) {
+            if (socket.isInputShutdown()) {
+               out.printf ("writer: socket.isInputShutdown%n");
+               break;
+            }
+            if (socket.isOutputShutdown()) {
+               out.printf ("writer: socket.isOutputShutdown%n");
+               break;
+            }
+            if (writer.checkError()) {
+               out.printf ("writer: writer.checkError%n");
+               break;
+            }
+            try {
+                Thread.sleep ((long) (opts.delaysec * 1000));
+            }catch (InterruptedException error) {
+            }
+            writer.printf ("%s[%d] %s (%s %d) --%s%n",
+                           opts.progname, count, opts.username,
+                           opts.hostname, opts.portnumber,
+                           opts.robomessage);
+            writer.flush();
+         }
+         writer.close();
+      }
+   }
+
+   public static void main (String[] args) {
+      Scanner stdin = new Scanner (System.in);
+      options opts = new options (args);
+      try {
+         Socket socket = new Socket (opts.hostname, opts.portnumber);
+         out.printf ("%s: socket OK%n", ident (opts));
+         Thread reading = new Thread (new reader (socket,
+                          new Scanner (socket.getInputStream())));
+         Thread writing = new Thread (new writer (socket, opts,
+                          new PrintWriter (socket.getOutputStream())));
+         reading.start();
+         writing.start();
+      }catch (IOException exn) {
+         quit ("%s: %s%n", ident (opts), exn);
+      }catch (IllegalArgumentException exn) {
+         quit ("%s: %s%n", ident (opts), exn);
+      }
+   }
+
+}
+
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.11 2013-08-26 13:41:15-07 - - $
+d106 1
+a106 1
+                Thread.sleep (opts.delaysec * 1000);
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.10 2013-08-26 13:37:10-07 - - $
+d34 1
+a34 1
+      long delaysec;
+d43 1
+a43 1
+            delaysec = Long.parseLong (args[3]);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.9 2013-08-26 13:32:46-07 - - $
+d101 4
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.8 2013-08-13 20:36:49-07 - - $
+d93 4
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.7 2013-08-13 20:35:56-07 - - $
+d65 9
+a73 1
+         while (! socket.isInputShutdown() && scanner.hasNextLine()) {
+d93 4
+a96 1
+            if (socket.isOutputShutdown()) break;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.6 2013-08-13 20:35:18-07 - - $
+d90 1
+a90 1
+            writer.printf ("%s[%d] %s (%s %d) %s%n",
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.5 2012-05-29 20:56:50-07 - - $
+d39 1
+a39 1
+            if (args.length < 5) throw new NumberFormatException ();
+d64 3
+a66 3
+      public void run () {
+         while (! socket.isInputShutdown() && scanner.hasNextLine ()) {
+            out.printf ("%s%n", scanner.nextLine ());
+d68 1
+a68 1
+         scanner.close ();
+d81 1
+a81 1
+      public void run () {
+d83 1
+a83 1
+         writer.flush ();
+d87 1
+a87 1
+                Thread.currentThread ().sleep (opts.delaysec * 1000);
+d94 1
+a94 1
+            writer.flush ();
+d96 1
+a96 1
+         writer.close ();
+d107 1
+a107 1
+                          new Scanner (socket.getInputStream ())));
+d109 3
+a111 3
+                          new PrintWriter (socket.getOutputStream ())));
+         reading.start ();
+         writing.start ();
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.4 2012-05-29 20:53:24-07 - - $
+d45 4
+a48 2
+            robomessage = "roboclient";
+            for (String arg: args) robomessage += " " + arg;
+d90 4
+a93 1
+            writer.printf ("%s%n", opts.robomessage);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.3 2012-05-29 20:52:20-07 - - $
+d63 1
+a63 2
+         while (scanner.hasNextLine ()) {
+            if (socket.isInputShutdown()) break;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.2 2012-05-29 20:39:35-07 - - $
+d56 1
+d58 3
+a60 2
+      reader (Socket socket, Scanner scanner) {
+         this.scanner = scanner;
+d72 1
+d75 4
+a78 3
+      writer (Socket socket, options opts, PrintWriter writer) {
+         this.opts = opts;
+         this.writer = writer;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.1 2012-05-29 20:35:29-07 - - $
+d57 1
+a57 1
+      reader (Scanner scanner) {
+d62 1
+d72 1
+a72 1
+      writer (options opts, PrintWriter writer) {
+d80 1
+d98 1
+a98 1
+         Thread reading = new Thread (new reader (
+d100 1
+a100 1
+         Thread writing = new Thread (new writer (opts,
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: roboclient.java,v 1.12 2009-03-05 20:25:54-08 - - $
+d4 1
+a4 1
+// Roboclient hostname port username delay cycles message message...
+d8 1
+a8 1
+// the number of cycles followed by a certain delay in millisec.
+d34 1
+a34 1
+      long delay;
+d43 1
+a43 1
+            delay = Long.parseLong (args[3]);
+d48 1
+a48 1
+            quit ("Usage: %s hostname port username delay cycles "
+d80 1
+a80 1
+                Thread.currentThread ().sleep (opts.delay);
+@

@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting allocvec.cpp
+allocvec.cpp: $Id: allocvec.cpp,v 1.1 2013-03-14 14:11:50-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++0x allocvec.cpp -o allocvec -lm
+rm -f allocvec.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished allocvec.cpp

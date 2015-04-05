@@ -1,0 +1,144 @@
+head	1.3;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.3
+date	2014.04.26.00.03.07;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.04.25.21.11.16;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.04.24.01.03.13;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@-
+@
+text
+@#!/usr/bin/perl
+# $Id: colornames-make.perl,v 1.2 2014-04-25 14:11:16-07 - - $
+use strict;
+use warnings;
+
+my %colors;
+my $file = "/usr/share/X11/rgb.txt";
+open RGBFILE, "<$file" or die "$0: $file: $!";
+while (my $line = <RGBFILE>) {
+   $line =~ m/^\s*(\d+)\s+(\d+)\s+(\d+)\s+(.*)/
+         or die "$0: invalid line: $line";
+   my ($red, $green, $blue, $name) = ($1, $2, $3, $4);
+   $name =~ s/\s+/-/g;
+   $name =~ s/[A-Z]/\L-$&/g;
+   $name =~ s/^-//;
+   $colors{$name} = [$red, $green, $blue];
+}
+close RGBFILE;
+
+my $hfile = "colornames.h";
+open HFILE, ">$hfile" or die "$0: $hfile: $!";
+print "open $hfile: OK\n";
+print HFILE <<__END_HFILE__;
+
+#include <map>
+#include <string>
+
+typedef unsigned char uchar;
+struct color {
+   uchar red = 0;
+   uchar green = 0;
+   uchar blue = 0;
+   color (uchar red_, uchar green_, uchar blue_):
+          red(red_), green(green_), blue(blue_) {}
+};
+
+extern const std::map<std::string,color> color_names;
+
+__END_HFILE__
+close HFILE;
+
+my $cppfile = "colornames.cpp";
+open CPPFILE, ">$cppfile" or die "$0: $cppfile: $!";
+print "open $cppfile: OK\n";
+print CPPFILE <<__END_CPPFILE__;
+
+#include "$hfile";
+using namespace std;
+
+const map<string,color> color_names = {
+__END_CPPFILE__
+
+printf CPPFILE "   {%-24s, {%3d, %3d, %3d}},\n",
+                  "\"$_\"", @@{$colors{$_}}
+       for sort keys %colors;
+print CPPFILE "};\n";
+close CPPFILE;
+
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: colornames-make.perl,v 1.1 2014-04-23 18:03:13-07 - - $
+d20 4
+a23 3
+my $colornames = "colornames.cpp";
+open COLORNAMES, ">$colornames" or die "$0: $colornames: $!";
+print COLORNAMES <<__END_PROLOG__;
+a26 1
+using namespace std;
+d28 1
+d30 5
+a34 3
+   unsigned red;
+   unsigned green;
+   unsigned blue;
+d37 13
+d51 1
+a51 1
+__END_PROLOG__
+d53 1
+a53 1
+printf COLORNAMES "   {%-24s, %3d, %3d, %3d},\n",
+d56 3
+a58 2
+print COLORNAMES "};\n";
+close COLORNAMES
+@
+
+
+1.1
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id$
+d6 1
+d13 4
+a16 2
+   $name = s/\s+/-/g;
+   printf "   {$-10s, %3d, %3d, %3d},\n", $name, $red, $green, $blue;
+d18 25
+@

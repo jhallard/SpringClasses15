@@ -1,0 +1,438 @@
+head	1.17;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.17
+date	2015.03.19.21.55.40;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2015.03.18.01.01.59;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2015.01.03.03.21.27;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.06.17.22.45.48;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.06.17.22.44.59;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.06.17.22.44.21;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.06.11.22.10.53;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.06.11.22.01.40;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.06.11.22.01.20;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.06.11.22.00.36;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.06.11.21.58.27;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.06.11.21.50.48;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.06.11.21.50.11;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.06.11.21.48.25;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.06.11.21.35.09;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.06.11.03.21.29;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.06.11.03.17.41;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.17
+log
+@-
+@
+text
+@<HEAD>
+<STYLE>
+p { max-width: 45em; }
+</STYLE>
+</HEAD>
+<BODY>
+<TT>
+<P>
+This lab0-intro-unix will not be graded and there
+is no credit for it.&nbsp;
+However, it is important you understand the Unix command
+line and submit procedure before you actually use it in the
+first assignment.
+<P>
+Make sure you know how to submit files.&nbsp;
+Submit these files to lab0.&nbsp;
+Verify that the submit actually worked by looking
+in the submit directory for your username.&nbsp;
+The find(1) command is very useful for things like this.&nbsp;
+<P>
+The submit command copies your files into a directory
+<BR>
+<TT>/afs/cats.ucsc.edu/class/cmps109-wm.s15/lab0/$USER</TT>
+<BR>
+and prefixes each file with a sequence number.&nbsp;
+You can see the names of the files, 
+but not their contents.&nbsp;
+<P>
+Prior experience with Unix is assumed.&nbsp;
+Attend a lab section to ask questions if you don't
+understand how submit works.
+The TA can explain such things.&nbsp;
+<P>
+Also read the submit checklist:&nbsp;
+<BR>
+<A HREF=
+http://www2.ucsc.edu/courses/cmps109-wm/:/Syllabus/submit-checklist/>
+http://www2.ucsc.edu/courses/cmps109-wm/:/Syllabus/submit-checklist/
+</A>
+<P>
+This directory shows a main program and a hello class and
+illustrates various features of C++11 that will be covered
+later in the course.&nbsp;
+<P>
+Whenever you need to look up information about C++,
+use Google,
+or look at
+The C++ Resources Network:&nbsp;
+<BR>
+<A HREF=http://www.cplusplus.com/>
+http://www.cplusplus.com/</A>
+<P>
+$Id: README.html,v 1.16 2015-03-17 18:01:59-07 - - $
+</BODY>
+@
+
+
+1.16
+log
+@-
+@
+text
+@d3 1
+a3 1
+p { max-width: 35em; }
+d53 1
+a53 1
+$Id: README.html,v 1.15 2015-01-02 19:21:27-08 - - $
+@
+
+
+1.15
+log
+@-
+@
+text
+@d9 1
+a9 1
+This asg0-intro-unix will not be graded and there
+d16 1
+a16 1
+Submit these files to asg0.&nbsp;
+d23 1
+a23 1
+<TT>/afs/cats.ucsc.edu/class/cmps109-wm.w15/asg0/$USER</TT>
+d53 1
+a53 1
+$Id: README.html,v 1.14 2014-06-17 15:45:48-07 - - $
+@
+
+
+1.14
+log
+@-
+@
+text
+@d9 6
+a20 6
+This asg0-intro-unix will not be graded and there
+is no credit for it.&nbsp;
+However, it is important you understand the Unix command
+line and submit procedure before you actually use it in the
+first assignment.
+<P>
+d23 1
+a23 1
+<TT>/afs/cats.ucsc.edu/class/cmps109-wm.u14/asg0/$USER</TT>
+d53 1
+a53 1
+$Id: README.html,v 1.13 2014-06-17 15:44:59-07 - - $
+@
+
+
+1.13
+log
+@-
+@
+text
+@d22 1
+d24 1
+d53 1
+a53 1
+$Id: README.html,v 1.12 2014-06-17 15:44:21-07 - - $
+@
+
+
+1.12
+log
+@-
+@
+text
+@d22 1
+a22 1
+<TT>/afs/cats.ucsc.edu/class/cmps109-wm.u14/asg0/</TT><I>username</I>
+d51 1
+a51 1
+$Id: README.html,v 1.11 2014-06-11 15:10:53-07 - - $
+@
+
+
+1.11
+log
+@-
+@
+text
+@d21 6
+d51 1
+a51 1
+$Id: README.html,v 1.10 2014-06-11 15:01:40-07 - - $
+@
+
+
+1.10
+log
+@-
+@
+text
+@d20 1
+d45 1
+a45 1
+$Id: README.html,v 1.9 2014-06-11 15:01:20-07 - - $
+@
+
+
+1.9
+log
+@-
+@
+text
+@d20 1
+a20 1
+Experience with Unix is assumed.&nbsp;
+d44 1
+a44 1
+$Id: README.html,v 1.8 2014-06-11 15:00:36-07 - - $
+@
+
+
+1.8
+log
+@-
+@
+text
+@d22 2
+a23 1
+understand how submit works.&nbsp;
+d44 1
+a44 1
+$Id: README.html,v 1.7 2014-06-11 14:58:27-07 - - $
+@
+
+
+1.7
+log
+@-
+@
+text
+@d3 1
+a3 1
+p { max-width: 30em; }
+a12 1
+<P>
+d41 1
+a41 1
+http://www.cplusplus.com/</A>,
+d43 1
+a43 1
+$Id: README.html,v 1.6 2014-06-11 14:50:48-07 - - $
+@
+
+
+1.6
+log
+@-
+@
+text
+@d3 1
+a3 1
+p { max-width: 40em; }
+d7 1
+a7 2
+<P>
+<TT># $Id: README.html,v 1.5 2014-06-11 14:50:11-07 - - $</TT>
+d16 5
+a20 1
+This asg0 will not be graded and there is no credit for it.&nbsp;
+d27 3
+a29 2
+<A HREF=http://www2.ucsc.edu/courses/cmps109-wm/:/Syllabus/submit-checklist/>
+<TT>cmps109-wm/:/Assignments/asg0-intro-unix/</TT></A>
+d36 9
+@
+
+
+1.5
+log
+@-
+@
+text
+@d8 1
+a8 1
+<TT># $Id: README.html,v 1.4 2014-06-11 14:48:25-07 - - $</TT>
+d23 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d8 1
+a8 1
+<TT># $Id: README.html,v 1.3 2014-06-11 14:35:09-07 - - $</TT>
+d10 2
+a11 2
+Make sure you know how to submit files.&nbsp
+Submit these files to asg0.&nbsp
+d13 1
+a13 1
+in the submit directory for your username.&nbsp
+d15 1
+a15 1
+The find(1) command is very useful for things like this.&nbsp
+d17 2
+a18 2
+This asg0 will not be graded and there is no credit for it.&nbsp
+Experience with Unix is assumed.&nbsp
+d20 1
+a20 1
+understand how submit works.&nbsp
+d22 1
+a22 1
+Also read the submit checklist:
+d29 1
+a29 1
+later in the course.&nbsp
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 21
+a21 13
+<PRE>
+# $Id: README.html,v 1.2 2014-06-10 20:21:29-07 - - $
+
+Make sure you know how to submit files.  Submit these files
+to asg0.  Verify that the submit actually worked by looking
+in the submit directory for your username.
+
+The find(1) command is very useful for things like this.
+
+This asg0 will not be graded and there is no credit for it.
+Experience with Unix is assumed.  Attend a lab section to ask
+questions if you don't understand how submit works.
+
+d23 2
+a24 2
+<A HREF=http:../../Syllabus/submit-checklist/>
+http:../../Syllabus/submit-checklist/>
+d26 1
+a26 1
+
+d29 3
+a31 2
+later in the course.
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: README.html,v 1.1 2014-06-10 20:17:41-07 - - $
+d19 4
+@
+
+
+1.1
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: README,v 1.2 2014-06-10 20:13:44-07 - - $
+d13 6
+@

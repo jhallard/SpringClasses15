@@ -1,0 +1,59 @@
+::::::::::::::
+script.client.log
+::::::::::::::
+Script started on Fri 23 May 2014 12:48:48 PM PDT
+bash-1$ short_prompt
+bash-2$ client
+client(16054): unix2.lt.ucsc.edu (128.114.104.230)
+client(16054): connecting to localhost port 50000
+client(16054): connected to localhost (127.0.0.1) port 50000
+client(16054): to server: "Message 0 from client 16054"
+client(16054): from server: "Message 0 from client 16054"
+client(16054): to server: "Message 1 from client 16054"
+client(16054): from server: "Message 1 from client 16054"
+client(16054): to server: "Message 2 from client 16054"
+client(16054): from server: "Message 2 from client 16054"
+client(16054): to server: "Message 3 from client 16054"
+client(16054): from server: "Message 3 from client 16054"
+bash-3$ client
+client(16089): unix2.lt.ucsc.edu (128.114.104.230)
+client(16089): connecting to localhost port 50000
+client(16089): connected to localhost (127.0.0.1) port 50000
+client(16089): to server: "Message 0 from client 16089"
+client(16089): from server: "Message 0 from client 16089"
+client(16089): to server: "Message 1 from client 16089"
+client(16089): from server: "Message 1 from client 16089"
+client(16089): to server: "Message 2 from client 16089"
+client(16089): from server: "Message 2 from client 16089"
+client(16089): to server: "Message 3 from client 16089"
+client(16089): from server: "Message 3 from client 16089"
+bash-3$ exit
+exit
+
+Script done on Fri 23 May 2014 12:49:09 PM PDT
+::::::::::::::
+script.server.log
+::::::::::::::
+Script started on Fri 23 May 2014 12:48:36 PM PDT
+bash-1$ short_prompt
+bash-2$ server
+server(16007): unix2.lt.ucsc.edu (128.114.104.230) accepting port 50000
+server(16007): accepted localhost (127.0.0.1) port 39362
+server(16007): received "Message 0 from client 16054"
+server(16007): received "Message 1 from client 16054"
+server(16007): received "Message 2 from client 16054"
+server(16007): received "Message 3 from client 16054"
+server(16007): client is gone
+server(16007): unix2.lt.ucsc.edu (128.114.104.230) accepting port 50000
+server(16007): accepted localhost (127.0.0.1) port 39363
+server(16007): received "Message 0 from client 16089"
+server(16007): received "Message 1 from client 16089"
+server(16007): received "Message 2 from client 16089"
+server(16007): received "Message 3 from client 16089"
+server(16007): client is gone
+server(16007): unix2.lt.ucsc.edu (128.114.104.230) accepting port 50000
+^C
+bash-3$ exit
+exit
+
+Script done on Fri 23 May 2014 12:49:14 PM PDT

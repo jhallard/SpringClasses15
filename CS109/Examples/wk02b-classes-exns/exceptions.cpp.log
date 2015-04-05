@@ -1,0 +1,7 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting exceptions.cpp
+* exceptions.cpp: $Id: exceptions.cpp,v 1.32 2013-06-28 19:51:19-07 -
+- $
+* g++ -g -O0 -Wall -Wextra -std=gnu++11 exceptions.cpp -o exceptions
+-lm
+* rm -f exceptions.o
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished exceptions.cpp

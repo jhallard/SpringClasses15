@@ -1,0 +1,313 @@
+head	1.9;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.9
+date	2013.07.09.00.02.55;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.07.06.02.22.20;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.07.03.20.20.42;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.20.05.08.11;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.20.05.07.14;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.20.05.06.40;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.20.05.03.12;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.20.05.00.27;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.20.04.59.32;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@-
+@
+text
+@// $Id: inlinevec.cpp,v 1.8 2013-07-05 19:22:20-07 - - $
+
+//
+// inlinevec - implementation of an int vector, using templates,
+// with the array inline in the struct, so size can not be changed.
+// also shows checked operator[] instead of get/put.
+//
+
+#include <iostream>
+#include <stdexcept>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// inlinevec.h
+/////////////////////////////////////////////////////////////////
+
+template <size_t _size>
+class inlinevec {
+   private:
+      int _data[_size];
+      void range_check (size_t index) const;
+   public:
+      inlinevec();
+      inlinevec (const inlinevec &) = default;            // copy ctor
+      inlinevec &operator= (const inlinevec &) = default; // copy op=
+      ~inlinevec(); = default;
+      size_t size() const;
+      int operator[] (size_t index) const; // get: x = a[i];
+      int &operator[] (size_t index); // put: a[i] = x;
+};
+
+/////////////////////////////////////////////////////////////////
+// inlinevec.cpp
+/////////////////////////////////////////////////////////////////
+
+template <size_t _size>
+inlinevec<_size>::inlinevec() {
+   for (size_t index = 0; index < _size; ++index) _data[index] = int();
+}
+
+template <size_t _size>
+void inlinevec<_size>::range_check (size_t index) const {
+   if (index >= _size) throw out_of_range ("inlinevec::range_check");
+}
+
+template <size_t _size>
+size_t inlinevec<_size>::size() const {
+   return _size;
+}
+
+template <size_t _size>
+int inlinevec<_size>::operator[] (size_t index) const {
+   range_check (index);
+   return _data[index];
+}
+
+template <size_t _size>
+int &inlinevec<_size>::operator[] (size_t index) {
+   range_check (index);
+   return _data[index];
+}
+
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+typedef inlinevec<10> tenvec;
+int main () {
+   tenvec v1;
+   v1[3] = 99;
+   int x = v1[3];
+   cout << x << endl;
+   try {
+      cout << "v1[999] = " << v1[999] << endl;
+   }catch (out_of_range error) {
+      cout << error.what() << endl;
+   }
+   tenvec v2 = v1;
+   v2[3] = 1234;
+   cout << v1[3] << " " << v2[3] << endl;
+   v2 = v1;
+   cout << v1[3] << " " << v2[3] << endl;
+   for (size_t i = 0; i < v1.size(); ++i) cout << v1[i];
+   cout << endl;
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=inlinevec.out.grind \
+//TEST//       inlinevec >inlinevec.out 2>&1
+//TEST// mkpspdf inlinevec.ps inlinevec.cpp* inlinevec.out*
+*/
+
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inlinevec.cpp,v 1.7 2013-07-03 13:20:42-07 - - $
+d27 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inlinevec.cpp,v 1.6 2012-04-19 22:08:11-07 - - $
+a25 1
+      inlinevec (inlinevec &&) = default;                 // move ctor
+a26 1
+      inlinevec &operator= (inlinevec &&) = default;      // move op=
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inlinevec.cpp,v 1.5 2012-04-19 22:07:14-07 - - $
+d25 4
+a28 3
+      // Default OK: inlinevec (const inlinevec &);
+      // Default OK: inlinevec &operator= (const inlinevec &);
+      // Default OK: ~inlinevec();
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inlinevec.cpp,v 1.4 2012-04-19 22:06:40-07 - - $
+a27 1
+      explicit inlinevec (size_t size);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inlinevec.cpp,v 1.3 2012-04-19 22:03:12-07 - - $
+a33 1
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inlinevec.cpp,v 1.2 2012-04-19 22:00:27-07 - - $
+d40 1
+a40 1
+inlinevec<size_t>::inlinevec() {
+d45 1
+a45 1
+void inlinevec<size_t>::range_check (size_t index) const {
+d50 1
+a50 1
+size_t inlinevec<size_t>::size() const {
+d55 1
+a55 1
+int inlinevec<size_t>::operator[] (size_t index) const {
+d61 1
+a61 1
+int &inlinevec<size_t>::operator[] (size_t index) {
+d63 1
+a63 1
+   _data[index] = value;
+d71 1
+d73 1
+a73 1
+   inlinevec v1<10>;
+d78 1
+a78 1
+      int y = v1[999];
+d80 1
+a80 1
+      cerr << error.what() << endl;
+d82 2
+a83 2
+   inlinevec v2 = v1;
+   v2[3] = 1234)
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inlinevec.cpp,v 1.1 2012-04-19 21:59:32-07 - - $
+d39 1
+d44 1
+d49 1
+d54 1
+d60 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inlinevec.cpp,v 1.14 2012-04-16 13:16:30-07 - - $
+d39 1
+a39 1
+inlinevec::inlinevec() {
+d43 1
+a43 1
+void inlinevec::range_check (size_t index) const {
+d47 1
+a47 1
+size_t inlinevec::size() const {
+d51 1
+a51 1
+int inlinevec::operator[] (size_t index) const {
+d56 1
+a56 1
+int &inlinevec::operator[] (size_t index) {
+@

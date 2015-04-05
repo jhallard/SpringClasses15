@@ -1,0 +1,71 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2012.04.11.03.06.25;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id: identity.java,v 1.3 2011-01-21 18:29:24-08 - - $
+
+//
+// NAME
+//    identity - show object identity with a couple of classes
+//
+// DESCRIPTION
+//    Creates a couple of objects, one with a toString method,
+//    one without.
+//
+
+import static java.lang.Integer.*;
+import static java.lang.System.*;
+
+class identity {
+
+   static class noname {
+      String value = "noname";
+   }
+
+   static class withname {
+      String value;
+      public withname (String name) {value = name; }
+      public String toString () {return "My name is " + value; }
+   }
+
+   static String identity (Object obj) {
+      return obj == null ? "null"
+           : obj.getClass().getName() + "@@"
+           + toHexString (identityHashCode (obj));
+   }
+
+   static void print (String label, Object obj) {
+      out.printf ("%s:%n", label);
+      out.printf ("   toString: %s%n", obj);
+      out.printf ("   identity: %s%n", identity (obj));
+   }
+
+   public static void main (String[] args) {
+      print ("noname", new noname());
+      print ("withname", new withname("foobar"));
+      print ("null", null);
+   }
+}
+
+//TEST// runprog -x identity.lis identity
+//TEST// mkpspdf identity.ps identity.java* identity.lis*
+
+@

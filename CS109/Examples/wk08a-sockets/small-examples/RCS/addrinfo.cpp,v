@@ -1,0 +1,417 @@
+head	1.12;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.12
+date	2014.05.22.21.35.13;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.22.21.35.05;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.22.21.34.25;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.22.21.34.03;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.22.21.33.09;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.21.04.04.31;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.21.04.03.24;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.21.03.58.47;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.21.03.47.40;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.21.03.22.02;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.21.03.21.15;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.21.03.20.39;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.12
+log
+@-
+@
+text
+@// $Id: addrinfo.cpp,v 1.11 2014-05-22 14:35:05-07 - - $
+
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+using namespace std;
+
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+
+string socktype (int socktype) {
+   static unordered_map<int,string> socktype_map {
+      {SOCK_DGRAM , "dgram" },
+      {SOCK_RAW   , "raw"   },
+      {SOCK_STREAM, "stream"},
+   };
+   const auto& result = socktype_map.find (socktype);
+   return result == socktype_map.end() ? "(\?\?\?\?)" : result->second;
+}
+
+string af_family (int family) {
+   static unordered_map<int,string> family_map {
+      {AF_FILE  , "File"  },
+      {AF_INET  , "IPv4"  },
+      {AF_INET6 , "IPv6"  },
+      {AF_UNIX  , "Unix"  },
+      {AF_UNSPEC, "Unspec"},
+   };
+   const auto& result = family_map.find (family);
+   return result == family_map.end() ? "(\?\?\?\?)" : result->second;
+}
+
+string inet_address (addrinfo* info) {
+   sockaddr* addr = nullptr;
+   switch (info->ai_family) {
+      case AF_INET:
+         addr = (sockaddr*) &((sockaddr_in*) info->ai_addr)->sin_addr;
+         break;
+      case AF_INET6:
+         addr = (sockaddr*) &((sockaddr_in6*) info->ai_addr)->sin6_addr;
+         break;
+   }
+   char textstr[INET6_ADDRSTRLEN];
+   const char* text = inet_ntop (info->ai_family, addr,
+                                 textstr, sizeof textstr);
+   if (text == nullptr) text = strerror (errno);
+   return textstr;
+}
+
+
+void print_addrinfo (const string& hostname) {
+   addrinfo hints;
+   memset (&hints, 0, sizeof hints);
+   hints.ai_flags = AI_CANONNAME;
+   hints.ai_family = AF_UNSPEC;
+   addrinfo* results;
+   cout << "IP addresses for " << hostname << ":" << endl;
+   int rc = getaddrinfo (hostname.c_str(), NULL, &hints, &results);
+   if (rc != 0) {
+      cout << "   " << gai_strerror (rc) << endl;
+      return;
+   }
+   for (auto info = results; info != nullptr; info = info->ai_next) {
+      cout << "   " << setw(6) << socktype (info->ai_socktype)
+           << " " << setw(6) << af_family (info->ai_family)
+           << " " << inet_address (info);
+      if (info->ai_canonname) cout << " " << info->ai_canonname;
+      cout << endl;
+   }
+   freeaddrinfo (results);
+}
+
+int main (int argc, char** argv) {
+   string progname (argv[0]);
+   vector<string> args (&argv[1], &argv[argc]);
+   for (const auto& hostname: args) {
+      print_addrinfo (hostname);
+   }
+   return 0;
+}
+
+/*
+//TEST// addrinfo www.google.com www.nohost.zone www.soe.ucsc.edu \
+//TEST//          unix.ucsc.edu unix1.lt.ucsc.edu unix2.lt.ucsc.edu \
+//TEST//          localhost >addrinfo.output 2>&1
+//TEST// mkpspdf addrinfo.ps addrinfo.cpp* addrinfo.output
+*/
+
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: addrinfo.cpp,v 1.10 2014-05-22 14:34:25-07 - - $
+d71 1
+a71 1
+      cout << "   " << setw(6) << socktype (info->ai_socktype);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: addrinfo.cpp,v 1.9 2014-05-22 14:34:03-07 - - $
+d44 1
+a44 1
+         addr = &((sockaddr_in*) info->ai_addr)->sin_addr;
+d47 1
+a47 1
+         addr = &((sockaddr_in6*) info->ai_addr)->sin6_addr;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: addrinfo.cpp,v 1.8 2014-05-22 14:33:09-07 - - $
+d44 1
+a44 1
+         addr = &((sockaddr*) info->ai_addr)->sin_addr;
+d47 1
+a47 1
+         addr = &((sockaddr*) info->ai_addr)->sin6_addr;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: addrinfo.cpp,v 1.7 2014-05-20 21:04:31-07 - - $
+d25 1
+a25 1
+   return result == socktype_map.end() ? "(????)" : result->second;
+d37 1
+a37 1
+   return result == family_map.end() ? "(????)" : result->second;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: addrinfo.cpp,v 1.6 2014-05-20 21:03:24-07 - - $
+d3 1
+d20 2
+a22 2
+      {SOCK_DGRAM , "dgram "},
+      {SOCK_RAW   , "raw   "},
+d25 30
+a54 1
+   return result == socktype_map.end() ? "(none)" : result->second;
+d63 2
+a64 1
+   addrinfo *results;
+a65 1
+   cout << "IP addresses for " << hostname << ":" << endl;
+d70 5
+a74 21
+   for (auto itor = results; itor != nullptr; itor = itor->ai_next) {
+      cout << "   " << socktype (itor->ai_socktype);
+      void* addr = nullptr;
+      string family = "????";
+      switch (itor->ai_family) {
+         case AF_INET:
+            family = "IPv4";
+            addr = &((sockaddr_in*) itor->ai_addr)->sin_addr;
+            break;
+         case AF_INET6:
+            family = "IPv6";
+            addr = &((sockaddr_in6*) itor->ai_addr)->sin6_addr;
+            break;
+      }
+      cout << " " << family;
+      char textstr[INET6_ADDRSTRLEN];
+      const char* text = inet_ntop (itor->ai_family, addr,
+                                    textstr, sizeof textstr);
+      if (text == nullptr) text = strerror (errno);
+      cout << " " << text;
+      if (itor->ai_canonname) cout << " " << itor->ai_canonname;
+d92 1
+a92 1
+//TEST//          >addrinfo.output 2>&1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: addrinfo.cpp,v 1.5 2014-05-20 20:58:47-07 - - $
+d27 1
+a27 1
+
+d37 1
+a37 1
+      cout << gai_strerror (rc) << endl;
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: addrinfo.cpp,v 1.4 2014-05-20 20:47:40-07 - - $
+a61 1
+      //freeaddrinfo (results);
+d63 1
+d74 8
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: addrinfo.cpp,v 1.3 2014-05-20 20:22:02-07 - - $
+d6 1
+d18 7
+a24 6
+   switch (socktype) {
+      case SOCK_STREAM: return "SOCK_STREAM";
+      case SOCK_DGRAM: return "SOCK_DGRAM ";
+      case SOCK_RAW: return "SOCK_RAW   ";
+   }
+   return "SOCK(" + to_string(socktype) + ")";
+d27 1
+d35 1
+a35 1
+   cout << hostname << ":" << endl;
+d41 1
+a41 1
+      cout << socktype (itor->ai_socktype);
+d43 1
+a43 1
+      string family = "UNKNOWN ";
+d46 1
+a46 1
+            family = "AF_INET ";
+d50 1
+a50 1
+            family = "AF_INET6";
+d62 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: addrinfo.cpp,v 1.1 2014-05-20 20:20:39-07 - - $
+d4 1
+d6 1
+d16 9
+d28 1
+d31 1
+a31 1
+   int rc = getaddrinfo (hostname, NULL, &hints, &results);
+d38 20
+a57 6
+      cout << "  ai_flags=" << itor->ai_flags;
+      cout << "  ai_family=" << itor->ai_family;
+      cout << "  ai_socktype=" << itor->ai_socktype;
+      cout << "  ai_addrlen=" << itor->ai_addrlen;
+      cout << "  ai_addr=" << itor->ai_addr;
+      cout << "  ai_canonname=" << itor->ai_canonname;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d7 1
+a7 2
+#include <sys/types.h>
+#include <sys/socket.h>
+a8 1
+#include <arpa/inet.h>
+d10 3
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d25 6
+a30 6
+      cout << "  ai_flags=" << ai_flags;
+      cout << "  ai_family=" << ai_family;
+      cout << "  ai_socktype=" << ai_socktype;
+      cout << "  ai_addrlen=" << ai_addrlen;
+      cout << "  ai_addr=" << ai_addr;
+      cout << "  ai_canonname=" << ai_canonname;
+@

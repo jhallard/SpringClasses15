@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting virtual.cpp
+virtual.cpp:
+     $Id: virtual.cpp,v 1.14 2015-02-10 17:54:20-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 virtual.cpp -o virtual -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f virtual.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished virtual.cpp

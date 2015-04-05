@@ -1,0 +1,94 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.4
+date	2013.08.31.01.28.53;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.08.31.01.27.57;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.08.31.01.26.52;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.08.31.01.26.28;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@// $Id: hashmap.cpp,v 1.3 2013-08-30 18:27:57-07 - - $
+
+#include <iostream>
+#include <string>
+#include <unordered_map>
+using namespace std;
+
+int main (int argc, char **argv) {
+   unordered_map<string,int> h;
+   for (int i = 0; i < argc; ++i) {
+      h.insert ({argv[i], i});
+   }
+   for (auto i = h.cbegin(); i != h.cend(); ++i) {
+      cout << &*i << ": {" << i->first << "," << i->second << "}"
+           << endl;
+   }
+}
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hashmap.cpp,v 1.2 2013-08-30 18:26:52-07 - - $
+d13 1
+a13 1
+   for (const auto i = h.cbegin(); i != h.cend(); ++i) {
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hashmap.cpp,v 1.1 2013-08-30 18:26:28-07 - - $
+d13 4
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d4 1
+d6 1
+@

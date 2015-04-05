@@ -1,0 +1,78 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2010.12.03.01.57.33;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@
+Winter 2010
+CMPS-109 -- Advanced Programming
+
+week  1:
+ 1. Wed Jan  6 - syllabus, Budd ch.1,2.
+ 2. Fri Jan  8 - examples: hello, vector, string, iterator
+ 3. Mon Jan 11 - fnmap.cc; asg1 - STL & fn ptrs
+
+week  2:
+ 4. Wed Jan 13 - Budd ch.3: pointers and references
+ 5. Fri Jan 15 - Budd ch.4: memory mgmt.  Leaks, dangles, errors.
+ 6. Mon Jan 18 - HOLIDAY.  NO CLASS.
+
+week  3:
+ 7. Wed Jan 20 - Examples/week3: box, astring
+ 8. Fri Jan 22 - wk3/irstring; asg2 - bigint
+ 9. Mon Jan 25 - bigint implementation, asg2
+
+week  4:
+10. Wed Jan 27 - Budd ch.5: class defns, canonical 4.
+11. Fri Jan 29 - initializations; visibility; nesting
+12. Mon Feb  1 - inheritance; overriding; casting; virt.fn.tables
+
+week  5:
+13. Wed Feb  3 - TEST #1.
+14. Fri Feb  5 - asg3; virtual, abstract fns; inheritance
+15. Mon Feb  8 - return test. finish asg3 discuss
+
+week  6:
+16. Wed Feb 10 - Operator overloading, +=, ++, etc.
+17. Fri Feb 12 - asg4: template class, iterator
+18. Mon Feb 15 - HOLIDAY.  NO CLASS.
+
+week  7:
+19. Wed Feb 17 - prog4: templates, iterators
+20. Fri Feb 19 - ch8 strings; ch9 STL; function objects tree trav
+21. Mon Feb 22 - bstree iterator; iomanip; exceptions
+
+week  8:
+22. Wed Feb 24 - TEST #2.
+23. Fri Feb 26 - exceptions, features C++ vs Java; sigaction.
+24. Mon Mar  1 - Java Thread: start, join, InterruptExn, synchronized
+
+week  9:
+25. Wed Mar  3 - Threads: wait, notify; Semaphores; BlockedQueue
+26. Fri Mar  5 - ServerSocket, client Socket.  get{Input,Output}Stream
+27. Mon Mar  8 - GUI: Jbutton, ActionListener
+
+week 10:
+28. Wed Mar 10 - GUI: JTextField, JTextArea, MouseListener
+29. Fri Mar 12 - containers, iterators, algorithms, template review
+30. Mon Mar 15 - review
+
+$Id: 2010-q1winter-lecture-log,v 1.1 2010-03-23 16:27:24-07 - - $
+@

@@ -1,0 +1,179 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.5
+date	2014.06.02.23.10.33;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.06.02.23.10.10;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.06.02.22.26.39;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.06.02.22.26.16;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.30.20.41.43;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: buffercp.cpp,v 1.4 2014-06-02 16:10:10-07 - - $
+
+//
+// Queue of buffers and file I/O.
+//
+
+#include <array>
+#include <cassert>
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <queue>
+using namespace std;
+
+string execname;
+int exit_status {EXIT_SUCCESS};
+
+struct exec_error: public runtime_error {
+   exec_error (const string& message): runtime_error (message) {
+      assert (execname.size() > 0);
+   }
+};
+
+struct sys_errno: public exec_error {
+   sys_errno (const string& obj):
+              exec_error (execname + ": " + obj + ": "
+                          + strerror (errno)){}
+};
+
+void usage () {
+   throw exec_error ("Usage: " + execname + " infile outfile");
+}
+
+
+struct buffer {
+   static constexpr size_t MAX_BYTES = 0x100;
+   size_t nbytes {};
+   array<char,MAX_BYTES>  bytes;
+};
+using buffer_uptr = unique_ptr<buffer>;
+using buffer_queue = queue<buffer_uptr>;
+
+buffer_queue readfile (const string& filename) {
+   buffer_queue que;
+   ifstream infile {filename};
+   if (infile.fail()) throw sys_errno (filename);
+   while (not infile.eof()) {
+      buffer_uptr uptr {new buffer()};
+      infile.read (uptr->bytes.data(), uptr->MAX_BYTES);
+      uptr->nbytes = infile.gcount();
+      que.push (std::move (uptr));
+   }
+   return std::move (que);
+}
+
+void writefile (const string& filename, buffer_queue& que) {
+   ofstream outfile {filename};
+   if (outfile.fail()) throw sys_errno (filename);
+   while (not que.empty()) {
+      buffer_uptr uptr = std::move (que.front());
+      que.pop();
+      outfile.write (uptr->bytes.data(), uptr->nbytes);
+   }
+}
+
+int main (int argc, char** argv) {
+   execname = basename (argv[0]);
+   try {
+      if (argc != 3) usage();
+      buffer_queue que = readfile (argv[1]);
+      writefile (argv[2], que);
+   }catch (exec_error& error) {
+      cerr << error.what() << endl;;
+      exit_status = EXIT_FAILURE;
+   }
+   return exit_status;
+}
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: buffercp.cpp,v 1.3 2014-06-02 15:26:39-07 - - $
+d63 1
+a63 1
+      outfile.write (uptr->bytes, uptr->nbytes);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: buffercp.cpp,v 1.2 2014-06-02 15:26:16-07 - - $
+d50 1
+a50 1
+      infile.read (uptr->bytes, uptr->MAX_BYTES);
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: buffercp.cpp,v 1.1 2014-05-30 13:41:43-07 - - $
+d7 1
+d39 1
+a39 1
+   array<char,MAX_BYTES>  bytes {};
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: buffer.cpp,v 1.1 2014-05-30 13:27:47-07 - - $
+d34 1
+d38 1
+a38 1
+   char bytes[MAX_BYTES] {};
+@

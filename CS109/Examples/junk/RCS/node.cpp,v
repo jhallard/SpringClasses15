@@ -1,0 +1,137 @@
+head	1.6;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.6
+date	2013.08.13.22.55.43;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.08.13.22.53.40;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.08.13.22.53.32;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.08.13.22.52.21;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.08.13.22.51.57;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.08.13.22.51.08;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@-
+@
+text
+@// $Id: node.cpp,v 1.5 2013-08-13 15:53:40-07 - - $
+
+#include <iostream>
+using namespace std;
+
+class foo {
+public:
+   foo() { cout << "foo()" << endl; }
+};
+
+class node {
+public:
+   foo f;
+   node *p;
+   node *n;
+public:
+   node():p(0),n(0){}
+};
+
+int main() {
+   node *p = new node();
+   cout << p->p << p->n << endl;
+}
+
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: node.cpp,v 1.4 2013-08-13 15:53:32-07 - - $
+d17 1
+a17 1
+   node(){}
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: node.cpp,v 1.3 2013-08-13 15:52:21-07 - - $
+d12 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: node.cpp,v 1.1 2013-08-13 15:51:08-07 - - $
+d21 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d7 1
+d15 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d7 1
+a7 1
+   foo() { cout << "foo()" << endl;
+d15 1
+a15 1
+}
+@

@@ -1,0 +1,11 @@
+fn_bad_alloc[18]: SHOW (vector<int> v0(-5);)
+.... exception St9bad_alloc, what = "std::bad_alloc"
+fn_out_of_range[22]: SHOW (vector<int> v1(10);)
+fn_out_of_range[23]: SHOW (v1.at(-5) = 8;)
+.... exception St12out_of_range, what = "vector::_M_range_check"
+fn_pop_empty_vector[27]: SHOW (vector<int> v2(10);)
+fn_pop_empty_vector[28]: SHOW (v2.pop_back();)
+fn_back_empty_vector[32]: SHOW (vector<int> v3(10);)
+fn_back_empty_vector[33]: SHOW (cout << ".... " << v3.back() << endl;)
+.... 0
+fn_bad_alloc[18]: SHOW (vector<int> v0(-5);)

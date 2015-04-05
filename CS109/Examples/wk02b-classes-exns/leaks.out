@@ -1,0 +1,7 @@
+vector<string*> = 0x4c2b040
+string* = 0x4c2b100 -> leaks
+string* = 0x4c2b200 -> foo
+string* = 0x4c2b300 -> bar
+string* = 0x4c2b410 -> baz
+string* = 0x4c2b4c0 -> qux
+We are done.

@@ -1,0 +1,766 @@
+head	1.29;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.29
+date	2012.04.11.01.11.10;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2012.04.11.01.01.50;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2012.04.11.01.01.01;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2012.04.11.00.59.56;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2012.04.11.00.58.00;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2012.04.11.00.57.27;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2012.04.11.00.55.49;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2012.04.11.00.54.53;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2012.04.11.00.54.01;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2012.04.11.00.53.07;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2012.04.11.00.49.34;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2012.04.11.00.48.49;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2012.04.11.00.48.36;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2012.04.11.00.47.52;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2012.04.11.00.47.17;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.04.11.00.46.29;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.04.11.00.44.31;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.04.11.00.44.19;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.04.11.00.37.05;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.04.11.00.35.23;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.11.00.34.41;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.11.00.34.12;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.11.00.33.56;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.11.00.33.10;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.11.00.32.53;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.11.00.32.04;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.11.00.31.46;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.11.00.31.23;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.11.00.25.44;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.29
+log
+@-
+@
+text
+@// $Id: box1.cpp,v 1.28 2012-04-10 18:01:50-07 - - $
+
+// Class box1 showing default ctor, copy ctor, operator=, dtor.
+
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <typeinfo>
+#include <vector>
+
+using namespace std;
+
+#define IDENT(name) \
+        cout << reinterpret_cast<const void*> (this) \
+             << "->" << name << ": value=" << value << endl; 
+#define SHOW(STMT) \
+        cout << "SHOW(" << #STMT << "):" << endl; \
+        STMT; \
+        cout << endl;
+
+/////////////////////////////////////////////////////////////////
+// box1.h
+/////////////////////////////////////////////////////////////////
+
+class box1 {
+   private:
+      int value;
+   public:
+      box1 ();                        // default ctor
+      box1 (const box1 &);            // copy ctor
+      box1 &operator= (const box1 &); // operator=
+      ~box1 ();                       // dtor
+      box1 (int);                     // implicit int->box1 conv
+      operator int () const;          // implicit box1->int conv
+      box1 &operator++ ();            // prefix ++
+      box1 operator++ (int);          // postfix ++
+};
+
+/////////////////////////////////////////////////////////////////
+// box1.cpp
+/////////////////////////////////////////////////////////////////
+
+box1::box1 (): value(0) {
+   IDENT ("box1::box1()");
+}
+
+box1::box1 (const box1 &init): value(init.value) {
+   IDENT ("box1::box1(const box1 &)");
+}
+
+box1 &box1::operator= (const box1 &that) {
+   if (this == &that) return *this;
+   this->value = that.value;
+   IDENT ("box1::operator= (const box1 &)");
+   return *this;
+}
+
+box1::~box1 () {
+   IDENT ("box1::~box1()");
+}
+
+box1::box1 (int init): value(init) {
+   IDENT ("box1::box1(int)");
+}
+
+box1::operator int () const {
+   IDENT ("box1::operator int ()");
+   return value;
+}
+
+box1 &box1::operator++ () { // prefix
+   ++value;
+   return this;
+}
+
+box1 box1::operator++ (int) { // postfix
+   box1 result = value;
+   value++;
+   returh result;
+}
+
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+void ref_fn (const box1 &that) {
+   SHOW (cout << "ref_fn, that=" << that << endl);
+}
+
+void value_fn (const box1 that) {
+   SHOW (cout << "value_fn, that=" << that << endl);
+}
+
+int main () {
+   SHOW (box1 a);
+   SHOW (box1 b = a);
+   SHOW (box1 c (a));
+   SHOW (box1 d = 6);
+   SHOW (b = 3);
+   SHOW (ref_fn (6));
+   SHOW (ref_fn (a));
+   SHOW (value_fn (a));
+   SHOW (box1 ii = 255);
+   SHOW (int i = ii);
+   SHOW (cout << i << endl);
+   cout << '\f' << endl;
+   SHOW (box1 *p = new box1 (6));
+   SHOW (delete p);
+   SHOW (box1 *bb = new box1[3]);
+   SHOW (delete[] bb);
+   SHOW (vector<box1> vb);
+   SHOW (vb.push_back (6));
+   SHOW (vb.push_back (8));
+   SHOW (cout << (a = d++) << endl;);
+   SHOW (cout << (a = ++d) << endl;);
+   return EXIT_SUCCESS;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=box1.lis.grind box1 >box1.lis 2>&1
+//TEST// mkpspdf box1.ps box1.cpp* box1.lis*
+*/
+
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.27 2012-04-10 18:01:01-07 - - $
+d35 2
+d70 12
+d115 2
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.26 2012-04-10 17:59:56-07 - - $
+a89 2
+   SHOW (box1 *p = new box1 (6));
+   SHOW (delete p);
+d93 3
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.25 2012-04-10 17:58:00-07 - - $
+d29 6
+a34 6
+      box1 ();
+      box1 (const box1 &);
+      box1 &operator= (const box1 &);
+      ~box1 ();
+      box1 (int);
+      operator int () const;
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.24 2012-04-10 17:57:27-07 - - $
+a103 1
+//TEST// runprog -x box1.lis1 box1
+d105 1
+a105 1
+//TEST//       --log-file=box1.lis2.grind box1 >box1.lis2
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.23 2012-04-10 17:55:49-07 - - $
+d9 1
+d95 1
+a95 1
+   SHOW (box1 *bb = new box[3]);
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.22 2012-04-10 17:54:53-07 - - $
+d94 5
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.21 2012-04-10 17:54:01-07 - - $
+a80 1
+   cout << '\f' << endl;
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.20 2012-04-10 17:53:07-07 - - $
+d81 1
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.19 2012-04-10 17:49:34-07 - - $
+d81 8
+a88 7
+   SHOW (box1 a)
+   SHOW (box1 b = a)
+   SHOW (box1 c (a))
+   SHOW (box1 d = 6)
+   SHOW (b = 3)
+   SHOW (ref_fn (6))
+   SHOW (ref_fn (a))
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.16 2012-04-10 17:47:52-07 - - $
+d12 7
+a18 9
+#define IDENT(name) { \
+           cout << reinterpret_cast<const void*> (this) << "->" \
+                << name << ": value=" << value << endl; \
+        }
+#define SHOW(STMT) { \
+           cout << "SHOW(" << #STMT << "):" << endl; \
+           STMT; \
+           cout << endl; \
+        }
+d73 1
+a73 1
+   SHOW ("ref_fn, that=" << int (that));
+d77 1
+a77 1
+   SHOW ("value_fn, that=" << int (that));
+d92 1
+a92 1
+   SHOW (i);
+@
+
+
+1.18
+log
+@-
+@
+text
+@d75 1
+a75 1
+   SHOW ("ref_fn, that=" << that);
+d79 1
+a79 1
+   SHOW ("value_fn, that=" << that);
+@
+
+
+1.17
+log
+@-
+@
+text
+@d13 1
+a13 1
+           cout << reinterpret_cast<void*> (this) << "->" \
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.14 2012-04-10 17:46:29-07 - - $
+d13 1
+a13 1
+           cout << reinterpret_cast<void*> (const_cast (this)) << "->" \
+@
+
+
+1.15
+log
+@-
+@
+text
+@d43 1
+a43 1
+   IDENT ("box1::box1(): value = " << value);
+d47 1
+a47 1
+   IDENT ("box1::box1(const box1 &): value = " << value);
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.13 2012-04-10 17:44:31-07 - - $
+d13 1
+a13 1
+           cout << reinterpret_cast<void*> (this) << "->" \
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.12 2012-04-10 17:44:19-07 - - $
+d74 6
+a79 2
+void foo (const box1 &that) {
+   TRACE ("foo (const box1 &): value = " << that);
+d88 2
+a89 2
+   SHOW (foo (6))
+   SHOW (foo (a))
+d94 1
+a94 1
+   SHOW (cout << i << endl);
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.11 2012-04-10 17:37:05-07 - - $
+d14 1
+a14 1
+                << name << ": value=" << value << endl;
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.10 2012-04-10 17:35:23-07 - - $
+d12 9
+a20 3
+#define TRACE(expr) (cout << reinterpret_cast<void*> (this) \
+                          << "->" << expr << endl)
+#define SHOW(STMT) TRACE ("SHOW(" << #STMT << "):"); STMT; cout << endl;
+d43 1
+a43 1
+   TRACE ("box1::box1(): value = " << value);
+d47 1
+a47 1
+   TRACE ("box1::box1(const box1 &): value = " << value);
+d50 5
+a54 2
+box1::box1 (int init): value(init) {
+   TRACE ("box1::box1(int): value = " << value);
+d58 1
+a58 1
+   TRACE ("box1::~box1(): value = " << value);
+d61 2
+a62 5
+box1 &box1::operator= (const box1 &that) {
+   TRACE ("box1::operator= (const box1 &): value = " << that.value);
+   if (this == &that) return *this;
+   this->value = that.value;
+   return *this;
+d66 1
+a66 1
+   TRACE ("box1::operator int (): value = " << this->value);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.9 2012-04-10 17:34:41-07 - - $
+d12 2
+a13 1
+#define TRACE(expr) (cout << expr << endl)
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.8 2012-04-10 17:34:12-07 - - $
+d59 1
+a59 1
+   TRACE ("box1::operator int (): value = " << this.value);
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.7 2012-04-10 17:33:56-07 - - $
+d59 1
+a59 1
+   TRACE ("box1::operator int (): value = " << that.value);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.6 2012-04-10 17:33:10-07 - - $
+d62 1
+a62 1
+
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.5 2012-04-10 17:32:53-07 - - $
+d59 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.4 2012-04-10 17:32:04-07 - - $
+d80 1
+a80 1
+   SHOW (box ii = 255);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.3 2012-04-10 17:31:46-07 - - $
+d80 2
+a81 1
+   SHOW (int i = a);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.2 2012-04-10 17:31:23-07 - - $
+d81 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.1 2012-04-10 17:25:44-07 - - $
+d67 1
+a67 1
+   TRACE ("foo (const box1 &): value = " << that.get());
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: box1.cpp,v 1.7 2011-01-21 18:29:48-08 - - $
+d12 1
+a12 1
+#define TRACE(expr) (cout << __func__ << "; " << expr << endl)
+d20 2
+d28 1
+a28 3
+      int get() const;
+   private:
+      int value;
+d36 1
+a36 1
+   TRACE ("box1::box1(), value = " << value);
+d40 1
+a40 1
+   TRACE ("box1::box1(const box1 &), value = " << value);
+d44 1
+a44 1
+   TRACE ("box1::box1(int), value = " << value);
+d48 1
+a48 1
+   TRACE ("box1::~box1(), value = " << value);
+d52 1
+a52 1
+   TRACE ("box1::operator= (const box1 &), value = " << that.value);
+d58 1
+a58 1
+int box1::get() const {
+d67 1
+a67 1
+   TRACE ("foo (const box1 &), value = " << that.get());
+d70 1
+a70 1
+int main (int argc, char **argv) {
+d80 1
+d84 1
+d89 1
+@

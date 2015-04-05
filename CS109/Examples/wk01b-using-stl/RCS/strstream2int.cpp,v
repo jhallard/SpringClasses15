@@ -1,0 +1,130 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.4
+date	2012.04.04.03.32.47;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.04.03.31.16;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.04.03.30.32;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.04.03.28.52;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@// $Id: strstream2int.cpp,v 1.3 2012-04-03 20:31:16-07 - - $
+
+//
+// NAME
+//    str2int-stream - print out argv elements that are ints
+//
+// SYNOPSIS
+//    str2int-stream [string...]
+//
+// DESCRIPTION
+//    Prints out its arguments that are ints, and which are not.
+//    Fail1 if an int is not recognized.
+//    Fail2 if an int is recognized followed by junk.
+//
+
+#include <sstream>
+#include <iostream>
+
+using namespace std;
+
+int main (int argc, char **argv) {
+   cout << boolalpha;
+   for (int argi = 1; argi < argc; ++argi) {
+      string arg = argv[argi];
+      cout << "argv[" << argi << "] = \"" << arg << "\", ";
+      istringstream stream (arg);
+      int num = 0;
+      stream >> num;
+      if (stream.fail ()) {
+         cout << "Fail1: int not recognized." << endl;
+         continue;
+      }
+      string junk = "";
+      stream >> junk;
+      if (! stream.fail ()) {
+         cout << "Fail2: number = " << num
+              << ", trailing junk = \"" << junk << "\"" << endl;
+         continue;
+      }
+      cout << "Good: number = " << num << endl;
+   }
+}
+
+/*
+//TEST// runprogram.perl -x strstream2int.lis ./strstream2int \
+//TEST//       1024 56foobar -45 68.9 testing 007777 0x48 2147483648
+//TEST// mkpspdf strstream2int.ps strstream2int.cpp strstream2int.lis
+*/
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strstream2int.cpp,v 1.2 2012-04-03 20:30:32-07 - - $
+d44 1
+d48 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strstream2int.cpp,v 1.1 2012-04-03 20:28:52-07 - - $
+d36 2
+a37 2
+         cout << "Fail2: junk after int: number = " << num
+              << ", junk = \"" << junk << "\"" << endl;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: str2int-stream.cpp,v 1.6 2012-04-03 20:25:33-07 - - $
+d44 3
+a46 2
+//TEST// runprogram.perl -x vecsort.lis ./vecsort foo bar baz qux quux
+//TEST// mkpspdf vecsort.ps vecsort.cpp vecsort.lis
+@

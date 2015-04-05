@@ -1,0 +1,11 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting observereport.java
+* observereport.java: $Id: observereport.java,v 1.6 2013-08-12
+19:26:25-07 - - $
+* javac -Xlint observereport.java
+* jar cfm observereport Manifest observereport$counter.class
+observereport$observer.class observereport$reporter.class
+observereport.class
+* chmod +x observereport
+* rm -f observereport$counter.class observereport$observer.class
+observereport$reporter.class observereport.class
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished observereport.java

@@ -1,0 +1,158 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/30/12)Tj
+-0.659766 -12.8004 Td
+(19:55:40)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 269.643 736.5 Tm
+(hellogui.java)Tj
+-83.0184 18 Td
+($cmps109-wm/Examples/wk09b-java-gui/)Tj
+/R10 10 Tf
+-118.625 -35.5 Td
+[(1:)-600(// $Id: hellogui.java,v 1.10 2012-05-30 19:55:40-07 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(//)]TJ
+T*[(4:)-600(// Display a hello button.)]TJ
+T*[(5:)-600(// Pressing it shows a slight change of appearance.)]TJ
+T*[(6:)-600(// Program only quits when killed externally.)]TJ
+T*[(7:)-600(//)]TJ
+(8:)'
+T*[(9:)-600(import java.awt.*; )]TJ
+-6 -11 Td
+[(10:)-600(import javax.swing.*;)]TJ
+(11:)'
+T*[(12:)-600(class hellogui { )]TJ
+T*[(13:)-600(   public static void main \(String[] args\) { )]TJ
+T*[(14:)-600(      JFrame frame = new JFrame \("HelloButton"\);)]TJ
+T*[(15:)-600(      Container pane = frame.getContentPane \(\);)]TJ
+T*[(16:)-600(      JButton hello = new JButton \("\253 Hello, world! \273"\);)]TJ
+T*[(17:)-600(      int fontsize = \(int\) Math.round \(10 * Math.pow \(1.2, 6\)\);)]TJ
+T*[(18:)-600(      Font timesroman = new Font \("SansSerif", Font.BOLD, fontsize\);)]TJ
+T*[(19:)-600(      hello.setFont \(timesroman\);)]TJ
+T*[(20:)-600(      pane.add \(hello\); )]TJ
+T*[(21:)-600(      frame.pack \(\); )]TJ
+T*[(22:)-600(      frame.setSize \(512, 128\);)]TJ
+T*[(23:)-600(      frame.setLocation \(256, 256\);)]TJ
+T*[(24:)-600(      frame.setVisible \(true\);)]TJ
+T*[(25:)-600(   })]TJ
+T*[(26:)-600(})]TJ
+(27:)'
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+1743
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+] /Count 1
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20120530202045)
+/ModDate(D:20120530202045)>>endobj
+xref
+0 13
+0000000000 65535 f 
+0000002014 00000 n 
+0000002463 00000 n 
+0000001955 00000 n 
+0000001822 00000 n 
+0000000009 00000 n 
+0000001802 00000 n 
+0000002261 00000 n 
+0000002132 00000 n 
+0000002330 00000 n 
+0000002198 00000 n 
+0000002395 00000 n 
+0000002062 00000 n 
+trailer
+<< /Size 13 /Root 1 0 R /Info 2 0 R
+/ID [<4459B0E15411B9DECD582F4DE10E9257><4459B0E15411B9DECD582F4DE10E9257>]
+>>
+startxref
+2574
+%%EOF

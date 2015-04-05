@@ -1,0 +1,372 @@
+head	1.7;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.7
+date	2013.08.01.02.55.00;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.08.01.02.39.06;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.08.01.02.38.24;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.08.01.02.38.08;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.08.01.02.37.33;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.08.01.02.37.08;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.08.01.02.31.11;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@-
+@
+text
+@// $Id: vectormgr.cpp,v 1.6 2013-07-31 19:39:06-07 - - $
+
+//
+// Vector using allocate/deallocate/construct/destroy.
+// With iterator/const_iterator.
+//
+
+#include <algorithm>
+#include <cstddef>
+#include <initializer_list>
+#include <memory>
+
+using namespace std;
+
+template <typename T>
+class vectormgr {
+   public:
+      typedef T value_type;
+      typedef value_type& reference;
+      typedef const value_type& const_reference;
+      typedef value_type* pointer;
+      typedef const value_type* const_pointer;
+      typedef ptrdiff_t difference_type;
+      typedef size_t size_type;
+      template <typename TI, typename Pointer = TI*,
+                typename Reference = TI&> class base_iterator;
+      typedef base_iterator<value_type> iterator;
+      typedef base_iterator<const value_type> const_iterator;
+   private:
+      const static size_type MIN_RESERVE = 8;
+      static allocator<value_type> alloc;
+      size_type _size;
+      size_type _capacity;
+      pointer _data;
+      void destroy_this();
+      void move_that (vectormgr&&);
+      void copy_that (const vectormgr&);
+      inline void clear_data() {_size = _capacity = 0; _data = NULL; }
+
+
+   public:
+      // Replace implicit members.
+      inline vectormgr() { clear_data(); }
+      vectormgr (const vectormgr&);
+      vectormgr (vectormgr&&);
+      vectormgr& operator= (const vectormgr&);
+      vectormgr& operator= (vectormgr&&);
+      ~vectormgr();
+
+      // More constructors.
+      explicit vectormgr (size_type size,
+                            const value_type& val = value_type());
+      explicit vectormgr (initializer_list<value_type> ilist);
+
+      // Iterators: begin, cbegin, end, cend.
+      inline iterator begin()
+             { return iterator (&_data[0]); }
+      inline const_iterator begin() const
+             { return const_iterator (&_data[0]); }
+      inline const_iterator cbegin() const
+             { return const_iterator (&_data[0]); }
+      inline iterator end()
+             { return iterator (&_data[_size]); }
+      inline const_iterator end() const
+             { return const_iterator (&_data[_size]); }
+      inline const_iterator cend() const
+             { return const_iterator (&_data[_size]); }
+
+      // Capacity.
+      inline size_type size() const { return _size; }
+      inline size_type capacity() const { return _capacity; }
+      inline bool empty() const { return size() == 0; }
+      void reserve (size_type);
+
+      // Access: [], front, back.
+      inline reference operator[] (size_type pos) { return _data[pos]; }
+      inline const_reference operator[] (size_type pos) const
+             { return _data[pos]; }
+      inline reference front() { return _data[0]; }
+      inline const_reference front() const { return _data[0]; }
+      inline reference back() { return _data[_size - 1]; }
+      inline const_reference back() const { return _data[_size - 1]; }
+
+      // Modifiers: push_back, pop_back.
+      void push_back (const value_type& value);
+      inline void pop_back() { alloc.destroy (&_data[--_size]); }
+};
+
+
+template <typename T>
+template <typename TI, typename Pointer, typename Reference>
+class vectormgr<T>::base_iterator {
+   public:
+      typedef Pointer pointer;
+      typedef Reference reference;
+   private:
+      pointer _datum;
+      inline base_iterator (pointer ptr): _datum(ptr) {}
+   public:
+      inline base_iterator(): _datum(NULL) {};
+      // Other implicit members by default OK.
+      inline base_iterator& operator++() { ++_datum; return *this; }
+      inline base_iterator& operator--() { --_datum; return *this; }
+      inline base_iterator operator++ (int)
+             { auto result (*this); ++_datum; return result; }
+      inline base_iterator operator-- (int)
+             { auto result (*this); --_datum; return result; }
+      inline reference operator*() { return *_datum; }
+      inline const reference operator*() const { return *_datum; }
+      inline pointer operator->() { return _datum; }
+      inline const pointer operator->() const { return _datum; }
+      inline bool operator== (const base_iterator& that) const
+             { return _datum == that._datum; }
+      inline bool operator!= (const base_iterator& that) const
+             { return not (*this == that); }
+};
+
+
+// Private destroy_this.
+template <typename T>
+void vectormgr<T>::destroy_this() {
+   if (_data) foreach (&_data[0], &_data[_size], alloc.destroy);
+}
+
+// Private move_that: and then clear that.
+template <typename T>
+void vectormgr<T>::move_that (vectormgr&& that) {
+   _size = that._size;
+   _capacity = that._capacity;
+   _data = that._data;
+   that.clear_data();
+}
+
+// Private: copy_that.
+template <typename T>
+void vectormgr<T>::copy_that (const vectormgr& that) {
+   reserve (that._size);
+   _size = that._size;
+   uninitialized_copy (that.cbegin(), that.cend(), _data);
+   return *this;
+}
+
+// Copy constructor.
+template <typename T>
+vectormgr<T>::vectormgr (const vectormgr& that) {
+   clear_data();
+   copy_that (that);
+}
+
+// Copy operator=.
+template <typename T>
+vectormgr<T>& vectormgr<T>::operator= (const vectormgr& that) {
+   if (*this == that) return *this;
+   destroy_this();
+   copy_that (that);
+}
+
+// Move constructor.
+template <typename T>
+vectormgr<T>::vectormgr (vectormgr&& that) {
+   move_that (that);
+}
+
+// Move operator=.
+template <typename T>
+vectormgr<T>& vectormgr<T>::operator= (vectormgr&& that) {
+   if (*this == that) return *this;
+   destroy_this();
+   move_that (that);
+   return *this;
+}
+
+
+// Destructor.
+template <typename T>
+vectormgr<T>::~vectormgr() {
+   destroy_this();
+   alloc.dealloc (_data, _capacity);
+}
+
+// Fill constructor.
+template <typename T>
+vectormgr<T>::vectormgr (size_type fill, const value_type& val) {
+   clear_data();
+   while (size() < fill) push_back (val);
+}
+
+// Initializer list constructor.
+template <typename T>
+vectormgr<T>::vectormgr (initializer_list<value_type> ilist) {
+   clear_data();
+   reserve (ilist.size());
+   uninitialized_copy (ilist.cbegin(), ilist.cend(), _data);
+}
+
+// Reserve minimum uninitialized space.
+template <typename T>
+void vectormgr<T>::reserve (size_type needed) {
+   if (needed <= capacity()) return;
+   size_t new_capacity = MIN_RESERVE;
+   while (new_capacity < needed) new_capacity <<= 1;
+   
+   //FIXME// Function not implemented.
+}
+
+template <typename T>
+void vectormgr<T>::push_back (const value_type& that) {
+   reserve (++_size);
+   alloc.construct (&_data[_size - 1], that);
+}
+
+
+int main (int argc, char** argv) {
+   return 0;
+}
+
+//TEST// mkpspdf vectormgr.ps vectormgr.cpp*
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectormgr.cpp,v 1.5 2013-07-31 19:38:24-07 - - $
+d30 1
+d73 1
+a73 1
+      void reserve (size_type size);
+d192 2
+a193 1
+   //FIXME// Function not implemented.
+d198 5
+a202 1
+void vectormgr<T>::reserve (size_type size) {
+d207 3
+a209 2
+void vectormgr<T>::push_back (const value_type&) {
+   //FIXME// Function not implemented.
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectormgr.cpp,v 1.4 2013-07-31 19:38:08-07 - - $
+d172 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectormgr.cpp,v 1.3 2013-07-31 19:37:33-07 - - $
+a37 1
+   public:
+d40 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectormgr.cpp,v 1.2 2013-07-31 19:37:08-07 - - $
+d208 2
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vectormgr.cpp,v 1.1 2013-07-31 18:09:27-07 - - $
+d204 4
+@
+
+
+1.1
+log
+@-
+@
+text
+@d37 1
+d40 1
+d42 1
+a42 1
+      inline vectormgr(): _size(0), _capacity(0), _data(NULL) {}
+d88 1
+d117 1
+d130 1
+a130 3
+   that._size = 0;
+   that._capacity = 0;
+   that._data = NULL;
+d134 1
+d145 1
+d181 3
+a183 2
+vectormgr<T>::vectormgr (size_type size, const value_type& val) {
+   //FIXME// Function not implemented.
+d189 1
+@

@@ -1,0 +1,2501 @@
+head	1.100;
+access;
+symbols;
+locks;
+comment	@.\" @;
+
+
+1.100
+date	2015.03.25.00.14.03;	author -;	state -;
+branches;
+next	1.99;
+
+1.99
+date	2014.12.23.02.37.55;	author -;	state -;
+branches;
+next	1.98;
+
+1.98
+date	2014.12.13.02.27.13;	author -;	state -;
+branches;
+next	1.97;
+
+1.97
+date	2014.12.13.02.24.41;	author -;	state -;
+branches;
+next	1.96;
+
+1.96
+date	2014.10.23.22.02.02;	author -;	state -;
+branches;
+next	1.95;
+
+1.95
+date	2014.10.23.22.01.34;	author -;	state -;
+branches;
+next	1.94;
+
+1.94
+date	2014.10.23.22.00.36;	author -;	state -;
+branches;
+next	1.93;
+
+1.93
+date	2014.10.23.21.59.37;	author -;	state -;
+branches;
+next	1.92;
+
+1.92
+date	2014.10.23.21.59.13;	author -;	state -;
+branches;
+next	1.91;
+
+1.91
+date	2014.10.23.21.58.47;	author -;	state -;
+branches;
+next	1.90;
+
+1.90
+date	2014.07.30.20.52.15;	author -;	state -;
+branches;
+next	1.89;
+
+1.89
+date	2014.07.14.19.54.17;	author -;	state -;
+branches;
+next	1.88;
+
+1.88
+date	2014.06.20.03.17.24;	author -;	state -;
+branches;
+next	1.87;
+
+1.87
+date	2014.06.19.23.08.57;	author -;	state -;
+branches;
+next	1.86;
+
+1.86
+date	2014.06.19.23.08.31;	author -;	state -;
+branches;
+next	1.85;
+
+1.85
+date	2014.06.19.23.07.06;	author -;	state -;
+branches;
+next	1.84;
+
+1.84
+date	2014.06.19.23.06.06;	author -;	state -;
+branches;
+next	1.83;
+
+1.83
+date	2014.06.19.23.05.03;	author -;	state -;
+branches;
+next	1.82;
+
+1.82
+date	2014.06.19.22.47.05;	author -;	state -;
+branches;
+next	1.81;
+
+1.81
+date	2014.06.19.22.46.49;	author -;	state -;
+branches;
+next	1.80;
+
+1.80
+date	2014.06.19.22.46.05;	author -;	state -;
+branches;
+next	1.79;
+
+1.79
+date	2014.06.19.22.42.43;	author -;	state -;
+branches;
+next	1.78;
+
+1.78
+date	2014.06.19.22.42.01;	author -;	state -;
+branches;
+next	1.77;
+
+1.77
+date	2014.06.11.02.23.10;	author -;	state -;
+branches;
+next	1.76;
+
+1.76
+date	2014.06.11.02.23.00;	author -;	state -;
+branches;
+next	1.75;
+
+1.75
+date	2014.06.11.02.22.39;	author -;	state -;
+branches;
+next	1.74;
+
+1.74
+date	2014.06.11.02.22.03;	author -;	state -;
+branches;
+next	1.73;
+
+1.73
+date	2014.06.11.02.21.09;	author -;	state -;
+branches;
+next	1.72;
+
+1.72
+date	2014.06.11.02.17.52;	author -;	state -;
+branches;
+next	1.71;
+
+1.71
+date	2014.06.11.02.13.41;	author -;	state -;
+branches;
+next	1.70;
+
+1.70
+date	2014.06.11.02.13.12;	author -;	state -;
+branches;
+next	1.69;
+
+1.69
+date	2014.06.11.02.11.36;	author -;	state -;
+branches;
+next	1.68;
+
+1.68
+date	2014.06.11.02.04.54;	author -;	state -;
+branches;
+next	1.67;
+
+1.67
+date	2014.06.09.21.59.01;	author -;	state -;
+branches;
+next	1.66;
+
+1.66
+date	2014.06.09.21.38.10;	author -;	state -;
+branches;
+next	1.65;
+
+1.65
+date	2014.06.09.21.36.45;	author -;	state -;
+branches;
+next	1.64;
+
+1.64
+date	2014.06.09.21.36.26;	author -;	state -;
+branches;
+next	1.63;
+
+1.63
+date	2014.06.09.21.36.13;	author -;	state -;
+branches;
+next	1.62;
+
+1.62
+date	2014.06.09.21.35.59;	author -;	state -;
+branches;
+next	1.61;
+
+1.61
+date	2014.06.09.21.35.19;	author -;	state -;
+branches;
+next	1.60;
+
+1.60
+date	2014.06.09.21.35.07;	author -;	state -;
+branches;
+next	1.59;
+
+1.59
+date	2014.06.09.21.34.30;	author -;	state -;
+branches;
+next	1.58;
+
+1.58
+date	2014.06.09.21.33.49;	author -;	state -;
+branches;
+next	1.57;
+
+1.57
+date	2014.06.09.21.32.43;	author -;	state -;
+branches;
+next	1.56;
+
+1.56
+date	2014.06.09.21.31.35;	author -;	state -;
+branches;
+next	1.55;
+
+1.55
+date	2014.03.31.19.51.40;	author -;	state -;
+branches;
+next	1.54;
+
+1.54
+date	2014.02.07.03.30.08;	author -;	state -;
+branches;
+next	1.53;
+
+1.53
+date	2014.01.28.21.08.52;	author -;	state -;
+branches;
+next	1.52;
+
+1.52
+date	2014.01.28.21.07.47;	author -;	state -;
+branches;
+next	1.51;
+
+1.51
+date	2014.01.28.21.01.36;	author -;	state -;
+branches;
+next	1.50;
+
+1.50
+date	2014.01.28.21.00.28;	author -;	state -;
+branches;
+next	1.49;
+
+1.49
+date	2014.01.28.20.55.49;	author -;	state -;
+branches;
+next	1.48;
+
+1.48
+date	2014.01.28.20.55.35;	author -;	state -;
+branches;
+next	1.47;
+
+1.47
+date	2014.01.28.20.52.07;	author -;	state -;
+branches;
+next	1.46;
+
+1.46
+date	2013.06.22.02.09.42;	author -;	state -;
+branches;
+next	1.45;
+
+1.45
+date	2013.06.18.23.05.42;	author -;	state -;
+branches;
+next	1.44;
+
+1.44
+date	2013.06.18.02.43.52;	author -;	state -;
+branches;
+next	1.43;
+
+1.43
+date	2013.06.18.02.02.23;	author -;	state -;
+branches;
+next	1.42;
+
+1.42
+date	2013.06.18.02.00.23;	author -;	state -;
+branches;
+next	1.41;
+
+1.41
+date	2013.06.10.23.48.19;	author -;	state -;
+branches;
+next	1.40;
+
+1.40
+date	2013.01.04.03.01.25;	author -;	state -;
+branches;
+next	1.39;
+
+1.39
+date	2013.01.04.03.00.59;	author -;	state -;
+branches;
+next	1.38;
+
+1.38
+date	2013.01.04.02.57.43;	author -;	state -;
+branches;
+next	1.37;
+
+1.37
+date	2013.01.04.02.57.13;	author -;	state -;
+branches;
+next	1.36;
+
+1.36
+date	2013.01.04.02.55.14;	author -;	state -;
+branches;
+next	1.35;
+
+1.35
+date	2013.01.04.00.27.00;	author -;	state -;
+branches;
+next	1.34;
+
+1.34
+date	2013.01.04.00.24.38;	author -;	state -;
+branches;
+next	1.33;
+
+1.33
+date	2013.01.04.00.24.29;	author -;	state -;
+branches;
+next	1.32;
+
+1.32
+date	2013.01.04.00.24.18;	author -;	state -;
+branches;
+next	1.31;
+
+1.31
+date	2013.01.04.00.23.51;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2013.01.04.00.22.21;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2013.01.04.00.12.27;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2013.01.04.00.05.08;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2013.01.04.00.04.50;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2013.01.03.23.59.03;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2012.05.25.18.55.32;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2012.04.16.20.36.47;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2012.04.16.20.35.55;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2012.03.23.01.25.31;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2010.12.10.02.31.15;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2010.12.07.22.58.52;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2010.12.07.22.57.08;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2010.12.07.22.56.57;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2010.12.07.22.55.22;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2010.12.07.22.52.43;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2010.12.07.22.52.24;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2010.12.07.22.46.42;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2010.12.07.22.45.38;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2010.12.07.02.10.53;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2010.12.07.02.10.34;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2010.12.07.02.10.15;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2010.12.03.02.31.21;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2010.12.03.02.31.00;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2010.12.03.02.29.38;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2010.12.03.02.29.12;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2010.12.03.02.26.00;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2010.12.03.02.25.23;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2010.12.03.02.24.57;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2010.12.03.02.01.18;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2010.12.03.02.00.49;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.100
+log
+@-
+@
+text
+@.so Tmac.mm-etc
+.if t .Newcentury-fonts
+.INITR* \n[.F]
+.SIZE 12 14
+.ds QUARTER Spring
+.ds YEAR 2015
+.TITLE CMPS-109 \*[QUARTER]\~\*[YEAR] Syllabus "Advanced Programming"
+.RCS "$Id: syllabus-cmps109.mm,v 1.99 2014-12-22 18:37:55-08 - - $"
+.PWD
+.URL
+.H 1 "General Information"
+The generic part of the syllabus contains detailed information
+about prohibiting cheating, due dates and times, 
+submitting assignments, and verification of the submit.
+Read it carefully, as you will be held responsible for it.
+.VL 18n
+.B=LI "Directory\(::"
+The directory
+.V=  /afs/cats.ucsc.edu/courses/cmps109-wm/
+and its subdirectories contain all assignments, handouts,
+examples, old exams, etc.
+.B=LI "Assignments\(::"
+All assignments must be submitted electronically and must work
+on the Unix servers
+.=V ( unix.ucsc.edu ).
+.B=LI "Due Dates\(::"
+Due dates are announced in the
+.V= README
+files in the course directory.
+You must frequently check the
+.V= README .
+.B=LI "Cheating\(::"
+.E= "Cheating will not be tolerated."
+.E= "See the secion on cheating in the generic part of the syllabus."
+.B=LI "Grades\(::"
+To pass the course, 
+both the programming component and the testing component will
+be taken into consideration.
+Failing either component may be cause to fail the course.
+Your final grade will be computed as follows\(::
+.DS
+.ie '\*[QUARTER]'Summer' \{.\"
+.TS
+tab(|); l r1 r1 r l.
+Programming assignments\(::|5 ×|10% =|50%
+Midterm and final tests in class\(::|2 ×|25% =|50%
+.TE
+Summer quarter does not have an exam week.
+.\}
+.el \{.\"
+.TS
+tab(|); l r1 r1 r l.
+Programming assignments\(::|5 ×|10% =|50%
+Midterm tests in class\(::|2 ×|12% =|24%
+Final exam during exam week\(::|||26%
+.TE
+.\}
+.DE
+.H 1 "Course Description from Catalog"
+.BR CMPS-109.
+.BR "Advanced Programming."
+An introduction to object-oriented techniques of software development
+including data abstraction, inheritance, polymorphism,
+and object-oriented design.
+Extensive practice using a computer to solve problems,
+including construction of graphical user interfaces
+and a multithreaded client/server application.
+.BR Prerequisites\(::
+CMPS-012B/M or CMPS-013H.
+.H 1 "Textbooks and References"
+Only the first textbook (by Stroustrup) is listed as ``requred''.
+The others are optional references.
+.ALX 1 ()
+.LI
+Bjarne Stroustrup\(::
+.E= "Programming Principles and Practice Using C++",
+second edition.
+Addison-Wesley, 2014.
+ISBN 0-321-99278-4.
+This is an elementary textbook for a first course in C++.
+The previous edition will also work,
+or any other C++ textbook you may already have.
+It is strongly recommended that you read a book advertising 
+the use of C++11.
+.LI
+The C++ Resources Network\(::
+Use this site to find specific information about various
+classes in the standard library.
+.VTCODE* 0 http://www.cplusplus.com/
+.LI
+C++11\(:: The New ISO C++ Standard FAQ\(::
+.VTCODE* 0 http://www.stroustrup.com/C++11FAQ.html
+.LI
+Bjarne Stroustrup\(::
+.E= "The C++ Programming Language, 4th edition."
+Addison-Wesley, 2013.
+This is the revised definitive description of C++11.
+.LI
+Stanley B.\& Lippman,
+Jos\['e]e Lajoie,
+Barbara E.\& Moo\(::
+.E= "C++ Primer, 5th edition."
+Addison-Wesley, 2013.
+A good primer discussing C++11.
+.LI
+Nicolai M.\& Josuttis\(::
+.E= "The C++ Standard Library, 2nd edition\(::"
+.E= "A Tutorial and Reference."
+Addison-Wesley, 2012.
+A specific tutorial on the library, with C++11.
+.LI
+JTC1/SC22/WG21 \[em] The C++ Standards Committee\(::
+Latest publicly available draft\(::
+.E= "N3797 Working Draft, Standard for Programming Language C++."
+2013-10-13.
+.ds JTC1-SC22-WG21 http://www.open-std.org/jtc1/sc22/wg21/
+.VTCODE* 0 \*[JTC1-SC22-WG21]
+.VTCODE* 0 \*[JTC1-SC22-WG21]/docs/papers/2013/n3797.pdf
+.LI
+Bjarne Stroustrup\(::
+.E= "The Design and Evolution of C++."
+Addison-Wesley, 1994.
+This is a historical document where Stroustrup discusses
+his design philosophy and how it derived from C with Classes.
+.LI
+P.J.\& Plauger,
+Alexander Stepanov,
+Meng Lee,
+David Musser\(::
+.E= "The C++ Standard Template Library."
+Prentice-Hall, 2001.
+Detailed description of the implementation of the STL,
+showing detailed code examples.
+.LI
+Scott Meyers,
+.V= http://www.aristeia.com/books.html
+.LE
+.H 1 "Detailed Syllabus."
+This course is about programming
+in C++, including C++11.
+Prior programming knowledge of ANSI C is assumed.
+.ALX 1 ()
+.LI
+C vs C++.
+Some differences\(::
+Input/output, strings, vectors
+instead of standard I/O, character and other arrays.
+Fundamental data types.
+Using the Standard Template Library (STL).
+.LI
+Functions\(::
+pass by value, reference, and const reference.
+Namespaces.
+.LI
+Classes\(::
+interface and implementaton.
+Header files and file guards.
+Member functions.
+Operator and function overloading.
+.LI
+Input and output streams.
+User-defined I/O operators.
+Formatting I/O.
+.LI
+Vectors and free store.
+Memory management
+Constructors and destructors.
+Copying and assignment of objects.
+Pointers and references.
+Shared_ptr and Unique_ptr.
+.LI
+Vectors and arrays.
+Copy and move constructors, and copy and move assignments.
+Destructors.
+Explicit constructors.
+.LI
+Inheritance polymorphism and object-oriented programming.
+Abstract classes.
+Virtual functions.
+Overriding functions and operators.
+Multiple inheritance as interfaces.
+.LI
+Template polymorphism and generic programming.
+Containers and inheritance.
+Range checking and resource management.
+Exceptions\(::
+defining, throwing, and catching.
+.LI
+Containers and iterators
+in the standard library.
+Vectors, lists, and strings.
+Algorithms and maps.
+.LI
+Graphical user interfaces (GUI).
+Threads.
+Sockets.
+Client/server applications.
+.LI
+Miscellaneous other topics\(::
+TBA.
+.LE
+.H 1 "Students with Disabilities"
+If you qualify for classroom accommodations because of a disability,
+please submit your Accommodation Authorization Letter
+from the Disability Resource Center (DRC) to me as soon as possible,
+preferably within the first week of the quarter.
+Contact DRC by phone at 831-459-2089 or by email at
+.V= drc@@ucsc.edu
+for more information.
+.H 1 "Pair Programming"
+You may do pair programming if you choose.
+You are responsible for choosing a partner with whom you can work.
+Read the guidelines in the directory
+.V= pair-programming/ .
+.FINISH
+@
+
+
+1.99
+log
+@-
+@
+text
+@d5 1
+a5 1
+.ds QUARTER Winter
+d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.98 2014-12-12 18:27:13-08 - - $"
+@
+
+
+1.98
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.97 2014-12-12 18:24:41-08 - - $"
+d134 3
+@
+
+
+1.97
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.96 2014-10-23 15:02:02-07 - - $"
+d76 4
+a79 3
+.E= "Programming Principles and Practice Using C++."
+Addison-Wesley, 2009.
+ISBN 0-321-54372-6.
+d81 4
+@
+
+
+1.96
+log
+@-
+@
+text
+@d5 2
+a6 2
+.ds QUARTER Summer
+.ds YEAR 2014
+d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.95 2014-10-23 15:01:34-07 - - $"
+@
+
+
+1.95
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.94 2014-10-23 15:00:36-07 - - $"
+a206 3
+.FS
+.Cato.maior
+.FE
+@
+
+
+1.94
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.93 2014-10-23 14:59:37-07 - - $"
+d71 2
+@
+
+
+1.93
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.92 2014-10-23 14:59:13-07 - - $"
+a191 3
+.H 1 "Generic Syllabus"
+Also read the generic syllabus in the directory
+.V= generic-syllabus/ .
+@
+
+
+1.92
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.91 2014-10-23 14:58:47-07 - - $"
+d29 1
+a29 1
+files in the course directory and in the newsgroup.
+@
+
+
+1.91
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.90 2014-07-30 13:52:15-07 - - $"
+a25 8
+.B=LI "Mailing List\(::"
+The class mailing list is 
+.V= cmps109-wm@@soe.ucsc.edu .
+If you are not already subscribed do so by sending email to
+.V= cmps109-wm+subscribe@@soe.ucsc.edu .
+The class mailing list is for questions and discussions that are
+appropriate in the classroom or lab section.
+Everyone in class must be subscribed to it.
+@
+
+
+1.90
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.89 2014-07-14 12:54:17-07 - - $"
+d19 1
+a19 1
+.VTCODE* 1 /afs/cats.ucsc.edu/courses/cmps109-wm/
+a21 2
+It may be accessed via the web.
+.VTCODE* 0 http://www2.ucsc.edu/courses/cmps109-wm/:/
+@
+
+
+1.89
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.88 2014-06-19 20:17:24-07 - - $"
+d19 1
+a19 1
+.V= /afs/cats.ucsc.edu/courses/cmps109-wm/
+@
+
+
+1.88
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.87 2014-06-19 16:08:57-07 - - $"
+d128 9
+@
+
+
+1.87
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.86 2014-06-19 16:08:31-07 - - $"
+d23 1
+a23 2
+.br
+.V= http://www2.ucsc.edu/courses/cmps109-wm/:/
+d87 1
+d100 1
+d107 1
+d113 1
+d122 6
+a128 1
+.br
+@
+
+
+1.86
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.85 2014-06-19 16:07:06-07 - - $"
+a87 8
+.\".LI
+.\"Jonathan G.\& Campbell\(::
+.\".E= "Lecture Notes on C++ for Java Programmers."
+.\"12th August 2009,
+.\"Report No\(::
+.\"jc/09/0011/r.
+.\".br
+.\".V= http://www.jgcampbell.com/cpp4jp/cpp4jp.pdf
+@
+
+
+1.85
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.84 2014-06-19 16:06:06-07 - - $"
+d124 3
+a126 2
+.VTCODE* 0 http://www.open-std.org/jtc1/sc22/wg21/ .
+.VTCODE* 0 http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3797.pdf
+@
+
+
+1.84
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.83 2014-06-19 16:05:03-07 - - $"
+d100 1
+a100 1
+.V= http://www.cplusplus.com/
+d103 1
+a103 2
+.br
+.V= http://www.stroustrup.com/C++11FAQ.html
+d124 2
+a125 4
+.br
+.V= http://www.open-std.org/jtc1/sc22/wg21/ .
+.br
+.V= http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3797.pdf
+@
+
+
+1.83
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.82 2014-06-19 15:47:05-07 - - $"
+d88 8
+a95 8
+.LI
+Jonathan G.\& Campbell\(::
+.E= "Lecture Notes on C++ for Java Programmers."
+12th August 2009,
+Report No\(::
+jc/09/0011/r.
+.br
+.V= http://www.jgcampbell.com/cpp4jp/cpp4jp.pdf
+@
+
+
+1.82
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.81 2014-06-19 15:46:49-07 - - $"
+a87 1
+An introductory textbook, not yet updated for C++11.
+a108 2
+The definitive book describing C++11,
+written by the inventor of the language.
+a114 2
+A very readable auxiliary book,
+somewhat easier to read than TCPL4e.
+a119 1
+Another advanced references describing the language.
+@
+
+
+1.81
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.80 2014-06-19 15:46:05-07 - - $"
+d195 1
+a196 1
+Sockets.
+@
+
+
+1.80
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.79 2014-06-19 15:42:43-07 - - $"
+d194 1
+a196 1
+Threads.
+@
+
+
+1.79
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.78 2014-06-19 15:42:01-07 - - $"
+d88 1
+d99 2
+d110 2
+d118 2
+d125 1
+a127 3
+.br
+.V= http://www.open-std.org/jtc1/sc22/wg21/ .
+.br
+d132 2
+@
+
+
+1.78
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.77 2014-06-10 19:23:10-07 - - $"
+a129 2
+.ne 8
+.\".H 1 "Syllabus\(:) C++ topics."
+a193 2
+.br
+.ne 4
+@
+
+
+1.77
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.76 2014-06-10 19:23:00-07 - - $"
+d164 1
+d184 1
+a184 1
+in the standard template library (STL).
+d188 5
+@
+
+
+1.76
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.75 2014-06-10 19:22:39-07 - - $"
+d191 1
+a191 1
+.ne 3
+@
+
+
+1.75
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.74 2014-06-10 19:22:03-07 - - $"
+d190 2
+@
+
+
+1.74
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.73 2014-06-10 19:21:09-07 - - $"
+d192 1
+a192 2
+.br
+.V= /afs/cats.ucsc.edu/courses/cmps109-wm/Syllabus/generic-syllabus/
+a200 1
+.V= generic-syllabus/
+@
+
+
+1.73
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.72 2014-06-10 19:17:52-07 - - $"
+d192 2
+@
+
+
+1.72
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.71 2014-06-10 19:13:41-07 - - $"
+d192 8
+@
+
+
+1.71
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.70 2014-06-10 19:13:12-07 - - $"
+d125 1
+@
+
+
+1.70
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.69 2014-06-10 19:11:36-07 - - $"
+d122 1
+@
+
+
+1.69
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.68 2014-06-10 19:04:54-07 - - $"
+d23 1
+d93 2
+a94 1
+jc/09/0011/r .
+d101 1
+d120 1
+d124 1
+@
+
+
+1.68
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.67 2014-06-09 14:59:01-07 - - $"
+d115 6
+@
+
+
+1.67
+log
+@-
+@
+text
+@d5 1
+a5 1
+.ds QUARTER Spring
+d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.66 2014-06-09 14:38:10-07 - - $"
+@
+
+
+1.66
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.65 2014-06-09 14:36:45-07 - - $"
+d120 1
+a120 1
+This course is about template and object-oriented programming
+d153 2
+a154 1
+Copy constructors and copy assignments.
+a155 1
+Accessing vector elements.
+a175 1
+Will include some details of C++11.
+a176 13
+.\".H 1 "Syllabus\(:) Java topics."
+.\"Prior knowledge of Java is assumed.
+.\"The following advanced topics in Java will be considered.
+.\".ALX 1 ()
+.\".LI
+.\"Inheritance, generics, and polymorphism.
+.\".LI
+.\"Graphical user unterfaces.
+.\".LI
+.\"Threads and concurrency.
+.\".LI
+.\"Sockets and interprocess communication.
+.\".LE
+@
+
+
+1.65
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.64 2014-06-09 14:36:26-07 - - $"
+a97 3
+Advanced C++ Lessons\(::
+.V= http://aszt.inf.elte.hu/~gsd/halado_cpp/
+.LI
+@
+
+
+1.64
+log
+@-
+@
+text
+@d5 1
+a5 1
+.ds QUARTER Summer
+d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.63 2014-06-09 14:36:13-07 - - $"
+@
+
+
+1.63
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.62 2014-06-09 14:35:59-07 - - $"
+d57 1
+a58 1
+.TE
+@
+
+
+1.62
+log
+@-
+@
+text
+@d5 1
+a5 1
+.ds QUARTER Spring
+d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.61 2014-06-09 14:35:19-07 - - $"
+@
+
+
+1.61
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.60 2014-06-09 14:35:07-07 - - $"
+d52 1
+a54 1
+.ie '\*[QUARTER]'Summer' \{.\"
+d58 1
+d61 2
+d66 1
+a67 1
+.TE
+@
+
+
+1.60
+log
+@-
+@
+text
+@d5 1
+a5 1
+.ds QUARTER Summer
+d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.59 2014-06-09 14:34:30-07 - - $"
+@
+
+
+1.59
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.58 2014-06-09 14:33:49-07 - - $"
+a50 1
+.ie '\*[QUARTER]'Summer' \{.\"
+d54 1
+a57 2
+.TE
+.DE
+a59 3
+.DS
+.TS
+tab(|); l r1 r1 r l.
+d63 1
+a65 1
+.\}
+@
+
+
+1.58
+log
+@-
+@
+text
+@d5 1
+a5 1
+.ds QUARTER Spring
+d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.57 2014-06-09 14:32:43-07 - - $"
+@
+
+
+1.57
+log
+@-
+@
+text
+@d5 1
+a5 1
+.ds QUARTER Summer
+d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.56 2014-06-09 14:31:35-07 - - $"
+@
+
+
+1.56
+log
+@-
+@
+text
+@d5 1
+a5 1
+.ds QUARTER Spring
+d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.55 2014-03-31 12:51:40-07 - - $"
+d52 8
+@
+
+
+1.55
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.54 2014-02-06 19:30:08-08 - - $"
+d51 3
+d62 1
+@
+
+
+1.54
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.53 2014-01-28 13:08:52-08 - - $"
+d74 1
+a74 1
+.E= "Programming Principles and Practice Using C++" .
+d79 1
+a79 1
+.E= "Lecture Notes on C++ for Java Programmers" .
+d93 15
+@
+
+
+1.53
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.52 2014-01-28 13:07:47-08 - - $"
+d69 1
+a69 1
+CMPS-012B and CMPS-012M.
+d98 2
+a99 1
+Most of the topics in the course will be about C++.
+@
+
+
+1.52
+log
+@-
+@
+text
+@d8 1
+a8 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.51 2014-01-28 13:01:36-08 - - $"
+a32 3
+If you prefer to read the mailing list and post to it as a newsgroup,
+use the URL
+.V= http://groups.google.com/a/soe.ucsc.edu/d/forum/cmps109-wm .
+@
+
+
+1.51
+log
+@-
+@
+text
+@d5 4
+a8 2
+.TITLE CMPS-109 Spring\~2014 Syllabus "Advanced Programming"
+.RCS "$Id: syllabus-cmps109.mm,v 1.49 2014-01-28 12:55:49-08 - - $"
+d26 2
+a27 2
+on the IC Unix servers
+.=V ( unix.ic.ucsc.edu ).
+d58 1
+a58 1
+Midterm exams in class\(::|2 ×|12% =|24%
+a59 2
+.\"Midterm exams in class\(::|2 ×|14% =|24%|(summer)
+.\"Final exam during the last class\(::|||22%|(summer)
+a60 2
+.\"Summer quarter does not have an exam week.
+.\"The final exam will be given during the final class period.
+d156 1
+@
+
+
+1.50
+log
+@-
+@
+text
+@d5 1
+a5 3
+.ds QUARTER Summer
+.ds YEAR 2014
+.TITLE CMPS-109 \*[QUARTER]\~\*[YEAR] Syllabus "Advanced Programming"
+a51 13
+.ie '\*[QUARTER]'Summer' \{.\"
+.DS
+.TS
+tab(|); l r1 r1 r l.
+Programming assignments\(::|5 ×|10% =|50%
+Midterm exams in class\(::|2 ×|14% =|24%|(summer)
+Final exam during the last class\(::|||22%|(summer)
+.TE
+Summer quarter does not have an exam week.
+The final exam will be given during the final class period.
+.DE
+.\}\"
+.el \{.\"
+d58 2
+d61 2
+a63 1
+.\}\"
+@
+
+
+1.49
+log
+@-
+@
+text
+@d5 4
+a8 2
+.TITLE CMPS-109 Spring\~2014 Syllabus "Advanced Programming"
+.RCS "$Id: syllabus-cmps109.mm,v 1.48 2014-01-28 12:55:35-08 - - $"
+d54 13
+a72 2
+.\"Midterm exams in class\(::|2 ×|14% =|24%|(summer)
+.\"Final exam during the last class\(::|||22%|(summer)
+a73 2
+.\"Summer quarter does not have an exam week.
+.\"The final exam will be given during the final class period.
+d75 1
+@
+
+
+1.48
+log
+@-
+@
+text
+@d4 1
+d6 1
+a6 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.47 2014-01-28 12:52:07-08 - - $"
+@
+
+
+1.47
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.46 2013-06-21 19:09:42-07 - - $"
+a88 7
+Ira Pohl, Charlie McDowell\(::
+.E= "Java by Dissection" ,
+2nd ed.,
+2006.
+Chapters 13, 8, 9.
+.V= http://www.lulu.com/javabydissection
+.LI
+d100 2
+a101 1
+.H 1 "Syllabus\(:) C++ topics."
+a153 11
+.LE
+.H 1 "Syllabus\(:) Java topics."
+Prior knowledge of Java is assumed.
+The following advanced topics in Java will be considered.
+.ALX 1 ()
+.LI
+Inheritance, generics, and polymorphism.
+.LI
+Graphical user unterfaces.
+.LI
+Threads and concurrency.
+d155 2
+a156 1
+Sockets and interprocess communication.
+d158 13
+@
+
+
+1.46
+log
+@-
+@
+text
+@d4 2
+a5 2
+.TITLE CMPS-109 Summer\~2013 Syllabus "Advanced Programming"
+.RCS "$Id: syllabus-cmps109.mm,v 1.45 2013-06-18 16:05:42-07 - - $"
+d55 4
+a58 4
+.\"Midterm exams in class\(::|2 ×|12% =|24%
+.\"Final exam during exam week\(::|||26%
+Midterm exams in class\(::|2 ×|14% =|24%|(summer)
+Final exam during the last class\(::|||22%|(summer)
+d60 2
+a61 2
+Summer quarter does not have an exam week.
+The final exam will be given during the final class period.
+@
+
+
+1.45
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.44 2013-06-17 19:43:52-07 - - $"
+d29 1
+a29 1
+.V= cmps109-wm+unsubscribe@@soe.ucsc.edu .
+@
+
+
+1.44
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.43 2013-06-17 19:02:23-07 - - $"
+d61 1
+@
+
+
+1.43
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.41 2013-06-10 16:48:19-07 - - $"
+d57 2
+a58 2
+Midterm exams in class\(::|2 ×|12% =|24%|(summer)
+Final exam during the last class\(::|||26%|(summer)
+@
+
+
+1.42
+log
+@-
+@
+text
+@d4 1
+a4 2
+.ds QUARTER Summer
+.TITLE CMPS-109 \*[QUARTER]\~2013 Syllabus "Advanced Programming"
+a53 1
+.ie '\*[QUARTER]'Summer' \{\
+d55 4
+a58 8
+Midterm exams in class\(::|2 ×|14% =|24%
+Final exam during exam week\(::|||22%
+.\}
+.el \{\
+Programming assignments\(::|5 ×|10% =|50%
+Midterm exams in class\(::|2 ×|12% =|24%
+Final exam during exam week\(::|||26%
+.\}
+d60 1
+a60 1
+.if '\*[QUARTER]'Summer' .nop Summer quarter does not have an exam week.
+@
+
+
+1.41
+log
+@-
+@
+text
+@d4 3
+a6 2
+.TITLE CMPS-109 Summer\~2013 Syllabus "Advanced Programming"
+.RCS "$Id: syllabus-cmps109.mm,v 1.40 2013-01-03 19:01:25-08 - - $"
+d55 1
+d57 8
+a64 4
+.\"Midterm exams in class\(::|2 ×|12% =|24%
+.\"Final exam during exam week\(::|||26%
+Midterm exams in class\(::|2 ×|12% =|24%|(summer)
+Final exam during the last class\(::|||26%|(summer)
+d66 1
+a66 1
+Summer quarter does not have an exam week.
+@
+
+
+1.40
+log
+@-
+@
+text
+@d4 2
+a5 2
+.TITLE CMPS-109 Spring\~2012 Syllabus "Advanced Programming"
+.RCS "$Id: syllabus-cmps109.mm,v 1.39 2013-01-03 19:00:59-08 - - $"
+d53 1
+a53 1
+tab(|); l r1 r1 r.
+d55 4
+a58 2
+Midterm exams in class\(::|2 ×|12% =|24%
+Final exam during exam week\(::|||26%
+d60 1
+@
+
+
+1.39
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.38 2013-01-03 18:57:43-08 - - $"
+d98 1
+a98 1
+C++11 \[em] the new ISO C++ Standard FAQ\(::
+@
+
+
+1.38
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.37 2013-01-03 18:57:13-08 - - $"
+d92 1
+a92 1
+The C++ Resources Network.
+d94 6
+@
+
+
+1.37
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.36 2013-01-03 18:55:14-08 - - $"
+a7 1
+.char \[C++] C\v'-.1v'++\v'.1v'
+d92 1
+a92 1
+The \[C++] Resources Network.
+d97 2
+a98 2
+.H 1 "Syllabus\(:) \[C++] topics."
+Most of the topics in the course will be about \[C++].
+d102 1
+a102 1
+C vs \[C++].
+@
+
+
+1.36
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.35 2013-01-03 16:27:00-08 - - $"
+d71 1
+a71 1
+.H 1 "Textbooks"
+d75 1
+a75 1
+.E= "Programming Principles and Practice Using \[C++]" .
+d80 1
+a80 1
+.E= "Lecture Notes on \[C++] for Java Programmers" .
+d92 3
+@
+
+
+1.35
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.34 2013-01-03 16:24:38-08 - - $"
+d105 1
+d144 2
+a145 2
+Containers and iterators.
+Standard template library (STL).
+@
+
+
+1.34
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.33 2013-01-03 16:24:29-08 - - $"
+d95 3
+a97 4
+.H 1 "Syllabus"
+The course will be mostly about \[C++], 
+but some advanced topics in Java will be included.
+.H 2 "\[C++] topics."
+d148 3
+a150 1
+.H 2 "Java topics."
+@
+
+
+1.33
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.32 2013-01-03 16:24:18-08 - - $"
+d94 1
+a94 1
+.ne 6
+@
+
+
+1.32
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.31 2013-01-03 16:23:51-08 - - $"
+d94 1
+a94 1
+.ne 5
+@
+
+
+1.31
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.30 2013-01-03 16:22:21-08 - - $"
+d93 2
+@
+
+
+1.30
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.29 2013-01-03 16:12:27-08 - - $"
+d95 1
+a95 1
+but some Java will be included.
+d148 1
+a148 1
+.ALX i () "" 0
+@
+
+
+1.29
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.28 2013-01-03 16:05:08-08 - - $"
+d99 5
+a103 1
+C vs C++.
+d120 1
+d124 22
+a145 18
+
+
+
+
+
+Fundamental data types
+Pointers and references
+Input and output streams
+Memory management
+Vectors and arrays
+Class definition
+Polymorphism
+Operator overloading
+Characters and strings
+Templates and containers
+Containers and iterators
+Algorithms and maps
+Exception handling
+d150 1
+a150 3
+Inheritance
+.LI
+Graphical user unterfaces
+d152 1
+a152 1
+Dynamic data structures
+d154 1
+a154 1
+Threads and concurrency
+d156 1
+a156 1
+Sockets
+@
+
+
+1.28
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.27 2013-01-03 16:04:50-08 - - $"
+d96 2
+a97 4
+.ALX a ()
+.LI
+.E= "\[C++] topics."
+.ALX i () "" 0
+d99 1
+a99 1
+C++ vs C, functions, classes.
+d101 18
+a118 1
+
+d138 1
+a138 2
+.LI
+.E= "Java topics."
+a144 2
+Coping with errors
+.LI
+@
+
+
+1.27
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.26 2013-01-03 15:59:03-08 - - $"
+d125 1
+a125 1
+ALX i () "" 0
+@
+
+
+1.26
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.25 2012-05-25 11:55:32-07 - - $"
+d96 13
+a108 7
+.DS
+.TS
+tab(|); l8 l8 l.
+.ALX 1 ()
+T{
+.BR "\[C++] topics"
+Philosophical differences
+a114 2
+T}|T{
+.BR "\[C++] topics"
+d122 5
+a126 2
+T}|T{
+.BR "Java topics"
+d128 1
+d130 1
+d132 1
+d134 1
+d136 3
+a138 3
+T}
+.TE
+.DE
+@
+
+
+1.25
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.24 2012-04-16 13:36:47-07 - - $"
+d7 1
+d26 11
+@
+
+
+1.24
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.23 2012-04-16 13:35:55-07 - - $"
+d78 1
+@
+
+
+1.23
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.22 2012-03-22 18:25:31-07 - - $"
+d123 1
+d125 1
+@
+
+
+1.22
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.21 2010-12-09 18:31:15-08 - - $"
+d123 1
+@
+
+
+1.21
+log
+@-
+@
+text
+@d4 2
+a5 2
+.TITLE CMPS-109 Winter\~2011 Syllabus "Advanced Programming"
+.RCS "$Id: syllabus-cmps109.mm,v 1.20 2010-12-07 14:58:52-08 - - $"
+@
+
+
+1.20
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.19 2010-12-07 14:57:08-08 - - $"
+d19 2
+a20 2
+It may be accessed via the web at
+.V= http://www2.ucsc.edu/courses/cmps109-wm/:/ .
+d72 1
+a72 1
+.=V [ http://www.jgcampbell.com/cpp4jp/cpp4jp.pdf ].
+a77 1
+.br
+@
+
+
+1.19
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.18 2010-12-07 14:56:57-08 - - $"
+d24 1
+a24 3
+.=V ( unix.ic.ucsc.edu )
+to receive a grade.
+.E= "A IC Solaris account is required for the course."
+a56 1
+.br
+@
+
+
+1.18
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.17 2010-12-07 14:55:22-08 - - $"
+d89 1
+a89 1
+tab(|); l5 l5 l.
+@
+
+
+1.17
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.16 2010-12-07 14:52:43-08 - - $"
+d89 1
+a89 1
+tab(|); le le le.
+@
+
+
+1.16
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.15 2010-12-07 14:52:24-08 - - $"
+d25 1
+a25 1
+in order to receive a grade.
+a26 3
+See the
+.V= README
+for the name of the submit directory.
+d37 1
+a37 1
+In order to pass the course, 
+d41 1
+a41 2
+Your final grade and narrative evaluation will be based on the
+following allocation of points\(::
+d89 1
+a89 1
+tab(|); l l l.
+d92 1
+a92 1
+\[C++] topics
+d101 1
+a101 1
+\[C++] topics
+d110 1
+a110 1
+Java topics
+@
+
+
+1.15
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.14 2010-12-07 14:46:42-08 - - $"
+d103 1
+a105 1
+Class definition
+@
+
+
+1.14
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.13 2010-12-07 14:45:38-08 - - $"
+d91 3
+d95 2
+a96 4
+.LI
+\[C++] topics\(::
+.ALX i () \n[Li] 0
+.LI
+a97 1
+.LI
+a98 1
+.LI
+a99 1
+.LI
+a100 1
+.LI
+a101 1
+.LI
+d103 2
+a104 1
+.LI
+a105 1
+.LI
+a106 1
+.LI
+a107 1
+.LI
+a108 1
+.LI
+a109 1
+.LI
+a110 1
+.LI
+a111 1
+.LI
+d113 2
+a114 5
+.LE
+.LI
+Java topics\(::
+.ALX i () \n[Li] 0
+.LI
+a115 1
+.LI
+a116 1
+.LI
+a117 1
+.LI
+a118 1
+.LI
+d120 3
+a122 2
+.LE
+.LE
+@
+
+
+1.13
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.12 2010-12-06 18:10:53-08 - - $"
+d49 3
+a51 3
+Programming assignments\(::|5 ×|8% =|40%
+Midterm exams in class\(::|2 ×|15% =|30%
+Final exam during exam week\(::|||30%
+@
+
+
+1.12
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.11 2010-12-06 18:10:34-08 - - $"
+d23 2
+a24 2
+on the IC Solaris servers
+.=V ( unix.ic )
+@
+
+
+1.11
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.10 2010-12-06 18:10:15-08 - - $"
+d79 1
+a79 1
+.V= http://www.jgcampbell.com/cpp4jp/cpp4jp.pdf
+@
+
+
+1.10
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.9 2010-12-02 18:31:21-08 - - $"
+a78 1
+.br
+@
+
+
+1.9
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.8 2010-12-02 18:31:00-08 - - $"
+d74 8
+@
+
+
+1.8
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.7 2010-12-02 18:29:38-08 - - $"
+a115 2
+.LI
+Features unique to \[C++]
+a129 2
+.LI
+Features unique to Java
+@
+
+
+1.7
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.6 2010-12-02 18:29:12-08 - - $"
+d87 1
+a87 1
+.ALX i () "" 0
+d121 1
+a121 1
+.ALX i () "" 0
+@
+
+
+1.6
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.5 2010-12-02 18:26:00-08 - - $"
+d86 2
+a87 2
+\[C++] topics
+.ALX i ()
+d120 2
+a121 2
+Java topics
+.ALX i ()
+@
+
+
+1.5
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.4 2010-12-02 18:25:23-08 - - $"
+d95 2
+d99 2
+d111 3
+a113 1
+Input and output
+@
+
+
+1.4
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.3 2010-12-02 18:24:57-08 - - $"
+a79 6
+.LI
+Scott Anderson\(::
+.E= "C and \[C++] for Java Programmers" .
+Fall 2002, version 5.
+.br
+.V= http://cs.wellesley.edu/~anderson/writing/cpp/c++-for-java.pdf
+@
+
+
+1.3
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.2 2010-12-02 18:01:18-08 - - $"
+d93 1
+a93 1
+.ALX i .
+d121 1
+a121 1
+.ALX i .
+@
+
+
+1.2
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.1 2010-12-02 18:00:49-08 - - $"
+d19 2
+@
+
+
+1.1
+log
+@-
+@
+text
+@d5 1
+a5 1
+.RCS "$Id: syllabus-cmps109.mm,v 1.60 2010-12-02 16:50:24-08 - - $"
+a64 1
+.sp -1v
+@

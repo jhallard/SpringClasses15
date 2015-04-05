@@ -1,0 +1,10 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting synchclick.java
+* synchclick.java: $Id: synchclick.java,v 1.1 2012-05-23 21:31:53-07 -
+- $
+* javac -Xlint synchclick.java
+* jar cfm synchclick Manifest synchclick$counter.class
+synchclick$synchr.class synchclick.class
+* chmod +x synchclick
+* rm -f synchclick$counter.class synchclick$synchr.class
+synchclick.class
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished synchclick.java

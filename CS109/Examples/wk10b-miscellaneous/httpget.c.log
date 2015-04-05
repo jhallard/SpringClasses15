@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting httpget.c
+httpget.c: $RCSfile: httpget.c,v $ $Revision: 1.1 $
+gcc -g -O0 -Wall -Wextra -std=gnu99 httpget.c -o httpget -lm
+rm -f httpget.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished httpget.c

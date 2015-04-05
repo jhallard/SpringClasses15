@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting vectorleak.cpp
+vectorleak.cpp: $Id: vectorleak.cpp,v 1.4 2014-04-22 18:58:28-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 vectorleak.cpp -o vectorleak -lm
+rm -f vectorleak.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished vectorleak.cpp

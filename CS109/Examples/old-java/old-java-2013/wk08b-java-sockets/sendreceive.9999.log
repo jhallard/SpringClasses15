@@ -1,0 +1,49 @@
+
+::::::::::::::
+sendreceive.+9999.log
+::::::::::::::
+
+Script started on Wed Jun  6 14:57:36 2012
+bash-3.2$ sendreceive 9999
+server: server socket: ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=9999]
+InetAddress: 0.0.0.0/0.0.0.0
+LocalPort: 9999
+server: client socket: Socket[addr=/127.0.0.1,port=34095,localport=9999]
+InetAddress: /127.0.0.1
+LocalAddress: /127.0.0.1
+LocalPort: 9999
+Port: 34095
+server: Message 0
+server: Message 1
+server: Message 2
+server: Message 3
+server: Message 4
+server: Message 5
+bash-3.2$ exit
+
+Script done on Wed Jun  6 14:58:12 2012
+
+::::::::::::::
+sendreceive.-9999.log
+::::::::::::::
+
+Script started on Wed Jun  6 14:58:01 2012
+bash-3.2$ sendreceive -9999
+client: server socket: Socket[addr=localhost/127.0.0.1,port=9999,localport=34095]
+InetAddress: localhost/127.0.0.1
+LocalAddress: /127.0.0.1
+LocalPort: 34095
+Port: 9999
+client: Message 0
+client: Message 1
+client: Message 2
+client: Message 3
+client: Message 4
+client: Message 5
+client: Message 6
+client: Message 7
+client: Message 8
+sender: error: Socket[addr=localhost/127.0.0.1,port=9999,localport=34095]
+bash-3.2$ exit
+
+Script done on Wed Jun  6 14:58:15 2012

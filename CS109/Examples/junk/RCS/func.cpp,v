@@ -1,0 +1,138 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.5
+date	2013.07.19.00.51.57;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.07.19.00.45.51;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.07.19.00.45.36;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.07.19.00.45.25;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.07.19.00.41.19;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: func.cpp,v 1.4 2013-07-18 17:45:51-07 - - $
+
+#include <iostream>
+#include <typeinfo>
+
+using namespace std;
+
+#define WHERE(FLAG,CODE) { \
+           if ((FLAG)) { \
+              cerr << __FILE__ << "[" << __LINE__ << "]" \
+                   << __func__ << ": "; \
+              cerr << CODE << endl; \
+           } \
+        }
+
+void foo() {
+   WHERE(true,1);
+}
+
+void bar() {
+   WHERE(true,1);
+}
+
+int main() {
+   WHERE(true,1);
+   foo();
+   bar();
+   return 0;
+}
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: func.cpp,v 1.3 2013-07-18 17:45:36-07 - - $
+d4 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: func.cpp,v 1.2 2013-07-18 17:45:25-07 - - $
+d10 3
+a12 3
+                   << __func__ << ": "; \ 
+              cerr << CODE << endl; \ 
+           } \     
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: func.cpp,v 1.1 2013-07-18 17:41:19-07 - - $
+d7 1
+a7 1
+#define TRACE(FLAG,CODE) { \
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d7 7
+a13 2
+#define WHERE cout << __func__ << "(" << __FILE__ << ":" << __LINE__ \
+                   << ")" << endl;
+d16 1
+a16 1
+   WHERE;
+d20 1
+a20 1
+   WHERE;
+d24 1
+a24 1
+   WHERE;
+@

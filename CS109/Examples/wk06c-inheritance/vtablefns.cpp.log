@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting vtablefns.cpp
+vtablefns.cpp:
+     $Id: vtablefns.cpp,v 1.26 2015-02-10 17:55:14-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 vtablefns.cpp -o vtablefns -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f vtablefns.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished vtablefns.cpp

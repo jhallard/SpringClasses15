@@ -1,0 +1,451 @@
+head	1.20;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.20
+date	2014.03.31.20.02.39;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.03.31.19.57.58;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.03.28.02.07.00;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2013.01.04.03.12.44;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2013.01.04.03.11.38;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.01.04.03.10.15;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.04.03.00.12.01;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.04.03.00.11.36;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.04.03.00.11.17;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.03.30.05.38.15;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2011.01.05.21.21.05;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2011.01.05.21.19.43;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2011.01.05.21.19.33;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2011.01.05.21.19.01;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2011.01.05.21.17.54;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2011.01.05.21.17.36;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2011.01.05.04.54.01;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2011.01.05.04.53.17;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2011.01.05.04.52.02;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.01.05.04.50.30;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.20
+log
+@-
+@
+text
+@// $Id: sizeof.cpp,v 1.19 2014-03-31 12:57:58-07 - - $
+
+#include <cstdlib>
+#include <cwchar>
+#include <iostream>
+#include <map>
+#include <stack>
+#include <vector>
+
+using namespace std;
+
+#define SHOW(Type) \
+   cout << "sizeof (" << #Type << ") = " << sizeof (Type) << endl;
+
+class empty {
+};
+
+class one {
+   int x;
+};
+
+class virt_one {
+   int x;
+   virtual void fn1 ();
+   virtual ~virt_one ();
+};
+
+class virt_two {
+   int y;
+   virtual void fn2 ();
+   virtual ~virt_two ();
+};
+
+class single: public virt_one {
+   int z;
+   virtual void fn3 ();
+   virtual ~single ();
+};
+
+class multiple: public virt_one, virt_two {
+   int z;
+   virtual void fn3 ();
+   virtual ~multiple ();
+};
+
+vector<int> vector_of_int_64 (64);
+
+
+int main (int argc, char **argv) {
+   (void) argc; // SUPPRESS: warning: unused parameter 'argc'
+   (void) argv; // SUPPRESS: warning: unused parameter 'argv'
+
+   SHOW (bool);
+   SHOW (char);
+   SHOW (short);
+   SHOW (int);
+   SHOW (long);
+   SHOW (long long);
+   SHOW (float);
+   SHOW (double);
+   SHOW (long double);
+   SHOW (wchar_t);
+   SHOW (char16_t);
+   SHOW (char32_t);
+   SHOW (char*);
+   SHOW (void*);
+   SHOW (int*);
+   SHOW (empty);
+   SHOW (one);
+   SHOW (virt_one);
+   SHOW (virt_two);
+   SHOW (single);
+   SHOW (multiple);
+   SHOW (vector<int>);
+   SHOW (vector_of_int_64);
+   SHOW (vector<string>);
+   SHOW (string);
+   SHOW (stack<string>);
+   typedef map<string, int> map_string_int;
+   SHOW (map_string_int);
+   return EXIT_SUCCESS;
+}
+
+//TEST// ./sizeof >sizeof.lis 2>&1
+//TEST// mkpspdf sizeof.ps sizeof.cpp* sizeof.lis
+
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.18 2014-03-27 19:07:00-07 - - $
+d65 3
+a67 3
+   SHOW (char *);
+   SHOW (void *);
+   SHOW (int *);
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.17 2013-01-03 19:12:44-08 - - $
+d63 2
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.16 2013-01-03 19:11:38-08 - - $
+d82 1
+a82 1
+//TEST// runprogram.perl -x sizeof.lis ./sizeof
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.15 2013-01-03 19:10:15-08 - - $
+d77 2
+a78 1
+   SHOW (map<string,int>);
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.14 2012-04-02 17:12:01-07 - - $
+d82 1
+a82 1
+//TEST// mkpspdf sizeof.ps sizeof.cpp sizeof.lis
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.13 2012-04-02 17:11:36-07 - - $
+d77 1
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.12 2012-04-02 17:11:17-07 - - $
+a76 1
+   SHOW ("map<string,double>");
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.11 2012-03-29 22:38:15-07 - - $
+d77 1
+a77 1
+   SHOW (map<string,double>);
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.10 2011-01-05 13:21:05-08 - - $
+d77 1
+a77 1
+   SHOW (map<string, double>);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.9 2011-01-05 13:19:43-08 - - $
+d48 1
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.8 2011-01-05 13:19:33-08 - - $
+d6 1
+d76 1
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.7 2011-01-05 13:19:01-08 - - $
+d6 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.6 2011-01-05 13:17:54-08 - - $
+d73 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.5 2011-01-05 13:17:36-08 - - $
+d44 2
+d70 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.4 2011-01-04 20:54:01-08 - - $
+a53 1
+   SHOW (long long long);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.3 2011-01-04 20:53:17-08 - - $
+d6 1
+d68 3
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cpp,v 1.1 2011-01-04 20:50:30-08 - - $
+d53 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d22 1
+d28 1
+d34 1
+d40 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: sizeof.cc,v 1.3 2010-02-09 16:14:39-08 - - $
+d40 3
+@

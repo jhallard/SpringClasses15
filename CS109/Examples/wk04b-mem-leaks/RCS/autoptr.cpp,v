@@ -1,0 +1,92 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2012.05.10.22.03.45;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+//
+// Use auto_ptr<T> to manage pointers to objects in a vector and a map.
+//
+
+#include <iostream>
+#include <map>
+#include <memory>
+#inlcude <vector>
+
+using namespace std;
+
+struct root {
+   int id;
+   explicit object (int _id = 0): id(_id) {};
+   virtual ~object();
+   private: root (const root &);
+   private: root &operator= (const root &);
+   virtual void print() {
+      cout << "root(" << id << ")" << endl;
+   }
+}
+
+struct text: public root {
+   char *word;
+   explicit text (int id = 0, char *_word = 0): root(id),
+            word(_word) {}
+   virtual ~text() { delete word; }
+   virtual void print() {
+      cout << "text(" << id << "," << word << ")" << endl;
+   }
+}
+
+struct array: public root {
+   size_t size;
+   int *data;
+   explicit array (int id = 0, size_t _size = 0): root(id),
+            size(_size), data(new int[size]) {};
+   virtual void print() {
+      cout << "array(" << id << ",size=" << size << ")" << endl;
+   }
+}
+
+typedef vector<root*> vecroot;
+typedef map<string, root*> maproot;
+
+int main () {
+   vecroot vr;
+   vr.push_back (new root (1));
+   vr.push_back (new text (2, "hello"));
+   vr.push_back (new array (3, 10));
+   for (size_t i = 0; i < vr.size(); ++i) vr[i]->print();
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=mapleak.out1.grind \
+//TEST//       mapleak these are some arguments to check on leak \
+//TEST//       >mapleak.out1 2>&1
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=mapleak.out2.grind \
+//TEST//       mapleak - these are some arguments to check on leak \
+//TEST//       >mapleak.out2 2>&1
+//TEST// mkpspdf mapleak.ps mapleak.cpp* mapleak.out*
+*/
+
+
+@

@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting shared_ptr.cpp
+shared_ptr.cpp: $Id: shared_ptr.cpp,v 1.5 2014-04-10 14:44:24-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 shared_ptr.cpp -o shared_ptr -lm
+rm -f shared_ptr.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished shared_ptr.cpp

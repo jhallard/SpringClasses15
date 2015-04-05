@@ -1,0 +1,207 @@
+head	1.8;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.8
+date	2009.02.28.05.13.11;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2009.02.28.05.11.48;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2009.02.28.05.07.13;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2009.02.28.05.06.57;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2009.02.28.05.06.01;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2009.02.28.01.46.18;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2009.02.28.01.46.00;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2009.02.27.04.40.16;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@-
+@
+text
+@// $Id: main.java,v 1.7 2009-02-27 21:11:48-08 - - $
+
+import static java.lang.System.*;
+
+class main {
+
+   public static void main (String[] args) {
+      stamp.printf ("main starting%n");
+      String[] latin = {
+         "prîmus", "secundus,", "tertius", "quârtus", "quîntus",
+         "sextus", "septimus", "octâvus", "nônus", "decimus"
+      };
+      String[] greek = {
+         "prôtos", "deuteros", "tritos", "tetartos", "pentos",
+         "hektos", "hebdomos", "ogdoos", "enatos", "dekatos"
+      };
+      buffer <String> buf = new semabuffer (5);
+      Thread[] producers = {
+         new Thread (new producer <String> (buf, "Latin", 100, latin)),
+         new Thread (new producer <String> (buf, "Greek", 300, greek))
+      };
+      Thread[] consumers = {
+         new Thread (new consumer (buf, "Foo", 200)),
+         new Thread (new consumer (buf, "Bar", 500))
+      };
+      for (Thread thread: producers) thread.start ();
+      for (Thread thread: consumers) {
+         thread.setDaemon (true); // So quits when producers done.
+         thread.start ();
+      }
+      stamp.printf ("main finished%n");
+   }
+
+}
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.java,v 1.6 2009-02-27 21:07:13-08 - - $
+d27 4
+a30 1
+      for (Thread thread: consumers) thread.start ();
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.java,v 1.5 2009-02-27 21:06:57-08 - - $
+d27 1
+a27 4
+      for (Thread thread: consumers) {
+         thread.setDaemon (true); // so they stop when producers stop.
+         thread.start ();
+      }
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.java,v 1.4 2009-02-27 21:06:01-08 - - $
+d28 1
+a28 1
+         thread.setDaemon (); // so they stop when producers stop.
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.java,v 1.3 2009-02-27 17:46:18-08 - - $
+d27 4
+a30 1
+      for (Thread thread: consumers) thread.start ();
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.java,v 1.2 2009-02-27 17:46:00-08 - - $
+a27 8
+      for (int itor = 0; itor < producers.length; ++itor) {
+         try {
+            producers[itor].join ();
+         }catch (InterruptedException exn) {
+            stamp.printf ("main join: %s%n", exn);
+         }
+      }
+      buf.producers_finished ();
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.java,v 1.11 2009-02-27 17:44:37-08 - - $
+d17 1
+a17 1
+      buffer <String> buf = new semabufffer (5);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.java,v 1.8 2009-02-26 20:22:46-08 - - $
+d17 1
+a17 1
+      buffer <String> buf = new semabuffer (5);
+d22 3
+a24 2
+      for (int itor = 0; itor < producers.length; ++itor) {
+         producers[itor].start ();
+d26 2
+a27 2
+      new Thread (new consumer (buf, "Foo", 200)).start ();
+      new Thread (new consumer (buf, "Bar", 500)).start ();
+@

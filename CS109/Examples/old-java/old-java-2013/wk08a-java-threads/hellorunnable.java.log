@@ -1,0 +1,9 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting hellorunnable.java
+* hellorunnable.java: $Id: hellorunnable.java,v 1.11 2013-08-12
+19:24:37-07 - - $
+* javac -Xlint hellorunnable.java
+* jar cfm hellorunnable Manifest hellorunnable$greeter.class
+hellorunnable.class
+* chmod +x hellorunnable
+* rm -f hellorunnable$greeter.class hellorunnable.class
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished hellorunnable.java

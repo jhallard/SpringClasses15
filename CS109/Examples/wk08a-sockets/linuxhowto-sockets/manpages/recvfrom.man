@@ -1,0 +1,198 @@
+
+
+
+RECV(2)                   SYSTEM CALLS                    RECV(2)
+
+
+
+NAME
+     recv, recvfrom, recvmsg - receive a message from a socket
+
+SYNOPSIS
+     #include <sys/types.h>
+     #include <sys/socket.h>
+
+     int recv(s, buf, len, flags)
+     int s;
+     char *buf;
+     int len, flags;
+
+     int recvfrom(s, buf, len, flags, from, fromlen)
+     int s;
+     char *buf;
+     int len, flags;
+     struct sockaddr *from;
+     int *fromlen;
+
+     int recvmsg(s, msg, flags)
+     int s;
+     struct msghdr *msg;
+     int flags;
+
+DESCRIPTION
+     s is a socket created with socket(2).   recv(),  recvfrom(),
+     and  recvmsg()  are  used  to  receive messages from another
+     socket.  recv() may be used only on a connected socket  (see
+     connect(2)),  while  recvfrom() and recvmsg() may be used to
+     receive data on a socket whether it is in a connected  state
+     or not.
+
+     If from is not a NULL pointer, the  source  address  of  the
+     message  is filled in.  fromlen is a value-result parameter,
+     initialized to the size of the buffer associated with  from,
+     and  modified  on  return to indicate the actual size of the
+     address  stored  there.   The  length  of  the  message   is
+     returned.   If  a message is too long to fit in the supplied
+     buffer, excess bytes may be discarded depending on the  type
+     of socket the message is received from (see socket(2)).
+
+     If no messages are available at the socket, the receive call
+     waits  for  a  message  to arrive, unless the socket is non-
+     blocking (see ioctl(2)) in which case -1  is  returned  with
+     the external variable errno set to EWOULDBLOCK.
+
+     The select(2) call may be used to determine when  more  data
+     arrive.
+
+     If the  process  calling  recv(),  recvfrom()  or  recvmsg()
+     receives  a signal before any data are available, the system
+     call is restarted unless the calling process explicitly  set
+
+
+
+Sun Release 4.1   Last change: 21 January 1990                  1
+
+
+
+
+
+
+RECV(2)                   SYSTEM CALLS                    RECV(2)
+
+
+
+     the signal to interrupt these calls using sigvec() or sigac-
+     tion() (see the discussions of  SV_INTERRUPT  on  sigvec(2),
+     and SA_INTERRUPT on sigaction(3V)).
+
+     The flags parameter is formed by ORing one or  more  of  the
+     following:
+
+     MSG_OOB        Read any "out-of-band" data  present  on  the
+                    socket,  rather  than  the  regular "in-band"
+                    data.
+
+     MSG_PEEK       "Peek" at the data present on the socket; the
+                    data  are returned, but not consumed, so that
+                    a subsequent receive operation will  see  the
+                    same data.
+
+     The recvmsg() call uses a msghdr structure to  minimize  the
+     number  of  directly supplied parameters.  This structure is
+     defined  in  <sys/socket.h>,  and  includes  the   following
+     members:
+
+          caddr_t      msg_name;         /* optional address */
+          int          msg_namelen;      /* size of address */
+          struct iovec *msg_iov;         /* scatter/gather array */
+          int          msg_iovlen;       /* # elements in msg_iov */
+          caddr_t      msg_accrights;    /* access rights sent/received */
+          int          msg_accrightslen;
+
+     Here  msg_name  and  msg_namelen  specify  the   destination
+     address  if the socket is unconnected; msg_name may be given
+     as a NULL pointer if no names are desired or required.   The
+     msg_iov  and  msg_iovlen  describe  the scatter-gather loca-
+     tions, as described in read(2V).  A buffer  to  receive  any
+     access  rights  sent  along with the message is specified in
+     msg_accrights, which has length msg_accrightslen.
+
+RETURN VALUES
+     These calls return the number of bytes received, or -1 if an
+     error occurred.
+
+ERRORS
+     EBADF               s is an invalid descriptor.
+
+     EFAULT              The data were specified to  be  received
+                         into a non-existent or protected part of
+                         the process address space.
+
+     EINTR               The calling process  received  a  signal
+                         before  any  data  were  available to be
+                         received, and  the  signal  was  set  to
+                         interrupt the system call.
+
+
+
+
+Sun Release 4.1   Last change: 21 January 1990                  2
+
+
+
+
+
+
+RECV(2)                   SYSTEM CALLS                    RECV(2)
+
+
+
+     ENOTSOCK            s is a descriptor  for  a  file,  not  a
+                         socket.
+
+     EWOULDBLOCK         The socket is  marked  non-blocking  and
+                         the requested operation would block.
+
+SEE ALSO
+     connect(2), fcntl(2V),  getsockopt(2),  ioctl(2),  read(2V),
+     select(2), send(2), socket(2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sun Release 4.1   Last change: 21 January 1990                  3
+
+
+

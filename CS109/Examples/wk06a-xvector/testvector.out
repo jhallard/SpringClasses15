@@ -1,0 +1,32 @@
+==10543== Memcheck, a memory error detector
+==10543== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==10543== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright info
+==10543== Command: testvector
+==10543== 
+   2   4   6   8  10  12  14  16  18  20  22  24  26  28  30
+   6  12  18  24  30  36  42  48  54  60  66  72  78  84  90
+  10  20  30  40  50  60  70  80  90 100 110 120 130 140 150
+  14  28  42  56  70  84  98 112 126 140 154 168 182 196 210
+  18  36  54  72  90 108 126 144 162 180 198 216 234 252 270
+  22  44  66  88 110 132 154 176 198 220 242 264 286 308 330
+  26  52  78 104 130 156 182 208 234 260 286 312 338 364 390
+  30  60  90 120 150 180 210 240 270 300 330 360 390 420 450
+  34  68 102 136 170 204 238 272 306 340 374 408 442 476 510
+  38  76 114 152 190 228 266 304 342 380 418 456 494 532 570
+  42  84 126 168 210 252 294 336 378 420 462 504 546 588 630
+  46  92 138 184 230 276 322 368 414 460 506 552 598 644 690
+  50 100 150 200 250 300 350 400 450 500 550 600 650 700 750
+  54 108 162 216 270 324 378 432 486 540 594 648 702 756 810
+  58 116 174 232 290 348 406 464 522 580 638 696 754 812 870
+sizeof (dvector) = 32
+sizeof (matrix)  = 32
+==10543== 
+==10543== HEAP SUMMARY:
+==10543==     in use at exit: 0 bytes in 0 blocks
+==10543==   total heap usage: 19 allocs, 19 frees, 2,640 bytes allocated
+==10543== 
+==10543== All heap blocks were freed -- no leaks are possible
+==10543== 
+==10543== For counts of detected and suppressed errors, rerun with: -v
+==10543== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 6 from 6)
+pstatus: 0x0000 EXIT STATUS = 0

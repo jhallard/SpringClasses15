@@ -1,0 +1,1152 @@
+head	1.25;
+access;
+symbols;
+locks;
+comment	@.\" @;
+
+
+1.25
+date	2014.06.10.01.34.19;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2014.01.04.01.07.32;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2013.09.24.22.26.36;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2013.09.24.22.26.17;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2013.09.24.22.25.57;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2013.09.24.22.25.26;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2013.09.18.00.10.07;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2013.03.23.04.12.48;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2012.09.26.01.08.47;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2012.09.11.22.06.50;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2012.09.11.22.06.33;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.09.11.21.57.59;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.09.11.21.57.11;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.09.11.21.55.54;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.09.11.21.54.31;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.09.11.21.48.37;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.09.11.21.47.07;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.01.09.21.21.59;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.01.09.21.21.10;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.01.09.21.17.52;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.01.09.21.17.21;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.01.06.02.05.31;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2011.08.22.21.23.48;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2011.08.22.21.23.01;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.08.19.02.13.13;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.25
+log
+@-
+@
+text
+@.so Tmac.mm-etc
+.if t .Newcentury-fonts
+.TITLE "Generic Syllabus"
+.RCS "$Id: generic-syllabus.mm,v 1.24 2014-01-03 17:07:32-08 - - $"
+.PWD
+.URL
+.INITR* \n[.F]
+.SIZE 12 14
+This is an attachment that I use for the syllabus in all of my courses.
+Any contradictions between what follows and what is written in the
+course-specific syllabus is resolved in favor of the course-specific
+syllabus.
+.EQ
+delim off
+.EN
+.H 1 "Disability Accommodations"
+It is UCSC policy to assist students with disabilities.
+If you qualify for accommodations because of a disability,
+please submit to me your
+.E= "Accommodation Authorization Form"
+from the Disability Resource Center (DRC) right away.
+Contact DRC at\(::
+.DS CB
+.TS
+tab(|); l l.
+T{
+Disability Resource Center
+146 Hahn Student Services
+1156 High Street
+University of California
+Santa Cruz, CA 95064-1077
+T}|T{
+Email: drc@@ucsc.edu
+Phone: (831) 459-2089
+Fax: (831) 459-5064
+T}
+.TE
+.DE
+.E= "Student responsibilities are as follows\(::"
+.ALX 1 ()
+.LI
+Students contact the DRC to determine their eligibility for
+accommodations.
+When approved by DRC,
+they will receive their Accommodation Authorization form.  
+.LI
+Students then notify their instructor during office hours or after
+class of their accommodations,
+and provide their instructor with their
+Accommodation Authorization Letter.
+This should be done during the
+.E= "first week"
+of the quarter.
+.LI
+Please note that it is the student's responsibility to contact the
+instructor about authorized accommodations.
+For disability-related testing accommodations, 
+arrangements must be made at least three weeks before each
+test or exam.
+.LE
+.H 1 "Academic Integrity and Cheating"
+Cheating will not be tolerated.
+Cheating is defined as giving or receiving unpermitted aid in
+any programming assignments, examinations, or other course work
+that is used by the instructor as a basis of assigning grades.
+Incidents of cheating will be reported to the Provost of
+the student's college and to the School of Engineering for
+disciplinary action.
+Cheating in any part of the course may lead to failing the
+course and suspension or dismissal from the University.
+.P
+Be warned that the School of Engineering has a policy of being
+highly intolerant toward cheating and/or academic dishonesty.
+All students shall read the UC Santa Cruz Academic Integrity web
+pages\(::
+.V= http://www.ucsc.edu/academics/academic_integrity/ .
+.P
+Students are expected to maintain high standards of academic honesty.
+That means that any work submitted by a student which is not
+completely his/her own is not acceptable.
+The only exceptions are\(::
+code provided by the instructor or TA,
+whether given in class or provided in the instructor's course
+directory,
+and code taken from the assigned textbook.
+Specifically, what is not acceptable is swapping code.
+``Just working together''
+is not an acceptable excuse.
+Helping each other with general questions is OK and that is one
+of the uses of the newsgroup.
+.P
+.E= "Pair programming\(::"
+For those courses where pair programming
+is explicitly permitted,
+it is not cheating for the two partners of a pair to share code,
+they are developing their projects using a single code base.
+See the guidelines for pair programming in another directory.
+It is cheating if the code between different pairs is excessively
+similar.
+.P
+Any code not written by the student must be acknowledged in the 
+.V= README
+submitted with the assignment.
+Submitting code not written personally by the student and which
+is not acknowledged in the
+.V= README
+is always cheating, whether or not the code would be otherwise
+authorized.
+Submitting code not written personally by the student,
+even if acknowledged in the
+.V= README ,
+is cheating if it pertains to parts of assignments that the
+student is expected to write individually.
+This refers to programs received from anyone, even tutors,
+or found on the web or other open-source code sources.
+And if an argument toward honesty does not convince you,
+note that if you can surf the web to find some code,
+so can others too,
+and they may then submit the same code you do.
+.P
+Getting help from tutors in developing programs is of course expected.
+Tutors, in the course of their duties,
+may provide small code fragments,
+or explain to students how to rewrite their code,
+or how to debug existing code and modify it in order to get it working.
+.H 1 "The Final Exam"
+From the Registrar\(::
+.E= "Final Examination Policies and Schedule."
+Final examinations are given during the exam week period at the time
+announced in the Schedule of Classes,
+usually in the same room used for class meetings during the quarter.
+Final examinations are required in all undergraduate courses.
+\|.\|.\|.
+If a student misses an examination due to a documented illness or other
+emergency,
+the instructor may agree to give an Incomplete and schedule a makeup
+examination provided that the student's work is passing up to that
+point.
+When a final examination is one of the regular requirements in a course,
+no one taking the course may be individually exempted from it.
+Travel plans for vacation are not an emergency,
+and should not be made without checking the final examination schedule.
+.H 1 "Assignment Specifications and the Final Grade"
+Late assignments will not be accepted except under extremely
+unusual circumstances and then only with adequate formal
+documentation.
+Make-up tests and exams will not be given,
+and workarounds for missed tests and exams will be permitted
+only in case of emergency,
+such as illness or hospitalization requiring the attendance of
+a physician.
+.P
+You can't pass the course without making at least a reasonable
+attempt at the programming assignments.
+You can't pass the course without a reasonable performance on
+the midterm tests and the final exam.
+This is not an absolute rule,
+but poor performance on any component of the course will
+justify a lowering of the general average.
+For example, someone who gets an
+.RB ` A '
+on the tests and exam and an
+.RB ` F '
+on the programming projects might get a
+.RB ` D '
+rather than a
+.RB ` C '
+as a final grade.
+Similarly for the reverse situation.
+In other words, if there is a significant disparity between
+the programming results and the testing results,
+the lower component will have more influence.
+.P
+.EQ
+delim $$
+.EN
+A final grade will in general be given by the standard weighted
+average formula, where the values of 
+$"weight" sub i$
+are given under `Grades' at the beginning of the syllabus\(::
+.DS CB
+.EQ
+"finalscore" ~ ~ = ~ ~ {sum from {i = 1} to n
+left (
+   {"score" sub i} over {"maximum" sub i} times {"weight" sub i}
+right )}
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ {bold where} ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+{sum from {i = 1} to n {"weight" sub i}} ~ ~ = ~ ~ 1.0
+delim off
+.EN
+.DE
+.P
+The  
+.V= Assignments
+subdirectory contains the syllabus and assignments,
+given in both text and Postscript format.
+Both are generated from the same
+.V= groff
+markup source file, but due to the restricted nature of ASCII text,
+some information may occasionally be missing,
+such as diagrams or math formulae.
+An example is the formula above.
+.P
+If you are reading the ASCII text version of this file,
+you will see 
+.V= geqn
+markup language, while if you view the Postscript version,
+you will see the actual equation.
+The Postscript format version of the assignment is ``official'',
+and the only version that has been proofread.
+In case of discrepancy, refer to the Postscript version of the
+assignment.
+The text version is convenient for
+.V= grep ping,
+but the final word is always in the Postscript version.
+.H 1 "Due dates and times"
+A
+.V= unix.ucsc.edu
+account is required in order to submit assignments.
+All assignments will be submitted electronically via the IC
+Solaris servers and must work on these machines in order
+to receive a grade.
+Submitting an assignment via email is not acceptable.
+.P
+Graders are required to be logged into the IC Solaris Operating
+Environment
+.=V ( unix.ucsc.edu ,
+etc.), machines when doing any part of the grading.
+Whether or not an assignment ``works'' with another
+operating environment will not influence an assignment score in any way.
+Students may develop their work with any operating environment
+they have access to,
+but must port their programs to IC Solaris before submitting
+them.
+.P
+Exactly when are assignments due\(??
+Assignments are to be submitted electronically using the submit
+command any time on or before the date specified as the due date.
+That includes up to and including 23:59:59 of the specified due date.
+The time of the lecture is not relevant to the time an assignment
+is due.
+In practice, however, you can get away with submitting
+assignments even later, up until the time that the submit
+directory is locked with a Unix command.
+This will done early the following morning at about 09:00:00.
+.P
+Waiting until the last minute to submit is not a good idea,
+since after midnight is gremlin time.
+Gremlins are heavily armed with very sharp pointers.
+This leaves the exact cutoff time somewhat fuzzy.
+If you submit the same assignment more than once, the later
+submission will override the earlier one.
+.E= "Submit early\(!!"
+.E= "Submit frequently\(!!"
+.P
+Not knowing how to use the
+.V= submit
+command is not an excuse for failing to submit an assignment.
+It is your responsibility to learn how to use it as well as
+how to use AFS well in advance of the due date.
+Once you have done the submit, 
+verify that you have submitted everything that needs to be
+submitted.
+.H 1 "Submitting assignments"
+Firstly, it is important for you to understand how to submit
+an assignment.
+Waiting until the due date to find that out will likely mean
+that you will not be able to submit, 
+and hence will score zero.
+.P
+Submit homework with the command\(::
+.VTCODE 1 "submit volume project files"
+\|.\|.\|.
+.br
+The volume name is the registrar's catalog code,
+a hyphen, the instructor's initials,
+a period, the quarter, and the two-digit year.
+Using
+.V= submit
+without operands displays the possible submit volumes.
+If you specify a submit volume without a project name,
+the available project names will be displayed.
+.P
+Finally,
+in order to verify that your submit is complete,
+and that the grader will be able to do the build,
+create a new directory in your personal file space,
+copy all of the files you have submitted and then perform your own
+test build.
+.H 1 "Appeals to scores and inaccuracies in grading"
+If you disagree with a score assigned to you in a programming project,
+you should send email to the TA asking for more information and
+detailing your objections or disagreements.
+If the number of TAs is not equal to 1, 
+please see further information in the
+.V= README ,
+newsgroup,
+or
+.V= SCORE
+report sent to you.
+There is always a deadline for appealing the scores,
+which will be given in the email sent to you after grading.
+For score reports that you receive prior to the last week of
+classes, this will be seven days after grading is completed.
+Because of the extremely tight schedule during exam week,
+a deadline of at most 24 hours will be permitted.
+.P
+For tests, the time to make note of any grading errors is immediately
+after the class during which the tests are returned.
+Test score appeals must be done in person with the test in your
+possession at that time, not via email.
+.P
+The instructor will email a gradebook summary to each student 
+as soon as the TA reports the scores to the instructor.
+If you do not receive such an email, it is your responsibility
+to contact the instructor and find out why not.
+The registrar provides the instructor with
+.V= @@ucsc.edu
+usernames as part of the information sent along with the class list,
+and it is these usernames that are in the gradebook.
+If that information is missing or inaccurate,
+you will not receive notification.
+Since everyone registered for the course is presumed to have a
+.V= @@ucsc.edu
+username, all gradebook related email will be sent to the
+.V= @@ucsc.edu
+username only.
+.P
+Forwarding your
+.V= @@ucsc.edu
+email to an off-campus location is not recommended.
+If, for any reason, that address becomes inaccessible,
+email sent to you will likely bounce.
+If you do forward your email,
+it is your responsibility to ensure that the forwarding address
+remains valid.
+.H 1 "Organizing your files"
+Throughout this course,
+in order to keep your files organized,
+you should make use of subdirectories.
+Below are some commands that you should enter,
+or something similar.
+You may want to do something similar for other courses and
+assignments.
+As with the submit discussion, 
+cmps012b is used as the example course.
+For other courses, make changes as appropriate.
+.BVL 1i
+.V=LI cd
+Change directory to your home directory.
+.V=LI "mkdir private"
+Create a private directory tree that you do not intend anyone
+else to have access to.
+.V=LI "fs sa private \[Do]USER all -clear"
+Set the ACL so that only you have access to the directory.
+.V=LI "fs la private"
+Verify that no one other than you has access to that directory.
+.V=LI "cd private"
+Move down into that directory.
+.V=LI "mkdir cmps012b"
+Create a subdirectory for the course cmps012b.
+.V=LI "mkdir cmps012b/asg1"
+Create a subsubdirectory for your first assignment.
+Everything having to do with that assignment should be placed
+in that directory.
+It is too confusing to have programs from many different assignments
+in the same directory.
+This is especially true when using
+.V= Makefile s,
+since each assignment needs to have a separate file,
+but it must be called
+.V= Makefile .
+.LE
+.P
+You may want to edit your file
+.V= .cshrc.mine
+to add an alias, such as\(::
+.VTCODE 1 "alias c1 cd \[Do]HOME/private/cmps012b/asg1"
+.br
+so that you can just use the command
+.V= c1
+to
+.V= cd
+into that directory.
+Any time you find yourself entering a command repeatedly,
+you can save typing by making up an alias for it.
+cmps012b
+.FINISH
+@
+
+
+1.24
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.23 2013-09-24 15:26:36-07 - - $"
+d50 4
+a53 1
+Accommodation Authorization form.
+d56 1
+a56 3
+instructor about their accommodations.
+If they do not contact their instructor,
+accommodations will not be made.
+@
+
+
+1.23
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.22 2013-09-24 15:26:17-07 - - $"
+d8 1
+@
+
+
+1.22
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.21 2013-09-24 15:25:57-07 - - $"
+a141 1
+.ft BI
+a149 1
+.ft P
+@
+
+
+1.21
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.20 2013-09-24 15:25:26-07 - - $"
+a98 1
+.ft BI
+a111 1
+.ft R
+@
+
+
+1.20
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.19 2013-09-17 17:10:07-07 - - $"
+a59 1
+.ft BI
+a68 1
+.ft R
+a76 1
+.ft BI
+a78 1
+.ft R
+a83 1
+.ft BI
+a86 1
+.ft R
+@
+
+
+1.19
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.18 2013-03-22 21:12:48-07 - - $"
+d225 1
+a225 1
+.E= "A"
+d227 1
+a227 1
+.E= "account is required in order to submit assignments."
+d264 1
+a264 1
+.E= "Not knowing how to use the"
+d266 1
+a266 1
+.E= "command is not an excuse for failing to submit an assignment."
+d270 2
+a271 2
+.E= "verify that you have submitted everything that needs to be"
+.E= "submitted."
+@
+
+
+1.18
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.17 2012-09-25 18:08:47-07 - - $"
+d225 3
+a227 1
+.E= "A Unix.IC account is required in order to submit assignments."
+d235 1
+a235 1
+.=V ( unix.ic.ucsc.edu ,
+@
+
+
+1.17
+log
+@-
+@
+text
+@d3 2
+a4 2
+.TITLE "Generic Syllabus" Fall\~2012
+.RCS "$Id: generic-syllabus.mm,v 1.16 2012-09-11 15:06:50-07 - - $"
+@
+
+
+1.16
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.15 2012-09-11 15:06:33-07 - - $"
+d394 1
+@
+
+
+1.15
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.14 2012-09-11 14:57:59-07 - - $"
+d6 1
+@
+
+
+1.14
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.13 2012-09-11 14:57:11-07 - - $"
+a19 3
+For disability-related testing accommodations, 
+arrangements must be made at least three weeks before each
+test or exam.
+d54 3
+@
+
+
+1.13
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.12 2012-09-11 14:55:54-07 - - $"
+d14 44
+a130 44
+.H 1 "Disability Accommodations"
+It is UCSC policy to assist students with disabilities.
+If you qualify for accommodations because of a disability,
+please submit to me your
+.E= "Accommodation Authorization Form"
+from the Disability Resource Center (DRC) right away.
+For disability-related testing accommodations, 
+arrangements must be made at least three weeks before each
+test or exam.
+Contact DRC at\(::
+.DS CB
+.TS
+tab(|); l l.
+T{
+Disability Resource Center
+146 Hahn Student Services
+1156 High Street
+University of California
+Santa Cruz, CA 95064-1077
+T}|T{
+Email: drc@@ucsc.edu
+Phone: (831) 459-2089
+Fax: (831) 459-5064
+T}
+.TE
+.DE
+.E= "Student responsibilities are as follows\(::"
+.ALX 1 ()
+.LI
+Students contact the DRC to determine their eligibility for
+accommodations.
+When approved by DRC,
+they will receive their Accommodation Authorization form.  
+.LI
+Students then notify their instructor during office hours or after
+class of their accommodations,
+and provide their instructor with their
+Accommodation Authorization form.
+.LI
+Please note that it is the student's responsibility to contact the
+instructor about their accommodations.
+If they do not contact their instructor,
+accommodations will not be made.
+.LE
+@
+
+
+1.12
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.11 2012-09-11 14:54:31-07 - - $"
+a92 5
+A student with a disability is required to meet with a
+DRC service coordinator at the
+beginning of the quarter to determine authorized accommodations.
+The DRC, not the instructor, makes the determination that
+a valid disability exists.
+@
+
+
+1.11
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.10 2012-09-11 14:48:37-07 - - $"
+d107 1
+a107 1
+UC Santa Cruz
+a108 1
+146 Hahn Student Services
+@
+
+
+1.10
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.9 2012-09-11 14:47:07-07 - - $"
+d104 13
+a116 6
+tab(|); l l l l.
+Disability Resource Center||Web\(::|\f[CR]http://www2.ucsc.edu/drc/\fR
+146 Hahn Student Services||Email\(::|\f[CR]drc@@ucsc.edu\fR
+1156 High Street||Phone\(::|(831) 459-2089
+University of California||TTY\(::|(831) 459-4806
+Santa Cruz, CA 95064-1077||Fax\(::|(831) 459-5064
+@
+
+
+1.9
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.8 2012-01-09 13:21:59-08 - - $"
+a86 23
+.P
+.if n .char \(os s
+As a general recommendation,
+regarding the sharing of code,
+one may best heed the sage precepts that
+.Folio= Poloniu\(os
+gave to
+.Folio= Laerte\(os
+in\(::
+.hw Shake-speare
+.Folio= "Act I, Scene iii,"
+.Folio= "``The Tragedy of Hamlet, Prince of Denmark'',"
+.Folio= "by William Shakespeare,"
+.Folio= "circa anno MDCI\(::"
+.DS CB
+.Folio= "Neither a borrower nor a lender be\(;;"
+.Folio= "For loan oft lose\(os both itself and friend,"
+.Folio= "And borrowing dull\(os the edge of husbandry."
+.Folio= "Thi\(os above all\(::  to thine own self be true,"
+.Folio= "And it must follow, a\(os the night the day,"
+.Folio= "Thou canst not then be false to any man."
+.Folio= "Farewell\(::  my blessing season thi\(os in thee" \fI\(!!\fR
+.DE
+@
+
+
+1.8
+log
+@-
+@
+text
+@d3 2
+a4 2
+.TITLE "Generic Syllabus" Winter\~2012
+.RCS "$Id: generic-syllabus.mm,v 1.7 2012-01-09 13:21:10-08 - - $"
+@
+
+
+1.7
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.6 2012-01-09 13:17:52-08 - - $"
+a414 83
+.H 1 "RCS files and revision numbers"
+You will frequently notice a line in my files that contains a
+filename and a revision number enclosed between 
+.RB ` \[Do] '-symbols.
+This is information for RCS (Revision Control System) which I 
+use for keeping older copies of files.
+The Revision mentioned contains a date-time stamp 
+which you can use to note whether or not the file has been changed.
+If you notice that someone has a printed copy of the file which
+differs from yours, check the date on the file.
+.H 1 "Brief summary of RCS"
+A useful suite of programs is RCS,
+Revision Control System,
+which you may want to use.
+You
+.E= should
+want to use them.
+It keeps extra backup copies of your programs in case you
+mess up a version and need an old version back again.
+The commands you need are
+.V= ci
+and
+.V= co .
+See the man pages for a complete description and some other
+associated commands.
+.P
+Briefly, assume you have a file called foo\(::
+.VL 1i
+.V=LI "ci foo"
+checks in foo into the RCS subdirectory,
+deleting it from the current directory.
+The current contents of foo are added to a version collection
+file which maintains all previous versions of the file.
+.V=LI "co foo"
+gets the file back again.
+.V=LI "ci -l foo"
+checks in foo but keeps it locked in the current
+directory so that it does not get deleted.
+.V=LI "ci -u foo"
+makes the file read-only,
+which you may not want.
+This, however, does allow your partner to access the file.
+.LE
+.P
+Inside each file,
+in a comment,
+you need an RCS line to identify the particular version being used.
+This is generally the first line of the file.
+Example\(::
+the string
+.V= "/*\[Do]Id\[Do]*/"
+might be replaced by\(::
+.V= "/* \[Do]Id: generic.mm,v 30.6 2000-12-20 15:58:22-08 - - \[Do] */"
+or something similar when you check it in.
+Then every time you check it in, the string
+.V= ` Id '
+will be changed so that for any printout you will always
+know what version you are looking at.
+I do this on the
+.V= README
+file and the stuff in the Assignments directory.
+Also, if you put the following near the top of the file\(::
+.DS
+.VTCODE 1 "/*"
+.VTCODE 1 "* \[Do]Log\[Do]"
+.VTCODE 1 "*/"
+.DE
+Then your log messages will be retained in the file to remind
+you what you did.
+That is, if you take the trouble to write up your log entry.
+If you don't, then it is of not much use.
+You will be prompted for a Log message at each check-in.
+Making backups is a very good thing.
+If you don't then the gremlins in the CPU will mate with the
+gremlins in your program and destroy everything according to
+Murphy's law.
+Also check the man pages for
+.V= rlog
+and
+.V= rcsdiff
+for ways of scanning the log and for checking on differences
+between what you have done and the originals.
+.FINISH
+@
+
+
+1.6
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.5 2012-01-09 13:17:21-08 - - $"
+d135 18
+@
+
+
+1.5
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.4 2012-01-05 18:05:31-08 - - $"
+a134 8
+In addition, students may received assistance from the Academic
+Resources Center,
+.V= http://www2.ucsc.edu/arc/.
+See Educational Opportunity Programs (EOP),
+Services to Transfer and Re-entry Students (STARS),
+and
+Learning Support Services (LSS),
+which are linked from that page.
+@
+
+
+1.4
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.3 2011-08-22 14:23:48-07 - - $"
+a353 104
+.H 1 "Sending email"
+.E= "Please do not send email with HTML or MIME in it."
+.E= "Please use text only."
+The problem of emailing HTML 
+appears mostly to affect people who use a Windoze mailer.
+Due consideration should be given to erasing Windoze
+from the disk and replacing it with Solaris.
+Some people would prefer Linux or BSD.
+For more information, see\(::
+www.sun.com/solaris,
+www.solariscentral.org,
+www.unixpower.org,
+sluglug.ucsc.edu,
+www.linux.org,
+freebsd.org,
+msbc.simplenet.com.
+Following is a general guide to sending email.
+Proper formatting saves much time.
+.P
+When sending email and posting to the newsgroup,
+one should send or post plain text only.
+Please do not email or post HTML or MIME,
+or using a MIME header in front of the message.  Use only
+.TVCODE 1 "Content-Type\(:) text/plain."
+.TVCODE 1 "Content-Transfer-Encoding\(:) 7bit or 8bit."
+.br
+Also, do not use Quoted Printable, since this causes some
+characters to be sent in hexadecimal instead of plain text.
+Similarly, do not use attachments or base64 encoding.
+.P
+When sending email, each line should be the standard 6.5 inches long,
+which is equivalent to 65 characters per line.
+This allows for a few levels of quoting if needed in a followup.
+Quoting is usually done by including the incoming message
+textually in the reply, and preceding each line with a
+greater-than sign and a space.
+The standard of 65 characters fits well with Letter sized paper,
+which is 8.5 inches by 11 inches.
+With an inch border around the paper, and using 12 point Courier,
+one can print 65 characters in 6.5 horizontal inches.
+An
+.V= xterm
+normally shows 80 characters per line,
+and with line numbers to the left using up 8 character positions,
+there are 72 print positions left over for text.
+.P
+In order to reformat a paragraph from inside
+.V= vi ,
+the following command may be used\(::
+.VTCODE 1 "{!}fmt -65"
+.br
+The
+.RB ` { '
+moves to the beginning of the paragraph.
+.RB ` !} '
+pipes the current paragraph through the program fmt.
+.RB ` "fmt -65" '
+reformats a paragraph into a neat even paragraph.
+To reformat a range of lines, one may type\(::
+.VTCODE 1 ":11,14!fmt -65"
+.br
+or whatever the line range is.
+The command
+.VTCODE 1 ":8,$!fmt -65"
+.br
+will format all lines from line 7 to the end of the file.
+The command
+.VTCODE 1 ":set number"
+.br
+will display line numbers so that you can know which particular
+line numbers to use in the commands.
+To make line numbers appear automatically, put the command
+.RB ` "set number" '
+in your
+.V= \&.exrc
+file.
+To suppress line wrap with
+.V= fmt ,
+use a period as the first character on the line,
+which can also be used as the bullet of a bullet display list.
+Thus fmt can be used as a simple formatter for text messages.
+.P
+Some people prefer
+.V= emacs
+to
+.V= vi
+(why\(?)), and there are undoubtedly ways to make that editor pipe
+ranges of lines through a command.
+The environment variable
+.V= VISUAL
+is used by
+.V= mailx
+in order to bring up what an individual programmer considers the
+``correct'' editor.
+.P
+Assignments may not be submitted via email.
+Use
+.V= ssh
+to login to one of the Unix.ic machines
+and use the
+.V= submit
+command.
+If you do not know how to use submit,
+go to the lab well in advance of the due date and learn how.
+@
+
+
+1.3
+log
+@-
+@
+text
+@d3 2
+a4 2
+.TITLE "Generic Syllabus" Fall\~2011
+.RCS "$Id: generic-syllabus.mm,v 1.2 2011-08-22 14:23:01-07 - - $"
+@
+
+
+1.2
+log
+@-
+@
+text
+@d4 1
+a4 1
+.RCS "$Id: generic-syllabus.mm,v 1.1 2011-08-18 19:13:13-07 - - $"
+d51 2
+a52 2
+For those courses where 
+.E= "pair programming"
+d55 1
+a55 1
+ they are developing their projects using a single code base.
+@
+
+
+1.1
+log
+@-
+@
+text
+@d3 2
+a4 2
+.TITLE "Generic Syllabus" Spring\~2011
+.RCS "$Id: generic-syllabus.mm,v 1.4 2011-03-23 18:51:46-07 - - $"
+@

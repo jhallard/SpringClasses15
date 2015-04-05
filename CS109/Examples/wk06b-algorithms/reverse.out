@@ -1,0 +1,32 @@
+
+testvector:
+   typeid(itor) = N9__gnu_cxx17__normal_iteratorIPSsSt6vectorISsSaISsEEEE
+      unmangled = __gnu_cxx::__normal_iterator<std::string*, std::vector<std::string, std::allocator<std::string> > >
+   typeid(*itor) = Ss
+      unmangled = std::string
+   foo bar baz qux hello world
+   world hello qux baz bar foo
+
+testlist:
+   typeid(itor) = St14_List_iteratorISsE
+      unmangled = std::_List_iterator<std::string>
+   typeid(*itor) = Ss
+      unmangled = std::string
+   foo bar baz qux hello world
+   world hello qux baz bar foo
+
+testcharstar:
+   typeid(itor) = PPc
+      unmangled = char**
+   typeid(*itor) = Pc
+      unmangled = char*
+   foo bar baz qux hello world
+   world hello qux baz bar foo
+
+testintarray:
+   typeid(itor) = Pi
+      unmangled = int*
+   typeid(*itor) = i
+      unmangled = int
+   3 1 4 1 5 9 2 6 5 3 5
+   5 3 5 6 2 9 5 1 4 1 3

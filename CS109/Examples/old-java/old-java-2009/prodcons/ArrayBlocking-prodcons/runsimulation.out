@@ -1,0 +1,50 @@
+ 0:00.000: main starting
+ 0:00.006: producer Greek starting
+ 0:00.007: consumer Bar starting
+ 0:00.007: consumer Foo starting
+ 0:00.006: producer Latin starting
+ 0:00.110: producer Latin: put ("prîmus")
+ 0:00.220: producer Latin: put ("secundus,")
+ 0:00.310: producer Greek: put ("prôtos")
+ 0:00.330: producer Latin: put ("tertius")
+ 0:00.430: consumer Foo: get() = "secundus,"
+ 0:00.440: producer Latin: put ("quârtus")
+ 0:00.550: producer Latin: put ("quîntus")
+ 0:00.620: producer Greek: put ("deuteros")
+ 0:00.620: consumer Bar: get() = "prîmus"
+ 0:00.640: consumer Foo: get() = "prôtos"
+ 0:00.660: producer Latin: put ("sextus")
+ 0:00.770: producer Latin: put ("septimus")
+ 0:00.850: consumer Foo: get() = "quârtus"
+ 0:00.880: producer Latin: put ("octâvus")
+ 0:00.930: producer Greek: put ("tritos")
+ 0:00.990: producer Latin: put ("nônus")
+ 0:01.060: consumer Foo: get() = "quîntus"
+ 0:01.130: consumer Bar: get() = "tertius"
+ 0:01.170: producer Latin: put ("decimus")
+ 0:01.171: producer Latin finished
+ 0:01.240: producer Greek: put ("tetartos")
+ 0:01.270: consumer Foo: get() = "deuteros"
+ 0:01.480: consumer Foo: get() = "septimus"
+ 0:01.580: producer Greek: put ("pentos")
+ 0:01.640: consumer Bar: get() = "sextus"
+ 0:01.690: consumer Foo: get() = "octâvus"
+ 0:01.890: producer Greek: put ("hektos")
+ 0:01.900: consumer Foo: get() = "nônus"
+ 0:02.110: consumer Foo: get() = "decimus"
+ 0:02.150: consumer Bar: get() = "tritos"
+ 0:02.200: producer Greek: put ("hebdomos")
+ 0:02.320: consumer Foo: get() = "tetartos"
+ 0:02.510: producer Greek: put ("ogdoos")
+ 0:02.530: consumer Foo: get() = "hektos"
+ 0:02.660: consumer Bar: get() = "pentos"
+ 0:02.740: consumer Foo: get() = "hebdomos"
+ 0:02.820: producer Greek: put ("enatos")
+ 0:03.030: consumer Foo: get() = "enatos"
+ 0:03.130: producer Greek: put ("dekatos")
+ 0:03.131: producer Greek finished
+ 0:03.131: main finished
+ 0:03.170: consumer Bar: get() = "ogdoos"
+ 0:03.171: consumer Bar finished
+ 0:03.340: consumer Foo: get() = "dekatos"
+ 0:03.343: consumer Foo finished

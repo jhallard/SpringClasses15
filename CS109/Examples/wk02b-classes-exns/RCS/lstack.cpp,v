@@ -1,0 +1,685 @@
+head	1.24;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.24
+date	2012.04.13.19.34.05;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2012.04.13.05.01.09;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2012.04.13.04.56.14;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2012.04.13.04.55.53;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2012.04.13.04.54.48;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2012.04.13.04.54.08;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2012.04.13.04.53.26;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2012.04.13.04.52.04;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2012.04.13.04.51.23;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2012.04.13.04.50.58;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.04.13.04.50.28;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.04.13.04.48.29;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.04.13.04.47.19;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.04.13.04.46.28;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.04.13.04.46.02;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.13.04.43.28;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.13.04.42.32;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.13.04.40.03;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.13.04.39.34;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.13.04.38.23;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.13.04.37.48;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.13.04.36.59;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.13.04.28.16;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.13.04.27.27;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.24
+log
+@-
+@
+text
+@// $Id: lstack.cpp,v 1.23 2012-04-12 22:01:09-07 - - $
+
+//
+// lstack - show the linked list implementation of a stackk
+//
+
+#include <cstddef>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// lstack.h
+/////////////////////////////////////////////////////////////////
+
+class lstack {
+   private:
+      struct node {
+         string item;
+         node *link;
+      };
+      node *topnode;
+      int count;
+      lstack (const lstack &); // Disabled.
+      lstack &operator= (const lstack &); // Disabled.
+   public:
+      lstack();
+      ~lstack();
+      void push (const string &);
+      void pop();
+      string &top();
+      const string &top() const;
+      size_t size() const;
+      bool empty() const;
+};
+
+
+/////////////////////////////////////////////////////////////////
+// lstack.cpp
+/////////////////////////////////////////////////////////////////
+
+lstack::lstack(): topnode (0), count(0) { }
+
+lstack::~lstack() {
+   while (! empty()) pop();
+}
+
+void lstack::push (const string &item) {
+   node *tmp = new node();
+   tmp->item = item;
+   tmp->link = topnode;
+   topnode = tmp;
+   ++count;
+}
+
+void lstack::pop() {
+   if (empty()) throw out_of_range ("lstack::pop()");
+   node *tmp = topnode;
+   topnode = topnode->link;
+   // delete tmp->item; won't work if item not a pointer
+   // but its lack causes leak if it is a pointer.
+   delete tmp;
+   --count;
+}
+
+string &lstack::top() {
+   if (empty()) throw out_of_range ("lstack::top()");
+   return topnode->item;
+}
+
+const string &lstack::top() const {
+   if (empty()) throw out_of_range ("lstack::top()");
+   return topnode->item;
+}
+
+size_t lstack::size() const {
+   return count;
+}
+
+bool lstack::empty() const {
+   return count == 0;
+}
+
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+int main (int argc, char **argv) {
+
+   lstack stkstr;
+   for (int argi = 1; argi < argc; ++argi) {
+      stkstr.push (argv[argi]);
+   }
+   while (stkstr.size() > size_t (argc / 2)) {
+      cout << stkstr.top() << endl;
+      stkstr.pop();
+   }
+
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=lstack.out.grind \
+//TEST//       lstack this is some test data for the stack \
+//TEST//       >lstack.out 2>&1
+//TEST// mkpspdf lstack.ps lstack.cpp* lstack.out*
+*/
+
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.22 2012-04-12 21:56:14-07 - - $
+d26 2
+a29 2
+      lstack (const lstack &); // Disabled.
+      lstack &operator= (const lstack &); // Disabled.
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.21 2012-04-12 21:55:53-07 - - $
+a17 1
+template <typename item_t>
+d21 1
+a21 1
+         item_t item;
+d31 1
+a31 1
+      void push (const item_t &);
+d33 2
+a34 2
+      item_t &top();
+      const item_t &top() const;
+d44 1
+a44 2
+template <typename item_t>
+lstack<item_t>::lstack(): topnode (0), count(0) { }
+d46 1
+a46 2
+template <typename item_t>
+lstack<item_t>::~lstack() {
+d50 1
+a50 2
+template <typename item_t>
+void lstack<item_t>::push (const item_t &item) {
+d58 1
+a58 2
+template <typename item_t>
+void lstack<item_t>::pop() {
+d62 2
+a63 1
+   delete tmp->item;
+d68 1
+a68 2
+template <typename item_t>
+item_t &lstack<item_t>::top() {
+d73 1
+a73 2
+template <typename item_t>
+const item_t &lstack<item_t>::top() const {
+d78 1
+a78 2
+template <typename item_t>
+size_t lstack<item_t>::size() const {
+d82 1
+a82 2
+template <typename item_t>
+bool lstack<item_t>::empty() const {
+d93 1
+a93 3
+   // First, with stack<string>:
+   cout << "First:" << endl;
+   lstack<string> stkstr;
+a101 13
+   // Second, with stack<string*>:
+   cout << endl << "Second:" << endl;
+   lstack<string*> stkpstr;
+   for (int argi = 1; argi < argc; ++argi) {
+      stkpstr.push (new string (argv[argi]));
+   }
+   while (stkpstr.size() > size_t (argc / 2)) {
+      string *top = stkpstr.top();
+      cout << top << endl;
+      delete top;
+      stkpstr.pop();
+   }
+
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.20 2012-04-12 21:54:48-07 - - $
+d67 1
+a67 1
+   delete item;
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.19 2012-04-12 21:54:08-07 - - $
+d67 1
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.18 2012-04-12 21:53:26-07 - - $
+d106 1
+a106 1
+   while (! stkstr.empty()) {
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.17 2012-04-12 21:52:04-07 - - $
+d117 1
+a117 1
+   while (stkpstr.size() < size_t (argc / 2)) {
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.16 2012-04-12 21:51:23-07 - - $
+d112 1
+a112 1
+   cout << "Second:" << endl;
+d130 2
+a131 1
+//TEST//       lstack this is a test >lstack.out 2>&1
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.15 2012-04-12 21:50:58-07 - - $
+d117 1
+a117 1
+   while (stkpstr.size() < ssize_t (argc) / 2) {
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.14 2012-04-12 21:50:28-07 - - $
+d117 1
+a117 1
+   while (stkpstr.size() < argc / 2) {
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.13 2012-04-12 21:48:29-07 - - $
+d117 1
+a117 1
+   while (stkpstr.count() < argc / 2) {
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.12 2012-04-12 21:47:19-07 - - $
+d101 1
+d112 1
+d117 4
+a120 2
+   while (! stkpstr.empty()) {
+      cout << stkpstr.top() << endl;
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.11 2012-04-12 21:46:28-07 - - $
+a109 1
+/*
+a118 1
+*/
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.8 2012-04-12 21:42:32-07 - - $
+d129 1
+a129 1
+//TEST// mkpspdf lstack.ps lstack.cpp lstack.out
+@
+
+
+1.10
+log
+@-
+@
+text
+@d58 1
+a58 1
+   topnode = item;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d46 1
+a46 1
+lstack<item_t>::lstack(): node (0), count(0) { }
+d103 1
+a103 1
+      stkstr.push (string (argv[argi]));
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.7 2012-04-12 21:40:03-07 - - $
+d103 1
+a103 1
+      stkstr.push (argv[argi]);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.6 2012-04-12 21:39:34-07 - - $
+d57 2
+a58 2
+   tmp->link = top;
+   top = item;
+d65 2
+a66 2
+   node *tmp = top;
+   top = top->link;
+d74 1
+a74 1
+   return top->item;
+d80 1
+a80 1
+   return top->item;
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.5 2012-04-12 21:38:23-07 - - $
+d10 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.4 2012-04-12 21:37:48-07 - - $
+d109 1
+d119 2
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.3 2012-04-12 21:36:59-07 - - $
+d39 1
+d92 1
+d110 1
+a110 1
+   lstack<string> stkpstr;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lstack.cpp,v 1.1 2012-04-12 21:27:27-07 - - $
+d98 1
+a98 1
+   stack<string> stkstr;
+d108 1
+a108 1
+   stack<string> stkstr;
+d110 1
+a110 1
+      stkstr.push (new string (argv[argi]));
+d112 3
+a114 3
+   while (! stkstr.empty()) {
+      cout << stkstr.top() << endl;
+      stkstr.pop();
+@
+
+
+1.2
+log
+@-
+@
+text
+@d7 6
+d30 1
+a30 1
+      ~stack();
+d35 1
+a35 1
+      size_type size() const;
+d44 1
+a44 1
+lstack::lstack(): node (0), count(0) { }
+d47 1
+a47 1
+lstack::~lstack() {
+d52 1
+a52 1
+void lstack::push (const item_t &item) {
+d61 1
+a61 1
+void lstack::pop() {
+d70 1
+a70 1
+item_t &lstack::top() {
+d76 1
+a76 1
+const item_t &lstack::top() const {
+d82 1
+a82 1
+size_type lstack::size() const {
+d87 1
+a87 1
+bool lstack::empty() const {
+d91 35
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d23 1
+a23 1
+      lastack &operator= (const lstack &); // Disabled.
+@

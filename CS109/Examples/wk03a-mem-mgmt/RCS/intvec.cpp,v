@@ -1,0 +1,651 @@
+head	1.24;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.24
+date	2014.04.14.20.16.36;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.04.14.20.11.11;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.04.11.02.33.38;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.01.28.21.38.15;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2013.07.06.02.32.37;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2013.07.06.02.31.07;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2013.07.06.02.24.44;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2013.07.06.02.24.10;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2013.02.16.01.13.01;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.02.16.01.12.31;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.04.16.20.16.30;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.04.16.20.16.00;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.04.16.20.15.40;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.04.16.20.14.45;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.04.16.20.11.36;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.16.20.10.32;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.16.20.10.15;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.16.20.10.07;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.16.20.09.45;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.16.20.09.29;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.16.20.09.19;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.16.20.07.53;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.16.20.07.26;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.16.19.52.01;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.24
+log
+@-
+@
+text
+@// $Id: intvec.cpp,v 1.23 2014-04-14 13:11:11-07 - - $
+
+//
+// intvec - implementation of an int vector, similar to 
+// Stroustrup, ch.17 example.
+//
+
+#include <iostream>
+#include <stdexcept>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// intvec.h
+/////////////////////////////////////////////////////////////////
+
+class intvec {
+   private:
+      size_t _size;
+      int *_data;
+      void copy_data (int *data);
+      void range_check (size_t index) const;
+   public:
+      intvec ();                         // default ctor
+      intvec (const intvec&);            // copy ctor
+      intvec (intvec&&);                 // move ctor
+      intvec& operator= (const intvec&); // copy operator=
+      intvec& operator= (intvec&&);      // move operator=
+      ~intvec();                         // dtor
+      // Other members.
+      explicit intvec (size_t size);
+      size_t size() const;
+      int get (size_t index) const;
+      void put (size_t index, int value);
+};
+
+
+/////////////////////////////////////////////////////////////////
+// intvec.cpp
+/////////////////////////////////////////////////////////////////
+
+// Private.
+void intvec::copy_data (int *data) {
+   for (size_t index = 0; index < _size; ++index) {
+      _data[index] = data[index];
+   }
+}
+
+// Private.
+void intvec::range_check (size_t index) const {
+   if (index >= _size) throw out_of_range ("intvec::range_check");
+}
+
+// Default ctor.
+intvec::intvec(): _size(0), _data(nullptr) {
+}
+
+// Copy constructor.
+intvec::intvec (const intvec& that):
+            _size(that._size), _data (new int[that._size]) {
+   copy_data (that._data);
+}
+
+// Move constructor.
+intvec::intvec (intvec&& that):
+            _size(that._size), _data (that._data) {
+   that._size = 0;
+   that._data = nullptr;
+}
+
+// Copy operator=
+intvec& intvec::operator= (const intvec& that){
+   if (this != &that) {
+      if (_data != nullptr) delete[] _data;
+      _size = that._size;
+      _data = new int[that._size];
+      copy_data (that._data);
+   }
+   return *this;
+}
+
+// Move operator=
+intvec& intvec::operator= (intvec&& that){
+   if (this != &that) {
+      if (_data != nullptr) delete[] _data;
+      _size = that._size;
+      _data = that._data;
+      that._size = 0;
+      that._data = nullptr;
+   }
+   return *this;
+}
+
+
+// Destructor.
+intvec::~intvec() {
+   if (_data != nullptr) delete[] _data;
+}
+
+// Fixed-size allocator.
+intvec::intvec (size_t size): _size(size), _data (new int[_size]) {
+   for (size_t index = 0; index < _size; ++index) {
+      _data[index] = 0;
+   }
+}
+
+size_t intvec::size() const {
+   return _size;
+}
+
+int intvec::get (size_t index) const {
+   range_check (index);
+   return _data[index];
+}
+
+void intvec::put (size_t index, int value) {
+   range_check (index);
+   _data[index] = value;
+}
+
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+int main () {
+   intvec v1(10);
+   v1.put (3, 99);
+   int x = v1.get (3);
+   cout << x << endl;
+   try {
+      v1.get (999);
+   }catch (out_of_range error) {
+      cerr << error.what() << endl;
+   }
+   intvec v2 = v1;
+   v2.put (3, 1234);
+   cout << v1.get (3) << " " << v2.get (3) << endl;
+   v2 = v1;
+   cout << v1.get (3) << " " << v2.get (3) << endl;
+   return 0;
+}
+
+//TEST// alias grind='valgrind --leak-check=full --show-reachable=yes'
+//TEST// grind intvec >intvec.out 2>&1
+//TEST// mkpspdf intvec.ps intvec.cpp* intvec.out*
+
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.22 2014-04-10 19:33:38-07 - - $
+d24 6
+a29 6
+      intvec ();                          // default ctor
+      intvec (const intvec &);            // copy ctor
+      intvec (intvec &&);                 // move ctor
+      intvec &operator= (const intvec &); // copy operator=
+      intvec &operator= (intvec &&);      // move operator=
+      ~intvec();                          // dtor
+d59 1
+a59 1
+intvec::intvec (const intvec &that):
+d65 1
+a65 1
+intvec::intvec (intvec &&that):
+d72 1
+a72 1
+intvec &intvec::operator= (const intvec &that){
+d83 1
+a83 1
+intvec &intvec::operator= (intvec &&that){
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.21 2014-01-28 13:38:15-08 - - $
+d144 2
+a145 4
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=intvec.out.grind \
+//TEST//       intvec >intvec.out 2>&1
+a146 1
+*/
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.20 2013-07-05 19:32:37-07 - - $
+d24 1
+a24 1
+      intvec () = delete;                 // default ctor
+d54 4
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.19 2013-07-05 19:31:07-07 - - $
+d64 1
+a64 1
+   that._data = NULL;
+d70 1
+a70 1
+      delete[] _data;
+d81 1
+d85 1
+a85 1
+      that._data = NULL;
+d93 1
+a93 1
+   if (_data != NULL) delete[] _data;
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.18 2013-07-05 19:24:44-07 - - $
+d42 1
+d49 1
+d89 1
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.17 2013-07-05 19:24:10-07 - - $
+d58 8
+a65 1
+// Operator=
+d76 11
+d89 1
+a89 1
+   delete[] _data;
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.16 2013-02-15 17:13:01-08 - - $
+a20 1
+      intvec() = delete;
+d24 1
+a24 1
+      intvec () = delete;
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.15 2013-02-15 17:12:31-08 - - $
+d25 6
+a30 3
+      intvec (const intvec &); // copy ctor
+      intvec &operator= (const intvec &); // operator=
+      ~intvec(); // dtor
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.14 2012-04-16 13:16:30-07 - - $
+a49 2
+// Default constructor is disabled.
+
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.13 2012-04-16 13:16:00-07 - - $
+d21 1
+a21 1
+      intvec(); // DISABLE: default ctor
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.12 2012-04-16 13:15:40-07 - - $
+d108 1
+a108 1
+      cout << error.what() << endl;
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.11 2012-04-16 13:14:45-07 - - $
+d95 1
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.10 2012-04-16 13:11:36-07 - - $
+d35 1
+d117 7
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.9 2012-04-16 13:10:32-07 - - $
+d75 3
+d94 22
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.8 2012-04-16 13:10:15-07 - - $
+d23 1
+a23 1
+      void range_check (size_t index);
+d45 1
+a45 1
+void intvec::range_check (size_t index) {
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.7 2012-04-16 13:10:07-07 - - $
+d77 1
+a77 1
+size_t size() const {
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.6 2012-04-16 13:09:45-07 - - $
+d58 1
+a58 1
+intvec &intvec::operator= (const intvec &){
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.5 2012-04-16 13:09:29-07 - - $
+d53 1
+a53 1
+            _size(that.size), _data (new int[that._size]) {
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.4 2012-04-16 13:09:19-07 - - $
+d41 1
+a41 1
+      _data[index] = that._data[index];
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.3 2012-04-16 13:07:53-07 - - $
+d39 1
+a39 1
+void intvec::copy_data (int *data) ){
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.2 2012-04-16 13:07:26-07 - - $
+d22 1
+a22 1
+      void copy_data (const intvec &);
+d39 1
+a39 1
+void intvec::copy_data (const intvec &that) {
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: intvec.cpp,v 1.1 2012-04-16 12:52:01-07 - - $
+d9 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d18 14
+a31 1
+      ssize_t _size;
+d33 57
+a89 1
+    
+@

@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting mapleak.cpp
+mapleak.cpp:
+     $Id: mapleak.cpp,v 1.14 2015-01-26 14:35:42-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 mapleak.cpp -o mapleak -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f mapleak.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished mapleak.cpp

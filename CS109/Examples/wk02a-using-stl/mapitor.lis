@@ -1,0 +1,16 @@
+
+Forward iterator:
+   ./mapitor 0
+   bar 2
+   baz 3
+   foo 1
+   quux 5
+   qux 4
+
+Reverse iterator:
+   qux 4
+   quux 5
+   foo 1
+   baz 3
+   bar 2
+   ./mapitor 0

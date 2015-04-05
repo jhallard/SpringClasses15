@@ -1,0 +1,180 @@
+head	1.6;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.6
+date	2015.02.06.03.08.00;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2015.02.06.03.06.40;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.08.16.23.55.19;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.08.08.21.46.53;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.08.08.21.46.37;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.06.06.05.05.05;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@-
+@
+text
+@// $Id: lexicalcast.cpp,v 1.5 2015-02-05 19:06:40-08 - - $
+
+//
+// Illustrate to_string, from_string, lexical_cast.
+// Assume the use of << and >> on sstreams.
+//
+
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <typeinfo>
+
+using namespace std;
+
+//
+// convert a thing into a string.
+//
+
+template <typename item_t>
+string to_string (item_t that) {
+   ostringstream stream;
+   stream << that;
+   return stream.str ();
+}
+
+//
+// Scan a string to grab a thing.
+//
+
+template <typename item_t>
+item_t from_string (const string &that) {
+   stringstream stream;
+   stream << that;
+   item_t result;
+   bool converted = stream >> result  // Is string is a valid item_t?
+                 && stream >> std::ws // Flush trailing white space.
+                 && stream.eof();     // Must now be at end of stream.
+   if (not converted) {
+      throw domain_error (string (typeid (item_t).name())
+            + " from_string (" + that + ")");
+   }
+   return result;
+}
+
+//
+// Lexically cast a thing to a string then to another thing.
+//
+
+template <typename target_t, typename source_t>
+target_t lexical_cast (source_t that) {
+   return from_string (to_string (that));
+}
+
+//
+// Main.
+//
+
+int main () {
+   cout << to_string<double> (9) << endl;
+   cout << from_string<int> ("42") << endl;
+   return 0;
+}
+
+//TEST// lexicalcast >lexicalcast.out 2>&1
+//TEST// mkpspdf lexicalcast.ps lexicalcast.cpp lexicalcast.out
+
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lexicalcast.cpp,v 1.4 2013-08-16 16:55:19-07 - - $
+d65 3
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lexicalcast.cpp,v 1.3 2013-08-08 14:46:53-07 - - $
+d64 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lexicalcast.cpp,v 1.2 2013-08-08 14:46:37-07 - - $
+d60 2
+a61 2
+   cout << to_string <double> (9) << endl;
+   cout << from_string <int> ("42") << endl;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: lexicalcast.cpp,v 1.1 2012-06-05 22:05:05-07 - - $
+d12 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string-conv.cpp,v 1.3 2012-04-17 22:15:18-07 - - $
+d38 1
+a38 1
+   if (! converted) {
+@

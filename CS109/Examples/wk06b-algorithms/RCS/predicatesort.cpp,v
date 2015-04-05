@@ -1,0 +1,116 @@
+head	1.3;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.3
+date	2012.06.05.02.15.19;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.06.05.02.14.52;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.06.05.02.13.18;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@-
+@
+text
+@// $Id: predicatesort.cpp,v 1.2 2012-06-04 19:14:52-07 - - $
+
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+template <class item_t>
+bool incrcomp (const item_t &left, const item_t &right) {
+   return left < right;
+}
+
+template <class item_t>
+bool decrcomp (const item_t &left, const item_t &right) {
+   return left > right;
+};
+
+template <class itor_t>
+void print (string label, const itor_t &begin, const itor_t &end) {
+   cout << endl << label << " order:" << endl;
+   for (itor_t itor = begin; itor != end; ++itor) {
+      cout << " " << *itor;
+   }
+   cout << endl;
+}
+
+int main () {
+   char *array[] = {"hello", "world", "foo", "bar", "baz"};
+   char **end = array + sizeof array / sizeof *array;
+
+   vector<string> vec;
+   for (char **itor = array; itor < end; ++itor) vec.push_back (*itor);
+   print ("initial", vec.begin(), vec.end());
+
+   sort (vec.begin(), vec.end());
+   print ("default sort", vec.begin(), vec.end());
+
+   sort (vec.begin(), vec.end(), incrcomp());
+   print ("incrcomp<string>", vec.begin(), vec.end());
+
+   sort (vec.begin(), vec.end(), decrcomp());
+   print ("decrcomp<string>", vec.begin(), vec.end());
+
+   return 0;
+}
+
+//TEST// ./predicatesort >predicatesort.out 2>&1
+//TEST// mkpspdf predicatesort.ps predicatesort.cpp* predicatesort.out
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: predicatesort.cpp,v 1.1 2012-06-04 19:13:18-07 - - $
+d40 1
+a40 1
+   sort (vec.begin(), vec.end(), incrcomp<string>());
+d43 1
+a43 1
+   sort (vec.begin(), vec.end(), decrcomp<string>());
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: predicateobj.cpp,v 1.6 2012/06/04 21:47:53 - - $
+d49 2
+a50 2
+//TEST// ./predicateobj >predicateobj.out 2>&1
+//TEST// mkpspdf predicateobj.ps predicateobj.cpp* predicateobj.out
+@

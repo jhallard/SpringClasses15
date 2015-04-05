@@ -1,0 +1,20 @@
+==9184== Memcheck, a memory error detector
+==9184== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==9184== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright info
+==9184== Command: smart_ptr hello world foo bar baz
+==9184== 
+0x4e7d0e0[2]->"smart_ptr"
+0x4e7d2a0[2]->"hello"
+0x4e7d450[2]->"world"
+0x4e7d600[2]->"foo"
+0x4e7d7b0[2]->"bar"
+0x4e7d960[3]->"baz"
+==9184== 
+==9184== HEAP SUMMARY:
+==9184==     in use at exit: 0 bytes in 0 blocks
+==9184==   total heap usage: 38 allocs, 38 frees, 531 bytes allocated
+==9184== 
+==9184== All heap blocks were freed -- no leaks are possible
+==9184== 
+==9184== For counts of detected and suppressed errors, rerun with: -v
+==9184== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 6 from 6)

@@ -1,0 +1,820 @@
+head	1.27;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.27
+date	2014.05.23.02.37.09;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2013.08.12.19.41.45;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2013.08.12.19.41.25;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2013.08.12.19.40.43;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2013.08.12.19.38.52;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2013.08.12.19.38.39;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2013.08.12.19.36.59;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2013.08.10.00.15.37;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2013.08.10.00.13.43;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2013.08.10.00.11.56;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2013.08.10.00.10.41;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2013.03.02.03.30.46;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.03.02.03.29.51;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2013.03.02.03.29.39;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.03.02.03.29.26;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.03.02.03.29.06;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.03.02.03.28.27;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.03.02.03.25.59;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.05.30.01.10.07;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.05.30.01.06.07;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.05.30.01.05.33;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.05.30.01.02.42;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.05.30.00.59.03;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.05.30.00.55.27;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.05.30.00.51.32;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.05.30.00.35.16;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.30.00.34.34;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.27
+log
+@-
+@
+text
+@// $Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $
+
+//
+// Web server.  Responds with README.html when queried.
+//
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import static java.lang.String.*;
+import static java.lang.System.*;
+
+class webserver {
+   static final String RCSID =
+         "$Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $";
+   static options opts = null;
+   static String[] server_socket_info;
+
+   static String ident() {
+      return String.format ("%s: port %d", opts.progname,
+                            opts.portnumber);
+   }
+
+   static String get_jarname() {
+      String jarpath = getProperty ("java.class.path");
+      int lastslash = jarpath.lastIndexOf ('/');
+      if (lastslash < 0) return jarpath;
+      return jarpath.substring (lastslash + 1);
+   }
+
+   static class options {
+      final String progname = get_jarname();
+      int portnumber;
+      options (String[] args) {
+         try {
+            if (args.length != 1) throw new NumberFormatException();
+            portnumber = Integer.parseInt (args[0]);
+         }catch (NumberFormatException exn) {
+            quit ("Usage: %s portnumber%n", progname);
+         }
+      }
+   }
+
+   static String timenow() {
+      return format ("%1$tY %1$tb %1$td %1$ta %1$tT.%1$tL",
+                     Calendar.getInstance());
+   }
+
+
+   static void sendline (PrintWriter writer, String line) {
+      out.printf ("SENT: %s%n", line);
+      writer.printf ("%s\n", line);
+   }
+
+   static void sendfile (Socket client, String filename)
+                  throws IOException {
+      if (filename.length() == 0) filename = "README";
+      List<String> lines = new LinkedList<String>();
+      PrintWriter writer = new PrintWriter (client.getOutputStream());
+      lines.add ("<PRE>");
+      lines.add ("Server RCS Id: " + RCSID);
+      try {
+         InetAddress addr = InetAddress.getLocalHost();
+         lines.add ("From HostName: " + addr.getHostName());
+         lines.add ("From HostAddress: " + addr.getHostAddress());
+      }catch (UnknownHostException exn) {
+         lines.add ("UnknownHostException: " + exn.getMessage());
+      }
+      for (String str: server_socket_info) lines.add (str);
+      lines.add ("Client InetAddress: " + client.getInetAddress());
+      lines.add ("Client LocalAddress: " + client.getLocalAddress());
+      lines.add ("Client LocalPort: " + client.getLocalPort());
+      lines.add ("Client Port: " + client.getPort());
+      lines.add ("Page sent: " + timenow());
+      lines.add ("");
+      try {
+         Scanner file = new Scanner (new File (filename));
+         while (file.hasNextLine()) {
+            String line = file.nextLine();
+            lines.add (line);
+         }
+      }catch (IOException exn) {
+         out.printf ("%s%n", exn);
+         lines.add ("IOException: " + exn.getMessage());
+      }
+      int length = 0;
+      for (String line: lines) length += line.length() + 1;
+      sendline (writer, "HTTP/1.1 200 OK");
+      sendline (writer, "Server: " + ident());
+      sendline (writer, "Content-Type: text/html");
+      sendline (writer, "Content-Length: " + length);
+      sendline (writer, "");
+      for (String line: lines) sendline (writer, line);
+      writer.flush();
+   }
+
+   static List<String> getrequest (Socket client) throws IOException {
+      List<String> lines = new LinkedList<String>();
+      Scanner input = new Scanner (client.getInputStream());
+      while (input.hasNextLine()) {
+         String line = input.nextLine();
+         out.printf ("RECD: %s%n", line);
+         lines.add (line);
+         if (line.length() == 0) break;
+      }
+      return lines;
+   }
+
+
+   static class worker implements Runnable {
+      static int worker_count = 0;
+      Socket client;
+      int id = ++worker_count;
+      worker (Socket client) {
+         this.client = client;
+      }
+      public void run() {
+         Thread.currentThread().setName ("Worker " + id);
+         out.printf ("%s: worker %d: starting%n", ident(), id);
+         try {
+            List<String> request = getrequest (client);
+            String filename = request.get(0).split("\\s+")[1];
+            sendfile (client, filename.substring(1));
+            client.close();
+            out.printf ("%s: worker %d: finished%n", ident(), id);
+         }catch (IOException exn) {
+            quit ("%s: %s%n", ident(), exn);
+         }
+      }
+   }
+
+   static void quit (String format, Object... params) {
+      err.printf (format, params);
+      Set<Map.Entry<Thread, StackTraceElement[]>> entryset =
+                  Thread.getAllStackTraces().entrySet();
+      for (Map.Entry<Thread, StackTraceElement[]> entry: entryset) {
+         Thread key = entry.getKey();
+         StackTraceElement[] value = entry.getValue();
+         err.printf ("Thread %d: %s%n", key.getId(), key.getName());
+         for (StackTraceElement stack: value) {
+            err.printf ("   %s%n", stack.toString());
+         }
+      }
+      exit (1);
+   }
+
+   public static void main (String[] args) {
+      opts = new options (args);
+      try {
+         ServerSocket socket = new ServerSocket (opts.portnumber);
+         server_socket_info = new String[2];
+         server_socket_info[0] = "Server InetAddress: "
+                               + socket.getInetAddress();
+         server_socket_info[1] = "Server LocalPort: "
+                               + socket.getLocalPort();
+         out.printf ("%s: waiting for client%n", ident());
+         for (;;) {
+            Socket client = socket.accept();
+            out.printf ("%s: socket.accept OK%n", ident());
+            Thread worker = new Thread (new worker (client));
+            worker.start();
+         }
+      }catch (IOException exn) {
+         quit ("%s: %s%n", ident(), exn);
+      }catch (IllegalArgumentException exn) {
+         quit ("%s: %s%n", ident(), exn);
+      }
+   }
+
+}
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.25 2013-08-12 12:41:25-07 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.25 2013-08-12 12:41:25-07 - - $";
+d39 1
+a39 1
+            quit ("Usage: %s hostname portnumber%n", progname);
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.24 2013-08-12 12:40:43-07 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.24 2013-08-12 12:40:43-07 - - $";
+d70 4
+a73 4
+      lines.add ("Client InetAddress", client.getInetAddress());
+      lines.add ("Client LocalAddress", client.getLocalAddress());
+      lines.add ("Client LocalPort", client.getLocalPort());
+      lines.add ("Client Port", client.getPort());
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.23 2013-08-12 12:38:52-07 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.23 2013-08-12 12:38:52-07 - - $";
+d70 4
+a73 4
+      lines.add ("Client InetAddress", socket.getInetAddress());
+      lines.add ("Client LocalAddress", socket.getLocalAddress());
+      lines.add ("Client LocalPort", socket.getLocalPort());
+      lines.add ("Client Port", socket.getPort());
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.22 2013-08-12 12:38:39-07 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.22 2013-08-12 12:38:39-07 - - $";
+d70 4
+d152 1
+a152 1
+         server_socket_info[0] = "InetAddress: "
+d154 2
+a155 1
+         server_socket_info[1] = "LocalPort: " + socket.getLocalPort();
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.21 2013-08-12 12:36:59-07 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.21 2013-08-12 12:36:59-07 - - $";
+d17 1
+a17 1
+   String[] server_socket_info;
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.20 2013-08-09 17:15:37-07 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.20 2013-08-09 17:15:37-07 - - $";
+d69 1
+d147 4
+a150 4
+         server_socket_info = {
+            "InetAddress: " + socket.getInetAddress(),
+            "LocalPort: " + socket.getLocalPort(),
+         };
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.19 2013-08-09 17:13:43-07 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.19 2013-08-09 17:13:43-07 - - $";
+d17 1
+d146 4
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.18 2013-08-09 17:11:56-07 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.18 2013-08-09 17:11:56-07 - - $";
+d60 10
+a79 10
+      lines.add ("");
+      lines.add ("Page sent: " + timenow());
+      try {
+         InetAddress addr = InetAddress.getLocalHost();
+         lines.add ("From HostName: " + addr.getHostName());
+         lines.add ("From HostAddress: " + addr.getHostAddress());
+      }catch (UnknownHostException exn) {
+         lines.add ("UnknownHostException: " + exn.getMessage());
+      }
+      lines.add ("Server RCS Id: " + RCSID);
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.17 2013-08-09 17:10:41-07 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.17 2013-08-09 17:10:41-07 - - $";
+d68 1
+a68 1
+         lines.add (exn.toString());
+a71 1
+      lines.add ("Server RCS Id: " + RCSID);
+d77 1
+a77 1
+         err.printf ("hostname: %s%n", exn);
+d79 1
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.16 2013-03-01 19:30:46-08 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.16 2013-03-01 19:30:46-08 - - $";
+d72 1
+a72 1
+      lines.add ("RCS Id: " + RCSID);
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.15 2013-03-01 19:29:51-08 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.15 2013-03-01 19:29:51-08 - - $";
+d18 1
+a18 1
+   static String ident () {
+d35 1
+a35 1
+            if (args.length != 1) throw new NumberFormatException ();
+d73 7
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.14 2013-03-01 19:29:39-08 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.14 2013-03-01 19:29:39-08 - - $";
+d72 1
+a72 1
+      lines.add (RCSID);
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.13 2013-03-01 19:29:26-08 - - $
+d14 2
+a15 2
+   static final RCSID =
+         "$Id: webserver.java,v 1.13 2013-03-01 19:29:26-08 - - $";
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.12 2013-03-01 19:29:06-08 - - $
+d15 1
+a15 1
+         "$Id: webserver.java,v 1.12 2013-03-01 19:29:06-08 - - $";
+d78 1
+a78 1
+      sendline (writer, "Content-Length: " + length));
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.11 2013-03-01 19:28:27-08 - - $
+d15 1
+a15 1
+         "$Id$";
+d72 1
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.10 2013-03-01 19:25:59-08 - - $
+d14 2
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.9 2012-05-29 18:10:07-07 - - $
+d42 1
+a42 1
+      return format ("[%1$tY %1$tb %1$td %1$ta %1$tT.%1$tL]",
+d68 2
+a69 1
+      lines.add (timenow());
+d73 1
+a73 1
+      sendline (writer, format ("Server: %s", ident()));
+d75 1
+a75 1
+      sendline (writer, format ("Content-Length: %d", length));
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.8 2012-05-29 18:06:07-07 - - $
+d41 5
+d68 1
+d92 1
+a114 1
+
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.7 2012-05-29 18:05:33-07 - - $
+d49 1
+a49 1
+      if (filename.length() == 0) filename = "README.html";
+d52 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.6 2012-05-29 18:02:42-07 - - $
+d60 1
+a60 1
+         lines.add (exn);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.4 2012-05-29 17:55:27-07 - - $
+d41 1
+a41 34
+   static class worker implements Runnable {
+      static int worker_count = 0;
+      Socket client;
+      int id = ++worker_count;
+      worker (Socket client) {
+         this.client = client;
+      }
+      public void run() {
+         Thread.currentThread().setName ("Worker " + id);
+         out.printf ("%s: worker %d: starting%n", ident(), id);
+         try {
+            List<String> request = getrequest (client);
+            String filename = request.get(0).split("\\s+")[1];
+            sendfile (client, filename.substring(1));
+            client.close();
+            out.printf ("%s: worker %d: finished%n", ident(), id);
+         }catch (IOException exn) {
+            quit ("%s: %s%n", ident(), exn);
+         }
+      }
+   }
+
+   static List<String> getrequest (Socket client) throws IOException {
+      List<String> lines = new LinkedList<String>();
+      Scanner input = new Scanner (client.getInputStream());
+      while (input.hasNextLine()) {
+         String line = input.nextLine();
+         out.printf ("RECD: %s%n", line);
+         lines.add (line);
+         if (line.length() == 0) break;
+      }
+      return lines;
+   }
+
+d60 1
+a60 1
+         lines.add ("File not found: 404:" + exn);
+d73 35
+@
+
+
+1.5
+log
+@-
+@
+text
+@a84 1
+      int length = 0;
+d92 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.2 2012-05-29 17:35:16-07 - - $
+a89 1
+            length += line.length() + 1; // +1 is for "\n".
+d93 1
+a93 1
+         lines.add ("File not found: 404");
+d95 2
+@
+
+
+1.3
+log
+@-
+@
+text
+@d53 2
+a54 2
+            String filename = request.get(0).split("\\s+")i[1];
+            sendfile (client, "README.html");
+d82 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.1 2012-05-29 17:34:34-07 - - $
+d52 2
+a53 1
+            ArrayList <String> request = getrequest (client);
+d63 2
+a64 3
+   static ArrayList <String> getrequest (Socket client)
+                  throws IOException {
+      ArrayList <String> lines = new ArrayList <String>();
+d82 1
+a82 1
+      ArrayList <String> lines = new ArrayList <String>();
+d106 1
+a106 1
+      Set <Map.Entry <Thread, StackTraceElement[]>> entryset =
+d108 1
+a108 1
+      for (Map.Entry <Thread, StackTraceElement[]> entry: entryset) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: webserver.java,v 1.62 2009-03-03 17:29:32-08 - - $
+d14 1
+a14 1
+   options opts = null;
+@

@@ -1,0 +1,887 @@
+head	1.29;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.29
+date	2015.02.11.01.43.42;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2015.02.11.01.42.53;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2015.02.11.01.42.12;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2013.07.22.23.55.45;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2013.07.20.03.54.20;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2013.07.20.03.52.35;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2013.07.20.03.51.20;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2013.07.20.03.51.00;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2013.07.20.03.48.46;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2013.07.20.03.48.11;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2013.07.20.03.47.11;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2013.07.20.03.45.18;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2013.07.20.03.44.45;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2013.07.20.03.43.44;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.07.20.03.42.57;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2013.07.20.03.41.55;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.07.20.03.40.21;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.07.20.03.39.17;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.07.20.03.33.52;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.04.25.04.42.57;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.25.04.17.26;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.25.04.17.00;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.25.04.15.59;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.25.04.14.56;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.25.04.12.45;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.25.04.10.44;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.25.04.10.05;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.25.04.09.08;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.25.04.06.57;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.29
+log
+@-
+@
+text
+@// $Id: inheritance.cpp,v 1.28 2015-02-10 17:42:53-08 - - $
+
+//
+// Example using objects, with a base object and two derived objects.
+//
+
+#include <iostream>
+#include <typeinfo>
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// class object
+/////////////////////////////////////////////////////////////////
+
+class object {
+   private:
+      object (const object&) = delete;
+      object& operator= (const object&) = delete;
+      static unsigned next_id;;
+   protected:
+      const unsigned id;
+      object(); // abstract class, so only derived can used ctor.
+   public:
+      virtual ~object(); // must be virtual
+      virtual void print (ostream&) const;
+};
+
+ostream& operator<< (ostream& out, const object& obj) {
+   obj.print (out);
+   return out;
+}
+
+unsigned object::next_id = 0;
+
+object::object(): id(++next_id) {
+   cout << "Create: " << *this << endl;
+}
+
+object::~object() {
+   cout << "Delete: " << *this << endl;
+}
+
+void object::print (ostream& out) const {
+   out << "[" << static_cast<const void *const> (this) << "->"
+       << typeid(*this).name() << "] id=" << id << ": ";
+}
+
+
+/////////////////////////////////////////////////////////////////
+// class rectangle 
+/////////////////////////////////////////////////////////////////
+
+class rectangle: public object {
+   private:
+      size_t width;
+      size_t height;
+   public:
+      rectangle (size_t width = 0, size_t height = 0);
+      virtual ~rectangle();
+      virtual void print (ostream&) const;
+};
+
+rectangle::rectangle (size_t width, size_t height):
+            width(width), height(height) {
+   cout << "Create: " << *this << endl;
+}
+
+rectangle::~rectangle() {
+   cout << "Delete: " << *this << endl;
+}
+
+void rectangle::print (ostream& out) const {
+   this->object::print (out);
+   out << "rectangle: width=" << width << ", height=" << height;
+}
+
+/////////////////////////////////////////////////////////////////
+// class circle 
+/////////////////////////////////////////////////////////////////
+
+class circle: public object {
+   private:
+      size_t diameter;
+   public:
+      circle (size_t diameter = 0);
+      virtual ~circle();
+      virtual void print (ostream&) const;
+};
+
+circle::circle (size_t diameter): diameter(diameter) {
+   cout << "Create: " << *this << endl;
+}
+
+circle::~circle() {
+   cout << "Delete: " << *this << endl;
+}
+
+void circle::print (ostream& out) const {
+   this->object::print (out);
+   out << "circle: " << "diameter=" << diameter;
+}
+
+
+
+/////////////////////////////////////////////////////////////////
+// main
+/////////////////////////////////////////////////////////////////
+
+int main() {
+   cout << "sizeof (object) = " << sizeof (object) << endl;
+   cout << "sizeof (rectangle) = " << sizeof (rectangle) << endl;
+   cout << "sizeof (circle) = " << sizeof (circle) << endl;
+
+   vector<shared_ptr<object>> vec;
+   // ERROR: v.push_back (new object());
+   // ERROR: object o;
+   vec.push_back (shared_ptr<object> (new circle ()));
+   vec.push_back (shared_ptr<object> (new circle (10)));
+   vec.push_back (shared_ptr<object> (new rectangle()));
+   vec.push_back (shared_ptr<object> (new rectangle (5)));
+   vec.push_back (shared_ptr<object> (new rectangle (8)));
+   cout << endl;
+
+   for (const auto& ptr: vec) {
+      cout << "Object: " << *ptr << endl;
+   }
+   cout << endl;
+
+   cout << "return 0" << endl;
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       inheritance >inheritance.out 2>&1
+//TEST// mkpspdf inheritance.ps inheritance.cpp* inheritance.out*
+*/
+
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.27 2015-02-10 17:42:12-08 - - $
+d128 1
+a128 1
+      cout << "Object: " << ptr << "->" << *ptr << endl;
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.26 2013-07-22 16:55:45-07 - - $
+d127 2
+a128 2
+   for (const auto& obj: vec) {
+      cout << "Object: " << obj << endl;
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.25 2013-07-19 20:54:20-07 - - $
+d20 2
+a21 2
+      object (const object &) = delete;
+      object &operator= (const object &) = delete;
+d28 1
+a28 1
+      virtual void print (ostream &) const;
+d31 1
+a31 1
+ostream &operator<< (ostream &out, const object &obj) {
+d46 1
+a46 1
+void object::print (ostream &out) const {
+d63 1
+a63 1
+      virtual void print (ostream &) const;
+d75 1
+a75 1
+void rectangle::print (ostream &out) const {
+d90 1
+a90 1
+      virtual void print (ostream &) const;
+d101 1
+a101 1
+void circle::print (ostream &out) const {
+d127 2
+a128 4
+   for (vector<shared_ptr<object>>::const_iterator itor = vec.cbegin();
+        itor != vec.cend(); ++itor) {
+      object &obj = **itor;
+      cout << "Iterator: " << obj << endl;
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.24 2013-07-19 20:52:35-07 - - $
+d81 1
+a81 1
+// class rectangle 
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.23 2013-07-19 20:51:20-07 - - $
+d129 2
+a130 2
+      object &o = **itor;
+      cout << "Iterator: " << o << endl;
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.22 2013-07-19 20:51:00-07 - - $
+d134 1
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.21 2013-07-19 20:48:46-07 - - $
+a138 1
+//TEST//       --log-file=inheritance.out.grind \
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.16 2013-07-19 20:43:44-07 - - $
+a17 1
+
+d39 1
+a39 1
+   cout << "Create: " << this << endl;
+d43 1
+a43 1
+   cout << "Delete: " << this << endl;
+d47 1
+a47 1
+   out << "[" << static_cast<const void *const> (this)
+d68 1
+a68 1
+   cout << "Create: " << this << endl;
+d72 1
+a72 1
+   cout << "Delete: " << this << endl;
+d94 1
+a94 1
+   cout << "Create: " << this << endl;
+d98 1
+a98 1
+   cout << "Delete: " << this << endl;
+@
+
+
+1.20
+log
+@-
+@
+text
+@d32 2
+a33 2
+ostream &operator<< (ostream &out, object *obj) {
+   obj->print (out);
+@
+
+
+1.19
+log
+@-
+@
+text
+@d130 2
+a131 1
+      cout << "Iterator: " << **itor << endl;
+@
+
+
+1.18
+log
+@-
+@
+text
+@d118 1
+a118 3
+   typedef shared_ptr<object> objptr_t;
+   typedef vector<objptr_t> vecobj_t;
+   vecobj_t v;
+d121 5
+a125 5
+   v.push_back (objptr_t (new circle ()));
+   v.push_back (objptr_t (new circle (10)));
+   v.push_back (objptr_t (new rectangle()));
+   v.push_back (objptr_t (new rectangle (5)));
+   v.push_back (objptr_t (new rectangle (8)));
+d128 2
+a129 2
+   for (vecobj_t::const_iterator itor = v.cbegin();
+        itor != v.cend(); ++itor) {
+@
+
+
+1.17
+log
+@-
+@
+text
+@d130 1
+a130 1
+   for (vecobj_t:const_iterator itor = v.cbegin();
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.15 2013-07-19 20:42:57-07 - - $
+d130 2
+a131 1
+   for (vecobj_t itor = v.cbegin(); itor != v.cend(); ++itor) {
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.14 2013-07-19 20:41:55-07 - - $
+d131 1
+a131 1
+      cout << "Iterator: " << *itor << endl;
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.13 2013-07-19 20:40:21-07 - - $
+d49 1
+a49 1
+       << typeid(*this).name() << << "] id=" << id << ": ";
+d130 1
+a130 3
+   vector<object*>::const_iterator itor = v.begin();
+   const vector<object*>::const_iterator end = v.end();
+   for (; itor != end; ++itor) {
+a134 7
+   while (! v.empty()) {
+      object *obj = v.back();
+      cout << "Not empty: " << obj << endl;
+      delete obj;
+      v.pop_back();
+   }
+
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.12 2013-07-19 20:39:17-07 - - $
+d29 1
+a29 1
+      virtual void print (ostream &, const string &label) const;
+d47 1
+a47 1
+void object::print (ostream &out, const string &label) const {
+d64 1
+a64 1
+      virtual void print (ostream &, const string &label) const;
+d76 1
+a76 1
+void rectangle::print (ostream &out, const string &label) const {
+d91 1
+a91 1
+      virtual void print (ostream &, const string &label) const;
+d102 1
+a102 1
+void circle::print (ostream &out, const string &label) const {
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.11 2013-07-19 20:33:52-07 - - $
+d118 2
+a119 1
+   typedef vector<shared_ptr<object>> vecobj_t;
+d123 5
+a127 5
+   v.push_back (new circle ());
+   v.push_back (new circle (10));
+   v.push_back (new rectangle());
+   v.push_back (new rectangle (5));
+   v.push_back (new rectangle (8));
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.10 2012-04-24 21:42:57-07 - - $
+d29 1
+a29 1
+      virtual void print (ostream &) const;
+d47 1
+a47 1
+virtual void object::print (ostream &out) const {
+d59 2
+a60 2
+      size_t _width;
+      size_t _height;
+d64 1
+a64 1
+      virtual void print (ostream &) const;
+d68 1
+a68 1
+            _width(width), _height(height) {
+d76 1
+a76 1
+void rectangle::print (ostream &out) const {
+d78 1
+a78 1
+   out << "rectangle: width=" << _width << ", height=" << _height;
+d87 1
+a87 1
+      size_t _diameter;
+d91 1
+a91 1
+      virtual void print (ostream &) const;
+d94 1
+a94 1
+circle::circle (size_t diameter): _diameter(diameter) {
+d102 1
+a102 1
+void circle::print (ostream &out) const {
+d104 1
+a104 1
+   out << "circle: " << "diameter=" << _diameter;
+d118 2
+a119 1
+   vector<object*> v;
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.9 2012-04-24 21:17:26-07 - - $
+d9 1
+d21 3
+a23 3
+      object (const object &); // suppress copying
+      object &operator= (const object &); // suppress copying
+      static unsigned _next_id;;
+d25 1
+a25 1
+      const unsigned _id;
+d37 1
+a37 1
+unsigned object::_next_id = 0;
+d39 1
+a39 1
+object::object(): _id(++_next_id) {
+d44 1
+a44 1
+   cout << "Destroy: " << this << endl;
+d47 3
+a49 4
+void object::print (ostream &out) const {
+   out << "[" << typeid(*this).name() << " "
+       << static_cast<const void *const> (this)
+       << "] id=" << _id << ": ";
+d73 1
+a73 1
+   cout << "Destroy: " << this << endl;
+d99 1
+a99 1
+   cout << "Destroy: " << this << endl;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.8 2012-04-24 21:17:00-07 - - $
+d114 4
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.7 2012-04-24 21:15:59-07 - - $
+a16 1
+ostream &operator<< (ostream &out, object *obj);
+d31 5
+a51 5
+ostream &operator<< (ostream &out, object *obj) {
+   obj->print (out);
+   return out;
+}
+
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.6 2012-04-24 21:14:56-07 - - $
+d17 2
+d39 1
+a39 1
+   cout << "Destroy: " << *this << endl;
+d70 1
+a70 1
+   cout << "Create: " << *this << endl;
+d74 1
+a74 1
+   cout << "Destroy: " << *this << endl;
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.5 2012-04-24 21:12:45-07 - - $
+d37 1
+a37 1
+   cout << "Destroy: " << this << endl;
+d68 1
+a68 1
+   cout << "Create: " << this << endl;
+d72 1
+a72 1
+   cout << "Destroy: " << this << endl;
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.4 2012-04-24 21:10:44-07 - - $
+d62 1
+d68 5
+a72 1
+   cout << "Create: " << this
+d89 1
+d94 5
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.3 2012-04-24 21:10:05-07 - - $
+d33 1
+a33 3
+   cout << "Create: ";
+   this->object::print (cout);
+   cout << endl;
+d37 1
+a37 3
+   cout << "Destroy: ";
+   print (cout);
+   cout << endl;
+d67 1
+d115 1
+a115 1
+      cout << *itor << endl;
+d121 1
+a121 1
+      cout << obj << endl;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.2 2012-04-24 21:09:08-07 - - $
+d40 1
+a40 1
+   this->object::print (cout);
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: inheritance.cpp,v 1.1 2012-04-24 21:06:57-07 - - $
+d45 1
+a45 1
+   out << typeid(*this).name() << " "
+d47 1
+a47 1
+       << " id=" << _id << ": ";
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.20 2012-04-24 21:06:03-07 - - $
+d46 2
+a47 2
+        << static_cast<const void *const> (this)
+        << " id=" << _id << ": ";
+d75 1
+a75 2
+   out << "rectangle: " << ": width=" << _width 
+       << ", height=" << _height;
+d124 1
+@

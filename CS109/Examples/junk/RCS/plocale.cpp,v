@@ -1,0 +1,33 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2014.05.31.00.05.47;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+#include <iostream>
+#include <locale>
+using namespace std;
+
+int main() {
+   locale loc ("");
+   cout << loc << endl;
+}
+@

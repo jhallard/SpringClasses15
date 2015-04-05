@@ -1,0 +1,33 @@
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Source: jhostname.java
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     1	// $Id: jhostname.java,v 1.2 2013-08-13 19:11:30-07 - - $
+     2	
+     3	//
+     4	// Get IP address and hostname of localhost.
+     5	//
+     6	
+     7	import java.net.*;
+     8	import static java.lang.System.*;
+     9	
+    10	class jhostname {
+    11	   public static void main (String[] args) {
+    12	      try {
+    13	         InetAddress addr = InetAddress.getLocalHost ();
+    14	         String hostname = addr.getHostName ();
+    15	         String hostaddr = addr.getHostAddress ();
+    16	         out.printf ("hostname = %s, hostaddr = %s%n",
+    17	                     hostname, hostaddr);
+    18	      }catch (UnknownHostException exn) {
+    19	         err.printf ("hostname: %s%n", exn);
+    20	         exit (1);
+    21	      }
+    22	   }
+    23	}
+    24	
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Output: ./jhostname 2>&1
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     1	hostname = unix1.ic.ucsc.edu, hostaddr = 128.114.108.152
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+pstatus: 0x0000 EXIT STATUS = 0

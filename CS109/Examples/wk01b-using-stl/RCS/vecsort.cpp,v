@@ -1,0 +1,647 @@
+head	1.28;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.28
+date	2015.04.01.01.29.40;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2015.04.01.01.28.05;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2015.04.01.01.20.50;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2015.04.01.01.18.18;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2015.04.01.01.09.55;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.06.24.01.28.48;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.06.24.01.28.03;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.06.24.01.26.57;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.06.21.05.22.31;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.06.21.05.20.52;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.06.21.05.18.31;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.06.21.05.18.09;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.06.21.05.14.56;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.06.21.05.13.51;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.06.21.05.10.41;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.06.21.05.10.21;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.06.21.05.09.24;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.06.21.05.04.50;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.06.21.05.04.06;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.30.23.51.43;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.03.28.02.38.35;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.03.28.02.35.45;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.01.08.02.49.10;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.03.30.06.21.21;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.03.30.06.20.42;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.03.30.06.18.20;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2011.01.06.03.44.59;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.01.05.05.20.50;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.28
+log
+@-
+@
+text
+@// $Id: vecsort.cpp,v 1.27 2015-03-31 18:28:05-07 - - $
+
+//
+// NAME
+//    vecsort - sort argv lexicographically
+//
+// SYNOPSIS
+//    vecsort [argv...]
+//
+// DESCRIPTION
+//    Takes each element of argv and inserts it into a vector,
+//    paired with its index.  Sorts the vector lexicographically,
+//    then prints it out.  Includes argv[0] in the sort.
+//
+
+#include <algorithm>
+#include <cstdlib>
+#include <iostream>
+#include <utility>
+#include <vector>
+using namespace std;
+
+using stringint = pair<string,int>;
+using vecstrint = vector<stringint>;
+
+template <typename pair_collection>
+void printvec (const string &label, const pair_collection &vec) {
+   for (const auto& item: vec) {
+      cout << label << ": {" << item.first << ", " << item.second
+           << "}" << endl;
+   }
+   cout << endl;
+}
+
+// Sort by string then by int.
+// On second test, after "or":
+// not (2.f < 1.f) means 2.f >= 1.f means 1.f <= 2.f
+// But 1.f < 2.f is false, so this means 1.f == 1.f
+bool by_string (const stringint &si1, const stringint &si2) {
+   return si1.first < si2.first
+       or (not (si2.first < si1.first) and si1.second < si2.second);
+}
+
+// Sort by int then by string.
+bool by_int (const stringint &si1, const stringint &si2) {
+   return si1.second < si2.second
+       or (not (si2.second < si1.second) and si1.first < si2.first);
+}
+
+
+int main (int argc, char **argv) {
+   vecstrint vec {{"foo",  3}, {"bar", 14}, {"baz",  1},
+                  {"qux", 77}, {"qux",  7}, {"qux", 14},
+                  {"foo", 14}, {"bar",  1}, {"baz",  3}};
+   for_each (&argv[1], &argv[argc],
+             [&](char* arg) {vec.push_back ({arg, arg - argv[0]}); });
+   printvec ("Unsorted", vec);
+   sort (vec.begin(), vec.end());
+   printvec ("Default", vec);
+   sort (vec.begin(), vec.end(), by_string);
+   printvec ("By string", vec);
+   sort (vec.begin(), vec.end(), by_int);
+   printvec ("By int", vec);
+   return EXIT_SUCCESS;
+}
+
+//TEST// ./vecsort >vecsort.lis 2>&1
+//TEST// mkpspdf vecsort.ps vecsort.cpp* vecsort.lis
+
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.26 2015-03-31 18:20:50-07 - - $
+d29 2
+a30 2
+      cout << label << ": {\"" << item.first << "\", \"" << item.second
+           << "\"}" << endl;
+d54 1
+a54 1
+                  {"3.1", 41}, {"592", 65}, {"358", 97}};
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.25 2015-03-31 18:18:18-07 - - $
+d52 3
+a54 2
+   vecstrint vec {{"foo", 3}, {"bar", 14}, {"baz", 1}, {"qux", 77},
+                  {"qux", 7}, {"qux", 14}, {"qux", 3}};
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.24 2015-03-31 18:09:55-07 - - $
+d50 1
+a50 1
+//
+d52 2
+a53 1
+   vecstrint vec;
+d66 1
+a66 1
+//TEST// ./vecsort foo bar baz qux qux >vecsort.lis 2>&1
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.23 2014-06-23 18:28:48-07 - - $
+d35 4
+d40 2
+a41 1
+   return si1.first < si2.first;
+d44 1
+d46 2
+a47 1
+   return si1.second < si2.second;
+d50 1
+d65 1
+a65 1
+//TEST// ./vecsort foo bar baz qux quux >vecsort.lis 2>&1
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.22 2014-06-23 18:28:03-07 - - $
+d26 2
+a27 1
+void printvec (const string &label, const vecstrint &vec) {
+d29 2
+a30 2
+      cout << label << ": " << item.first << " = " << item.second
+           << endl;
+d39 2
+a40 2
+bool by_negint (const stringint &si1, const stringint &si2) {
+   return -si1.second < -si2.second;
+d52 2
+a53 2
+   sort (vec.begin(), vec.end(), by_negint);
+   printvec ("By negint", vec);
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.21 2014-06-23 18:26:57-07 - - $
+d45 1
+a45 1
+             [&](char* arg) {vec.push_back ({arg, &arg - &argv[0]}); });
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.20 2014-06-20 22:22:31-07 - - $
+d45 1
+a45 1
+             [&](char* arg) {vec.push_back ({arg, arg - &argv[0]}); });
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.19 2014-06-20 22:20:52-07 - - $
+d45 1
+a45 1
+             [&](char* arg) {vec.push_back ({arg, &arg - argv}); });
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.18 2014-06-20 22:18:31-07 - - $
+a20 1
+
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.11 2014-06-20 22:04:50-07 - - $
+d45 2
+a46 1
+   for_each (1, argc, [&](int i) {vec.push_back ({argv[i], i}); });
+@
+
+
+1.17
+log
+@-
+@
+text
+@d45 1
+a45 1
+   for_each (1, argc, [&](int i) {vec.push_back ({argv[i], i})});
+@
+
+
+1.16
+log
+@-
+@
+text
+@d45 1
+a45 1
+   for_each (1, argc, [=](int i) {vec.push_back (stringint (argv[i], i))});
+@
+
+
+1.15
+log
+@-
+@
+text
+@d45 1
+a45 1
+   for_each (1, argc, [=](int i) {vec.push_back ({{argv[i]}, i})});
+@
+
+
+1.14
+log
+@-
+@
+text
+@d45 1
+a45 1
+   for_each (1, argc, [=](int i) {vec.push_back ({argv[i], i})});
+@
+
+
+1.13
+log
+@-
+@
+text
+@d45 1
+a45 1
+   for_each (1, argc, [=](int i) {vec.emplace_back ({argv[i], i})});
+@
+
+
+1.12
+log
+@-
+@
+text
+@d45 1
+a45 1
+   for_each (1, argc, [=](int i) {vec.push_back ({argv[i], i})});
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.10 2014-06-20 22:04:06-07 - - $
+d44 2
+a45 1
+   vecstrint vec (&argv[1], &argv[argc]);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.9 2014-05-30 16:51:43-07 - - $
+d29 1
+a29 1
+      cout << label << ": " << itor->first << " = " << itor->second
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.8 2014-03-27 19:38:35-07 - - $
+d28 1
+a28 1
+   for (auto itor = vec.begin(); itor != vec.end(); ++itor) {
+d44 1
+a44 4
+   vecstrint vec;
+   for (int argi = 1; argi < argc; ++argi) {
+      vec.push_back (stringint (argv[argi], argi));
+   }
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.7 2014-03-27 19:35:45-07 - - $
+d24 2
+a25 3
+typedef pair <string, int> stringint;
+typedef vector <stringint> vecstrint;
+typedef vecstrint::const_iterator vecitor;
+d28 1
+a28 1
+   for (vecitor itor = vec.begin(); itor != vec.end(); ++itor) {
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.6 2013-01-07 18:49:10-08 - - $
+d59 1
+a59 1
+//TEST// ./vecsort foo bar baz qux quux vecsort.lis 2>&1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.5 2012-03-29 23:21:21-07 - - $
+d59 1
+a59 1
+//TEST// runprogram.perl -x vecsort.lis ./vecsort foo bar baz qux quux
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.4 2012-03-29 23:20:42-07 - - $
+d60 1
+a60 1
+//TEST// mkpspdf vecsort.ps vecsort.cpp vecsort.lis
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.3 2012-03-29 23:18:20-07 - - $
+d33 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.2 2011-01-05 19:44:59-08 - - $
+d35 2
+a36 2
+bool by_string (const string &s1, const string &s2) {
+   return s1 < s2;
+d39 2
+a40 2
+bool by_string (int i1, int i2) {
+   return -i1 < -i2;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cpp,v 1.1 2011-01-04 21:20:50-08 - - $
+a28 1
+   cout << label << ": " << endl;
+d30 2
+a31 1
+      cout << "   " << itor->first << " = " << itor->second << endl;
+d35 8
+d45 1
+a45 1
+   for (int argi = 0; argi < argc; ++argi) {
+d48 1
+a48 1
+   printvec ("Before", vec);
+d50 5
+a54 1
+   printvec ("After", vec);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: vecsort.cc,v 1.1 2010-01-07 20:16:52-08 - - $
+d26 1
+a26 1
+typedef vecstrint::iterator vecitor;
+d28 1
+a28 1
+void printvec (string label, vecstrint vec) {
+@

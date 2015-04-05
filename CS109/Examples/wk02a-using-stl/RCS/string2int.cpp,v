@@ -1,0 +1,410 @@
+head	1.15;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.15
+date	2014.06.21.05.46.10;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.06.21.05.45.41;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.04.09.22.30.10;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.04.09.20.31.44;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.04.09.20.31.07;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.06.28.02.16.45;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.06.28.02.13.14;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.06.28.02.12.53;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.06.28.02.11.17;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.06.28.02.09.21;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.06.28.02.07.21;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.06.28.02.03.16;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.06.28.02.01.40;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.06.28.02.01.05;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.06.28.01.39.15;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.15
+log
+@-
+@
+text
+@// $Id: string2int.cpp,v 1.14 2014-06-20 22:45:41-07 - - $
+
+//
+// NAME
+//    str2int-stream - print out argv elements that are ints
+//
+// SYNOPSIS
+//    str2int-stream [string...]
+//
+// DESCRIPTION
+//    Prints out its arguments that are ints, and which are not.
+//
+
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <vector>
+using namespace std;
+
+int from_string (const string &arg) {
+   stringstream stream (arg);
+   int result;
+   if (not (stream >> result and stream.eof())) {
+      throw domain_error ("int from_string (" + arg + ")");
+   }
+   return result;
+}
+
+int main (int argc, char **argv) {
+   cout << boolalpha;
+   vector<string> args (&argv[0], &argv[argc]);
+   for (const auto& arg: args) {
+      cout << "\"" << arg << "\"" << endl;
+      try {
+         int number = from_string (arg);
+         cout << "        success: number = " << number << endl;
+      }catch (const domain_error &error) {
+         cout << "        failure: " << error.what() << endl;
+      }
+   }
+   return 0;
+}
+
+/*
+//TEST// ./string2int 1024 56foobar -45 68.9 testing 007777 0x48 \
+//TEST//          2147483648 2>&1 >string2int.output
+//TEST// mkpspdf string2int.ps string2int.cpp* string2int.output
+*/
+
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.13 2014-04-09 15:30:10-07 - - $
+d25 1
+a25 1
+      throw domain_error ("int from_string (" + arg + ")"));
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.12 2014-04-09 13:31:44-07 - - $
+a21 6
+   struct {
+      void operator() (const string &arg1, const string &spec) {
+         throw domain_error (string ("from_string (" + arg1 + ") ["
+                                     + spec + "]"));
+      }
+   } error;
+d24 3
+a26 5
+   if (not (stream >> result)) error (arg, "not an int");
+   stream >> std::ws; // skip trailing white space, if any.
+   string junk;
+   getline (stream, junk, '\0');
+   if (junk.size() != 0) error (arg, "trailing junk \"" + junk + "\"");
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.11 2014-04-09 13:31:07-07 - - $
+d30 1
+a30 1
+   if (! (stream >> result)) error (arg, "not an int");
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.10 2013-06-27 19:16:45-07 - - $
+a11 2
+//    Fail1 if an int is not recognized.
+//    Fail2 if an int is recognized followed by junk.
+d50 1
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.9 2013-06-27 19:13:14-07 - - $
+d19 2
+a20 1
+
+d42 3
+a44 3
+   for (int argi = 1; argi < argc; ++argi) {
+      string arg = argv[argi];
+      cout << "argv[" << argi << "] = \"" << arg << "\"" << endl;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.8 2013-06-27 19:12:53-07 - - $
+d34 1
+a34 1
+   getline (stream, junk);
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.7 2013-06-27 19:11:17-07 - - $
+d48 1
+a48 1
+         cout << "        faulire: " << error.what() << endl;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.6 2013-06-27 19:09:21-07 - - $
+d43 1
+a43 1
+      cout << "argv[" << argi << "] = \"" << arg << "\". ";
+d46 1
+a46 1
+         cout << "good: number = " << number << endl;
+d48 1
+a48 1
+         cout << "fail: " << error.what() << endl;
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.5 2013-06-27 19:07:21-07 - - $
+d33 2
+a34 1
+   string junk = stream.str();
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.4 2013-06-27 19:03:16-07 - - $
+d42 6
+a47 7
+      cout << "argv[" << argi << "] = \"" << arg << "\", ";
+      istringstream stream (arg);
+      int num = 0;
+      stream >> num;
+      if (stream.fail ()) {
+         cout << "Fail1: int not recognized." << endl;
+         continue;
+a48 8
+      string junk = "";
+      stream >> junk;
+      if (! stream.fail ()) {
+         cout << "Fail2: number = " << num
+              << ", trailing junk = \"" << junk << "\"" << endl;
+         continue;
+      }
+      cout << "Good: number = " << num << endl;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.3 2013-06-27 19:01:40-07 - - $
+d16 1
+d18 1
+a18 1
+#include <iostream>
+a23 1
+      const string &arg1 = arg;
+d25 1
+a25 1
+         throw domain_error (string ("from_string (" + arg + ") ["
+d29 3
+a31 2
+   stringstream stream (that);
+   if (! (stream >> result)) error ("not an int");
+d34 1
+a34 1
+   if (junk.size() != 0) error ("trailing junk \"" + junk + "\"");
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.2 2013-06-27 19:01:05-07 - - $
+d21 5
+a25 4
+int from_string (const string &that) {
+   struct error {
+      void operator() (const string &spec) {
+         throw domain_error (string ("from_string (" + that + ") ["
+d28 1
+a28 1
+   }
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: string2int.cpp,v 1.1 2013-06-27 18:39:15-07 - - $
+d23 1
+a23 1
+      void operator (const string &spec) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strstream2int.cpp,v 1.2 2013-01-08 17:03:14-08 - - $
+d22 5
+a26 9
+   stringstream stream;
+   stream << that;
+   int result;
+   bool converted = stream >> result  // Is string is a valid int?
+                 && stream >> std::ws // Flush trailing white space.
+                 && stream.eof();     // Must now be at end of stream.
+   if (! converted) {
+      throw domain_error (string (typeid (int).name())
+            + " from_string (" + that + ")");
+d28 5
+d60 3
+a62 3
+//TEST// runprogram.perl -x strstream2int.lis ./strstream2int \
+//TEST//       1024 56foobar -45 68.9 testing 007777 0x48 2147483648
+//TEST// mkpspdf strstream2int.ps strstream2int.cpp* strstream2int.lis
+@

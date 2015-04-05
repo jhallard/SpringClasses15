@@ -1,0 +1,59 @@
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+log: hellorunnable.log
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+     1	Script  : /afs/cats.ucsc.edu/courses/cmps012b-wm/bin/runprog
+     2	limit c :    0 max core file size (KB)
+     3	limit f : 4194303 max output file size (KB)
+     4	limit t : 4294967295 max CPU time (sec)
+     5	stdin   : /dev/null
+     6	stdout  : hellorunnable.out
+     7	stderr  : hellorunnable.err
+     8	log     : hellorunnable.log
+     9	listing : hellorunnable.lis
+    10	Command : hellorunnable
+    11	starting: pid 9244: 19:32:33.00
+    12	finished: pid 9244: 19:32:41.00, real 8.00, user 0.08, sys 0.02
+    13	pstatus: 0x0000 EXIT STATUS = 0
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stdin: /dev/null
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stdout: hellorunnable.out
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+     1	     0.048: main(1): starting
+     2	     8.414: main(1): finished
+     3	     8.678: Hello(8): starting
+     4	     8.704: World(9): starting
+     5	   510.066: Hello(8): slept 500 msec, 0th time
+     6	   809.348: World(9): slept 800 msec, 0th time
+     7	  1010.634: Hello(8): slept 500 msec, 1th time
+     8	  1511.206: Hello(8): slept 500 msec, 2th time
+     9	  1609.915: World(9): slept 800 msec, 1th time
+    10	  2011.743: Hello(8): slept 500 msec, 3th time
+    11	  2410.462: World(9): slept 800 msec, 2th time
+    12	  2512.291: Hello(8): slept 500 msec, 4th time
+    13	  3012.858: Hello(8): slept 500 msec, 5th time
+    14	  3211.025: World(9): slept 800 msec, 3th time
+    15	  3513.363: Hello(8): slept 500 msec, 6th time
+    16	  4011.576: World(9): slept 800 msec, 4th time
+    17	  4013.947: Hello(8): slept 500 msec, 7th time
+    18	  4514.495: Hello(8): slept 500 msec, 8th time
+    19	  4812.143: World(9): slept 800 msec, 5th time
+    20	  5015.018: Hello(8): slept 500 msec, 9th time
+    21	  5015.495: Hello(8): finished
+    22	  5612.693: World(9): slept 800 msec, 6th time
+    23	  6413.255: World(9): slept 800 msec, 7th time
+    24	  7253.086: World(9): slept 800 msec, 8th time
+    25	  8053.707: World(9): slept 800 msec, 9th time
+    26	  8054.247: World(9): finished
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stderr: hellorunnable.err
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+

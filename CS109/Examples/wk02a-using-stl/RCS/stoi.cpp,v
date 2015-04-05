@@ -1,0 +1,364 @@
+head	1.15;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.15
+date	2014.04.09.22.28.50;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.04.09.02.44.51;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.04.09.02.43.33;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.04.09.02.41.25;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.04.09.02.41.04;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.04.09.02.40.49;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.04.09.02.40.04;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.04.09.02.39.47;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.04.09.02.39.19;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.01.15.02.10.05;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.01.15.01.13.41;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.01.15.01.13.00;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.01.15.01.10.26;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.01.15.01.09.43;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.01.15.01.09.07;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.15
+log
+@-
+@
+text
+@// $Id: stoi.cpp,v 1.14 2014-04-08 19:44:51-07 - - $
+
+//
+// NAME
+//    stoi - print out argv elements that are ints
+//
+// SYNOPSIS
+//    stoi [string...]
+//
+// DESCRIPTION
+//    Prints out its arguments that are ints, and which are not.
+//
+
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <vector>
+using namespace std;
+
+int main (int argc, char **argv) {
+   cout << boolalpha;
+   for (const auto& arg: vector<string> (&argv[1], &argv[argc])) {
+      cout << "\"" << arg << "\": ";
+      try {
+         size_t endpos;
+         int number = stoi (arg, &endpos);
+         if (endpos == arg.size()) {
+            cout << "good number = " << number << endl;
+         }else {
+            cout << "bad number = " << number << ", trailing junk = \""
+                 << arg.substr (endpos) << "\"" << endl;
+         }
+      }catch (invalid_argument &error) {
+         cout << "invalid_argument (" << error.what() << ")" << endl;
+      }catch (out_of_range &error) {
+         cout << "out_of_range (" << error.what() << ")" << endl;
+      }
+   }
+}
+
+/*
+//TEST// ./stoi 1024 56foobar -45 68.9 testing 007777 0x48 \
+//TEST//        2147483648 >stoi.lis
+//TEST// mkpspdf stoi.ps stoi.cpp* stoi.lis
+*/
+
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.13 2014-04-08 19:43:33-07 - - $
+d23 1
+a23 1
+   for (const auto& arg: vector<string> (&argv[0], &argv[argc])) {
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.12 2014-04-08 19:41:25-07 - - $
+d43 2
+a44 2
+//TEST// ./stoi 1024 56foobar -45 68.9 testing 007777 0x48 2147483648 \
+//TEST//        >stoi.lis
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.11 2014-04-08 19:41:04-07 - - $
+a24 1
+      size_t endpos;
+d26 1
+d35 1
+a35 2
+         cout << "invalid_argument (" << error.what() << "): \""
+              << arg << "\"" << endl;
+d37 1
+a37 2
+         cout << "out_of_range (" << error.what() << "): \""
+              << arg << "\"" << endl;
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.10 2014-04-08 19:40:49-07 - - $
+d17 1
+d23 1
+a23 1
+   for (const auto& arg: vector (&argv[0], &argv[argc])) {
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.9 2014-04-08 19:40:04-07 - - $
+d17 1
+a17 1
+
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.8 2014-04-08 19:39:47-07 - - $
+d23 1
+a23 1
+      cout << "argv[" << argi - argv << "] = \"" << arg << "\": ";
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.7 2014-04-08 19:39:19-07 - - $
+d22 1
+a22 1
+   for (const auto& arg: vector (&argv[0], &argv[argc]) {
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.6 2013-01-14 18:10:05-08 - - $
+d22 1
+a22 1
+   for (const auto& arg: vector (&argv[0], &argv[argc]);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.5 2013-01-14 17:13:41-08 - - $
+a11 2
+//    Fail1 if an int is not recognized.
+//    Fail2 if an int is recognized followed by junk.
+d22 1
+a22 2
+   for (char **argi = argv; argi != argv + argc; ++argi) {
+      string arg = *argi;
+d44 2
+a45 2
+//TEST// runprogram.perl -x stoi.lis ./stoi \
+//TEST//       1024 56foobar -45 68.9 testing 007777 0x48 2147483648
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.4 2013-01-14 17:13:00-08 - - $
+d39 3
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.3 2013-01-14 17:10:26-08 - - $
+d26 1
+a26 1
+      cout << "argv[" << argi << "] = \"" << arg << "\": ";
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.2 2013-01-14 17:09:43-08 - - $
+d16 1
+d18 1
+a18 1
+#include <iostream>
+d28 11
+a38 6
+      int number = stoi (arg, &endpos);
+      if (endpos == arg.size()) {
+         cout << "good number = " << number << endl;
+      }else {
+         cout << "bad number = " << number << ", trailing junk = \""
+              << arg.substr (endpos) << "\"" << endl;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: stoi.cpp,v 1.1 2013-01-14 17:09:07-08 - - $
+d26 1
+a26 1
+      size_t *endpos;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: strstream2int.cpp,v 1.2 2013-01-08 17:03:14-08 - - $
+d38 1
+a38 1
+//TEST// runprogram.perl -x strstream2int.lis ./strstream2int \
+d40 1
+a40 1
+//TEST// mkpspdf strstream2int.ps strstream2int.cpp* strstream2int.lis
+@

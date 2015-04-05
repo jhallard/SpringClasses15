@@ -1,0 +1,499 @@
+head	1.19;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.19
+date	2012.05.10.04.14.53;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2012.05.10.04.12.29;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2012.05.10.04.10.03;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2012.05.10.04.04.59;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2012.05.10.04.03.37;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.05.10.04.02.57;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.05.10.04.00.56;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.05.10.03.58.47;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.05.10.03.57.38;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.05.10.03.57.22;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.05.10.03.56.09;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.05.10.03.52.47;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.05.10.03.47.15;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.05.10.03.41.49;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.05.10.03.41.13;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.05.10.03.40.55;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.05.10.03.40.44;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.05.10.03.39.42;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.10.03.36.12;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.19
+log
+@-
+@
+text
+@// $Id: mapwrapleak.cpp,v 1.18 2012-05-09 21:12:29-07 - - $
+
+//
+// Illustrate how to avoid leaks may for a map by wrapping each
+// pointer in an auto_ptr.  Thus the map has no pointers itself.
+// But C++11 deprecates auto_ptr in favor of unique_ptr or something
+// else.  We use our own object_ptr and reference counting on the
+// object itself.  Note that object_ptr properly overrides the
+// default four members.  We also handle an object_ptr not having
+// an object.
+//
+
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+int seqct = 0;
+struct object {
+   int ref;
+   int seqnr;
+   string value;
+   explicit object (const string &val):
+         ref(1), seqnr(++seqct), value(val) {}
+};
+
+struct object_ptr {
+   object *obj;
+   void incr() { if (obj) ++obj->ref; }
+   void decr() { if (obj && --obj->ref == 0) delete obj; }
+   explicit object_ptr (object *_obj): obj(_obj) {}
+
+   // Following are the default four.
+   object_ptr(): obj(0) {}
+   object_ptr (const object_ptr &that): obj(that.obj) { incr(); }
+   object_ptr &operator= (const object_ptr &that) {
+      if (this != &that) { decr(); obj = that.obj; incr(); }
+      return *this;
+   }
+   ~object_ptr() { decr(); }
+};
+
+typedef map <string, object_ptr> somap_t;
+typedef somap_t::const_iterator somap_conitor;
+
+int main (int argc, char **argv) {
+   map <string, object_ptr> somap;
+
+   // Push each element of argv into map as object.
+   for (int index = 1; index < argc; ++index) {
+      string arg = argv[index];
+      somap[arg] = object_ptr (new object (arg));
+   }
+
+   // Iterate over the map, printing out the keys and values.
+   for (somap_conitor itor = somap.begin();
+        itor != somap.end(); ++itor) {
+      cout << itor->first << " => (" << itor->second.obj->seqnr << ", "
+           << itor->second.obj->value << ")" << endl;
+   }
+
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=mapwrapleak.out1.grind \
+//TEST//       mapwrapleak these are some arguments to check on leak \
+//TEST//       >mapwrapleak.out1 2>&1
+//TEST// mkpspdf mapwrapleak.ps mapwrapleak.cpp* mapwrapleak.out*
+*/
+
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.17 2012-05-09 21:10:03-07 - - $
+d23 2
+a24 2
+   explicit object (const string &val): ref(1), seqnr(++seqct),
+                                        value(val) {}
+d32 1
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.16 2012-05-09 21:04:59-07 - - $
+d7 4
+a10 1
+// else.  We use our own object_ptr.
+d29 4
+d36 1
+a36 5
+      if (this != &that) {
+         decr();
+         obj = that.obj;
+         incr();
+      }
+a39 3
+   void incr() { if (obj) ++obj->ref; }
+   void decr() { if (obj && --obj->ref == 0) delete obj; }
+   explicit object_ptr (object *_obj): obj(_obj) {}
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.14 2012-05-09 21:02:57-07 - - $
+d20 2
+a21 2
+   explicit object (const string &val):
+               ref(1), seqnr(++seqct), value(val) {}
+d27 8
+a34 2
+   object_ptr (const object_ptr &that): obj(that.obj) {
+      if (obj) ++obj->ref;
+d36 3
+a39 4
+   ~object_ptr() {
+      cout << "~op" << endl;
+      if (obj && --obj->ref == 0) delete obj;
+   }
+@
+
+
+1.15
+log
+@-
+@
+text
+@d28 1
+a28 1
+      ++obj->ref;
+d33 1
+a33 1
+      if (--obj->ref == 0) delete obj;
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.10 2012-05-09 20:57:22-07 - - $
+d27 1
+a27 1
+   object_ptr (const object_ptr &_obj): obj(_obj) {
+@
+
+
+1.13
+log
+@-
+@
+text
+@d27 3
+d31 4
+a34 1
+   ~object_ptr() { if (--obj->ref == 0) delete obj; }
+@
+
+
+1.12
+log
+@-
+@
+text
+@d17 1
+d20 2
+a21 1
+   explicit object (const string &val): seqnr(++seqct), value(val) {}
+d28 1
+a28 1
+   ~object_ptr() { cout << "~object_ptr" << endl; if (obj) delete obj; }
+@
+
+
+1.11
+log
+@-
+@
+text
+@d26 1
+a26 1
+   ~object_ptr() { cout << "~object_ptr" << endl; }
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.9 2012-05-09 20:56:09-07 - - $
+d26 1
+a26 1
+   ~object_ptr() { cout << ~object_ptr" << endl; }
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.8 2012-05-09 20:52:47-07 - - $
+d26 1
+a26 1
+   ~object_ptr() { if (obj) delete obj; }
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.6 2012-05-09 20:41:49-07 - - $
+d24 1
+d26 1
+a26 1
+   ~object_ptr() { delete obj; }
+@
+
+
+1.7
+log
+@-
+@
+text
+@a16 1
+   int ref;
+d19 1
+a19 1
+   explicit object (const string &val): ref(1), seqnr(++seqct), value(val) {}
+d25 1
+a25 2
+   object_ptr (const object_ptr &_obj): obj(_obj) { ++obj->ref; }
+   ~object_ptr() { if (--obj->ref == 0) delete obj; }
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.5 2012-05-09 20:41:13-07 - - $
+d17 1
+d20 1
+a20 1
+   explicit object (const string &val): seqnr(++seqct), value(val) {}
+d26 2
+a27 1
+   ~object_ptr() { delete obj; }
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.4 2012-05-09 20:40:55-07 - - $
+d43 2
+a44 2
+      cout << itor->first << " => (" << itor->second->obj->seqnr << ", "
+           << itor->second->obj->value << ")" << endl;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.3 2012-05-09 20:40:44-07 - - $
+d32 1
+a32 1
+   map <string, object*> somap;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.2 2012-05-09 20:39:42-07 - - $
+d26 1
+a26 1
+}
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapwrapleak.cpp,v 1.1 2012-05-09 20:36:12-07 - - $
+d24 1
+a24 1
+   explicit object_ptr (object _obj): obj(_obj) {}
+d37 1
+a37 1
+      somap[arg] = new object (arg);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mapleak.cpp,v 1.9 2012-05-09 20:29:24-07 - - $
+d7 1
+a7 1
+// else.  We use our own wrapper.
+d22 7
+a28 1
+typedef map <string, object*> somap_t;
+a29 1
+typedef somap_t::iterator somap_itor;
+d43 2
+a44 12
+      cout << itor->first << " => (" << itor->second->seqnr << ", "
+           << itor->second->value << ")" << endl;
+   }
+
+   // If the first argument is "-", erase all map entries.
+   if (argc > 1 && argv[1][0] == '-') {
+      while (somap.size() > 0) {
+         somap_itor itor = somap.begin();
+         object *second = itor->second;
+         somap.erase (itor);
+         delete second;
+      }
+d52 4
+a55 8
+//TEST//       --log-file=mapleak.out1.grind \
+//TEST//       mapleak these are some arguments to check on leak \
+//TEST//       >mapleak.out1 2>&1
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=mapleak.out2.grind \
+//TEST//       mapleak - these are some arguments to check on leak \
+//TEST//       >mapleak.out2 2>&1
+//TEST// mkpspdf mapleak.ps mapleak.cpp* mapleak.out*
+@

@@ -1,0 +1,112 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.4
+date	2014.08.06.04.02.15;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.08.06.03.49.52;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.08.06.03.49.08;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.08.06.03.47.24;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@#include <iostream>
+using namespace std;
+
+template <int N>
+constexpr int fac() {
+   return N * fac<N-1>();
+}
+
+template<>
+constexpr int fac<0>() {
+   return 1;
+}
+
+void print() {
+   cout << endl;
+}
+
+template <typename Type, typename... Args>
+void print (Type head, Args... tail) {
+   cout << head;
+   print (tail...);
+}
+
+int main() {
+   cout << fac<0>() << endl;
+   cout << fac<1>() << endl;
+   cout << fac<2>() << endl;
+   cout << fac<3>() << endl;
+   cout << fac<4>() << endl;
+   cout << fac<5>() << endl;
+   cout << fac<6>() << endl;
+   print ("Testing: ", 6, " ", 4.8, " end");
+   return 0;
+}
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d14 8
+a21 4
+template <typename T, typename... Args>
+void print (T value, Args... args) {
+   cout << value;
+   print (args...);
+d32 1
+a32 1
+   print ("Testing", 6, endl);
+d35 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d17 1
+a17 1
+   print (args);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d14 6
+d28 1
+@

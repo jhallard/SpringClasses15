@@ -1,0 +1,98 @@
+[112] SHOW(abox a):
+[47] 0x7fefffb10->abox::abox(): value=0
+
+[113] SHOW(abox b = a):
+[51] 0x7fefffb00->abox::abox(const abox&): value=0
+
+[114] SHOW(abox c (a)):
+[51] 0x7fefffaf0->abox::abox(const abox&): value=0
+
+[115] SHOW(abox d = 6):
+[79] 0x7fefffae0->abox::abox(int): value=6
+
+[116] SHOW(b = 3):
+[79] 0x7fefffb20->abox::abox(int): value=3
+[74] 0x7fefffb00->abox::operator= (abox&&): value=3
+[63] 0x7fefffb20->abox::~abox(): value=3
+
+[117] SHOW(ref_fn (6)):
+[79] 0x7fefffb30->abox::abox(int): value=6
+[104] SHOW(cout << "ref_fn, that=" << that << endl):
+[83] 0x7fefffb30->abox::operator int(): value=6
+ref_fn, that=6
+
+[63] 0x7fefffb30->abox::~abox(): value=6
+
+[118] SHOW(ref_fn (a)):
+[104] SHOW(cout << "ref_fn, that=" << that << endl):
+[83] 0x7fefffb10->abox::operator int(): value=0
+ref_fn, that=0
+
+
+[119] SHOW(value_fn (a)):
+[51] 0x7fefffb40->abox::abox(const abox&): value=0
+[108] SHOW(cout << "value_fn, that=" << that << endl):
+[83] 0x7fefffb40->abox::operator int(): value=0
+value_fn, that=0
+
+[63] 0x7fefffb40->abox::~abox(): value=0
+
+[120] SHOW(abox ii = 255):
+[79] 0x7fefffad0->abox::abox(int): value=255
+
+[121] SHOW(int i = ii):
+[83] 0x7fefffad0->abox::operator int(): value=255
+
+[122] SHOW(cout << i << endl):
+255
+
+
+[124] SHOW(abox *p = new abox (6)):
+[79] 0x4c2b040->abox::abox(int): value=6
+
+[125] SHOW(delete p):
+[63] 0x4c2b040->abox::~abox(): value=6
+
+[126] SHOW(abox *bb = new abox[3]):
+[47] 0x4c2b098->abox::abox(): value=0
+[47] 0x4c2b09c->abox::abox(): value=0
+[47] 0x4c2b0a0->abox::abox(): value=0
+
+[127] SHOW(delete[] bb):
+[63] 0x4c2b0a0->abox::~abox(): value=0
+[63] 0x4c2b09c->abox::~abox(): value=0
+[63] 0x4c2b098->abox::~abox(): value=0
+
+[128] SHOW(vector<abox> vb):
+
+[129] SHOW(vb.push_back (6)):
+[79] 0x7fefffb50->abox::abox(int): value=6
+[67] 0x4c2b0f0->abox::abox(abox&&): value=6
+[63] 0x7fefffb50->abox::~abox(): value=6
+
+[130] SHOW(vb.push_back (8)):
+[79] 0x7fefffb60->abox::abox(int): value=8
+[67] 0x4c2b144->abox::abox(abox&&): value=8
+[51] 0x4c2b140->abox::abox(const abox&): value=6
+[63] 0x4c2b0f0->abox::~abox(): value=6
+[63] 0x7fefffb60->abox::~abox(): value=8
+
+[131] SHOW(cout << (a = d++) << endl;):
+[79] 0x7fefffb70->abox::abox(int): value=6
+[74] 0x7fefffb10->abox::operator= (abox&&): value=6
+[83] 0x7fefffb10->abox::operator int(): value=6
+6
+[63] 0x7fefffb70->abox::~abox(): value=6
+
+[132] SHOW(cout << (a = ++d) << endl;):
+[58] 0x7fefffb10->abox::operator= (const abox&): value=8
+[83] 0x7fefffb10->abox::operator int(): value=8
+8
+
+[63] 0x4c2b140->abox::~abox(): value=6
+[63] 0x4c2b144->abox::~abox(): value=8
+[63] 0x7fefffad0->abox::~abox(): value=255
+[63] 0x7fefffae0->abox::~abox(): value=8
+[63] 0x7fefffaf0->abox::~abox(): value=0
+[63] 0x7fefffb00->abox::~abox(): value=3
+[63] 0x7fefffb10->abox::~abox(): value=8

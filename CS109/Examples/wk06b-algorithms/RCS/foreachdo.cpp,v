@@ -1,0 +1,432 @@
+head	1.14;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.14
+date	2013.08.21.02.49.22;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.08.21.02.49.08;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.08.21.02.48.53;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.08.21.02.48.19;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.08.21.02.41.37;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.08.21.02.40.32;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.08.21.02.40.02;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.08.21.02.39.22;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.06.02.06.08.48;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.06.02.06.08.30;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.06.02.06.06.46;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.06.02.06.05.14;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.06.02.05.56.56;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.06.02.05.56.36;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.14
+log
+@-
+@
+text
+@// $Id: foreachdo.cpp,v 1.13 2013-08-20 19:49:08-07 - - $
+
+#include <algorithm>
+#include <cmath>
+#include <functional>
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Accumulators.
+
+struct adder: unary_function <double, void> {
+   double &sum;
+   adder (double &sum): sum (sum) {}
+   void operator() (double num) { sum += num; }
+};
+
+struct multiplier: unary_function <double, void> {
+   double &prod;
+   multiplier (double &prod): prod (prod) {}
+   void operator() (double num) { prod *= num; }
+};
+
+struct sqrt_vec: unary_function <double, void> {
+   void operator() (double &num) { num = sqrt (num); }
+};
+
+void printd (double num) {
+   cout << "vec: " << num << endl;
+}
+
+int main () {
+   vector<double> vec {1.6, 3.9, 3.14, 11.44, 16.28, 24, 32.3, 98.6};
+   for_each (vec.begin(), vec.end(), printd);
+
+   double sum {0};
+   for_each (vec.begin(), vec.end(), adder (sum));
+   cout << "sum = " << sum << endl;
+
+   double product {1};
+   for_each (vec.begin(), vec.end(), multiplier (product));
+   cout << "product = " << product << endl;
+
+   for_each (vec.begin(), vec.end(), sqrt_vec());
+   for_each (vec.begin(), vec.end(), printd);
+
+   return EXIT_SUCCESS;
+}
+
+//TEST// ./foreachdo >foreachdo.out 2>&1
+//TEST// mkpspdf foreachdo.ps foreachdo.cpp* foreachdo.out
+
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.12 2013-08-20 19:48:53-07 - - $
+d38 1
+a38 1
+   cout << "sum = " << add.sum << endl;
+d42 1
+a42 1
+   cout << "product = " << mul.product << endl;
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.11 2013-08-20 19:48:19-07 - - $
+d14 1
+a14 1
+   add_sum (double &sum): sum (sum) {}
+d20 1
+a20 1
+   mul_prod (double &prod): prod (prod) {}
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.10 2013-08-20 19:41:37-07 - - $
+d12 1
+a12 1
+struct add_sum: unary_function <double, void> {
+d18 1
+a18 1
+struct mul_prod: unary_function <double, void> {
+d37 1
+a37 1
+   for_each (vec.begin(), vec.end(), add);
+d41 1
+a41 1
+   for_each (vec.begin(), vec.end(), mul);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.8 2013-08-20 19:40:02-07 - - $
+d13 2
+a14 2
+   double sum;
+   add_sum(): sum (0) {}
+d19 2
+a20 2
+   double prod;
+   mul_prod(): prod (1) {}
+d29 1
+a29 1
+   cout << num << endl;
+d36 1
+a36 1
+   add_sum add;
+d40 1
+a40 1
+   mul_prod mul;
+d42 1
+a42 1
+   cout << "prod = " << mul.prod << endl;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d29 1
+a29 1
+   cout << " " << num;
+a34 1
+   cout << endl;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.7 2013-08-20 19:39:22-07 - - $
+d26 1
+a26 1
+}
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.6 2012-06-01 23:08:48-07 - - $
+d4 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.5 2012-06-01 23:08:30-07 - - $
+d3 1
+a6 1
+
+a8 9
+// Algorithm.
+// For each do, as in functional design.
+
+template <typename itor_t, typename action_t>
+void for_each_do (const itor_t &begin, const itor_t &end,
+                  action_t &action) {
+   for (itor_t itor = begin; itor != end; ++itor) action (*itor);
+}
+
+d14 1
+a14 1
+   void operator() (double num) {sum += num; }
+d20 1
+a20 1
+   void operator() (double num) {prod *= num; }
+d23 3
+a25 4
+struct push_vec: unary_function<double, void> {
+   vector<double> vec;
+   void operator() (const double num) {vec.push_back (num); }
+};
+d27 3
+a29 3
+// Misc utility, main.
+
+void printd (double num) { cout << " " << num; }
+d32 2
+a33 3
+   double array[] = {1.6, 3.9, 3.14, 11.44, 16.28, 24, 32.3, 98.6};
+   size_t length = sizeof array / sizeof *array;
+   for_each_do (array + 0, array + length, printd);
+a35 3
+   push_vec vec_fun;
+   for_each_do (array + 0, array + length, vec_fun);
+
+d37 1
+a37 1
+   for_each_do (vec_fun.vec.begin(), vec_fun.vec.end(), add);
+d41 1
+a41 1
+   for_each_do (vec_fun.vec.begin(), vec_fun.vec.end(), mul);
+d44 3
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.4 2012-06-01 23:06:46-07 - - $
+d62 1
+a62 1
+//TEST// mkpspdf foreachdo..ps foreachdo.cpp* foreachdo.out
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.3 2012-06-01 23:05:14-07 - - $
+a31 2
+typedef vector<double> vecd;
+typedef vecd::const_iterator vecd_itor;
+d33 1
+a33 1
+   vecd vec;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cpp,v 1.1 2012-06-01 22:56:36-07 - - $
+d41 1
+a41 3
+void printd (double num) {
+   cout << " " << num;
+}
+@
+
+
+1.2
+log
+@-
+@
+text
+@a8 1
+//
+a10 1
+//
+a17 1
+//
+a18 1
+//
+d34 1
+a34 1
+struct push_vec: unary_function<vecd_itor> {
+d36 1
+a36 1
+   void operator() (const vecd_itor itor) {vec.push_back (*itor); }
+a38 1
+//
+a39 1
+//
+d41 2
+a42 3
+template <typename itor_t, typename action_t>
+void load (const itor_t begin, const item_t end, action_t action) {
+   for_each_do (begin, end, action);
+d45 1
+a45 1
+int main (int argc, char **argv) {
+d47 4
+a50 1
+   size_t length = array + sizeof array / sizeof *array;
+d52 1
+a52 1
+   loadvec (array, array + length, vec_fun);
+d55 1
+a55 1
+   for_each_do (vec.begin(), vec.end(), add);
+d59 1
+a59 1
+   for_each_do (vec.begin(), vec.end(), mul);
+d65 3
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: foreachdo.cc,v 1.5 2010-03-11 21:27:53-08 - - $
+d41 1
+a41 1
+}
+@

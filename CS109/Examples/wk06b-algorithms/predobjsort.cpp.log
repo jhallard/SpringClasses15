@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting predobjsort.cpp
+predobjsort.cpp:
+     $Id: predobjsort.cpp,v 1.5 2015-02-05 19:09:40-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 predobjsort.cpp -o predobjsort -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f predobjsort.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished predobjsort.cpp

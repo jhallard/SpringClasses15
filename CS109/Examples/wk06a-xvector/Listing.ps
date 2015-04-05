@@ -1,0 +1,3699 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: Listing.ps
+%%For: Wesley Mackey
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Tue Feb  3 15:08:53 2015
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier-Bold /F-gs-font MF
+/F-gs-font 11 11 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript-mycolor 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+/HeaderPageCountF /Helvetica-Bold findfont 18 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    /dhw d_header_w 4 sub def
+
+    /linecolor {0 0 0 setrgbcolor} bind def  % line color
+    /txcolor   {0 0 0 setrgbcolor} bind def  % text color
+    /fncolor   {0 0 0 setrgbcolor} bind def  % filename line color
+
+    .5 setlinewidth
+
+    % line across bottom of the header area
+    linecolor
+    0 0 moveto dhw 0 lineto
+
+    % side boxes
+    /sbw d_header_h 2 mul def	% side box width
+
+    % left side box
+    0 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % date/time in left box
+    txcolor
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 5 div moveto show
+
+    % right side box
+    dhw sbw sub 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % get width of pagecount
+    HeaderPageCountF setfont
+    pagecountstr stringwidth pop
+
+    txcolor
+    HeaderPageNumF setfont
+    pagenumstr stringwidth pop add  % add to width of pagecount
+    sbw exch sub 2 div dhw sbw sub add
+    d_header_h .2 mul moveto
+
+    pagenumstr show
+
+    HeaderPageCountF setfont
+    pagecountstr show
+
+    % filename
+    fncolor
+    HeaderHDRF setfont
+    dhw fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % HACK around a bug in enscript 1.6.0:
+      % for some reason this is getting set to "(null)" and
+      %
+      user_header_center_str (\(null\)) eq {
+        /user_header_center_str () def
+      } if
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        dhw user_header_left_str stringwidth pop sub 2 div
+        h moveto user_header_left_str show
+      } {
+        sbw 5 add h moveto user_header_left_str show
+
+        dhw user_header_center_str stringwidth pop sub 2 div
+        h moveto user_header_center_str show
+
+	dhw sbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} bind def
+%%EndResource
+/d_page_w 536 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 708 def
+/d_header_w 536 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 536 def
+/d_footer_h 0 def
+/d_output_w 536 def
+/d_output_h 708 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (xvector.h) def
+/fdir () def
+/ftail (xvector.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/6) def
+/modtimestr (13:45:08) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: xvector.h,v 1.46 2015-02-03 13:06:33-08 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(//) s
+32.4 658 M (4:) s
+52.2 658 M
+(// Vector explicitly managing memory) s
+32.4 646 M (5:) s
+52.2 646 M
+(// using allocate/deallocate/construct/destroy.) s
+32.4 634 M (6:) s
+52.2 634 M
+(// with iterator/const_iterator.) s
+32.4 622 M (7:) s
+52.2 622 M
+(//) s
+32.4 610 M (8:) s
+32.4 598 M (9:) s
+52.2 598 M
+(#ifndef __XVECTOR_H__) s
+25.8 586 M (10:) s
+52.2 586 M
+(#define __XVECTOR_H__) s
+25.8 574 M (11:) s
+25.8 562 M (12:) s
+52.2 562 M
+(#include <initializer_list>) s
+25.8 550 M (13:) s
+52.2 550 M
+(#include <iterator>) s
+25.8 538 M (14:) s
+25.8 526 M (15:) s
+52.2 526 M
+(template <typename Type> class xvector_base;) s
+25.8 514 M (16:) s
+52.2 514 M
+(template <typename Type> class xvector;) s
+25.8 502 M (17:) s
+52.2 502 M
+(template <typename Type> class xvector_iterator;) s
+25.8 490 M (18:) s
+25.8 478 M (19:) s
+52.2 478 M
+(// Base class guarantees all xvector ctors no uninit pointers.) s
+25.8 466 M (20:) s
+52.2 466 M
+(// Manages allocation/deallocation of memory.) s
+25.8 454 M (21:) s
+52.2 454 M
+(template <typename Type>) s
+25.8 442 M (22:) s
+52.2 442 M
+(class xvector_base {) s
+25.8 430 M (23:) s
+52.2 430 M
+(   friend class xvector<Type>;) s
+25.8 418 M (24:) s
+25.8 406 M (25:) s
+52.2 406 M
+(private:) s
+25.8 394 M (26:) s
+52.2 394 M
+(   allocator<Type> alloc;) s
+25.8 382 M (27:) s
+52.2 382 M
+(   Type* begin {nullptr};) s
+25.8 370 M (28:) s
+52.2 370 M
+(   Type* end {nullptr};) s
+25.8 358 M (29:) s
+52.2 358 M
+(   Type* limit {nullptr};) s
+25.8 346 M (30:) s
+52.2 346 M
+(   xvector_base\(\): begin\(nullptr\), end\(nullptr\), limit\(nullptr\) {}) s
+25.8 334 M (31:) s
+52.2 334 M
+(   xvector_base \(const xvector_base&\) = delete;) s
+25.8 322 M (32:) s
+52.2 322 M
+(   xvector_base& operator= \(const xvector_base&\) = delete;) s
+25.8 310 M (33:) s
+52.2 310 M
+(   xvector_base \(xvector_base&& that\);) s
+25.8 298 M (34:) s
+52.2 298 M
+(   xvector_base& operator= \(xvector_base&&\);) s
+25.8 286 M (35:) s
+52.2 286 M
+(   ~xvector_base\(\) { alloc.deallocate \(begin, limit - begin\); }) s
+25.8 274 M (36:) s
+52.2 274 M
+(   explicit xvector_base \(size_t capacity\);) s
+25.8 262 M (37:) s
+52.2 262 M
+(};) s
+25.8 250 M (38:) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (xvector.h) def
+/fdir () def
+/ftail (xvector.h) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (02/03/15) def
+/pagecountstr (/6) def
+/modtimestr (13:45:08) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (39:) s
+25.8 682 M (40:) s
+52.2 682 M
+(// Uses xvector_base to construct/destroy elements ) s
+25.8 670 M (41:) s
+52.2 670 M
+(// and provide access to elements.) s
+25.8 658 M (42:) s
+52.2 658 M
+(template <typename Type>) s
+25.8 646 M (43:) s
+52.2 646 M
+(class xvector {) s
+25.8 634 M (44:) s
+25.8 622 M (45:) s
+52.2 622 M
+(public:) s
+25.8 610 M (46:) s
+52.2 610 M
+(   using value_type = Type;) s
+25.8 598 M (47:) s
+52.2 598 M
+(   using reference = value_type&;) s
+25.8 586 M (48:) s
+52.2 586 M
+(   using const_reference = const value_type&;) s
+25.8 574 M (49:) s
+52.2 574 M
+(   using pointer = value_type*;) s
+25.8 562 M (50:) s
+52.2 562 M
+(   using const_pointer = const value_type*;) s
+25.8 550 M (51:) s
+52.2 550 M
+(   using difference_type = ptrdiff_t;) s
+25.8 538 M (52:) s
+52.2 538 M
+(   using size_type = size_t;) s
+25.8 526 M (53:) s
+52.2 526 M
+(   using iterator = xvector_iterator<value_type>;) s
+25.8 514 M (54:) s
+52.2 514 M
+(   using const_iterator = xvector_iterator<const value_type>;) s
+25.8 502 M (55:) s
+25.8 490 M (56:) s
+52.2 490 M
+(private:) s
+25.8 478 M (57:) s
+52.2 478 M
+(   static constexpr size_type MIN_RESERVE = 4;) s
+25.8 466 M (58:) s
+52.2 466 M
+(   xvector_base<value_type> base;) s
+25.8 454 M (59:) s
+52.2 454 M
+(   void deallocate_this\(\);) s
+25.8 442 M (60:) s
+52.2 442 M
+(   void copy_from_that \(const xvector&\);) s
+25.8 430 M (61:) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (xvector.h) def
+/fdir () def
+/ftail (xvector.h) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (02/03/15) def
+/pagecountstr (/6) def
+/modtimestr (13:45:08) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (62:) s
+25.8 682 M (63:) s
+52.2 682 M
+(public:) s
+25.8 670 M (64:) s
+52.2 670 M
+(   // Replace implicit members.) s
+25.8 658 M (65:) s
+52.2 658 M
+(   xvector\(\): base\(\) {}) s
+25.8 646 M (66:) s
+52.2 646 M
+(   xvector \(const xvector&\);) s
+25.8 634 M (67:) s
+52.2 634 M
+(   xvector \(xvector&&\);) s
+25.8 622 M (68:) s
+52.2 622 M
+(   xvector& operator= \(const xvector&\);) s
+25.8 610 M (69:) s
+52.2 610 M
+(   xvector& operator= \(xvector&&\);) s
+25.8 598 M (70:) s
+52.2 598 M
+(   ~xvector\(\) { resize \(0\); }) s
+25.8 586 M (71:) s
+25.8 574 M (72:) s
+52.2 574 M
+(   // More constructors.) s
+25.8 562 M (73:) s
+52.2 562 M
+(   explicit xvector \(size_type size,) s
+25.8 550 M (74:) s
+52.2 550 M
+(                     const value_type& val = value_type{}\);) s
+25.8 538 M (75:) s
+52.2 538 M
+(   explicit xvector \(initializer_list<value_type> ilist\);) s
+25.8 526 M (76:) s
+25.8 514 M (77:) s
+52.2 514 M
+(   // Capacity.) s
+25.8 502 M (78:) s
+52.2 502 M
+(   size_type size\(\) const     { return base.end - base.begin; }) s
+25.8 490 M (79:) s
+52.2 490 M
+(   size_type capacity\(\) const { return base.limit - base.begin; }) s
+25.8 478 M (80:) s
+52.2 478 M
+(   bool empty\(\) const         { return size\(\) == 0; }) s
+25.8 466 M (81:) s
+52.2 466 M
+(   void reserve \(size_type\);) s
+25.8 454 M (82:) s
+52.2 454 M
+(   void resize \(size_type, const value_type &val = value_type\(\)\);) s
+25.8 442 M (83:) s
+25.8 430 M (84:) s
+52.2 430 M
+(   // Modifiers: push_back, pop_back.) s
+25.8 418 M (85:) s
+52.2 418 M
+(   void push_back \(const value_type&\);) s
+25.8 406 M (86:) s
+52.2 406 M
+(   void push_back \(value_type&&\);) s
+25.8 394 M (87:) s
+52.2 394 M
+(   void pop_back\(\);) s
+25.8 382 M (88:) s
+25.8 370 M (89:) s
+52.2 370 M
+(   // Iterators: begin, cbegin, end, cend.) s
+25.8 358 M (90:) s
+52.2 358 M
+(   iterator begin\(\)              { return iterator \(base.begin\); }) s
+25.8 346 M (91:) s
+52.2 346 M
+(   const_iterator begin\(\) const  { return iterator \(base.begin\); }) s
+25.8 334 M (92:) s
+52.2 334 M
+(   const_iterator cbegin\(\) const { return iterator \(base.begin\); }) s
+25.8 322 M (93:) s
+52.2 322 M
+(   iterator end\(\)                { return iterator \(base.end\); }) s
+25.8 310 M (94:) s
+52.2 310 M
+(   const_iterator end\(\) const    { return iterator \(base.end\); }) s
+25.8 298 M (95:) s
+52.2 298 M
+(   const_iterator cend\(\) const   { return iterator \(base.end\); }) s
+25.8 286 M (96:) s
+25.8 274 M (97:) s
+52.2 274 M
+(   // Access: [], front, back.) s
+25.8 262 M (98:) s
+52.2 262 M
+(   reference operator[] \(size_type pos\) { return base.begin[pos]; }) s
+25.8 250 M (99:) s
+52.2 250 M
+(   const_reference operator[] \(size_type pos\) const) s
+19.2 238 M (100:) s
+52.2 238 M
+(                                        { return base.begin[pos]; }) s
+19.2 226 M (101:) s
+52.2 226 M
+(   reference front\(\)                    { return base.begin[0]; }) s
+19.2 214 M (102:) s
+52.2 214 M
+(   const_reference front\(\) const        { return base.begin[0]; }) s
+19.2 202 M (103:) s
+52.2 202 M
+(   reference back\(\)                     { return base.end[-1]; }) s
+19.2 190 M (104:) s
+52.2 190 M
+(   const_reference back\(\) const         { return base.end[-1]; }) s
+19.2 178 M (105:) s
+52.2 178 M
+(};) s
+19.2 166 M (106:) s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (xvector.h) def
+/fdir () def
+/ftail (xvector.h) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (02/03/15) def
+/pagecountstr (/6) def
+/modtimestr (13:45:08) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (107:) s
+19.2 682 M (108:) s
+52.2 682 M
+(// Relational operators for comparing vectors lexicographically.) s
+19.2 670 M (109:) s
+52.2 670 M
+(// Do not need to be members.) s
+19.2 658 M (110:) s
+52.2 658 M
+(template <typename Type>) s
+19.2 646 M (111:) s
+52.2 646 M
+(bool operator== \(const xvector<Type>& lhs, const xvector<Type>& rhs\);) s
+19.2 634 M (112:) s
+19.2 622 M (113:) s
+52.2 622 M
+(template <typename Type>) s
+19.2 610 M (114:) s
+52.2 610 M
+(bool operator< \(const xvector<Type>& lhs, const xvector<Type>& rhs\);) s
+19.2 598 M (115:) s
+19.2 586 M (116:) s
+52.2 586 M
+(template <typename Type>) s
+19.2 574 M (117:) s
+52.2 574 M
+(bool operator!= \(const xvector<Type>& lhs, const xvector<Type>& rhs\) {) s
+19.2 562 M (118:) s
+52.2 562 M
+(   return not \(lhs == rhs\);) s
+19.2 550 M (119:) s
+52.2 550 M
+(}) s
+19.2 538 M (120:) s
+19.2 526 M (121:) s
+52.2 526 M
+(template <typename Type>) s
+19.2 514 M (122:) s
+52.2 514 M
+(bool operator> \(const xvector<Type>& lhs, const xvector<Type>& rhs\) {) s
+19.2 502 M (123:) s
+52.2 502 M
+(   return rhs < lhs;) s
+19.2 490 M (124:) s
+52.2 490 M
+(}) s
+19.2 478 M (125:) s
+19.2 466 M (126:) s
+52.2 466 M
+(template <typename Type>) s
+19.2 454 M (127:) s
+52.2 454 M
+(bool operator<= \(const xvector<Type>& lhs, const xvector<Type>& rhs\) {) s
+19.2 442 M (128:) s
+52.2 442 M
+(   return not \(rhs < lhs\);) s
+19.2 430 M (129:) s
+52.2 430 M
+(}) s
+19.2 418 M (130:) s
+19.2 406 M (131:) s
+52.2 406 M
+(template <typename Type>) s
+19.2 394 M (132:) s
+52.2 394 M
+(bool operator>= \(const xvector<Type>& lhs, const xvector<Type>& rhs\) {) s
+19.2 382 M (133:) s
+52.2 382 M
+(   return not \(lhs < rhs\);) s
+19.2 370 M (134:) s
+52.2 370 M
+(}) s
+19.2 358 M (135:) s
+_R
+S
+%%Page: (5) 5
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 5 def
+/fname (xvector.h) def
+/fdir () def
+/ftail (xvector.h) def
+% User defined strings:
+/pagenumstr (5) def
+/moddatestr (02/03/15) def
+/pagecountstr (/6) def
+/modtimestr (13:45:08) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (136:) s
+19.2 682 M (137:) s
+52.2 682 M
+(// xvector<Type>::iterator) s
+19.2 670 M (138:) s
+52.2 670 M
+(template <typename Type>) s
+19.2 658 M (139:) s
+52.2 658 M
+(class xvector_iterator {) s
+19.2 646 M (140:) s
+52.2 646 M
+(   friend class xvector<Type>;) s
+19.2 634 M (141:) s
+52.2 634 M
+(   template<typename> friend class xvector_iterator;) s
+19.2 622 M (142:) s
+19.2 610 M (143:) s
+52.2 610 M
+(public:) s
+19.2 598 M (144:) s
+52.2 598 M
+(   using iterator_category = random_access_iterator_tag;) s
+19.2 586 M (145:) s
+52.2 586 M
+(   using value_type = Type;) s
+19.2 574 M (146:) s
+52.2 574 M
+(   using reference = value_type&;) s
+19.2 562 M (147:) s
+52.2 562 M
+(   using pointer = value_type*;) s
+19.2 550 M (148:) s
+52.2 550 M
+(   using const_reference = const value_type&;) s
+19.2 538 M (149:) s
+52.2 538 M
+(   using const_pointer = const value_type*;) s
+19.2 526 M (150:) s
+52.2 526 M
+(   using difference_type = ptrdiff_t;) s
+19.2 514 M (151:) s
+19.2 502 M (152:) s
+52.2 502 M
+(private:) s
+19.2 490 M (153:) s
+52.2 490 M
+(   pointer base {};) s
+19.2 478 M (154:) s
+52.2 478 M
+(   xvector_iterator \(pointer base\): base\(base\) {}) s
+19.2 466 M (155:) s
+19.2 454 M (156:) s
+52.2 454 M
+(public:) s
+19.2 442 M (157:) s
+52.2 442 M
+(   xvector_iterator\(\): base\(nullptr\) {}) s
+19.2 430 M (158:) s
+52.2 430 M
+(   // Other implicit members by default OK.) s
+19.2 418 M (159:) s
+19.2 406 M (160:) s
+52.2 406 M
+(   xvector_iterator& operator++\(\)      { ++base; return *this; }) s
+19.2 394 M (161:) s
+52.2 394 M
+(   xvector_iterator& operator--\(\)      { --base; return *this; }) s
+19.2 382 M (162:) s
+52.2 382 M
+(   xvector_iterator operator++ \(int\);) s
+19.2 370 M (163:) s
+52.2 370 M
+(   xvector_iterator operator-- \(int\);) s
+19.2 358 M (164:) s
+19.2 346 M (165:) s
+52.2 346 M
+(   reference operator*\(\)                         { return *base; }) s
+19.2 334 M (166:) s
+52.2 334 M
+(   const_reference operator*\(\) const             { return *base; }) s
+19.2 322 M (167:) s
+52.2 322 M
+(   pointer operator->\(\)                          { return base; }) s
+19.2 310 M (168:) s
+52.2 310 M
+(   const_pointer operator->\(\) const              { return base; }) s
+19.2 298 M (169:) s
+52.2 298 M
+(   reference operator[] \(size_t pos\)             { return base[pos]; }) s
+19.2 286 M (170:) s
+52.2 286 M
+(   const_reference operator[] \(size_t pos\) const { return base[pos]; }) s
+19.2 274 M (171:) s
+19.2 262 M (172:) s
+52.2 262 M
+(   // Comparison and arithmetic operators.) s
+19.2 250 M (173:) s
+52.2 250 M
+(   bool operator== \(const xvector_iterator& that\) const) s
+19.2 238 M (174:) s
+52.2 238 M
+(                                 { return base == that.base; }) s
+19.2 226 M (175:) s
+52.2 226 M
+(   bool operator<  \(const xvector_iterator& that\) const) s
+19.2 214 M (176:) s
+52.2 214 M
+(                                 { return base < that.base; }) s
+19.2 202 M (177:) s
+52.2 202 M
+(   xvector_iterator& operator+= \(difference_type offset\)) s
+19.2 190 M (178:) s
+52.2 190 M
+(                                 { base += offset; return *this; }) s
+19.2 178 M (179:) s
+52.2 178 M
+(   xvector_iterator& operator-= \(difference_type offset\)) s
+19.2 166 M (180:) s
+52.2 166 M
+(                                 { base -= offset; return *this; }) s
+19.2 154 M (181:) s
+52.2 154 M
+(   difference_type operator- \(const xvector_iterator& that\)) s
+19.2 142 M (182:) s
+52.2 142 M
+(                                 { return base - that.base; }) s
+19.2 130 M (183:) s
+52.2 130 M
+(   // Implicit conversion of iterator to const_iterator.) s
+19.2 118 M (184:) s
+52.2 118 M
+(   operator xvector_iterator<const value_type>\(\) const) s
+19.2 106 M (185:) s
+52.2 106 M
+(   { return xvector_iterator<const value_type> \(base\); }) s
+19.2 94 M (186:) s
+52.2 94 M
+(   operator bool\(\) { return base != nullptr; }) s
+19.2 82 M (187:) s
+19.2 70 M (188:) s
+52.2 70 M
+(};) s
+19.2 58 M (189:) s
+_R
+S
+%%Page: (6) 6
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 6 def
+/fname (xvector.h) def
+/fdir () def
+/ftail (xvector.h) def
+% User defined strings:
+/pagenumstr (6) def
+/moddatestr (02/03/15) def
+/pagecountstr (/6) def
+/modtimestr (13:45:08) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (190:) s
+19.2 682 M (191:) s
+52.2 682 M
+(//) s
+19.2 670 M (192:) s
+52.2 670 M
+(// XVECTOR-ITERATOR NON-MEMBER OPERATORS) s
+19.2 658 M (193:) s
+52.2 658 M
+(//) s
+19.2 646 M (194:) s
+19.2 634 M (195:) s
+52.2 634 M
+(template <typename Type>) s
+19.2 622 M (196:) s
+52.2 622 M
+(xvector_iterator<Type> operator+ \() s
+19.2 610 M (197:) s
+52.2 610 M
+(            typename xvector_iterator<Type>::difference_type offset,) s
+19.2 598 M (198:) s
+52.2 598 M
+(            const xvector_iterator<Type>& itor\) {) s
+19.2 586 M (199:) s
+52.2 586 M
+(   return itor + offset;) s
+19.2 574 M (200:) s
+52.2 574 M
+(}) s
+19.2 562 M (201:) s
+19.2 550 M (202:) s
+52.2 550 M
+(template <typename Type>) s
+19.2 538 M (203:) s
+52.2 538 M
+(xvector_iterator<Type> operator+ \(const xvector_iterator<Type>& itor,) s
+19.2 526 M (204:) s
+52.2 526 M
+(            typename xvector_iterator<Type>::difference_type offset\) {) s
+19.2 514 M (205:) s
+52.2 514 M
+(   xvector_iterator<Type> result {itor};) s
+19.2 502 M (206:) s
+52.2 502 M
+(   return result += offset;) s
+19.2 490 M (207:) s
+52.2 490 M
+(}) s
+19.2 478 M (208:) s
+19.2 466 M (209:) s
+52.2 466 M
+(template <typename Type>) s
+19.2 454 M (210:) s
+52.2 454 M
+(xvector_iterator<Type> operator- \(const xvector_iterator<Type>& itor,) s
+19.2 442 M (211:) s
+52.2 442 M
+(            typename xvector_iterator<Type>::difference_type offset\) {) s
+19.2 430 M (212:) s
+52.2 430 M
+(   xvector_iterator<Type> result {itor};) s
+19.2 418 M (213:) s
+52.2 418 M
+(   return result -= offset;) s
+19.2 406 M (214:) s
+52.2 406 M
+(}) s
+19.2 394 M (215:) s
+19.2 382 M (216:) s
+52.2 382 M
+(template <typename Type>) s
+19.2 370 M (217:) s
+52.2 370 M
+(bool operator!= \(const xvector_iterator<Type>& one,) s
+19.2 358 M (218:) s
+52.2 358 M
+(                 const xvector_iterator<Type>& two\) {) s
+19.2 346 M (219:) s
+52.2 346 M
+(   return not \(one == two\);) s
+19.2 334 M (220:) s
+52.2 334 M
+(}) s
+19.2 322 M (221:) s
+19.2 310 M (222:) s
+52.2 310 M
+(template <typename Type>) s
+19.2 298 M (223:) s
+52.2 298 M
+(bool operator> \(const xvector_iterator<Type>& one,) s
+19.2 286 M (224:) s
+52.2 286 M
+(                const xvector_iterator<Type>& two\) {) s
+19.2 274 M (225:) s
+52.2 274 M
+(   return two < one;) s
+19.2 262 M (226:) s
+52.2 262 M
+(}) s
+19.2 250 M (227:) s
+19.2 238 M (228:) s
+52.2 238 M
+(template <typename Type>) s
+19.2 226 M (229:) s
+52.2 226 M
+(bool operator<= \(const xvector_iterator<Type>& one,) s
+19.2 214 M (230:) s
+52.2 214 M
+(                 const xvector_iterator<Type>& two\) {) s
+19.2 202 M (231:) s
+52.2 202 M
+(   return not \(two < one\);) s
+19.2 190 M (232:) s
+52.2 190 M
+(}) s
+19.2 178 M (233:) s
+19.2 166 M (234:) s
+52.2 166 M
+(template <typename Type>) s
+19.2 154 M (235:) s
+52.2 154 M
+(bool operator>= \(const xvector_iterator<Type>& one,) s
+19.2 142 M (236:) s
+52.2 142 M
+(                 const xvector_iterator<Type>& two\) {) s
+19.2 130 M (237:) s
+52.2 130 M
+(   return not \(one < two\);) s
+19.2 118 M (238:) s
+52.2 118 M
+(}) s
+19.2 106 M (239:) s
+19.2 94 M (240:) s
+52.2 94 M
+(#include "xvector.tcc") s
+19.2 82 M (241:) s
+19.2 70 M (242:) s
+52.2 70 M
+(#endif) s
+19.2 58 M (243:) s
+_R
+S
+%%Page: (1) 7
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (xvector.tcc) def
+/fdir () def
+/ftail (xvector.tcc) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/5) def
+/modtimestr (13:43:39) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: xvector.tcc,v 1.37 2015-02-03 13:07:18-08 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <memory>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <utility>) s
+32.4 646 M (5:) s
+32.4 634 M (6:) s
+52.2 634 M
+(//) s
+32.4 622 M (7:) s
+52.2 622 M
+(// XVECTOR-BASE MEMBERS AND FUNCTIONS.) s
+32.4 610 M (8:) s
+52.2 610 M
+(//) s
+32.4 598 M (9:) s
+25.8 586 M (10:) s
+52.2 586 M
+(template <typename Type>) s
+25.8 574 M (11:) s
+52.2 574 M
+(xvector_base<Type>::xvector_base \(xvector_base&& that\):) s
+25.8 562 M (12:) s
+52.2 562 M
+(   begin \(that.begin\),) s
+25.8 550 M (13:) s
+52.2 550 M
+(   end \(that.end\),) s
+25.8 538 M (14:) s
+52.2 538 M
+(   limit \(that.limit\) {) s
+25.8 526 M (15:) s
+52.2 526 M
+(   that.begin = that.end = that.limit = nullptr;) s
+25.8 514 M (16:) s
+52.2 514 M
+(}) s
+25.8 502 M (17:) s
+25.8 490 M (18:) s
+52.2 490 M
+(template <typename Type>) s
+25.8 478 M (19:) s
+52.2 478 M
+(xvector_base<Type>&) s
+25.8 466 M (20:) s
+52.2 466 M
+(xvector_base<Type>::operator= \(xvector_base&& that\) {) s
+25.8 454 M (21:) s
+52.2 454 M
+(   if \(this != &that\) {) s
+25.8 442 M (22:) s
+52.2 442 M
+(      if \(begin\) alloc.deallocate \(begin, limit - begin\);) s
+25.8 430 M (23:) s
+52.2 430 M
+(      begin = that.begin;) s
+25.8 418 M (24:) s
+52.2 418 M
+(      end = that.end;) s
+25.8 406 M (25:) s
+52.2 406 M
+(      limit = that.limit;) s
+25.8 394 M (26:) s
+52.2 394 M
+(      that.begin = that.end = that.limit = nullptr;) s
+25.8 382 M (27:) s
+52.2 382 M
+(   }) s
+25.8 370 M (28:) s
+52.2 370 M
+(   return *this;) s
+25.8 358 M (29:) s
+52.2 358 M
+(}) s
+25.8 346 M (30:) s
+25.8 334 M (31:) s
+52.2 334 M
+(template <typename Type>) s
+25.8 322 M (32:) s
+52.2 322 M
+(xvector_base<Type>::xvector_base \(size_t capacity\):) s
+25.8 310 M (33:) s
+52.2 310 M
+(   begin \(alloc.allocate \(capacity\)\),) s
+25.8 298 M (34:) s
+52.2 298 M
+(   end \(begin\),) s
+25.8 286 M (35:) s
+52.2 286 M
+(   limit \(&begin[capacity]\) {) s
+25.8 274 M (36:) s
+52.2 274 M
+(}) s
+25.8 262 M (37:) s
+_R
+S
+%%Page: (2) 8
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (xvector.tcc) def
+/fdir () def
+/ftail (xvector.tcc) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (02/03/15) def
+/pagecountstr (/5) def
+/modtimestr (13:43:39) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (38:) s
+25.8 682 M (39:) s
+52.2 682 M
+(//) s
+25.8 670 M (40:) s
+52.2 670 M
+(// XVECTOR CONSTRUCTORS, OPERATOR=, DESTRUCTOR.) s
+25.8 658 M (41:) s
+52.2 658 M
+(//) s
+25.8 646 M (42:) s
+25.8 634 M (43:) s
+52.2 634 M
+(// Copy constructor.) s
+25.8 622 M (44:) s
+52.2 622 M
+(template <typename Type>) s
+25.8 610 M (45:) s
+52.2 610 M
+(xvector<Type>::xvector \(const xvector& that\): base \(that.capacity\(\)\) {) s
+25.8 598 M (46:) s
+52.2 598 M
+(   uninitialized_copy \(that.cbegin\(\), that.cend\(\), base.begin\);) s
+25.8 586 M (47:) s
+52.2 586 M
+(   base.end = base.begin + that.size\(\);) s
+25.8 574 M (48:) s
+52.2 574 M
+(}) s
+25.8 562 M (49:) s
+25.8 550 M (50:) s
+52.2 550 M
+(// Copy operator=.) s
+25.8 538 M (51:) s
+52.2 538 M
+(template <typename Type>) s
+25.8 526 M (52:) s
+52.2 526 M
+(xvector<Type>& xvector<Type>::operator= \(const xvector& that\) {) s
+25.8 514 M (53:) s
+52.2 514 M
+(   if \(*this != that\) {) s
+25.8 502 M (54:) s
+52.2 502 M
+(      resize \(0\);) s
+25.8 490 M (55:) s
+52.2 490 M
+(      reserve \(that.size\(\)\);) s
+25.8 478 M (56:) s
+52.2 478 M
+(      uninitialized_copy \(that.cbegin\(\), that.cend\(\), base.begin\);) s
+25.8 466 M (57:) s
+52.2 466 M
+(      base.end = base.begin + that.size\(\);) s
+25.8 454 M (58:) s
+52.2 454 M
+(   }) s
+25.8 442 M (59:) s
+52.2 442 M
+(   return *this;) s
+25.8 430 M (60:) s
+52.2 430 M
+(}) s
+25.8 418 M (61:) s
+25.8 406 M (62:) s
+52.2 406 M
+(// Move constructor.) s
+25.8 394 M (63:) s
+52.2 394 M
+(template <typename Type>) s
+25.8 382 M (64:) s
+52.2 382 M
+(xvector<Type>::xvector \(xvector&& that\):) s
+25.8 370 M (65:) s
+52.2 370 M
+(   base \(std::move \(that.base\)\) {) s
+25.8 358 M (66:) s
+52.2 358 M
+(}) s
+25.8 346 M (67:) s
+25.8 334 M (68:) s
+52.2 334 M
+(// Move operator=.) s
+25.8 322 M (69:) s
+52.2 322 M
+(template <typename Type>) s
+25.8 310 M (70:) s
+52.2 310 M
+(xvector<Type>& xvector<Type>::operator= \(xvector&& that\) {) s
+25.8 298 M (71:) s
+52.2 298 M
+(   if \(*this != that\) base = std::move \(that\);) s
+25.8 286 M (72:) s
+52.2 286 M
+(   return *this;) s
+25.8 274 M (73:) s
+52.2 274 M
+(}) s
+25.8 262 M (74:) s
+25.8 250 M (75:) s
+52.2 250 M
+(// Fill constructor.) s
+25.8 238 M (76:) s
+52.2 238 M
+(template <typename Type>) s
+25.8 226 M (77:) s
+52.2 226 M
+(xvector<Type>::xvector \(size_type fill_size, const value_type& val\):) s
+25.8 214 M (78:) s
+52.2 214 M
+(   base \(fill_size\) {) s
+25.8 202 M (79:) s
+52.2 202 M
+(   base.end = &base.begin[fill_size];) s
+25.8 190 M (80:) s
+52.2 190 M
+(   uninitialized_fill \(base.begin, base.end, val\);) s
+25.8 178 M (81:) s
+52.2 178 M
+(}) s
+25.8 166 M (82:) s
+25.8 154 M (83:) s
+52.2 154 M
+(// Initializer list constructor.) s
+25.8 142 M (84:) s
+52.2 142 M
+(template <typename Type>) s
+25.8 130 M (85:) s
+52.2 130 M
+(xvector<Type>::xvector \(initializer_list<value_type> list\):) s
+25.8 118 M (86:) s
+52.2 118 M
+(   base \(list.size\(\)\) {) s
+25.8 106 M (87:) s
+52.2 106 M
+(   uninitialized_copy \(list.begin\(\), list.end\(\), base.begin\);) s
+25.8 94 M (88:) s
+52.2 94 M
+(   base.end = base.begin + list.size\(\);) s
+25.8 82 M (89:) s
+52.2 82 M
+(}) s
+25.8 70 M (90:) s
+_R
+S
+%%Page: (3) 9
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (xvector.tcc) def
+/fdir () def
+/ftail (xvector.tcc) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (02/03/15) def
+/pagecountstr (/5) def
+/modtimestr (13:43:39) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (91:) s
+25.8 682 M (92:) s
+52.2 682 M
+(//) s
+25.8 670 M (93:) s
+52.2 670 M
+(// XVECTOR OTHER FUNCTION MEMBERS.) s
+25.8 658 M (94:) s
+52.2 658 M
+(//) s
+25.8 646 M (95:) s
+25.8 634 M (96:) s
+52.2 634 M
+(// Reserve minimum uninitialized space.) s
+25.8 622 M (97:) s
+52.2 622 M
+(template <typename Type>) s
+25.8 610 M (98:) s
+52.2 610 M
+(void xvector<Type>::reserve \(size_type capacity_\) {) s
+25.8 598 M (99:) s
+52.2 598 M
+(   if \(capacity_ <= capacity\(\)\) return;) s
+19.2 586 M (100:) s
+52.2 586 M
+(   if \(capacity_ < MIN_RESERVE\) capacity_ = MIN_RESERVE;) s
+19.2 574 M (101:) s
+52.2 574 M
+(   if \(capacity_ < 2 * capacity\(\)\) capacity_ = 2 * capacity\(\);) s
+19.2 562 M (102:) s
+52.2 562 M
+(   xvector_base<value_type> new_base \(capacity_\);) s
+19.2 550 M (103:) s
+52.2 550 M
+(   new_base.end = &new_base.begin[size\(\)];) s
+19.2 538 M (104:) s
+52.2 538 M
+(   if \(base.begin and size\(\) > 0\) {) s
+19.2 526 M (105:) s
+52.2 526 M
+(      uninitialized_copy \(begin\(\), end\(\), new_base.begin\);) s
+19.2 514 M (106:) s
+52.2 514 M
+(      resize \(0\);) s
+19.2 502 M (107:) s
+52.2 502 M
+(   }) s
+19.2 490 M (108:) s
+52.2 490 M
+(   base = std::move \(new_base\);) s
+19.2 478 M (109:) s
+52.2 478 M
+(}) s
+19.2 466 M (110:) s
+19.2 454 M (111:) s
+52.2 454 M
+(// Increase or decrease size of vector.) s
+19.2 442 M (112:) s
+52.2 442 M
+(template <typename Type>) s
+19.2 430 M (113:) s
+52.2 430 M
+(void xvector<Type>::resize \(size_type size_, const value_type &val\) {) s
+19.2 418 M (114:) s
+52.2 418 M
+(   while \(size_ < size\(\)\) pop_back\(\);) s
+19.2 406 M (115:) s
+52.2 406 M
+(   while \(size_ > size\(\)\) push_back \(val\);) s
+19.2 394 M (116:) s
+52.2 394 M
+(}) s
+19.2 382 M (117:) s
+19.2 370 M (118:) s
+52.2 370 M
+(template <typename Type>) s
+19.2 358 M (119:) s
+52.2 358 M
+(void xvector<Type>::push_back \(const value_type& that\) {) s
+19.2 346 M (120:) s
+52.2 346 M
+(   reserve \(size\(\) + 1\);) s
+19.2 334 M (121:) s
+52.2 334 M
+(   base.alloc.construct \(base.end++, that\);) s
+19.2 322 M (122:) s
+52.2 322 M
+(}) s
+19.2 310 M (123:) s
+19.2 298 M (124:) s
+52.2 298 M
+(template <typename Type>) s
+19.2 286 M (125:) s
+52.2 286 M
+(void xvector<Type>::push_back \(value_type&& that\) {) s
+19.2 274 M (126:) s
+52.2 274 M
+(   reserve \(size\(\) + 1\);) s
+19.2 262 M (127:) s
+52.2 262 M
+(   *base.end++ = std::move \(that\);) s
+19.2 250 M (128:) s
+52.2 250 M
+(}) s
+19.2 238 M (129:) s
+19.2 226 M (130:) s
+52.2 226 M
+(template <typename Type>) s
+19.2 214 M (131:) s
+52.2 214 M
+(void xvector<Type>::pop_back\(\) {) s
+19.2 202 M (132:) s
+52.2 202 M
+(   base.alloc.destroy \(--base.end\);) s
+19.2 190 M (133:) s
+52.2 190 M
+(}) s
+19.2 178 M (134:) s
+_R
+S
+%%Page: (4) 10
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (xvector.tcc) def
+/fdir () def
+/ftail (xvector.tcc) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (02/03/15) def
+/pagecountstr (/5) def
+/modtimestr (13:43:39) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (135:) s
+19.2 682 M (136:) s
+52.2 682 M
+(//) s
+19.2 670 M (137:) s
+52.2 670 M
+(// XVECTOR RELATIONAL OPERATORS == and <) s
+19.2 658 M (138:) s
+52.2 658 M
+(//) s
+19.2 646 M (139:) s
+52.2 646 M
+(template <typename Type>) s
+19.2 634 M (140:) s
+52.2 634 M
+(bool operator== \(const xvector<Type>& lhs, const xvector<Type>& rhs\) {) s
+19.2 622 M (141:) s
+52.2 622 M
+(   if \(lhs.size\(\) != rhs.size\(\)\) return false;) s
+19.2 610 M (142:) s
+52.2 610 M
+(   auto lhs_itor = lhs.cbegin\(\);) s
+19.2 598 M (143:) s
+52.2 598 M
+(   auto rhs_itor = rhs.cbegin\(\);) s
+19.2 586 M (144:) s
+52.2 586 M
+(   for \(; lhs_itor != lhs.cend\(\); ++lhs_itor, ++rhs_itor\) {) s
+19.2 574 M (145:) s
+52.2 574 M
+(      if \(*lhs_itor != *rhs_itor\) return false;) s
+19.2 562 M (146:) s
+52.2 562 M
+(   }) s
+19.2 550 M (147:) s
+52.2 550 M
+(   return true;) s
+19.2 538 M (148:) s
+52.2 538 M
+(}) s
+19.2 526 M (149:) s
+52.2 526 M
+(    ) s
+19.2 514 M (150:) s
+52.2 514 M
+(template <typename Type>) s
+19.2 502 M (151:) s
+52.2 502 M
+(bool operator< \(const xvector<Type>& lhs, const xvector<Type>& rhs\) {) s
+19.2 490 M (152:) s
+52.2 490 M
+(   auto lhs_itor = lhs.cbegin\(\);) s
+19.2 478 M (153:) s
+52.2 478 M
+(   auto rhs_itor = rhs.cbegin\(\);) s
+19.2 466 M (154:) s
+52.2 466 M
+(   for \(; lhs_itor != lhs.cend\(\); ++lhs_itor, ++rhs_itor\) {) s
+19.2 454 M (155:) s
+52.2 454 M
+(      if \(rhs_itor == rhs.cend\(\)\) return false;) s
+19.2 442 M (156:) s
+52.2 442 M
+(      if \(*lhs_itor < *rhs_itor\) return true;) s
+19.2 430 M (157:) s
+52.2 430 M
+(      if \(*rhs_itor < *lhs_itor\) return false;) s
+19.2 418 M (158:) s
+52.2 418 M
+(   }) s
+19.2 406 M (159:) s
+52.2 406 M
+(   return rhs_itor != rhs.cend\(\);) s
+19.2 394 M (160:) s
+52.2 394 M
+(}) s
+19.2 382 M (161:) s
+52.2 382 M
+(    ) s
+_R
+S
+%%Page: (5) 11
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 5 def
+/fname (xvector.tcc) def
+/fdir () def
+/ftail (xvector.tcc) def
+% User defined strings:
+/pagenumstr (5) def
+/moddatestr (02/03/15) def
+/pagecountstr (/5) def
+/modtimestr (13:43:39) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (162:) s
+19.2 682 M (163:) s
+52.2 682 M
+(//) s
+19.2 670 M (164:) s
+52.2 670 M
+(// XVECTOR::ITERATOR FUNCTIONS.) s
+19.2 658 M (165:) s
+52.2 658 M
+(//) s
+19.2 646 M (166:) s
+19.2 634 M (167:) s
+52.2 634 M
+(template <typename Type>) s
+19.2 622 M (168:) s
+52.2 622 M
+(xvector_iterator<Type> xvector_iterator<Type>::operator++ \(int\) {) s
+19.2 610 M (169:) s
+52.2 610 M
+(   xvector_iterator<Type> result {*this};) s
+19.2 598 M (170:) s
+52.2 598 M
+(   ++base;) s
+19.2 586 M (171:) s
+52.2 586 M
+(   return result;) s
+19.2 574 M (172:) s
+52.2 574 M
+(}) s
+19.2 562 M (173:) s
+19.2 550 M (174:) s
+52.2 550 M
+(template <typename Type>) s
+19.2 538 M (175:) s
+52.2 538 M
+(xvector_iterator<Type> xvector_iterator<Type>::operator-- \(int\) {) s
+19.2 526 M (176:) s
+52.2 526 M
+(   xvector_iterator<Type> result {*this};) s
+19.2 514 M (177:) s
+52.2 514 M
+(   --base;) s
+19.2 502 M (178:) s
+52.2 502 M
+(   return result;) s
+19.2 490 M (179:) s
+52.2 490 M
+(}) s
+19.2 478 M (180:) s
+_R
+S
+%%Page: (1) 12
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (Makefile) def
+/fdir () def
+/ftail (Makefile) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (13:07:45) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(# $Id: Makefile,v 1.33 2013-08-19 19:03:59-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(DEPFILE  = Makefile.dep) s
+32.4 658 M (4:) s
+52.2 658 M
+(NOINCL   = ci clean spotless) s
+32.4 646 M (5:) s
+52.2 646 M
+(NEEDINCL = ${filter ${NOINCL}, ${MAKECMDGOALS}}) s
+32.4 634 M (6:) s
+52.2 634 M
+(PROGRAMS = testbool.cpp testint.cpp testpointer.cpp \\) s
+32.4 622 M (7:) s
+52.2 622 M
+(           testsort.cpp teststring.cpp testvector.cpp) s
+32.4 610 M (8:) s
+52.2 610 M
+(OBJFILES = ${PROGRAMS:.cpp=.o}) s
+32.4 598 M (9:) s
+52.2 598 M
+(BINARIES = ${PROGRAMS:.cpp=}) s
+25.8 586 M (10:) s
+52.2 586 M
+(TESTRUNS = ${foreach file, ${PROGRAMS}, ${file} ${file:.cpp=.out}}) s
+25.8 574 M (11:) s
+52.2 574 M
+(AUXFILES = xvector.h xvector.tcc Makefile) s
+25.8 562 M (12:) s
+52.2 562 M
+(OUTPUTS  = ${PROGRAMS:.cpp=.out}) s
+25.8 550 M (13:) s
+52.2 550 M
+(LISTING  = Listing.ps) s
+25.8 538 M (14:) s
+25.8 526 M (15:) s
+52.2 526 M
+(GPP      = g++ -g -O0 -Wall -Wextra -std=gnu++0x) s
+25.8 514 M (16:) s
+52.2 514 M
+(GRIND    = valgrind --leak-check=full --show-reachable=yes) s
+25.8 502 M (17:) s
+25.8 490 M (18:) s
+52.2 490 M
+(all : ${BINARIES}) s
+25.8 478 M (19:) s
+25.8 466 M (20:) s
+52.2 466 M
+(% : %.o) s
+25.8 454 M (21:) s
+52.2 454 M
+(        ${GPP} $< -o $@) s
+25.8 442 M (22:) s
+25.8 430 M (23:) s
+52.2 430 M
+(%.o : %.cpp) s
+25.8 418 M (24:) s
+52.2 418 M
+(        ${GPP} $< -c) s
+25.8 406 M (25:) s
+52.2 406 M
+(                ) s
+25.8 394 M (26:) s
+52.2 394 M
+(ci : ${AUXFILES} ${PROGRAMS}) s
+25.8 382 M (27:) s
+52.2 382 M
+(        cid + ${AUXFILES} ${PROGRAMS}) s
+25.8 370 M (28:) s
+52.2 370 M
+(        checksource ${AUXFILES} ${PROGRAMS}) s
+25.8 358 M (29:) s
+25.8 346 M (30:) s
+52.2 346 M
+(out : ${OUTPUTS}) s
+25.8 334 M (31:) s
+25.8 322 M (32:) s
+52.2 322 M
+(%.out : %) s
+25.8 310 M (33:) s
+52.2 310 M
+(        ${GRIND} $< >$@ 2>&1; pstatus >>$@) s
+25.8 298 M (34:) s
+25.8 286 M (35:) s
+52.2 286 M
+(lis : out) s
+25.8 274 M (36:) s
+52.2 274 M
+(        pkill gv || exit 0) s
+25.8 262 M (37:) s
+52.2 262 M
+(        mkpspdf ${LISTING} ${AUXFILES} ${TESTRUNS}) s
+25.8 250 M (38:) s
+25.8 238 M (39:) s
+52.2 238 M
+(${DEPFILE} :) s
+25.8 226 M (40:) s
+52.2 226 M
+(        ${GPP} -MM ${PROGRAMS} >${DEPFILE}) s
+25.8 214 M (41:) s
+52.2 214 M
+(        cat ${DEPFILE}) s
+25.8 202 M (42:) s
+25.8 190 M (43:) s
+52.2 190 M
+(clean :) s
+25.8 178 M (44:) s
+52.2 178 M
+(        - rm ${DEPFILE} ${OBJFILES}) s
+25.8 166 M (45:) s
+25.8 154 M (46:) s
+52.2 154 M
+(spotless : clean) s
+25.8 142 M (47:) s
+52.2 142 M
+(        - rm ${BINARIES} ${OUTPUTS} ${LISTING} ${LISTING:.ps=.pdf}) s
+25.8 130 M (48:) s
+25.8 118 M (49:) s
+52.2 118 M
+(again :) s
+25.8 106 M (50:) s
+52.2 106 M
+(        ${MAKE} spotless ci) s
+25.8 94 M (51:) s
+52.2 94 M
+(        ${MAKE} all out lis) s
+25.8 82 M (52:) s
+25.8 70 M (53:) s
+52.2 70 M
+(ifeq \(${NEEDINCL},\)) s
+25.8 58 M (54:) s
+52.2 58 M
+(include ${DEPFILE}) s
+25.8 46 M (55:) s
+52.2 46 M
+(endif) s
+25.8 34 M (56:) s
+_R
+S
+%%Page: (1) 13
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testbool.cpp) def
+/fdir () def
+/ftail (testbool.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (13:07:45) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: testbool.cpp,v 1.6 2013-08-12 18:55:17-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(//) s
+32.4 658 M (4:) s
+52.2 658 M
+(// Sieve of Eratosthenes.) s
+32.4 646 M (5:) s
+52.2 646 M
+(// To Kóskinon 'Eratosthénous.) s
+32.4 634 M (6:) s
+52.2 634 M
+(//) s
+32.4 622 M (7:) s
+32.4 610 M (8:) s
+52.2 610 M
+(#include <iomanip>) s
+32.4 598 M (9:) s
+52.2 598 M
+(#include <iostream>) s
+25.8 586 M (10:) s
+25.8 574 M (11:) s
+52.2 574 M
+(using namespace std;) s
+25.8 562 M (12:) s
+25.8 550 M (13:) s
+52.2 550 M
+(#include "xvector.h") s
+25.8 538 M (14:) s
+25.8 526 M (15:) s
+52.2 526 M
+(int main \(\) {) s
+25.8 514 M (16:) s
+52.2 514 M
+(   const size_t rows {32};) s
+25.8 502 M (17:) s
+52.2 502 M
+(   const size_t columns {16};) s
+25.8 490 M (18:) s
+52.2 490 M
+(   const size_t num_width {4};) s
+25.8 478 M (19:) s
+52.2 478 M
+(   xvector<bool> sieve \(rows * columns, true\);) s
+25.8 466 M (20:) s
+52.2 466 M
+(   sieve[0] = sieve[1] = false;) s
+25.8 454 M (21:) s
+25.8 442 M (22:) s
+52.2 442 M
+(   for \(size_t prime {2}; prime * prime < sieve.size\(\); ++prime\) {) s
+25.8 430 M (23:) s
+52.2 430 M
+(      if \(sieve[prime]\) {) s
+25.8 418 M (24:) s
+52.2 418 M
+(         for \(size_t itor {prime * prime};) s
+25.8 406 M (25:) s
+52.2 406 M
+(              itor < sieve.size\(\); itor += prime\) {) s
+25.8 394 M (26:) s
+52.2 394 M
+(            sieve[itor] = false;) s
+25.8 382 M (27:) s
+52.2 382 M
+(         }) s
+25.8 370 M (28:) s
+52.2 370 M
+(      }) s
+25.8 358 M (29:) s
+52.2 358 M
+(   }) s
+25.8 346 M (30:) s
+25.8 334 M (31:) s
+52.2 334 M
+(   size_t prime_count {0};) s
+25.8 322 M (32:) s
+52.2 322 M
+(   size_t col_count {0};) s
+25.8 310 M (33:) s
+52.2 310 M
+(   cout << "Sieve of Eratosthenes." << endl;) s
+25.8 298 M (34:) s
+52.2 298 M
+(   cout << "To Kóskinon 'Eratosthénous." << endl;) s
+25.8 286 M (35:) s
+52.2 286 M
+(   for \(size_t itor {0}; itor < rows * columns; ++itor\) {) s
+25.8 274 M (36:) s
+52.2 274 M
+(      cout << setw \(num_width\);) s
+25.8 262 M (37:) s
+52.2 262 M
+(      if \(sieve[itor]\) { cout << itor; ++prime_count; }) s
+25.8 250 M (38:) s
+52.2 250 M
+(                  else { cout << "."; }) s
+25.8 238 M (39:) s
+52.2 238 M
+(      if \(++col_count % columns == 0\) cout << endl;) s
+25.8 226 M (40:) s
+52.2 226 M
+(   }) s
+25.8 214 M (41:) s
+52.2 214 M
+(   cout << "Sieve size: " << sieve.size\(\) << ".  ";) s
+25.8 202 M (42:) s
+52.2 202 M
+(   cout << "Primes found: " << prime_count << "." << endl;) s
+25.8 190 M (43:) s
+25.8 178 M (44:) s
+52.2 178 M
+(   return 0;) s
+25.8 166 M (45:) s
+52.2 166 M
+(}) s
+25.8 154 M (46:) s
+_R
+S
+%%Page: (1) 14
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testbool.out) def
+/fdir () def
+/ftail (testbool.out) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (15:08:50) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(==10514== Memcheck, a memory error detector) s
+32.4 682 M (2:) s
+52.2 682 M
+(==10514== Copyright \(C\) 2002-2013, and GNU GPL'd, by Julian Seward et al) s
+5 670 M
+(.) s
+32.4 658 M (3:) s
+52.2 658 M
+(==10514== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright i) s
+5 646 M
+(nfo) s
+32.4 634 M (4:) s
+52.2 634 M
+(==10514== Command: testbool) s
+32.4 622 M (5:) s
+52.2 622 M
+(==10514== ) s
+32.4 610 M (6:) s
+52.2 610 M
+(Sieve of Eratosthenes.) s
+32.4 598 M (7:) s
+52.2 598 M
+(To Kóskinon 'Eratosthénous.) s
+32.4 586 M (8:) s
+52.2 586 M
+(   .   .   2   3   .   5   .   7   .   .   .  11   .  13   .   .) s
+32.4 574 M (9:) s
+52.2 574 M
+(   .  17   .  19   .   .   .  23   .   .   .   .   .  29   .  31) s
+25.8 562 M (10:) s
+52.2 562 M
+(   .   .   .   .   .  37   .   .   .  41   .  43   .   .   .  47) s
+25.8 550 M (11:) s
+52.2 550 M
+(   .   .   .   .   .  53   .   .   .   .   .  59   .  61   .   .) s
+25.8 538 M (12:) s
+52.2 538 M
+(   .   .   .  67   .   .   .  71   .  73   .   .   .   .   .  79) s
+25.8 526 M (13:) s
+52.2 526 M
+(   .   .   .  83   .   .   .   .   .  89   .   .   .   .   .   .) s
+25.8 514 M (14:) s
+52.2 514 M
+(   .  97   .   .   . 101   . 103   .   .   . 107   . 109   .   .) s
+25.8 502 M (15:) s
+52.2 502 M
+(   . 113   .   .   .   .   .   .   .   .   .   .   .   .   . 127) s
+25.8 490 M (16:) s
+52.2 490 M
+(   .   .   . 131   .   .   .   .   . 137   . 139   .   .   .   .) s
+25.8 478 M (17:) s
+52.2 478 M
+(   .   .   .   .   . 149   . 151   .   .   .   .   . 157   .   .) s
+25.8 466 M (18:) s
+52.2 466 M
+(   .   .   . 163   .   .   . 167   .   .   .   .   . 173   .   .) s
+25.8 454 M (19:) s
+52.2 454 M
+(   .   .   . 179   . 181   .   .   .   .   .   .   .   .   . 191) s
+25.8 442 M (20:) s
+52.2 442 M
+(   . 193   .   .   . 197   . 199   .   .   .   .   .   .   .   .) s
+25.8 430 M (21:) s
+52.2 430 M
+(   .   .   . 211   .   .   .   .   .   .   .   .   .   .   . 223) s
+25.8 418 M (22:) s
+52.2 418 M
+(   .   .   . 227   . 229   .   .   . 233   .   .   .   .   . 239) s
+25.8 406 M (23:) s
+52.2 406 M
+(   . 241   .   .   .   .   .   .   .   .   . 251   .   .   .   .) s
+25.8 394 M (24:) s
+52.2 394 M
+(   . 257   .   .   .   .   . 263   .   .   .   .   . 269   . 271) s
+25.8 382 M (25:) s
+52.2 382 M
+(   .   .   .   .   . 277   .   .   . 281   . 283   .   .   .   .) s
+25.8 370 M (26:) s
+52.2 370 M
+(   .   .   .   .   . 293   .   .   .   .   .   .   .   .   .   .) s
+25.8 358 M (27:) s
+52.2 358 M
+(   .   .   . 307   .   .   . 311   . 313   .   .   . 317   .   .) s
+25.8 346 M (28:) s
+52.2 346 M
+(   .   .   .   .   .   .   .   .   .   .   . 331   .   .   .   .) s
+25.8 334 M (29:) s
+52.2 334 M
+(   . 337   .   .   .   .   .   .   .   .   . 347   . 349   .   .) s
+25.8 322 M (30:) s
+52.2 322 M
+(   . 353   .   .   .   .   . 359   .   .   .   .   .   .   . 367) s
+25.8 310 M (31:) s
+52.2 310 M
+(   .   .   .   .   . 373   .   .   .   .   . 379   .   .   . 383) s
+25.8 298 M (32:) s
+52.2 298 M
+(   .   .   .   .   . 389   .   .   .   .   .   .   . 397   .   .) s
+25.8 286 M (33:) s
+52.2 286 M
+(   . 401   .   .   .   .   .   .   . 409   .   .   .   .   .   .) s
+25.8 274 M (34:) s
+52.2 274 M
+(   .   .   . 419   . 421   .   .   .   .   .   .   .   .   . 431) s
+25.8 262 M (35:) s
+52.2 262 M
+(   . 433   .   .   .   .   . 439   .   .   . 443   .   .   .   .) s
+25.8 250 M (36:) s
+52.2 250 M
+(   . 449   .   .   .   .   .   .   . 457   .   .   . 461   . 463) s
+25.8 238 M (37:) s
+52.2 238 M
+(   .   .   . 467   .   .   .   .   .   .   .   .   .   .   . 479) s
+25.8 226 M (38:) s
+52.2 226 M
+(   .   .   .   .   .   .   . 487   .   .   . 491   .   .   .   .) s
+25.8 214 M (39:) s
+52.2 214 M
+(   .   .   . 499   .   .   . 503   .   .   .   .   . 509   .   .) s
+25.8 202 M (40:) s
+52.2 202 M
+(Sieve size: 512.  Primes found: 97.) s
+25.8 190 M (41:) s
+52.2 190 M
+(==10514== ) s
+25.8 178 M (42:) s
+52.2 178 M
+(==10514== HEAP SUMMARY:) s
+25.8 166 M (43:) s
+52.2 166 M
+(==10514==     in use at exit: 0 bytes in 0 blocks) s
+25.8 154 M (44:) s
+52.2 154 M
+(==10514==   total heap usage: 1 allocs, 1 frees, 512 bytes allocated) s
+25.8 142 M (45:) s
+52.2 142 M
+(==10514== ) s
+25.8 130 M (46:) s
+52.2 130 M
+(==10514== All heap blocks were freed -- no leaks are possible) s
+25.8 118 M (47:) s
+52.2 118 M
+(==10514== ) s
+25.8 106 M (48:) s
+52.2 106 M
+(==10514== For counts of detected and suppressed errors, rerun with: -v) s
+25.8 94 M (49:) s
+52.2 94 M
+(==10514== ERROR SUMMARY: 0 errors from 0 contexts \(suppressed: 6 from 6\)) s
+25.8 82 M (50:) s
+52.2 82 M
+(pstatus: 0x0000 EXIT STATUS = 0) s
+_R
+S
+%%Page: (1) 15
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testint.cpp) def
+/fdir () def
+/ftail (testint.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (13:07:45) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: testint.cpp,v 1.11 2014-07-09 13:00:06-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <iostream>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <sstream>) s
+32.4 646 M (5:) s
+52.2 646 M
+(#include <string>) s
+32.4 634 M (6:) s
+32.4 622 M (7:) s
+52.2 622 M
+(using namespace std;) s
+32.4 610 M (8:) s
+32.4 598 M (9:) s
+52.2 598 M
+(#include "xvector.h") s
+25.8 586 M (10:) s
+25.8 574 M (11:) s
+52.2 574 M
+(void printvec \(const string& label, const xvector<int>& vec\) {) s
+25.8 562 M (12:) s
+52.2 562 M
+(   cout << label << ":";) s
+25.8 550 M (13:) s
+52.2 550 M
+(   for \(size_t i {0}; i < vec.size\(\); ++i\) {) s
+25.8 538 M (14:) s
+52.2 538 M
+(      cout << " [" << i << "]" << vec[i];) s
+25.8 526 M (15:) s
+52.2 526 M
+(   }) s
+25.8 514 M (16:) s
+52.2 514 M
+(   cout << endl;) s
+25.8 502 M (17:) s
+52.2 502 M
+(}) s
+25.8 490 M (18:) s
+25.8 478 M (19:) s
+52.2 478 M
+(int main\(\) {) s
+25.8 466 M (20:) s
+52.2 466 M
+(   xvector<int> aa {10, 20, 30, 40, 50, 60, 70, 80, 90};) s
+25.8 454 M (21:) s
+52.2 454 M
+(   xvector<int> va;) s
+25.8 442 M (22:) s
+52.2 442 M
+(   cout << "sizeof aa = " << sizeof aa << endl;) s
+25.8 430 M (23:) s
+52.2 430 M
+(   cout << "sizeof va = " << sizeof va << endl;) s
+25.8 418 M (24:) s
+25.8 406 M (25:) s
+52.2 406 M
+(   printvec \("loop1\(aa\)", aa\);) s
+25.8 394 M (26:) s
+52.2 394 M
+(   for \(auto& i: aa\) va.push_back \(i\);) s
+25.8 382 M (27:) s
+25.8 370 M (28:) s
+52.2 370 M
+(   for \(auto i = va.cbegin\(\); i != va.cend\(\); ++i\) {) s
+25.8 358 M (29:) s
+52.2 358 M
+(      cout << "loop2: " << &*i << "->" << *i << endl;) s
+25.8 346 M (30:) s
+52.2 346 M
+(   }) s
+25.8 334 M (31:) s
+25.8 322 M (32:) s
+52.2 322 M
+(   printvec \("loop3\(va\)", va\);) s
+25.8 310 M (33:) s
+25.8 298 M (34:) s
+52.2 298 M
+(   xvector<int> vb \(va\);) s
+25.8 286 M (35:) s
+52.2 286 M
+(   xvector<int>::iterator j {vb.begin\(\)};) s
+25.8 274 M (36:) s
+52.2 274 M
+(   xvector<int>::const_iterator cj {j};) s
+25.8 262 M (37:) s
+25.8 250 M (38:) s
+52.2 250 M
+(   ++cj;) s
+25.8 238 M (39:) s
+52.2 238 M
+(   cout << &*cj << ": " << *j << " " << *cj << endl;) s
+25.8 226 M (40:) s
+25.8 214 M (41:) s
+52.2 214 M
+(   //xvector<int>::iterator k = cj;) s
+25.8 202 M (42:) s
+52.2 202 M
+(   //error: conversion from 'xvector_iterator<const int>') s
+25.8 190 M (43:) s
+52.2 190 M
+(   //to non-scalar type 'xvector_iterator<int>' requested) s
+25.8 178 M (44:) s
+25.8 166 M (45:) s
+52.2 166 M
+(   xvector<int> bb {10, 20, 30, 45};) s
+25.8 154 M (46:) s
+52.2 154 M
+(   printvec \("compare\(aa\)", aa\);) s
+25.8 142 M (47:) s
+52.2 142 M
+(   printvec \("compare\(bb\)", bb\);) s
+25.8 130 M (48:) s
+52.2 130 M
+(   cout << "aa < bb = " << boolalpha << \(aa < bb\) << endl;) s
+25.8 118 M (49:) s
+25.8 106 M (50:) s
+52.2 106 M
+(   return 0;) s
+25.8 94 M (51:) s
+52.2 94 M
+(}) s
+25.8 82 M (52:) s
+_R
+S
+%%Page: (1) 16
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testint.out) def
+/fdir () def
+/ftail (testint.out) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (15:08:51) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(==10517== Memcheck, a memory error detector) s
+32.4 682 M (2:) s
+52.2 682 M
+(==10517== Copyright \(C\) 2002-2013, and GNU GPL'd, by Julian Seward et al) s
+5 670 M
+(.) s
+32.4 658 M (3:) s
+52.2 658 M
+(==10517== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright i) s
+5 646 M
+(nfo) s
+32.4 634 M (4:) s
+52.2 634 M
+(==10517== Command: testint) s
+32.4 622 M (5:) s
+52.2 622 M
+(==10517== ) s
+32.4 610 M (6:) s
+52.2 610 M
+(sizeof aa = 32) s
+32.4 598 M (7:) s
+52.2 598 M
+(sizeof va = 32) s
+32.4 586 M (8:) s
+52.2 586 M
+(loop1\(aa\): [0]10 [1]20 [2]30 [3]40 [4]50 [5]60 [6]70 [7]80 [8]90) s
+32.4 574 M (9:) s
+52.2 574 M
+(loop2: 0x4c2e1d0->10) s
+25.8 562 M (10:) s
+52.2 562 M
+(loop2: 0x4c2e1d4->20) s
+25.8 550 M (11:) s
+52.2 550 M
+(loop2: 0x4c2e1d8->30) s
+25.8 538 M (12:) s
+52.2 538 M
+(loop2: 0x4c2e1dc->40) s
+25.8 526 M (13:) s
+52.2 526 M
+(loop2: 0x4c2e1e0->50) s
+25.8 514 M (14:) s
+52.2 514 M
+(loop2: 0x4c2e1e4->60) s
+25.8 502 M (15:) s
+52.2 502 M
+(loop2: 0x4c2e1e8->70) s
+25.8 490 M (16:) s
+52.2 490 M
+(loop2: 0x4c2e1ec->80) s
+25.8 478 M (17:) s
+52.2 478 M
+(loop2: 0x4c2e1f0->90) s
+25.8 466 M (18:) s
+52.2 466 M
+(loop3\(va\): [0]10 [1]20 [2]30 [3]40 [4]50 [5]60 [6]70 [7]80 [8]90) s
+25.8 454 M (19:) s
+52.2 454 M
+(0x4c2e2c4: 10 20) s
+25.8 442 M (20:) s
+52.2 442 M
+(compare\(aa\): [0]10 [1]20 [2]30 [3]40 [4]50 [5]60 [6]70 [7]80 [8]90) s
+25.8 430 M (21:) s
+52.2 430 M
+(compare\(bb\): [0]10 [1]20 [2]30 [3]45) s
+25.8 418 M (22:) s
+52.2 418 M
+(aa < bb = true) s
+25.8 406 M (23:) s
+52.2 406 M
+(==10517== ) s
+25.8 394 M (24:) s
+52.2 394 M
+(==10517== HEAP SUMMARY:) s
+25.8 382 M (25:) s
+52.2 382 M
+(==10517==     in use at exit: 0 bytes in 0 blocks) s
+25.8 370 M (26:) s
+52.2 370 M
+(==10517==   total heap usage: 10 allocs, 10 frees, 368 bytes allocated) s
+25.8 358 M (27:) s
+52.2 358 M
+(==10517== ) s
+25.8 346 M (28:) s
+52.2 346 M
+(==10517== All heap blocks were freed -- no leaks are possible) s
+25.8 334 M (29:) s
+52.2 334 M
+(==10517== ) s
+25.8 322 M (30:) s
+52.2 322 M
+(==10517== For counts of detected and suppressed errors, rerun with: -v) s
+25.8 310 M (31:) s
+52.2 310 M
+(==10517== ERROR SUMMARY: 0 errors from 0 contexts \(suppressed: 6 from 6\)) s
+25.8 298 M (32:) s
+52.2 298 M
+(pstatus: 0x0000 EXIT STATUS = 0) s
+_R
+S
+%%Page: (1) 17
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testpointer.cpp) def
+/fdir () def
+/ftail (testpointer.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (13:07:45) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: testpointer.cpp,v 1.3 2015-02-03 13:06:33-08 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <iomanip>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <iostream>) s
+32.4 646 M (5:) s
+32.4 634 M (6:) s
+52.2 634 M
+(using namespace std;) s
+32.4 622 M (7:) s
+32.4 610 M (8:) s
+52.2 610 M
+(#include "xvector.h") s
+32.4 598 M (9:) s
+25.8 586 M (10:) s
+52.2 586 M
+(struct node {) s
+25.8 574 M (11:) s
+52.2 574 M
+(   int a;) s
+25.8 562 M (12:) s
+52.2 562 M
+(   int b;) s
+25.8 550 M (13:) s
+52.2 550 M
+(   node \(int ai = 0, int bi = 0\): a\(ai\), b\(bi\) {}) s
+25.8 538 M (14:) s
+52.2 538 M
+(};) s
+25.8 526 M (15:) s
+25.8 514 M (16:) s
+52.2 514 M
+(int main\(\) {) s
+25.8 502 M (17:) s
+52.2 502 M
+(   xvector<int*> vecpi;) s
+25.8 490 M (18:) s
+52.2 490 M
+(   for \(int i = 0; i < 10; ++i\) vecpi.push_back \(new int \(i\)\);) s
+25.8 478 M (19:) s
+52.2 478 M
+(   for \(auto it = vecpi.begin\(\); it != vecpi.end\(\); ++it\) **it *= **it;) s
+25.8 466 M (20:) s
+52.2 466 M
+(   cout << "vecpi:";) s
+25.8 454 M (21:) s
+52.2 454 M
+(   for \(auto it = vecpi.begin\(\); it != vecpi.end\(\); ++it\)) s
+25.8 442 M (22:) s
+52.2 442 M
+(        cout << " " << **it;) s
+25.8 430 M (23:) s
+52.2 430 M
+(   cout << endl;) s
+25.8 418 M (24:) s
+52.2 418 M
+(   while \(not vecpi.empty\(\)\) {) s
+25.8 406 M (25:) s
+52.2 406 M
+(      int *ip = vecpi.back\(\);) s
+25.8 394 M (26:) s
+52.2 394 M
+(      vecpi.pop_back\(\);) s
+25.8 382 M (27:) s
+52.2 382 M
+(      delete ip;) s
+25.8 370 M (28:) s
+52.2 370 M
+(   }) s
+25.8 358 M (29:) s
+25.8 346 M (30:) s
+52.2 346 M
+(   xvector<node> vecn;) s
+25.8 334 M (31:) s
+52.2 334 M
+(   for \(int i = 0; i < 10; ++i\) vecn.push_back \(node \(i, i * i\)\);) s
+25.8 322 M (32:) s
+52.2 322 M
+(   cout << "vecn:";) s
+25.8 310 M (33:) s
+52.2 310 M
+(   for \(auto i = vecn.cbegin\(\); i != vecn.cend\(\); ++i\) {) s
+25.8 298 M (34:) s
+52.2 298 M
+(      cout << " \(" << \(*i\).a << "," << i->b << "\)";) s
+25.8 286 M (35:) s
+52.2 286 M
+(   }) s
+25.8 274 M (36:) s
+52.2 274 M
+(   cout << endl;) s
+25.8 262 M (37:) s
+25.8 250 M (38:) s
+52.2 250 M
+(   xvector<node*> vecpn;) s
+25.8 238 M (39:) s
+52.2 238 M
+(   for \(int i = 0; i < 10; ++i\) vecpn.push_back \(new node \(i, i * i\)\);) s
+25.8 226 M (40:) s
+52.2 226 M
+(   for \(auto i = vecpn.cbegin\(\); i != vecpn.cend\(\); ++i\) {) s
+25.8 214 M (41:) s
+52.2 214 M
+(      cout << "vecpn: " << *i << "->\(" << \(**i\).a << "," << \(*i\)->b) s
+25.8 202 M (42:) s
+52.2 202 M
+(           << "\)" << endl;) s
+25.8 190 M (43:) s
+52.2 190 M
+(   }) s
+25.8 178 M (44:) s
+52.2 178 M
+(   while \(not vecpn.empty\(\)\) {) s
+25.8 166 M (45:) s
+52.2 166 M
+(      delete vecpn.back\(\);) s
+25.8 154 M (46:) s
+52.2 154 M
+(      vecpn.pop_back\(\);) s
+25.8 142 M (47:) s
+52.2 142 M
+(   }) s
+25.8 130 M (48:) s
+25.8 118 M (49:) s
+52.2 118 M
+(   return 0;) s
+25.8 106 M (50:) s
+52.2 106 M
+(}) s
+_R
+S
+%%Page: (1) 18
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testpointer.out) def
+/fdir () def
+/ftail (testpointer.out) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (15:08:51) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(==10521== Memcheck, a memory error detector) s
+32.4 682 M (2:) s
+52.2 682 M
+(==10521== Copyright \(C\) 2002-2013, and GNU GPL'd, by Julian Seward et al) s
+5 670 M
+(.) s
+32.4 658 M (3:) s
+52.2 658 M
+(==10521== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright i) s
+5 646 M
+(nfo) s
+32.4 634 M (4:) s
+52.2 634 M
+(==10521== Command: testpointer) s
+32.4 622 M (5:) s
+52.2 622 M
+(==10521== ) s
+32.4 610 M (6:) s
+52.2 610 M
+(vecpi: 0 1 4 9 16 25 36 49 64 81) s
+32.4 598 M (7:) s
+52.2 598 M
+(vecn: \(0,0\) \(1,1\) \(2,4\) \(3,9\) \(4,16\) \(5,25\) \(6,36\) \(7,49\) \(8,64\) \(9,81\)) s
+32.4 586 M (8:) s
+52.2 586 M
+(vecpn: 0x4c2e6a0->\(0,0\)) s
+32.4 574 M (9:) s
+52.2 574 M
+(vecpn: 0x4c2e750->\(1,1\)) s
+25.8 562 M (10:) s
+52.2 562 M
+(vecpn: 0x4c2e7a0->\(2,4\)) s
+25.8 550 M (11:) s
+52.2 550 M
+(vecpn: 0x4c2e7f0->\(3,9\)) s
+25.8 538 M (12:) s
+52.2 538 M
+(vecpn: 0x4c2e840->\(4,16\)) s
+25.8 526 M (13:) s
+52.2 526 M
+(vecpn: 0x4c2e910->\(5,25\)) s
+25.8 514 M (14:) s
+52.2 514 M
+(vecpn: 0x4c2e960->\(6,36\)) s
+25.8 502 M (15:) s
+52.2 502 M
+(vecpn: 0x4c2e9b0->\(7,49\)) s
+25.8 490 M (16:) s
+52.2 490 M
+(vecpn: 0x4c2ea00->\(8,64\)) s
+25.8 478 M (17:) s
+52.2 478 M
+(vecpn: 0x4c2eb10->\(9,81\)) s
+25.8 466 M (18:) s
+52.2 466 M
+(==10521== ) s
+25.8 454 M (19:) s
+52.2 454 M
+(==10521== HEAP SUMMARY:) s
+25.8 442 M (20:) s
+52.2 442 M
+(==10521==     in use at exit: 0 bytes in 0 blocks) s
+25.8 430 M (21:) s
+52.2 430 M
+(==10521==   total heap usage: 29 allocs, 29 frees, 792 bytes allocated) s
+25.8 418 M (22:) s
+52.2 418 M
+(==10521== ) s
+25.8 406 M (23:) s
+52.2 406 M
+(==10521== All heap blocks were freed -- no leaks are possible) s
+25.8 394 M (24:) s
+52.2 394 M
+(==10521== ) s
+25.8 382 M (25:) s
+52.2 382 M
+(==10521== For counts of detected and suppressed errors, rerun with: -v) s
+25.8 370 M (26:) s
+52.2 370 M
+(==10521== ERROR SUMMARY: 0 errors from 0 contexts \(suppressed: 6 from 6\)) s
+25.8 358 M (27:) s
+52.2 358 M
+(pstatus: 0x0000 EXIT STATUS = 0) s
+_R
+S
+%%Page: (1) 19
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testsort.cpp) def
+/fdir () def
+/ftail (testsort.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (13:31:43) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: testsort.cpp,v 1.1 2013-08-16 14:57:39-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <algorithm>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <iomanip>) s
+32.4 646 M (5:) s
+52.2 646 M
+(#include <iostream>) s
+32.4 634 M (6:) s
+52.2 634 M
+(#include <string>) s
+32.4 622 M (7:) s
+32.4 610 M (8:) s
+52.2 610 M
+(using namespace std;) s
+32.4 598 M (9:) s
+25.8 586 M (10:) s
+52.2 586 M
+(#include "xvector.h") s
+25.8 574 M (11:) s
+25.8 562 M (12:) s
+52.2 562 M
+(xvector<string> vecvalues \(\) {) s
+25.8 550 M (13:) s
+52.2 550 M
+(   static const xvector<string> values {) s
+25.8 538 M (14:) s
+52.2 538 M
+(      "Hello", "World",) s
+25.8 526 M (15:) s
+52.2 526 M
+(      "foo", "bar", "baz", "qux",) s
+25.8 514 M (16:) s
+52.2 514 M
+(      "3.14159265358979",) s
+25.8 502 M (17:) s
+52.2 502 M
+(      "1.61803398874989",) s
+25.8 490 M (18:) s
+52.2 490 M
+(      "2.71828182845905",) s
+25.8 478 M (19:) s
+52.2 478 M
+(      "!@#$%^&*\(\)_+|",) s
+25.8 466 M (20:) s
+52.2 466 M
+(   };) s
+25.8 454 M (21:) s
+52.2 454 M
+(   return values;) s
+25.8 442 M (22:) s
+52.2 442 M
+(}) s
+25.8 430 M (23:) s
+25.8 418 M (24:) s
+52.2 418 M
+(template <typename Iterator>) s
+25.8 406 M (25:) s
+52.2 406 M
+(void print \(const string& label, Iterator itor, const Iterator &end\) {) s
+25.8 394 M (26:) s
+52.2 394 M
+(   cout << label << ":" << endl;) s
+25.8 382 M (27:) s
+52.2 382 M
+(   for \(; itor != end; ++itor\) {) s
+25.8 370 M (28:) s
+52.2 370 M
+(      cout << "   " << *itor << endl;) s
+25.8 358 M (29:) s
+52.2 358 M
+(   }) s
+25.8 346 M (30:) s
+52.2 346 M
+(}) s
+25.8 334 M (31:) s
+25.8 322 M (32:) s
+52.2 322 M
+(int main \(\) {) s
+25.8 310 M (33:) s
+52.2 310 M
+(   xvector<string> v1 \(vecvalues\(\)\);) s
+25.8 298 M (34:) s
+52.2 298 M
+(   sort \(v1.begin\(\), v1.end\(\)\);) s
+25.8 286 M (35:) s
+52.2 286 M
+(   print \("Default sort", v1.cbegin\(\), v1.cend\(\)\);) s
+25.8 274 M (36:) s
+25.8 262 M (37:) s
+52.2 262 M
+(   xvector<string> v2 \(vecvalues\(\)\);) s
+25.8 250 M (38:) s
+52.2 250 M
+(   sort \(v2.begin\(\), v2.end\(\), greater<string>\(\)\);) s
+25.8 238 M (39:) s
+52.2 238 M
+(   print \("Greater sort", v2.cbegin\(\), v2.cend\(\)\);) s
+25.8 226 M (40:) s
+25.8 214 M (41:) s
+52.2 214 M
+(   return 0;) s
+25.8 202 M (42:) s
+52.2 202 M
+(}) s
+25.8 190 M (43:) s
+_R
+S
+%%Page: (1) 20
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testsort.out) def
+/fdir () def
+/ftail (testsort.out) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (15:08:52) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(==10535== Memcheck, a memory error detector) s
+32.4 682 M (2:) s
+52.2 682 M
+(==10535== Copyright \(C\) 2002-2013, and GNU GPL'd, by Julian Seward et al) s
+5 670 M
+(.) s
+32.4 658 M (3:) s
+52.2 658 M
+(==10535== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright i) s
+5 646 M
+(nfo) s
+32.4 634 M (4:) s
+52.2 634 M
+(==10535== Command: testsort) s
+32.4 622 M (5:) s
+52.2 622 M
+(==10535== ) s
+32.4 610 M (6:) s
+52.2 610 M
+(Default sort:) s
+32.4 598 M (7:) s
+52.2 598 M
+(   !@#$%^&*\(\)_+|) s
+32.4 586 M (8:) s
+52.2 586 M
+(   1.61803398874989) s
+32.4 574 M (9:) s
+52.2 574 M
+(   2.71828182845905) s
+25.8 562 M (10:) s
+52.2 562 M
+(   3.14159265358979) s
+25.8 550 M (11:) s
+52.2 550 M
+(   Hello) s
+25.8 538 M (12:) s
+52.2 538 M
+(   World) s
+25.8 526 M (13:) s
+52.2 526 M
+(   bar) s
+25.8 514 M (14:) s
+52.2 514 M
+(   baz) s
+25.8 502 M (15:) s
+52.2 502 M
+(   foo) s
+25.8 490 M (16:) s
+52.2 490 M
+(   qux) s
+25.8 478 M (17:) s
+52.2 478 M
+(Greater sort:) s
+25.8 466 M (18:) s
+52.2 466 M
+(   qux) s
+25.8 454 M (19:) s
+52.2 454 M
+(   foo) s
+25.8 442 M (20:) s
+52.2 442 M
+(   baz) s
+25.8 430 M (21:) s
+52.2 430 M
+(   bar) s
+25.8 418 M (22:) s
+52.2 418 M
+(   World) s
+25.8 406 M (23:) s
+52.2 406 M
+(   Hello) s
+25.8 394 M (24:) s
+52.2 394 M
+(   3.14159265358979) s
+25.8 382 M (25:) s
+52.2 382 M
+(   2.71828182845905) s
+25.8 370 M (26:) s
+52.2 370 M
+(   1.61803398874989) s
+25.8 358 M (27:) s
+52.2 358 M
+(   !@#$%^&*\(\)_+|) s
+25.8 346 M (28:) s
+52.2 346 M
+(==10535== ) s
+25.8 334 M (29:) s
+52.2 334 M
+(==10535== HEAP SUMMARY:) s
+25.8 322 M (30:) s
+52.2 322 M
+(==10535==     in use at exit: 0 bytes in 0 blocks) s
+25.8 310 M (31:) s
+52.2 310 M
+(==10535==   total heap usage: 15 allocs, 15 frees, 647 bytes allocated) s
+25.8 298 M (32:) s
+52.2 298 M
+(==10535== ) s
+25.8 286 M (33:) s
+52.2 286 M
+(==10535== All heap blocks were freed -- no leaks are possible) s
+25.8 274 M (34:) s
+52.2 274 M
+(==10535== ) s
+25.8 262 M (35:) s
+52.2 262 M
+(==10535== For counts of detected and suppressed errors, rerun with: -v) s
+25.8 250 M (36:) s
+52.2 250 M
+(==10535== ERROR SUMMARY: 0 errors from 0 contexts \(suppressed: 6 from 6\)) s
+25.8 238 M (37:) s
+52.2 238 M
+(pstatus: 0x0000 EXIT STATUS = 0) s
+_R
+S
+%%Page: (1) 21
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (teststring.cpp) def
+/fdir () def
+/ftail (teststring.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (13:07:45) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: teststring.cpp,v 1.7 2013-08-13 14:53:57-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <iostream>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <sstream>) s
+32.4 646 M (5:) s
+52.2 646 M
+(#include <string>) s
+32.4 634 M (6:) s
+32.4 622 M (7:) s
+52.2 622 M
+(using namespace std;) s
+32.4 610 M (8:) s
+32.4 598 M (9:) s
+52.2 598 M
+(#include "xvector.h") s
+25.8 586 M (10:) s
+25.8 574 M (11:) s
+52.2 574 M
+(template <typename Iter>) s
+25.8 562 M (12:) s
+52.2 562 M
+(void print \(Iter itor, Iter end\) {) s
+25.8 550 M (13:) s
+52.2 550 M
+(   for \(; itor != end; ++itor\) cout << " " << *itor;) s
+25.8 538 M (14:) s
+52.2 538 M
+(}) s
+25.8 526 M (15:) s
+25.8 514 M (16:) s
+52.2 514 M
+(int main\(\) {) s
+25.8 502 M (17:) s
+52.2 502 M
+(   xvector<string> vs {"hello", "world", "foo", "bar", "baz"};) s
+25.8 490 M (18:) s
+52.2 490 M
+(   xvector<string> vt = vs;) s
+25.8 478 M (19:) s
+52.2 478 M
+(   vs.resize \(9, "six"\);) s
+25.8 466 M (20:) s
+25.8 454 M (21:) s
+52.2 454 M
+(   while \(not vs.empty\(\)\) {) s
+25.8 442 M (22:) s
+52.2 442 M
+(      cout << "vs.size = " << vs.size\(\) << ", vs.back\(\) = \\"") s
+25.8 430 M (23:) s
+52.2 430 M
+(           << vs.back\(\) << "\\"" << endl; ) s
+25.8 418 M (24:) s
+52.2 418 M
+(      vs.pop_back\(\);) s
+25.8 406 M (25:) s
+52.2 406 M
+(   }) s
+25.8 394 M (26:) s
+25.8 382 M (27:) s
+52.2 382 M
+(   cout << "second string vt:";) s
+25.8 370 M (28:) s
+52.2 370 M
+(   for \(auto i = vt.cbegin\(\); i != vt.cend\(\); ++i\) {) s
+25.8 358 M (29:) s
+52.2 358 M
+(      cout << " " << *i;) s
+25.8 346 M (30:) s
+52.2 346 M
+(   }) s
+25.8 334 M (31:) s
+52.2 334 M
+(   cout << endl;) s
+25.8 322 M (32:) s
+25.8 310 M (33:) s
+52.2 310 M
+(   cout << "template print:";) s
+25.8 298 M (34:) s
+52.2 298 M
+(   print \(vt.begin\(\), vt.end\(\)\);) s
+25.8 286 M (35:) s
+52.2 286 M
+(   xvector<string>::iterator j {vt.begin\(\)};) s
+25.8 274 M (36:) s
+52.2 274 M
+(   xvector<string>::const_iterator cj {j};) s
+25.8 262 M (37:) s
+52.2 262 M
+(   ++cj;) s
+25.8 250 M (38:) s
+52.2 250 M
+(   cout << " " << *cj << endl;) s
+25.8 238 M (39:) s
+52.2 238 M
+(   cout << "END" << endl;) s
+25.8 226 M (40:) s
+25.8 214 M (41:) s
+52.2 214 M
+(   return 0;) s
+25.8 202 M (42:) s
+52.2 202 M
+(}) s
+25.8 190 M (43:) s
+_R
+S
+%%Page: (1) 22
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (teststring.out) def
+/fdir () def
+/ftail (teststring.out) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (15:08:52) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(==10540== Memcheck, a memory error detector) s
+32.4 682 M (2:) s
+52.2 682 M
+(==10540== Copyright \(C\) 2002-2013, and GNU GPL'd, by Julian Seward et al) s
+5 670 M
+(.) s
+32.4 658 M (3:) s
+52.2 658 M
+(==10540== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright i) s
+5 646 M
+(nfo) s
+32.4 634 M (4:) s
+52.2 634 M
+(==10540== Command: teststring) s
+32.4 622 M (5:) s
+52.2 622 M
+(==10540== ) s
+32.4 610 M (6:) s
+52.2 610 M
+(vs.size = 9, vs.back\(\) = "six") s
+32.4 598 M (7:) s
+52.2 598 M
+(vs.size = 8, vs.back\(\) = "six") s
+32.4 586 M (8:) s
+52.2 586 M
+(vs.size = 7, vs.back\(\) = "six") s
+32.4 574 M (9:) s
+52.2 574 M
+(vs.size = 6, vs.back\(\) = "six") s
+25.8 562 M (10:) s
+52.2 562 M
+(vs.size = 5, vs.back\(\) = "baz") s
+25.8 550 M (11:) s
+52.2 550 M
+(vs.size = 4, vs.back\(\) = "bar") s
+25.8 538 M (12:) s
+52.2 538 M
+(vs.size = 3, vs.back\(\) = "foo") s
+25.8 526 M (13:) s
+52.2 526 M
+(vs.size = 2, vs.back\(\) = "world") s
+25.8 514 M (14:) s
+52.2 514 M
+(vs.size = 1, vs.back\(\) = "hello") s
+25.8 502 M (15:) s
+52.2 502 M
+(second string vt: hello world foo bar baz) s
+25.8 490 M (16:) s
+52.2 490 M
+(template print: hello world foo bar baz world) s
+25.8 478 M (17:) s
+52.2 478 M
+(END) s
+25.8 466 M (18:) s
+52.2 466 M
+(==10540== ) s
+25.8 454 M (19:) s
+52.2 454 M
+(==10540== HEAP SUMMARY:) s
+25.8 442 M (20:) s
+52.2 442 M
+(==10540==     in use at exit: 0 bytes in 0 blocks) s
+25.8 430 M (21:) s
+52.2 430 M
+(==10540==   total heap usage: 9 allocs, 9 frees, 332 bytes allocated) s
+25.8 418 M (22:) s
+52.2 418 M
+(==10540== ) s
+25.8 406 M (23:) s
+52.2 406 M
+(==10540== All heap blocks were freed -- no leaks are possible) s
+25.8 394 M (24:) s
+52.2 394 M
+(==10540== ) s
+25.8 382 M (25:) s
+52.2 382 M
+(==10540== For counts of detected and suppressed errors, rerun with: -v) s
+25.8 370 M (26:) s
+52.2 370 M
+(==10540== ERROR SUMMARY: 0 errors from 0 contexts \(suppressed: 6 from 6\)) s
+25.8 358 M (27:) s
+52.2 358 M
+(pstatus: 0x0000 EXIT STATUS = 0) s
+_R
+S
+%%Page: (1) 23
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testvector.cpp) def
+/fdir () def
+/ftail (testvector.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (13:07:45) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: testvector.cpp,v 1.7 2014-05-29 19:02:56-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <iomanip>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <iostream>) s
+32.4 646 M (5:) s
+32.4 634 M (6:) s
+52.2 634 M
+(using namespace std;) s
+32.4 622 M (7:) s
+32.4 610 M (8:) s
+52.2 610 M
+(#include "xvector.h") s
+32.4 598 M (9:) s
+25.8 586 M (10:) s
+52.2 586 M
+(using dvector = xvector<double>;) s
+25.8 574 M (11:) s
+52.2 574 M
+(using matrix = xvector<dvector>;) s
+25.8 562 M (12:) s
+25.8 550 M (13:) s
+52.2 550 M
+(matrix outer_product \(const dvector &v1, const dvector &v2\) {) s
+25.8 538 M (14:) s
+52.2 538 M
+(   matrix m \(v1.size\(\), dvector \(v2.size\(\)\)\);) s
+25.8 526 M (15:) s
+52.2 526 M
+(   for \(size_t i {0}; i < v1.size\(\); ++i\) {) s
+25.8 514 M (16:) s
+52.2 514 M
+(      for \(size_t j {0}; j < v2.size\(\); ++j\) {) s
+25.8 502 M (17:) s
+52.2 502 M
+(         m[i][j] = v1[i] * v2[j];) s
+25.8 490 M (18:) s
+52.2 490 M
+(      }) s
+25.8 478 M (19:) s
+52.2 478 M
+(   }) s
+25.8 466 M (20:) s
+52.2 466 M
+(   return m;) s
+25.8 454 M (21:) s
+52.2 454 M
+(}) s
+25.8 442 M (22:) s
+25.8 430 M (23:) s
+52.2 430 M
+(void print \(const matrix &m\) {) s
+25.8 418 M (24:) s
+52.2 418 M
+(   cout << fixed << setprecision\(0\);) s
+25.8 406 M (25:) s
+52.2 406 M
+(   for \(size_t i {0}; i < m.size\(\); ++i\) {) s
+25.8 394 M (26:) s
+52.2 394 M
+(      for \(size_t j {0}; j < m[i].size\(\); ++j\) {) s
+25.8 382 M (27:) s
+52.2 382 M
+(         cout << setw\(4\) << m[i][j];) s
+25.8 370 M (28:) s
+52.2 370 M
+(      }) s
+25.8 358 M (29:) s
+52.2 358 M
+(      cout << endl;) s
+25.8 346 M (30:) s
+52.2 346 M
+(   }) s
+25.8 334 M (31:) s
+52.2 334 M
+(}) s
+25.8 322 M (32:) s
+25.8 310 M (33:) s
+52.2 310 M
+(int main\(\) {) s
+25.8 298 M (34:) s
+52.2 298 M
+(   dvector v1 {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29};) s
+25.8 286 M (35:) s
+52.2 286 M
+(   dvector v2 {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30};) s
+25.8 274 M (36:) s
+52.2 274 M
+(   matrix m = outer_product \(v1, v2\);) s
+25.8 262 M (37:) s
+52.2 262 M
+(   print \(m\);) s
+25.8 250 M (38:) s
+52.2 250 M
+(   cout << "sizeof \(dvector\) = " << sizeof \(dvector\) << endl;) s
+25.8 238 M (39:) s
+52.2 238 M
+(   cout << "sizeof \(matrix\)  = " << sizeof \(matrix\) << endl;) s
+25.8 226 M (40:) s
+52.2 226 M
+(   return 0;) s
+25.8 214 M (41:) s
+52.2 214 M
+(}) s
+25.8 202 M (42:) s
+_R
+S
+%%Page: (1) 24
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (testvector.out) def
+/fdir () def
+/ftail (testvector.out) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/15) def
+/pagecountstr (/1) def
+/modtimestr (15:08:53) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk06a-xvector/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(==10543== Memcheck, a memory error detector) s
+32.4 682 M (2:) s
+52.2 682 M
+(==10543== Copyright \(C\) 2002-2013, and GNU GPL'd, by Julian Seward et al) s
+5 670 M
+(.) s
+32.4 658 M (3:) s
+52.2 658 M
+(==10543== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright i) s
+5 646 M
+(nfo) s
+32.4 634 M (4:) s
+52.2 634 M
+(==10543== Command: testvector) s
+32.4 622 M (5:) s
+52.2 622 M
+(==10543== ) s
+32.4 610 M (6:) s
+52.2 610 M
+(   2   4   6   8  10  12  14  16  18  20  22  24  26  28  30) s
+32.4 598 M (7:) s
+52.2 598 M
+(   6  12  18  24  30  36  42  48  54  60  66  72  78  84  90) s
+32.4 586 M (8:) s
+52.2 586 M
+(  10  20  30  40  50  60  70  80  90 100 110 120 130 140 150) s
+32.4 574 M (9:) s
+52.2 574 M
+(  14  28  42  56  70  84  98 112 126 140 154 168 182 196 210) s
+25.8 562 M (10:) s
+52.2 562 M
+(  18  36  54  72  90 108 126 144 162 180 198 216 234 252 270) s
+25.8 550 M (11:) s
+52.2 550 M
+(  22  44  66  88 110 132 154 176 198 220 242 264 286 308 330) s
+25.8 538 M (12:) s
+52.2 538 M
+(  26  52  78 104 130 156 182 208 234 260 286 312 338 364 390) s
+25.8 526 M (13:) s
+52.2 526 M
+(  30  60  90 120 150 180 210 240 270 300 330 360 390 420 450) s
+25.8 514 M (14:) s
+52.2 514 M
+(  34  68 102 136 170 204 238 272 306 340 374 408 442 476 510) s
+25.8 502 M (15:) s
+52.2 502 M
+(  38  76 114 152 190 228 266 304 342 380 418 456 494 532 570) s
+25.8 490 M (16:) s
+52.2 490 M
+(  42  84 126 168 210 252 294 336 378 420 462 504 546 588 630) s
+25.8 478 M (17:) s
+52.2 478 M
+(  46  92 138 184 230 276 322 368 414 460 506 552 598 644 690) s
+25.8 466 M (18:) s
+52.2 466 M
+(  50 100 150 200 250 300 350 400 450 500 550 600 650 700 750) s
+25.8 454 M (19:) s
+52.2 454 M
+(  54 108 162 216 270 324 378 432 486 540 594 648 702 756 810) s
+25.8 442 M (20:) s
+52.2 442 M
+(  58 116 174 232 290 348 406 464 522 580 638 696 754 812 870) s
+25.8 430 M (21:) s
+52.2 430 M
+(sizeof \(dvector\) = 32) s
+25.8 418 M (22:) s
+52.2 418 M
+(sizeof \(matrix\)  = 32) s
+25.8 406 M (23:) s
+52.2 406 M
+(==10543== ) s
+25.8 394 M (24:) s
+52.2 394 M
+(==10543== HEAP SUMMARY:) s
+25.8 382 M (25:) s
+52.2 382 M
+(==10543==     in use at exit: 0 bytes in 0 blocks) s
+25.8 370 M (26:) s
+52.2 370 M
+(==10543==   total heap usage: 19 allocs, 19 frees, 2,640 bytes allocated) s
+25.8 358 M (27:) s
+52.2 358 M
+(==10543== ) s
+25.8 346 M (28:) s
+52.2 346 M
+(==10543== All heap blocks were freed -- no leaks are possible) s
+25.8 334 M (29:) s
+52.2 334 M
+(==10543== ) s
+25.8 322 M (30:) s
+52.2 322 M
+(==10543== For counts of detected and suppressed errors, rerun with: -v) s
+25.8 310 M (31:) s
+52.2 310 M
+(==10543== ERROR SUMMARY: 0 errors from 0 contexts \(suppressed: 6 from 6\)) s
+25.8 298 M (32:) s
+52.2 298 M
+(pstatus: 0x0000 EXIT STATUS = 0) s
+_R
+S
+%%Trailer
+%%Pages: 24
+%%DocumentNeededResources: font Times-Roman Courier-Bold Times-Bold 
+%%EOF

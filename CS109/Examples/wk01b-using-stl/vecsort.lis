@@ -1,0 +1,40 @@
+Unsorted: {foo, 3}
+Unsorted: {bar, 14}
+Unsorted: {baz, 1}
+Unsorted: {qux, 77}
+Unsorted: {qux, 7}
+Unsorted: {qux, 14}
+Unsorted: {foo, 14}
+Unsorted: {bar, 1}
+Unsorted: {baz, 3}
+
+Default: {bar, 1}
+Default: {bar, 14}
+Default: {baz, 1}
+Default: {baz, 3}
+Default: {foo, 3}
+Default: {foo, 14}
+Default: {qux, 7}
+Default: {qux, 14}
+Default: {qux, 77}
+
+By string: {bar, 1}
+By string: {bar, 14}
+By string: {baz, 1}
+By string: {baz, 3}
+By string: {foo, 3}
+By string: {foo, 14}
+By string: {qux, 7}
+By string: {qux, 14}
+By string: {qux, 77}
+
+By int: {bar, 1}
+By int: {baz, 1}
+By int: {baz, 3}
+By int: {foo, 3}
+By int: {qux, 7}
+By int: {bar, 14}
+By int: {foo, 14}
+By int: {qux, 14}
+By int: {qux, 77}
+

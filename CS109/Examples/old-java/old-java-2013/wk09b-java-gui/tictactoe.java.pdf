@@ -1,0 +1,287 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/31/12)Tj
+-0.659766 -12.8004 Td
+(22:20:30)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 268.873 736.5 Tm
+(tictactoe.java)Tj
+-82.2488 18 Td
+($cmps109-wm/Examples/wk09b-java-gui/)Tj
+/R10 10 Tf
+-118.625 -35.5 Td
+[(1:)-600(// $Id: tictactoe.java,v 1.1 2012-05-31 22:20:30-07 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(import java.awt.*;)]TJ
+T*[(4:)-600(import java.awt.event.*;)]TJ
+T*[(5:)-600(import javax.swing.*;)]TJ
+T*[(6:)-600(import static java.lang.System.*;)]TJ
+(7:)'
+T*[(8:)-600(class tictactoe {)]TJ
+(9:)'
+-6 -11 Td
+[(10:)-600(   static class mouse implements MouseListener {)]TJ
+T*[(11:)-600(      Color defaultForeground = Color.BLACK;)]TJ
+T*[(12:)-600(      Color defaultBackground = Color.WHITE;)]TJ
+(13:)'
+T*[(14:)-600(      public void mouseClicked \(MouseEvent event\) {)]TJ
+T*[(15:)-600(         int which = event.getButton\(\);)]TJ
+T*[(16:)-600(         JButton button = \(JButton\) event.getComponent\(\);)]TJ
+T*[(17:)-600(         switch \(which\) {)]TJ
+T*[(18:)-600(            case MouseEvent.BUTTON1: button.setText \("X"\); break;)]TJ
+T*[(19:)-600(            case MouseEvent.BUTTON2: button.setText \("O"\); break;)]TJ
+T*[(20:)-600(            case MouseEvent.BUTTON3: button.setText \(" "\); break;)]TJ
+T*[(21:)-600(         })]TJ
+T*[(22:)-600(      })]TJ
+(23:)'
+T*[(24:)-600(      public void mouseEntered \(MouseEvent event\) {)]TJ
+T*[(25:)-600(         JButton button = \(JButton\) event.getComponent\(\);)]TJ
+T*[(26:)-600(         defaultForeground = button.getForeground\(\);)]TJ
+T*[(27:)-600(         defaultBackground = button.getBackground\(\);)]TJ
+T*[(28:)-600(         button.setForeground \(Color.BLUE\);)]TJ
+T*[(29:)-600(         button.setBackground \(Color.RED\);)]TJ
+T*[(30:)-600(      })]TJ
+(31:)'
+T*[(32:)-600(      public void mouseExited \(MouseEvent event\) {)]TJ
+T*[(33:)-600(         JButton button = \(JButton\) event.getComponent\(\);)]TJ
+T*[(34:)-600(         button.setForeground \(defaultForeground\);)]TJ
+T*[(35:)-600(         button.setBackground \(defaultBackground\);)]TJ
+T*[(36:)-600(      })]TJ
+(37:)'
+T*[(38:)-600(      public void mousePressed \(MouseEvent event\) {)]TJ
+T*[(39:)-600(         Toolkit.getDefaultToolkit\(\).beep\(\);)]TJ
+T*[(40:)-600(      })]TJ
+(41:)'
+T*[(42:)-600(      public void mouseReleased \(MouseEvent event\) {)]TJ
+T*[(43:)-600(         Toolkit.getDefaultToolkit\(\).beep\(\);)]TJ
+T*[(44:)-600(      })]TJ
+(45:)'
+T*[(46:)-600(   })]TJ
+(47:)'
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+2727
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/31/12)Tj
+-0.659766 -12.8004 Td
+(22:20:30)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 268.873 736.5 Tm
+(tictactoe.java)Tj
+-82.2488 18 Td
+($cmps109-wm/Examples/wk09b-java-gui/)Tj
+/R10 10 Tf
+-124.625 -35.5 Td
+(48:)Tj
+11 TL
+T*[(49:)-600(   public static void main \(String[] args\) {)]TJ
+T*[(50:)-600(      JFrame frame = new JFrame \("Tic Tac Toe"\);)]TJ
+T*[(51:)-600(      Container pane = frame.getContentPane\(\);)]TJ
+T*[(52:)-600(      Font xo_font = new Font \("Monospaced", Font.BOLD, 128\);)]TJ
+T*[(53:)-600(      JPanel buttons = new JPanel\(\);)]TJ
+T*[(54:)-600(      buttons.setLayout \(new GridLayout \(3, 3\)\);)]TJ
+T*[(55:)-600(      for \(int index = 0; index < 3; ++index\) {)]TJ
+T*[(56:)-600(         for \(int jndex = 0; jndex < 3; ++jndex\) {)]TJ
+T*[(57:)-600(            JButton button = new JButton \(""\);)]TJ
+T*[(58:)-600(            button.setFont \(xo_font\);)]TJ
+T*[(59:)-600(            button.setText \(" "\);)]TJ
+T*[(60:)-600(            button.addMouseListener \(new mouse\(\)\);)]TJ
+T*[(61:)-600(            buttons.add \(button\);)]TJ
+T*[(62:)-600(         })]TJ
+T*[(63:)-600(      })]TJ
+T*[(64:)-600(      pane.add \(buttons\);)]TJ
+T*[(65:)-600(      frame.pack\(\);)]TJ
+T*[(66:)-600(      frame.setLocation \(64, 64\);)]TJ
+T*[(67:)-600(      frame.setVisible \(true\);)]TJ
+T*[(68:)-600(   })]TJ
+T*[(69:)-600(})]TJ
+(70:)'
+T*[(71:)-600(// Primary colors:)]TJ
+T*[(72:)-600(//   0   0   0 black)]TJ
+T*[(73:)-600(//   0   0 255 blue)]TJ
+T*[(74:)-600(//   0 255   0 green)]TJ
+T*[(75:)-600(//   0 255 255 cyan)]TJ
+T*[(76:)-600(// 255   0   0 red)]TJ
+T*[(77:)-600(// 255   0 255 magenta)]TJ
+T*[(78:)-600(// 255 255   0 yellow)]TJ
+T*[(79:)-600(// 255 255 255 white)]TJ
+(80:)'
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+2006
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+] /Count 2
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20120531223557)
+/ModDate(D:20120531223557)>>endobj
+xref
+0 17
+0000000000 65535 f 
+0000005219 00000 n 
+0000005727 00000 n 
+0000005153 00000 n 
+0000004885 00000 n 
+0000000009 00000 n 
+0000002786 00000 n 
+0000005525 00000 n 
+0000005396 00000 n 
+0000005594 00000 n 
+0000005462 00000 n 
+0000005659 00000 n 
+0000005267 00000 n 
+0000005018 00000 n 
+0000002806 00000 n 
+0000004864 00000 n 
+0000005337 00000 n 
+trailer
+<< /Size 17 /Root 1 0 R /Info 2 0 R
+/ID [<6F0F6691ED2D2B9424A1BA273A1AD474><6F0F6691ED2D2B9424A1BA273A1AD474>]
+>>
+startxref
+5838
+%%EOF

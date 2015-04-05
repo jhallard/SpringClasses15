@@ -1,0 +1,210 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.4
+date	2012.06.06.03.48.14;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.06.06.03.12.10;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.06.06.03.11.51;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.06.06.03.08.29;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@// $Id: accumulate.cpp,v 1.2 2012-06-05 20:11:51-07 - - $
+
+//
+// Accumulate.
+// Takes an object and an action and accumulates a sequence,
+// producing a final result.
+//
+
+#include <iostream>
+#include <list>
+#include <vector>
+
+using namespace std;
+
+//
+// algorithm for_each_do
+//
+template <typename itor_t, typename action_t>
+void for_each_do (const itor_t &begin, const itor_t &end,
+                  action_t &action) {
+   for (itor_t itor = begin; itor != end; ++itor) action (*itor);
+}
+
+//
+// struct accumulator
+//
+template <typename value_t, typename binary_fn>
+struct accumulator {
+   value_t value;
+   binary_fn *fn;
+   accumulator (const value_t _value, const binary_fn _fn):
+               value(_value), fn(_fn) {}
+   void operator() (const value_t &opnd) {
+      value = fn (value, opnd);
+   }
+};
+
+//
+// algorithm accumulate
+//
+template <typename itor_t, typename value_t, typename binary_fn>
+value_t accumulate (const itor_t &begin, const itor_t &end,
+                    const value_t &initial, const binary_fn &binfn) {
+   accumulator<value_t, binary_fn> accum (initial, binfn);
+   for_each_do (begin, end, accum);
+   return accum.value;
+}
+
+//
+// algorithm copyit
+//
+template <typename itor_t, typename dest_t>
+void copyit (const itor_t &begin, const itor_t &end,
+             const dest_t &dest) {
+   dest_t desti = dest;
+   for (itor_t itor = begin; itor != end; ++itor) *desti++ = *itor;
+}
+
+
+//
+// Rest is local user code for testing.
+//
+template <typename value_t>
+value_t add (const value_t &left, const value_t &right) {
+   return left + right;
+}
+
+template <typename value_t>
+value_t multiply (const value_t &left, const value_t &right) {
+   return left * right;
+}
+
+double array[] = {3.1, 4.1, 5.9, 2.6, 5.3};
+double *a_end = array + sizeof array / sizeof *array;
+
+void array_test() {
+   cout << "array_test:" << endl;
+   cout << accumulate (&*array, a_end, 0.0, add<double>) << endl;
+   cout << accumulate (&*array, a_end, 1.0, multiply<double>) << endl;
+}
+
+void vector_test() {
+   vector<double> vec (a_end - array); // reserve enough space
+   copyit (&*array, a_end, vec.begin());
+   cout << "vector_test:" << endl;
+   cout << accumulate (vec.begin(), vec.end(), 0.0, add<double>)
+        << endl;
+   cout << accumulate (vec.begin(), vec.end(), 1.0, multiply<double>)
+        << endl;
+}
+
+int main() {
+   array_test();
+   cout << endl;
+   vector_test();
+   cout << endl;
+}
+
+//TEST// ./accumulate >accumulate.out 2>&1
+//TEST// mkpspdf accumulate.ps accumulate.cpp* accumulate.out
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@a8 1
+#include <tr1/array>
+d15 26
+d44 13
+a56 5
+   value_t result (initial);
+   for (itor_t itor = begin; itor != end; ++itor) {
+      result = binfn (result, *itor);
+   }
+   return result;
+d59 4
+d64 3
+a66 5
+struct adder {
+   value_t operator() (const value_t &left, const value_t &right) {
+      return left + right;
+   }
+};
+d69 6
+a74 5
+struct multiplier {
+   value_t operator() (const value_t &left, const value_t &right) {
+      return left * right;
+   }
+};
+d77 20
+a96 4
+   array<double, 4> ad4 = {3.1, 4.1, 5.9, 2.6, 5.3};
+   cout << accumulate (ad4.begin(), ad4.end(), 0.0, adder) << endl;
+   cout << accumulate (ad4.begin(), ad4.end(), 1.0, multiplier) << endl;
+   cout << accumulate (ad4.begin(), ad4.end(), 1.0, operator/) << endl;
+d98 4
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: accumulate.cpp,v 1.1 2012-06-05 20:08:29-07 - - $
+d31 1
+a31 1
+}
+d38 1
+a38 1
+}
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d9 1
+a9 1
+#include <array>
+@

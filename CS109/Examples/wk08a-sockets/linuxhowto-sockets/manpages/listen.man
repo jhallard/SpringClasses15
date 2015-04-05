@@ -1,0 +1,42 @@
+NAME
+     listen - listen for connections on a socket
+
+SYNOPSIS
+     int listen(s, backlog)
+     int s, backlog;
+
+DESCRIPTION
+     To accept  connections,  a  socket  is  first  created  with
+     socket(2),  a  backlog for incoming connections is specified
+     with listen() and then the  connections  are  accepted  with
+     accept(2).   The  listen()  call  applies only to sockets of
+     type SOCK_STREAM or SOCK_SEQPACKET.
+
+     The backlog parameter defines the maximum length  the  queue
+     of pending connections may grow to.  If a connection request
+     arrives with the queue full the client will receive an error
+     with an indication of ECONNREFUSED.
+
+RETURN VALUES
+     listen() returns:
+
+     0    on success.
+
+     -1   on failure and sets errno to indicate the error.
+
+ERRORS
+     EBADF               s is not a valid descriptor.
+
+     ENOTSOCK            s is not a socket.
+
+     EOPNOTSUPP          The socket is not of a  type  that  sup-
+                         ports listen().
+
+SEE ALSO
+     accept(2), connect(2), socket(2)
+
+BUGS
+     The backlog is currently limited (silently) to 5.
+
+
+

@@ -1,0 +1,339 @@
+head	1.14;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.14
+date	2015.01.07.23.06.54;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2015.01.07.23.06.03;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2015.01.07.21.49.41;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2015.01.07.21.48.48;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2015.01.07.21.48.37;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2015.01.07.21.48.15;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2015.01.07.21.47.52;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2015.01.07.21.47.35;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2015.01.07.21.47.10;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.03.28.02.05.19;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.01.28.21.36.55;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.01.04.03.11.37;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.11.29.04.55.13;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.01.05.04.58.31;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.14
+log
+@-
+@
+text
+@// $Id: isatty.cpp,v 1.13 2015-01-07 15:06:03-08 - - $
+
+//
+// NAME
+//    isatty - check if cin, cout, and cerr are ttys
+//
+// SYNOPSIS
+//    isatty
+//
+// DESCRIPTION
+//    Examines the file descriptors associated with cin, cout,
+//    and cerr and says whether or not they are ttys.  Redirection
+//    to/from a pipe or file will make them not.
+//
+
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+#include <libgen.h>
+#include <unistd.h>
+
+// Declare standard file descriptors.
+enum class FD {CIN = 0, COUT = 1, CERR = 2};
+
+int exit_status = EXIT_SUCCESS;
+string exec_name = "";
+
+void report (string filename, FD filedes) {
+   errno = 0;
+   bool istty = isatty (int (filedes)) != 0;
+   if (errno != 0) {
+      cerr << exec_name << ": " << filename << ": fd " << int (filedes)
+           << ": " << strerror (errno) << endl;
+      exit_status = EXIT_FAILURE;
+   }else {
+      char* name = ttyname (int (filedes));
+      cout << filename << (istty ? " is" : " is not") << " a tty";
+      if (name != nullptr) cout << " named " << name;
+      cout << endl;
+   }
+        
+}
+
+int main (int argc, char **argv) {
+   (void) argc; // SUPPRESS: warning: unused parameter 'argc'
+   exec_name = basename (argv[0]);
+   report ("cin", FD::CIN);
+   report ("cout", FD::COUT);
+   report ("cerr", FD::CERR);
+   return exit_status;
+}
+
+//TEST// ./isatty 1>isatty.out 2>isatty.err
+//TEST// catnv isatty.cpp.log isatty.out isatty.err >isatty.lis
+//TEST// rm -v isatty.cpp.log isatty.out isatty.err
+//TEST// mkpspdf isatty.ps isatty.cpp* isatty.lis
+
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.12 2015-01-07 13:49:41-08 - - $
+d42 1
+a42 1
+      string name = ttyname (int (filedes));
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.11 2015-01-07 13:48:48-08 - - $
+d21 1
+d42 1
+a42 1
+      char *name = ttyname (int (filedes));
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.10 2015-01-07 13:48:37-08 - - $
+d37 1
+a37 1
+      cerr << exec_name << ": " << filename << ": fd " << filedes
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.9 2015-01-07 13:48:15-08 - - $
+d41 1
+a41 1
+      char *name = ttyname (filedes);
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.8 2015-01-07 13:47:52-08 - - $
+d35 1
+a35 1
+   bool istty = isatty (filedes) != 0;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.7 2015-01-07 13:47:35-08 - - $
+d33 1
+a33 1
+void report (string filename, int filedes) {
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.6 2015-01-07 13:47:10-08 - - $
+d52 3
+a54 3
+   report ("cin", CIN);
+   report ("cout", COUT);
+   report ("cerr", CERR);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.5 2014-03-27 19:05:19-07 - - $
+d28 1
+a28 1
+enum FD {CIN = 0, COUT = 1, CERR = 2};
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.4 2014-01-28 13:36:55-08 - - $
+d28 1
+a28 1
+enum {CIN_FD = 0, COUT_FD = 1, CERR_FD = 2};
+d52 3
+a54 3
+   report ("cin", CIN_FD);
+   report ("cout", COUT_FD);
+   report ("cerr", CERR_FD);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.3 2013-01-03 19:11:37-08 - - $
+d58 3
+a60 1
+//TEST// runprogram.perl -x isatty.lis ./isatty
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.2 2012-11-28 20:55:13-08 - - $
+d43 1
+a43 1
+      if (name != NULL) cout << " named " << name;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cpp,v 1.1 2011-01-04 20:58:31-08 - - $
+d59 1
+a59 1
+//TEST// mkpspdf isatty.ps isatty.cpp isatty.lis
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: isatty.cc,v 1.5 2010-12-20 18:30:02-08 - - $
+d18 1
+@

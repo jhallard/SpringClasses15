@@ -1,0 +1,186 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.5
+date	2015.02.06.03.09.40;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.06.05.02.25.26;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.06.05.02.24.31;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.06.05.02.24.15;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.06.05.02.12.29;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: predobjsort.cpp,v 1.4 2012-06-04 19:25:26-07 - - $
+
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+template <class item_t>
+struct incrcmp {
+   bool operator () (const item_t &left, const item_t &right) {
+      return left < right;
+   }
+};
+
+template <class item_t>
+struct decrcmp {
+   bool operator () (const item_t &left, const item_t &right) {
+      return left > right;
+   }
+};
+
+template <class item_t>
+struct lengthcmp {
+   bool operator () (const item_t &left, const item_t &right) {
+      return left.size() < right.size()
+          or (not (right.size() < left.size()) and left < right);
+   }
+};
+
+template <class itor_t>
+void print (string label, const itor_t &begin, const itor_t &end) {
+   cout << endl << label << " order:" << endl;
+   for (itor_t itor = begin; itor != end; ++itor) {
+      cout << " " << *itor;
+   }
+   cout << endl;
+}
+
+int main (int argc, char **argv) {
+   char **end = argv + argc;
+   vector<string> vec;
+   for (char **itor = argv; itor < end; ++itor) vec.push_back (*itor);
+   print ("initial", vec.begin(), vec.end());
+
+   sort (vec.begin(), vec.end());
+   print ("default sort", vec.begin(), vec.end());
+
+   sort (vec.begin(), vec.end(), incrcmp<string>());
+   print ("incrcmp<string>", vec.begin(), vec.end());
+
+   sort (vec.begin(), vec.end(), decrcmp<string>());
+   print ("decrcmp<string>", vec.begin(), vec.end());
+
+   sort (vec.begin(), vec.end(), lengthcmp<string>());
+   print ("lengthcmp<string>", vec.begin(), vec.end());
+
+   return 0;
+}
+
+//TEST// predobjsort hello world foo bar baz quux >predobjsort.out 2>&1
+//TEST// mkpspdf predobjsort.ps predobjsort.cpp* predobjsort.out
+
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: predobjsort.cpp,v 1.3 2012-06-04 19:24:31-07 - - $
+d28 1
+a28 1
+       || !(right.size() < left.size()) && left < right;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: predobjsort.cpp,v 1.2 2012-06-04 19:24:15-07 - - $
+a41 1
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: predobjsort.cpp,v 1.1 2012-06-04 19:12:29-07 - - $
+d43 1
+a43 1
+   int end = argv + argc;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: predobjsort.cpp,v 1.6 2012/06/04 21:47:53 - - $
+d11 1
+a11 1
+struct incrcomp {
+d18 1
+a18 1
+struct decrcomp {
+d24 8
+d41 1
+a41 3
+int main () {
+   char *array[] = {"hello", "world", "foo", "bar", "baz"};
+   char **end = array + sizeof array / sizeof *array;
+d43 1
+d45 1
+a45 1
+   for (char **itor = array; itor < end; ++itor) vec.push_back (*itor);
+d51 5
+a55 2
+   sort (vec.begin(), vec.end(), incrcomp<string>());
+   print ("incrcomp<string>", vec.begin(), vec.end());
+d57 2
+a58 2
+   sort (vec.begin(), vec.end(), decrcomp<string>());
+   print ("decrcomp<string>", vec.begin(), vec.end());
+d63 1
+a63 1
+//TEST// ./predobjsort >predobjsort.out 2>&1
+@

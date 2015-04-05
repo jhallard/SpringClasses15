@@ -1,0 +1,63 @@
+File: endian.c
+     1  // $Id: endian.c,v 1.4 2014-05-20 21:45:24-07 - - $
+     2  
+     3  // Illustrate endianness.
+     4  
+     5  #include <arpa/inet.h>
+     6  #include <stdio.h>
+     7  
+     8  typedef union union32 { uint32_t num; char chr[4]; } union32;
+     9  typedef union union16 { uint16_t num; char chr[2]; } union16;
+    10  
+    11  void print32 (const char *label, const union32 *val) {
+    12     printf ("%-8s: 0x%08X =", label, val->num);
+    13     for (int i = 0; i < 4; ++i) printf (" %02X", val->chr[i]);
+    14     printf ("\n");
+    15  }
+    16  
+    17  void print16 (const char *label, const union16 *val) {
+    18     printf ("%-8s: 0x%04X =", label, val->num);
+    19     for (int i = 0; i < 2; ++i) printf (" %02X", val->chr[i]);
+    20     printf ("\n");
+    21  }
+    22  
+    23  int main () {
+    24     union union32 n32 = {0x12345678};
+    25     print32 ("Original", &n32);
+    26     n32.num = htonl (n32.num);
+    27     print32 ("Network", &n32);
+    28     n32.num = ntohl (n32.num);
+    29     print32 ("Host", &n32);
+    30  
+    31     union union16 n16 = {0x1234};
+    32     print16 ("Original", &n16);
+    33     n16.num = htons (n16.num);
+    34     print16 ("Network", &n16);
+    35     n16.num = ntohs (n16.num);
+    36     print16 ("Host", &n16);
+    37  
+    38     return 0;
+    39  }
+
+File: endian.output.sparc
+     1  -bash-16$ uname -srmpi
+     2  SunOS 5.10 sun4v sparc SUNW,SPARC-Enterprise-T2000
+     3  -bash-17$ ./endian
+     4  Original: 0x12345678 = 12 34 56 78
+     5  Network : 0x12345678 = 12 34 56 78
+     6  Host    : 0x12345678 = 12 34 56 78
+     7  Original: 0x1234 = 12 34
+     8  Network : 0x1234 = 12 34
+     9  Host    : 0x1234 = 12 34
+
+File: endian.output.x86_64
+     1  -bash-23$ uname -srmpi
+     2  Linux 2.6.32-431.11.2.el6.x86_64 x86_64 x86_64 x86_64
+     3  -bash-24$ ./endian
+     4  Original: 0x12345678 = 78 56 34 12
+     5  Network : 0x78563412 = 12 34 56 78
+     6  Host    : 0x12345678 = 78 56 34 12
+     7  Original: 0x1234 = 34 12
+     8  Network : 0x3412 = 12 34
+     9  Host    : 0x1234 = 34 12
+

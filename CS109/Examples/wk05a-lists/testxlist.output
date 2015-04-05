@@ -1,0 +1,49 @@
+==25043== Memcheck, a memory error detector
+==25043== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==25043== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright info
+==25043== Command: testxlist
+==25043== 
+--------------------------------------------------
+sizeof (xlist) = 16
+sizeof (int) = 4
+After decl:
+0xffefff8f0->{next=0xffefff8f0, prev=0xffefff8f0}
+After push_back:
+0xffefff8f0->{next=0x4c2e140, prev=0x4c2e260}
+0x4c2e140->{next=0x4c2e1a0, prev=0xffefff8f0, item=3}
+0x4c2e1a0->{next=0x4c2e200, prev=0x4c2e140, item=4}
+0x4c2e200->{next=0x4c2e260, prev=0x4c2e1a0, item=5}
+0x4c2e260->{next=0xffefff8f0, prev=0x4c2e200, item=6}
+6
+5
+At end of test_int:
+0xffefff8f0->{next=0x4c2e140, prev=0x4c2e1a0}
+0x4c2e140->{next=0x4c2e1a0, prev=0xffefff8f0, item=3}
+0x4c2e1a0->{next=0xffefff8f0, prev=0x4c2e140, item=4}
+--------------------------------------------------
+sizeof (xlist) = 16
+sizeof (string) = 8
+After decl:
+0xffefff8c0->{next=0xffefff8c0, prev=0xffefff8c0}
+After push_back:
+0xffefff8c0->{next=0x4c2e470, prev=0x4c2e6b0}
+0x4c2e470->{next=0x4c2e530, prev=0xffefff8c0, item=Hello}
+0x4c2e530->{next=0x4c2e5f0, prev=0x4c2e470, item=World}
+0x4c2e5f0->{next=0x4c2e6b0, prev=0x4c2e530, item=foo}
+0x4c2e6b0->{next=0xffefff8c0, prev=0x4c2e5f0, item=bar}
+bar
+foo
+At end of test_string:
+0xffefff8c0->{next=0x4c2e470, prev=0x4c2e530}
+0x4c2e470->{next=0x4c2e530, prev=0xffefff8c0, item=Hello}
+0x4c2e530->{next=0xffefff8c0, prev=0x4c2e470, item=World}
+--------------------------------------------------
+==25043== 
+==25043== HEAP SUMMARY:
+==25043==     in use at exit: 0 bytes in 0 blocks
+==25043==   total heap usage: 19 allocs, 19 frees, 622 bytes allocated
+==25043== 
+==25043== All heap blocks were freed -- no leaks are possible
+==25043== 
+==25043== For counts of detected and suppressed errors, rerun with: -v
+==25043== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 6 from 6)

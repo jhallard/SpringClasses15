@@ -1,0 +1,1044 @@
+head	1.30;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.30
+date	2015.01.26.22.28.34;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2015.01.26.22.25.43;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2015.01.26.22.25.27;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2015.01.26.22.24.30;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2015.01.26.22.22.35;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2013.07.18.00.02.02;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2013.07.13.02.34.03;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2013.07.13.02.33.20;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2013.07.13.02.32.43;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2013.07.13.02.32.00;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2013.07.13.02.31.08;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2013.07.13.02.30.48;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2013.07.13.02.30.18;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2013.07.13.02.27.15;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2013.07.13.02.26.23;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.07.13.02.25.50;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2013.07.13.02.25.38;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.07.13.02.22.57;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.07.13.02.22.15;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.07.13.02.22.01;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.07.13.02.21.48;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.07.13.02.21.34;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.07.13.02.19.50;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.01.26.02.55.03;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.01.26.02.53.41;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.01.26.02.52.45;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.01.26.02.52.31;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.01.26.02.51.46;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.01.26.02.51.29;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.21.01.05.42;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.30
+log
+@-
+@
+text
+@// $Id: astring.cpp,v 1.29 2015-01-26 14:25:43-08 - - $
+
+//
+// NAME
+//    astring - trivial implementation of a string using an array
+//
+// DESCRIPTION
+//    We show how to implement a simple string class.
+//
+
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// astring.h
+/////////////////////////////////////////////////////////////////
+
+class astring {
+   private:
+      static constexpr size_t DEFAULT_CAPACITY = 16;
+      size_t capacity_;
+      size_t size_;
+      char* buffer_;
+      void range_check (size_t pos, const char* id) const;
+      void copy_from (const astring&);
+      void clear_that (astring&);
+   public:
+
+      // override implicit members
+      astring();                                // default ctor
+      astring (const astring&);                 // copy ctor
+      astring& operator= (const astring&);      // operator=
+      ~astring();                               // dtor
+      astring (astring&&);                      // move ctor
+      astring& operator= (astring&&);           // move operator=
+
+      // other members
+      astring (const char* );                 // "" ctor
+      explicit astring (size_t);              // length reservation
+      astring& operator= (const char*);       // operator=
+      astring& operator+= (const char);       // += char
+      astring& operator+= (const char*);      // += char* 
+      char operator[] (size_t pos) const;     // const subscript =[]
+      char& operator[] (size_t pos);          // ref subscript []=
+      void reserve (size_t);                  // ensure buffer size;
+      size_t size() const;                    // strlen
+      size_t capacity() const;
+      const char* c_str() const;              // borrow string in C fmt
+      friend ostream& operator<< (ostream&, const astring&);
+};
+
+/////////////////////////////////////////////////////////////////
+// astring.cpp
+/////////////////////////////////////////////////////////////////
+
+void astring::range_check (size_t pos, const char* id) const {
+   if (pos < size_) return;
+   throw out_of_range (id);
+}
+
+void astring::copy_from (const astring& that) {
+   reserve (that.size_ + 1);
+   size_ = that.size_;
+   strcpy (buffer_, that.buffer_);
+}
+
+void astring::clear_that (astring& that) {
+   that.size_ = that.capacity_ = 0;
+   that.buffer_ = NULL;
+}
+
+astring::astring(): capacity_ (DEFAULT_CAPACITY), size_ (0),
+                    buffer_ (new char[DEFAULT_CAPACITY]) {
+   buffer_[size_] = '\0';
+}
+
+astring::astring (const astring& that): capacity_ (that.capacity_),
+                    buffer_ (new char[that.capacity_]) {
+   copy_from (that);
+}
+
+astring& astring::operator= (const astring& that) {
+   if (this !=& that) copy_from (that);
+   return *this;
+}
+
+astring::astring (astring&& that): capacity_ (that.capacity_),
+                    size_ (that.size_), buffer_ (that.buffer_) {
+   clear_that (that);
+}
+
+astring& astring::operator= (astring&& that) {
+   if (this !=& that) {
+      capacity_ = that.capacity_;
+      size_ = that.size_;
+      buffer_ = that.buffer_;
+      clear_that (that);
+   }
+   return *this;
+}
+
+astring::~astring() {
+   if (buffer_ != NULL) delete[] buffer_;
+}
+
+
+astring::astring (const char* that) {
+   size_ = strlen (that);
+   capacity_ = size_ + 1;
+   buffer_ = new char [capacity_];
+   strcpy (buffer_, that);
+}
+
+astring::astring (size_t capacity): capacity_ (capacity), size_ (0),
+                    buffer_ (new char[size_]) {
+   buffer_[size_] = '\0';
+}
+
+astring& astring::operator= (const char* that) {
+   size_ = strlen (that);
+   reserve (size_ + 1);
+   strcpy (buffer_, that);
+   return *this;
+}
+
+astring& astring::operator+= (const char achar) {
+   ++size_;
+   reserve (size_ + 1);
+   buffer_[size_ - 1] = achar;
+   buffer_[size_] = '\0';
+   return *this;
+}
+
+astring& astring::operator+= (const char* cstr) {
+   size_ += strlen (cstr);
+   reserve (size_ + 1);
+   strcat (buffer_, cstr);
+   return *this;
+}
+
+char astring::operator[] (size_t pos) const {
+   range_check (pos, "operator[]");
+   return buffer_[pos]; // no bounds check
+}
+
+char& astring::operator[] (size_t pos) {
+   range_check (pos, "operator[]");
+   return buffer_[pos]; // no bounds check
+}
+
+void astring::reserve (size_t capacity) {
+   if (capacity < capacity_) return;
+   capacity_ *= 2;
+   if (capacity_ < capacity) capacity_ = capacity + 1;
+   char* oldbuffer_ = buffer_;
+   buffer_ = new char[capacity_];
+   strcpy (buffer_, oldbuffer_);
+   delete[] oldbuffer_;
+}
+
+
+size_t astring::size() const {
+   return size_;
+}
+
+const char* astring::c_str() const {
+   return buffer_;
+}
+
+ostream& operator<< (ostream& out, const astring& that) {
+   out << that.buffer_;
+   return out;
+}
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+int main (int argc, char** argv) {
+   astring first = "Hello, World!";
+   cout << "first=" << first << endl;
+   astring second;
+   second = first;
+   second += 'x'; second += 'y';
+   for (int i = 0; i < 3; ++i) second[i] = i + '1';
+   cout << "second=" << second << endl;
+   for (size_t i = 5; i < second.size(); ++i) {
+      cout << second[i] << endl;
+   }
+   astring allargs = "args:";
+   for (char** arg = &argv[1]; arg < &argv[argc]; ++arg) {
+      (allargs += " ") += *arg;
+   }
+   cout << allargs << endl;
+   cout << allargs.c_str() << endl;
+   return EXIT_SUCCESS;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=astring.out.grind \
+//TEST//       astring foo bar baz >astring.out 2>&1
+//TEST// mkpspdf astring.ps astring.cpp* astring.out*
+*/
+
+@
+
+
+1.29
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.28 2015-01-26 14:25:27-08 - - $
+d29 3
+a31 3
+      char *buffer_;
+      void range_check (size_t pos, const char *id) const;
+      void copy_from (const astring &);
+d37 2
+a38 2
+      astring (const astring &);                // copy ctor
+      astring &operator= (const astring &);     // operator=
+d41 1
+a41 1
+      astring &operator= (astring&&);           // move operator=
+d44 1
+a44 1
+      astring (const char *);                 // "" ctor
+d46 3
+a48 3
+      astring &operator= (const char *);      // operator=
+      astring &operator+= (const char);       // += char
+      astring &operator+= (const char *);     // += char *
+d50 1
+a50 1
+      char &operator[] (size_t pos);          // ref subscript []=
+d54 2
+a55 2
+      const char *c_str() const;              // borrow string in C fmt
+      friend ostream &operator<< (ostream &, const astring &);
+d62 1
+a62 1
+void astring::range_check (size_t pos, const char *id) const {
+d88 1
+a88 1
+astring &astring::operator= (const astring& that) {
+d98 1
+a98 1
+astring &astring::operator= (astring&& that) {
+d113 1
+a113 1
+astring::astring (const char *that) {
+d125 1
+a125 1
+astring &astring::operator= (const char *that) {
+d132 1
+a132 1
+astring &astring::operator+= (const char achar) {
+d140 1
+a140 1
+astring &astring::operator+= (const char *cstr) {
+d152 1
+a152 1
+char &astring::operator[] (size_t pos) {
+d161 1
+a161 1
+   char *oldbuffer_ = buffer_;
+d172 1
+a172 1
+const char *astring::c_str() const {
+d176 1
+a176 1
+ostream &operator<< (ostream &out, const astring& that) {
+d185 1
+a185 1
+int main (int argc, char **argv) {
+d197 1
+a197 1
+   for (char **arg = argv + 1; arg < argv + argc; ++arg) {
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.27 2015-01-26 14:24:30-08 - - $
+d32 1
+a32 1
+      void clear_that (astring&&);
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.26 2015-01-26 14:22:35-08 - - $
+d73 1
+a73 1
+void astring::clear_that (astring&& that) {
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.25 2013-07-17 17:02:02-07 - - $
+d32 1
+a32 1
+      void clear_that (astring &&);
+d40 2
+a41 2
+      astring (astring &&);                     // move ctor
+      astring &operator= (astring &&);          // move operator=
+d67 1
+a67 1
+void astring::copy_from (const astring &that) {
+d73 1
+a73 1
+void astring::clear_that (astring &&that) {
+d83 1
+a83 1
+astring::astring (const astring &that): capacity_ (that.capacity_),
+d88 2
+a89 2
+astring &astring::operator= (const astring &that) {
+   if (this != &that) copy_from (that);
+d93 1
+a93 1
+astring::astring (astring &&that): capacity_ (that.capacity_),
+d98 2
+a99 2
+astring &astring::operator= (astring &&that) {
+   if (this != &that) {
+d176 1
+a176 1
+ostream &operator<< (ostream &out, const astring &that) {
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.24 2013-07-12 19:34:03-07 - - $
+d26 1
+a26 1
+      static const size_t DEFAULT_CAPACITY = 16;
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.23 2013-07-12 19:33:20-07 - - $
+d109 1
+a109 1
+   delete[] buffer_;
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.22 2013-07-12 19:32:43-07 - - $
+d112 1
+d167 1
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.21 2013-07-12 19:32:00-07 - - $
+d57 1
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.20 2013-07-12 19:31:08-07 - - $
+d195 1
+a195 1
+      allargs += " " += *arg;
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.19 2013-07-12 19:30:48-07 - - $
+d195 1
+a195 1
+      allargs += *arg;
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.18 2013-07-12 19:30:18-07 - - $
+d141 1
+a141 1
+   strcat (cstr);
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.16 2013-07-12 19:26:23-07 - - $
+d195 1
+a195 1
+      allargs += arg;
+@
+
+
+1.17
+log
+@-
+@
+text
+@a24 1
+      friend ostream &operator<< (ostream &, const astring &);
+d46 1
+a46 1
+      astring &operator= (const char *const); // operator=
+d48 1
+d55 1
+d138 7
+d169 4
+d198 1
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.15 2013-07-12 19:25:50-07 - - $
+d182 2
+a183 2
+   for (const char **arg = argv + 1; arg < argv + argc; ++arg) {
+      allargs += " " + arg;
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.14 2013-07-12 19:25:38-07 - - $
+d182 1
+a182 1
+   for (const char *arg = argv + 1; arg < argv + argc; ++arg) {
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.13 2013-07-12 19:22:57-07 - - $
+d181 1
+a181 1
+   astring allargs = "args:"
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.12 2013-07-12 19:22:15-07 - - $
+a170 2
+   (void) argc; // warning: unused parameter 'argc'
+   (void) argv; // warning: unused parameter 'argv'
+d179 1
+a179 1
+      cout << second.at (i) << endl;
+d181 5
+d192 1
+a192 1
+//TEST//       astring >astring.out 2>&1
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.11 2013-07-12 19:22:01-07 - - $
+d31 1
+a31 1
+      void range_check (size_t pos, const char *id);
+d60 1
+a60 1
+void astring::range_check (size_t pos, const char *id) {
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.10 2013-07-12 19:21:48-07 - - $
+d97 1
+a97 1
+   if (this != *that) {
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.9 2013-07-12 19:21:34-07 - - $
+d92 1
+a92 1
+                    size_ (that.size), buffer_ (that.buffer_) {
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.8 2013-07-12 19:19:50-07 - - $
+d27 1
+a27 1
+      static const DEFAULT_CAPACITY = 16;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.7 2013-01-25 18:55:03-08 - - $
+d92 1
+a92 1
+                    size_ (that.size), buffer_ (that.buffer) {
+d97 7
+a103 4
+   capacity_ = that.capacity_;
+   size_ = that.size_;
+   buffer_ = that.buffer_;
+   clear_that (that);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.6 2013-01-25 18:53:41-08 - - $
+a19 9
+#define LINE "[" << __LINE__ << "] "
+#define IDENT(name) \
+        cout << LINE << reinterpret_cast<const void*> (this) \
+             << "->" << name << ": astring{" << endl \
+             << "  bufsize=" << bufsize \
+             << ", astrlen=" << astrlen \
+             << ", buf=" << reinterpret_cast<const void*> (buffer) \
+             << "->\"" << buffer << "\"" << endl << "}" << endl;
+
+d27 7
+a33 5
+      size_t bufsize;
+      size_t astrlen;
+      char *buffer;
+      static const size_t INITSIZE;
+      void range_check (size_t pos);
+d41 2
+d45 10
+a54 11
+      astring (const char *const);              // "" ctor
+      explicit astring (size_t);                // length reservation
+      astring &operator= (const char *const);   // operator=
+      astring &operator+= (const char);         // += char
+      char operator[] (size_t pos) const;       // const subscript =[]
+      char &operator[] (size_t pos);            // ref subscript []=
+      char at (size_t pos) const;               // checked const =[]
+      char &at (size_t pos);                    // checked ref []=
+      void ensure_size (size_t);                // ensure buffer size;
+      size_t size() const;                      // strlen
+
+a55 1
+
+d60 15
+a74 1
+const size_t astring::INITSIZE = 8;
+d76 3
+a78 4
+astring::astring(): bufsize (INITSIZE), astrlen (0),
+                    buffer (new char[INITSIZE]) {
+   buffer[astrlen] = '\0';
+   IDENT ("astring::astring()");
+d81 3
+a83 4
+astring::astring (const astring &that):
+         bufsize (that.bufsize), buffer (new char[that.bufsize]) {
+   *this = that;
+   IDENT ("astring::astring (const astring &)");
+d87 1
+a87 6
+   if (this != &that) {
+      ensure_size (that.astrlen + 1);
+      astrlen = that.astrlen;
+      strcpy (buffer, that.buffer);
+   }
+   IDENT ("astring &astring::operator= (const astring &)");
+d91 12
+d104 1
+a104 2
+   IDENT ("astring::~astring()");
+   delete[] buffer;
+d107 16
+a122 20
+astring::astring (const char *const that) {
+   astrlen = strlen (that);
+   bufsize = astrlen + 1;
+   buffer = new char [bufsize];
+   strcpy (buffer, that);
+   IDENT ("astring::astring (const char *const)");
+}
+
+astring::astring (size_t _size): bufsize (_size), astrlen (0),
+                    buffer (new char[_size]) {
+   buffer[astrlen] = '\0';
+   IDENT ("astring::astring (size_t)");
+   
+}
+
+astring &astring::operator= (const char *const that) {
+   astrlen = strlen (that);
+   ensure_size (astrlen + 1);
+   strcpy (buffer, that);
+   IDENT ("astring &astring::operator= (const char *const)");
+d125 1
+a125 1
+
+d127 4
+a130 5
+   ++astrlen;
+   ensure_size (astrlen + 1);
+   buffer[astrlen - 1] = achar;
+   buffer[astrlen] = '\0';
+   IDENT ("astring &astring::operator+= (const char)");
+a133 10
+void astring::range_check (size_t pos) {
+   // Can't be negative: size_t is unsigned.
+   size_t _size = size();
+   if (pos < _size) return;
+   ostringstream message;
+   message << "astring::range_check(" << pos << "), "
+           << "size()=" << _size;
+   throw out_of_range (message.str());
+}
+
+d135 2
+a136 2
+   IDENT ("const char astring::operator[] (size_t) const");
+   return buffer[pos]; // no bounds check
+d140 2
+a141 7
+   IDENT ("char &astring::operator[] (size_t)");
+   return buffer[pos]; // no bounds check
+}
+
+char astring::at (size_t pos) const {
+   IDENT ("const char astring::operator[] (size_t) const");
+   return buffer[pos]; // no bounds check
+d144 8
+a151 14
+char &astring::at (size_t pos) {
+   IDENT ("char &astring::operator[] (size_t)");
+   return buffer[pos]; // no bounds check
+}
+
+void astring::ensure_size (size_t size) {
+   if (size < bufsize) return;
+   bufsize *= 2;
+   if (bufsize < size) bufsize = size;
+   char *oldbuffer = buffer;
+   buffer = new char[bufsize];
+   strcpy (buffer, oldbuffer);
+   delete[] oldbuffer;
+   IDENT ("void astring::ensure_size (size_t)");
+d155 1
+a155 2
+   IDENT ("size_t astring::size() const");
+   return astrlen;
+d159 1
+a159 1
+   out << that.buffer;
+d162 1
+a162 1
+
+d171 1
+a171 1
+   cout << LINE << "first=" << first << endl;
+d176 1
+a176 1
+   cout << LINE << "second=" << second << endl;
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.1 2012-04-20 18:05:42-07 - - $
+d118 1
+a118 1
+
+d127 1
+a127 1
+
+@
+
+
+1.5
+log
+@-
+@
+text
+@d54 1
+a54 1
+      const char operator[] (size_t pos) const; // const subscript =[]
+d56 1
+a56 1
+      const char at (size_t pos) const;         // checked const =[]
+d138 1
+a138 1
+const char astring::operator[] (size_t pos) const {
+d148 1
+a148 1
+const char astring::at (size_t pos) const {
+@
+
+
+1.4
+log
+@-
+@
+text
+@d184 2
+a185 2
+   argc; // warning: unused parameter 'argc'
+   argv; // warning: unused parameter 'argv'
+@
+
+
+1.3
+log
+@-
+@
+text
+@d184 2
+@
+
+
+1.2
+log
+@-
+@
+text
+@d54 1
+a54 1
+      char operator[] (size_t pos) const; // const subscript =[]
+d56 1
+a56 1
+      char at (size_t pos) const;         // checked const =[]
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: astring.cpp,v 1.1 2012-04-13 18:24:22-07 - - $
+d54 1
+a54 1
+      const char operator[] (size_t pos) const; // const subscript =[]
+d56 1
+a56 1
+      const char at (size_t pos) const;         // checked const =[]
+@

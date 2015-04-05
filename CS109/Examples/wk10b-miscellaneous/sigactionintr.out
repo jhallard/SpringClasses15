@@ -1,0 +1,37 @@
+bash-3.2$ ./sigactionintr
+sigactionintr: signal (SIGINT) = 0
+Just before calling shell.
+Entering shell.
+[26113]sigactionintr: Shell count 0, action_count 0
+[26113]sigactionintr: Shell count 1, action_count 0
+[26113]sigactionintr: Shell count 2, action_count 0
+[26113]sigactionintr: Caught signal 2, action_count 1
+[26113]sigactionintr: Shell count 3, action_count 1
+[26113]sigactionintr: Shell count 4, action_count 1
+[26113]sigactionintr: Shell count 5, action_count 1
+[26113]sigactionintr: Caught signal 2, action_count 2
+[26113]sigactionintr: Shell count 6, action_count 2
+[26113]sigactionintr: Shell count 7, action_count 2
+[26113]sigactionintr: Shell count 8, action_count 2
+[26113]sigactionintr: Caught signal 2, action_count 3
+[26113]sigactionintr: Shell count 9, action_count 3
+[26113]sigactionintr: Shell count 10, action_count 3
+[26113]sigactionintr: Caught signal 2, action_count 4
+[26113]sigactionintr: Shell count 11, action_count 4
+[26113]sigactionintr: Caught signal 2, action_count 5
+[26113]sigactionintr: Shell count 12, action_count 5
+[26113]sigactionintr: Shell count 13, action_count 5
+[26113]sigactionintr: Caught signal 2, action_count 6
+[26113]sigactionintr: Shell count 14, action_count 6
+[26113]sigactionintr: Caught signal 2, action_count 7
+[26113]sigactionintr: Shell count 15, action_count 7
+[26113]sigactionintr: Shell count 16, action_count 7
+[26113]sigactionintr: Shell count 17, action_count 7
+[26113]sigactionintr: Caught signal 2, action_count 8
+[26113]sigactionintr: Shell count 18, action_count 8
+[26113]sigactionintr: Caught signal 2, action_count 9
+[26113]sigactionintr: Shell count 19, action_count 9
+[26113]sigactionintr: Caught signal 2, action_count 10
+[26113]sigactionintr: Shell count 20, action_count 10
+sigactionintr: action_count > 9
+bash-3.2$ exit

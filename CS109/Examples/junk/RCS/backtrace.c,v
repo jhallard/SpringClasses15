@@ -1,0 +1,128 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.4
+date	2014.06.12.02.57.00;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.06.12.02.56.18;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.06.12.02.56.09;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.06.12.02.47.01;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@// $Id: backtrace.c,v 1.3 2014-06-11 19:56:18-07 - - $
+
+#include <execinfo.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+// Obtain a backtrace and print it to stdout.
+void print_trace (void) {
+    void* array[32];
+    size_t size = backtrace (array, sizeof array / sizeof *array);
+    char** strings = backtrace_symbols (array, size);
+    printf ("Obtained %zd stack frames.\n", size);
+    for (size_t i = 0; i < size; i++) printf ("%s\n", strings[i]);
+    free (strings);
+}
+
+// A dummy function to make the backtrace more interesting.
+void dummy_function (int count) {
+   if (count > 0) dummy_function (count -1);
+             else print_trace ();
+}
+
+int main (void) {
+   dummy_function (3);
+   return 0;
+}
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: backtrace.c,v 1.2 2014-06-11 19:56:09-07 - - $
+d9 1
+a9 1
+    void* array[10];
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: backtrace.c,v 1.1 2014-06-11 19:47:01-07 - - $
+d24 1
+a24 1
+   dummy_function ();
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d7 1
+a7 1
+/* Obtain a backtrace and print it to stdout. */
+d9 3
+a11 8
+    void *array[10];
+    size_t size;
+    char **strings;
+    size_t i;
+  
+    size = backtrace (array, 10);
+    strings = backtrace_symbols (array, size);
+  
+d13 1
+a13 4
+  
+    for (i = 0; i < size; i++)
+       printf ("%s\n", strings[i]);
+  
+d17 4
+a20 3
+/* A dummy function to make the backtrace more interesting. */
+void dummy_function (void) {
+   print_trace ();
+@

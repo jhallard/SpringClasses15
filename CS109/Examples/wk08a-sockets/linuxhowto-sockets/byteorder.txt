@@ -1,0 +1,48 @@
+
+Big endian and Little endian computers
+
+Virtually all computer architectures are byte addressable.  If
+an int is four bytes, there are two different ways to store this.
+Suppose the address of the int is A.  In a so-called big endian
+computer, the highest order byte is stored at A, and the lowest
+order byte is stored at address A+3.  In a so-called little
+endian computer, address A stores the least significant byte
+and the most significant byte is at address A+3.
+
+Big endian computer architectures include the IBM 370, 
+the Motorola 68000 and Sun Sparc.  Little endian computers
+include the intel series (80486, pentium etc) and VAX.
+
+Consider the decimal integer 91,329.  This is 00 01 64 C1 
+in hexidecimal.  If this were to be stored at address A
+in a big endian computer, 00 would be at address A,
+01 at address A+1 64 at address A+2, and C1 at address
+A+3.  On a little endian computer, C1 would be the value
+at address A, 64 at address A+1, 01 at address A+2,
+and 00 at address A+3.
+
+Computer networks are big endian.  This means that when
+little endian computers are going to pass integers
+over the network (IP addresses for example), they need
+to convert them to network byte order.  Likewise, when the
+receive integer values over the network, they need to
+convert them back to their own native representation.
+
+There are four functions that do this.
+
+
+unsigned long htonl(unsigned long)
+   host to network conversion for long ints (4 bytes)
+unsigned short htons(unsigned short)
+   host to network conversion for short ints (2 bytes)
+unsigned long ntohl(unsigned long)
+   network to host conversion for long ints 
+unsigned short ntohs(short)
+   network to host conversion for short ints
+
+On big endian computers these functions simply return their
+arguments.
+
+The terms big endian and little endian are borrowed from
+Gulliver's Travels.
+

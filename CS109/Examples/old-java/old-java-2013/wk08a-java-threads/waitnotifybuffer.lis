@@ -1,0 +1,50 @@
+     0.046: main(1): starting
+     8.413: producer Romans(8): starting
+     9.293: consumer Gauls(10): starting
+    10.050: producer Greeks(9): starting
+    10.611: consumer Picts(11): starting
+   109.373: producer Romans(8): put ("prîmus")
+   210.164: producer Romans(8): put ("secundus,")
+   310.675: producer Greeks(9): put ("prôtos")
+   311.385: producer Romans(8): put ("tertius")
+   410.904: consumer Gauls(10): get() = "secundus,"
+   412.123: producer Romans(8): put ("quârtus")
+   512.856: producer Romans(8): put ("quîntus")
+   610.226: consumer Picts(11): get() = "prîmus"
+   611.450: producer Greeks(9): put ("deuteros")
+   612.128: consumer Gauls(10): get() = "prôtos"
+   613.543: producer Romans(8): put ("sextus")
+   714.288: producer Romans(8): put ("septimus")
+   812.809: consumer Gauls(10): get() = "quârtus"
+   814.978: producer Romans(8): put ("octâvus")
+   912.198: producer Greeks(9): put ("tritos")
+   915.736: producer Romans(8): put ("nônus")
+  1013.545: consumer Gauls(10): get() = "quîntus"
+  1110.989: consumer Picts(11): get() = "tertius"
+  1114.312: producer Romans(8): put ("decimus")
+  1114.988: producer Romans(8): finished
+  1212.946: producer Greeks(9): put ("tetartos")
+  1214.300: consumer Gauls(10): get() = "deuteros"
+  1414.989: consumer Gauls(10): get() = "septimus"
+  1515.003: producer Greeks(9): put ("pentos")
+  1611.736: consumer Picts(11): get() = "sextus"
+  1615.679: consumer Gauls(10): get() = "octâvus"
+  1815.689: producer Greeks(9): put ("hektos")
+  1816.413: consumer Gauls(10): get() = "nônus"
+  2017.098: consumer Gauls(10): get() = "decimus"
+  2112.482: consumer Picts(11): get() = "tritos"
+  2116.366: producer Greeks(9): put ("hebdomos")
+  2217.796: consumer Gauls(10): get() = "tetartos"
+  2417.121: producer Greeks(9): put ("ogdoos")
+  2418.473: consumer Gauls(10): get() = "hektos"
+  2613.251: consumer Picts(11): get() = "pentos"
+  2619.160: consumer Gauls(10): get() = "hebdomos"
+  2717.802: producer Greeks(9): put ("enatos")
+  2918.490: consumer Gauls(10): get() = "enatos"
+  3018.480: producer Greeks(9): put ("dekatos")
+  3019.090: producer Greeks(9): finished
+  3019.635: main(1): finished
+  3114.020: consumer Picts(11): get() = "ogdoos"
+  3114.699: consumer Picts(11): finished
+  3219.178: consumer Gauls(10): get() = "dekatos"
+  3219.902: consumer Gauls(10): finished

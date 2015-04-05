@@ -1,0 +1,5 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting searching.cpp
+searching.cpp: $Id: searching.cpp,v 1.5 2012-06-04 14:35:45-07 - - $
+g++ -g -O0 -Wall -Wextra searching.cpp -o searching -lm
+rm -f searching.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished searching.cpp

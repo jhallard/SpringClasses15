@@ -1,0 +1,1407 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: Enscript Output
+%%For: Wesley Mackey
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Tue Aug 13 19:24:15 2013
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier-Bold /F-gs-font MF
+/F-gs-font 10.5 10.5 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 536 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 708 def
+/d_header_w 536 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 536 def
+/d_footer_h 0 def
+/d_output_w 536 def
+/d_output_h 708 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (webserver.java) def
+/fdir () def
+/ftail (webserver.java) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/13/13) def
+/modtimestr (19:15:30) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+31.2 694.5 M (1:) s
+50.1 694.5 M
+(// $Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $) s
+31.2 683 M (2:) s
+31.2 671.5 M (3:) s
+50.1 671.5 M
+(//) s
+31.2 660 M (4:) s
+50.1 660 M
+(// Web server.  Responds with README.html when queried.) s
+31.2 648.5 M (5:) s
+50.1 648.5 M
+(//) s
+31.2 637 M (6:) s
+31.2 625.5 M (7:) s
+50.1 625.5 M
+(import java.io.*;) s
+31.2 614 M (8:) s
+50.1 614 M
+(import java.net.*;) s
+31.2 602.5 M (9:) s
+50.1 602.5 M
+(import java.util.*;) s
+24.9 591 M (10:) s
+50.1 591 M
+(import static java.lang.String.*;) s
+24.9 579.5 M (11:) s
+50.1 579.5 M
+(import static java.lang.System.*;) s
+24.9 568 M (12:) s
+24.9 556.5 M (13:) s
+50.1 556.5 M
+(class webserver {) s
+24.9 545 M (14:) s
+50.1 545 M
+(   static final String RCSID =) s
+24.9 533.5 M (15:) s
+50.1 533.5 M
+(         "$Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $";) s
+24.9 522 M (16:) s
+50.1 522 M
+(   static options opts = null;) s
+24.9 510.5 M (17:) s
+50.1 510.5 M
+(   static String[] server_socket_info;) s
+24.9 499 M (18:) s
+24.9 487.5 M (19:) s
+50.1 487.5 M
+(   static String ident\(\) {) s
+24.9 476 M (20:) s
+50.1 476 M
+(      return String.format \("%s: port %d", opts.progname,) s
+24.9 464.5 M (21:) s
+50.1 464.5 M
+(                            opts.portnumber\);) s
+24.9 453 M (22:) s
+50.1 453 M
+(   }) s
+24.9 441.5 M (23:) s
+24.9 430 M (24:) s
+50.1 430 M
+(   static String get_jarname\(\) {) s
+24.9 418.5 M (25:) s
+50.1 418.5 M
+(      String jarpath = getProperty \("java.class.path"\);) s
+24.9 407 M (26:) s
+50.1 407 M
+(      int lastslash = jarpath.lastIndexOf \('/'\);) s
+24.9 395.5 M (27:) s
+50.1 395.5 M
+(      if \(lastslash < 0\) return jarpath;) s
+24.9 384 M (28:) s
+50.1 384 M
+(      return jarpath.substring \(lastslash + 1\);) s
+24.9 372.5 M (29:) s
+50.1 372.5 M
+(   }) s
+24.9 361 M (30:) s
+24.9 349.5 M (31:) s
+50.1 349.5 M
+(   static class options {) s
+24.9 338 M (32:) s
+50.1 338 M
+(      final String progname = get_jarname\(\);) s
+24.9 326.5 M (33:) s
+50.1 326.5 M
+(      int portnumber;) s
+24.9 315 M (34:) s
+50.1 315 M
+(      options \(String[] args\) {) s
+24.9 303.5 M (35:) s
+50.1 303.5 M
+(         try {) s
+24.9 292 M (36:) s
+50.1 292 M
+(            if \(args.length != 1\) throw new NumberFormatException\(\);) s
+24.9 280.5 M (37:) s
+50.1 280.5 M
+(            portnumber = Integer.parseInt \(args[0]\);) s
+24.9 269 M (38:) s
+50.1 269 M
+(         }catch \(NumberFormatException exn\) {) s
+24.9 257.5 M (39:) s
+50.1 257.5 M
+(            quit \("Usage: %s hostname portnumber%n", progname\);) s
+24.9 246 M (40:) s
+50.1 246 M
+(         }) s
+24.9 234.5 M (41:) s
+50.1 234.5 M
+(      }) s
+24.9 223 M (42:) s
+50.1 223 M
+(   }) s
+24.9 211.5 M (43:) s
+24.9 200 M (44:) s
+50.1 200 M
+(   static String timenow\(\) {) s
+24.9 188.5 M (45:) s
+50.1 188.5 M
+(      return format \("%1$tY %1$tb %1$td %1$ta %1$tT.%1$tL",) s
+24.9 177 M (46:) s
+50.1 177 M
+(                     Calendar.getInstance\(\)\);) s
+24.9 165.5 M (47:) s
+50.1 165.5 M
+(   }) s
+24.9 154 M (48:) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (webserver.java) def
+/fdir () def
+/ftail (webserver.java) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (08/13/13) def
+/modtimestr (19:15:30) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+24.9 694.5 M (49:) s
+24.9 683 M (50:) s
+50.1 683 M
+(   static void sendline \(PrintWriter writer, String line\) {) s
+24.9 671.5 M (51:) s
+50.1 671.5 M
+(      out.printf \("SENT: %s%n", line\);) s
+24.9 660 M (52:) s
+50.1 660 M
+(      writer.printf \("%s\\n", line\);) s
+24.9 648.5 M (53:) s
+50.1 648.5 M
+(   }) s
+24.9 637 M (54:) s
+24.9 625.5 M (55:) s
+50.1 625.5 M
+(   static void sendfile \(Socket client, String filename\)) s
+24.9 614 M (56:) s
+50.1 614 M
+(                  throws IOException {) s
+24.9 602.5 M (57:) s
+50.1 602.5 M
+(      if \(filename.length\(\) == 0\) filename = "README";) s
+24.9 591 M (58:) s
+50.1 591 M
+(      List<String> lines = new LinkedList<String>\(\);) s
+24.9 579.5 M (59:) s
+50.1 579.5 M
+(      PrintWriter writer = new PrintWriter \(client.getOutputStream\(\)\);) s
+24.9 568 M (60:) s
+50.1 568 M
+(      lines.add \("<PRE>"\);) s
+24.9 556.5 M (61:) s
+50.1 556.5 M
+(      lines.add \("Server RCS Id: " + RCSID\);) s
+24.9 545 M (62:) s
+50.1 545 M
+(      try {) s
+24.9 533.5 M (63:) s
+50.1 533.5 M
+(         InetAddress addr = InetAddress.getLocalHost\(\);) s
+24.9 522 M (64:) s
+50.1 522 M
+(         lines.add \("From HostName: " + addr.getHostName\(\)\);) s
+24.9 510.5 M (65:) s
+50.1 510.5 M
+(         lines.add \("From HostAddress: " + addr.getHostAddress\(\)\);) s
+24.9 499 M (66:) s
+50.1 499 M
+(      }catch \(UnknownHostException exn\) {) s
+24.9 487.5 M (67:) s
+50.1 487.5 M
+(         lines.add \("UnknownHostException: " + exn.getMessage\(\)\);) s
+24.9 476 M (68:) s
+50.1 476 M
+(      }) s
+24.9 464.5 M (69:) s
+50.1 464.5 M
+(      for \(String str: server_socket_info\) lines.add \(str\);) s
+24.9 453 M (70:) s
+50.1 453 M
+(      lines.add \("Client InetAddress: " + client.getInetAddress\(\)\);) s
+24.9 441.5 M (71:) s
+50.1 441.5 M
+(      lines.add \("Client LocalAddress: " + client.getLocalAddress\(\)\);) s
+24.9 430 M (72:) s
+50.1 430 M
+(      lines.add \("Client LocalPort: " + client.getLocalPort\(\)\);) s
+24.9 418.5 M (73:) s
+50.1 418.5 M
+(      lines.add \("Client Port: " + client.getPort\(\)\);) s
+24.9 407 M (74:) s
+50.1 407 M
+(      lines.add \("Page sent: " + timenow\(\)\);) s
+24.9 395.5 M (75:) s
+50.1 395.5 M
+(      lines.add \(""\);) s
+24.9 384 M (76:) s
+50.1 384 M
+(      try {) s
+24.9 372.5 M (77:) s
+50.1 372.5 M
+(         Scanner file = new Scanner \(new File \(filename\)\);) s
+24.9 361 M (78:) s
+50.1 361 M
+(         while \(file.hasNextLine\(\)\) {) s
+24.9 349.5 M (79:) s
+50.1 349.5 M
+(            String line = file.nextLine\(\);) s
+24.9 338 M (80:) s
+50.1 338 M
+(            lines.add \(line\);) s
+24.9 326.5 M (81:) s
+50.1 326.5 M
+(         }) s
+24.9 315 M (82:) s
+50.1 315 M
+(      }catch \(IOException exn\) {) s
+24.9 303.5 M (83:) s
+50.1 303.5 M
+(         out.printf \("%s%n", exn\);) s
+24.9 292 M (84:) s
+50.1 292 M
+(         lines.add \("IOException: " + exn.getMessage\(\)\);) s
+24.9 280.5 M (85:) s
+50.1 280.5 M
+(      }) s
+24.9 269 M (86:) s
+50.1 269 M
+(      int length = 0;) s
+24.9 257.5 M (87:) s
+50.1 257.5 M
+(      for \(String line: lines\) length += line.length\(\) + 1;) s
+24.9 246 M (88:) s
+50.1 246 M
+(      sendline \(writer, "HTTP/1.1 200 OK"\);) s
+24.9 234.5 M (89:) s
+50.1 234.5 M
+(      sendline \(writer, "Server: " + ident\(\)\);) s
+24.9 223 M (90:) s
+50.1 223 M
+(      sendline \(writer, "Content-Type: text/html"\);) s
+24.9 211.5 M (91:) s
+50.1 211.5 M
+(      sendline \(writer, "Content-Length: " + length\);) s
+24.9 200 M (92:) s
+50.1 200 M
+(      sendline \(writer, ""\);) s
+24.9 188.5 M (93:) s
+50.1 188.5 M
+(      for \(String line: lines\) sendline \(writer, line\);) s
+24.9 177 M (94:) s
+50.1 177 M
+(      writer.flush\(\);) s
+24.9 165.5 M (95:) s
+50.1 165.5 M
+(   }) s
+24.9 154 M (96:) s
+24.9 142.5 M (97:) s
+50.1 142.5 M
+(   static List<String> getrequest \(Socket client\) throws IOException {) s
+24.9 131 M (98:) s
+50.1 131 M
+(      List<String> lines = new LinkedList<String>\(\);) s
+24.9 119.5 M (99:) s
+50.1 119.5 M
+(      Scanner input = new Scanner \(client.getInputStream\(\)\);) s
+18.6 108 M (100:) s
+50.1 108 M
+(      while \(input.hasNextLine\(\)\) {) s
+18.6 96.5 M (101:) s
+50.1 96.5 M
+(         String line = input.nextLine\(\);) s
+18.6 85 M (102:) s
+50.1 85 M
+(         out.printf \("RECD: %s%n", line\);) s
+18.6 73.5 M (103:) s
+50.1 73.5 M
+(         lines.add \(line\);) s
+18.6 62 M (104:) s
+50.1 62 M
+(         if \(line.length\(\) == 0\) break;) s
+18.6 50.5 M (105:) s
+50.1 50.5 M
+(      }) s
+18.6 39 M (106:) s
+50.1 39 M
+(      return lines;) s
+18.6 27.5 M (107:) s
+50.1 27.5 M
+(   }) s
+18.6 16 M (108:) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (webserver.java) def
+/fdir () def
+/ftail (webserver.java) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (08/13/13) def
+/modtimestr (19:15:30) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18.6 694.5 M (109:) s
+18.6 683 M (110:) s
+50.1 683 M
+(   static class worker implements Runnable {) s
+18.6 671.5 M (111:) s
+50.1 671.5 M
+(      static int worker_count = 0;) s
+18.6 660 M (112:) s
+50.1 660 M
+(      Socket client;) s
+18.6 648.5 M (113:) s
+50.1 648.5 M
+(      int id = ++worker_count;) s
+18.6 637 M (114:) s
+50.1 637 M
+(      worker \(Socket client\) {) s
+18.6 625.5 M (115:) s
+50.1 625.5 M
+(         this.client = client;) s
+18.6 614 M (116:) s
+50.1 614 M
+(      }) s
+18.6 602.5 M (117:) s
+50.1 602.5 M
+(      public void run\(\) {) s
+18.6 591 M (118:) s
+50.1 591 M
+(         Thread.currentThread\(\).setName \("Worker " + id\);) s
+18.6 579.5 M (119:) s
+50.1 579.5 M
+(         out.printf \("%s: worker %d: starting%n", ident\(\), id\);) s
+18.6 568 M (120:) s
+50.1 568 M
+(         try {) s
+18.6 556.5 M (121:) s
+50.1 556.5 M
+(            List<String> request = getrequest \(client\);) s
+18.6 545 M (122:) s
+50.1 545 M
+(            String filename = request.get\(0\).split\("\\\\s+"\)[1];) s
+18.6 533.5 M (123:) s
+50.1 533.5 M
+(            sendfile \(client, filename.substring\(1\)\);) s
+18.6 522 M (124:) s
+50.1 522 M
+(            client.close\(\);) s
+18.6 510.5 M (125:) s
+50.1 510.5 M
+(            out.printf \("%s: worker %d: finished%n", ident\(\), id\);) s
+18.6 499 M (126:) s
+50.1 499 M
+(         }catch \(IOException exn\) {) s
+18.6 487.5 M (127:) s
+50.1 487.5 M
+(            quit \("%s: %s%n", ident\(\), exn\);) s
+18.6 476 M (128:) s
+50.1 476 M
+(         }) s
+18.6 464.5 M (129:) s
+50.1 464.5 M
+(      }) s
+18.6 453 M (130:) s
+50.1 453 M
+(   }) s
+18.6 441.5 M (131:) s
+18.6 430 M (132:) s
+50.1 430 M
+(   static void quit \(String format, Object... params\) {) s
+18.6 418.5 M (133:) s
+50.1 418.5 M
+(      err.printf \(format, params\);) s
+18.6 407 M (134:) s
+50.1 407 M
+(      Set<Map.Entry<Thread, StackTraceElement[]>> entryset =) s
+18.6 395.5 M (135:) s
+50.1 395.5 M
+(                  Thread.getAllStackTraces\(\).entrySet\(\);) s
+18.6 384 M (136:) s
+50.1 384 M
+(      for \(Map.Entry<Thread, StackTraceElement[]> entry: entryset\) {) s
+18.6 372.5 M (137:) s
+50.1 372.5 M
+(         Thread key = entry.getKey\(\);) s
+18.6 361 M (138:) s
+50.1 361 M
+(         StackTraceElement[] value = entry.getValue\(\);) s
+18.6 349.5 M (139:) s
+50.1 349.5 M
+(         err.printf \("Thread %d: %s%n", key.getId\(\), key.getName\(\)\);) s
+18.6 338 M (140:) s
+50.1 338 M
+(         for \(StackTraceElement stack: value\) {) s
+18.6 326.5 M (141:) s
+50.1 326.5 M
+(            err.printf \("   %s%n", stack.toString\(\)\);) s
+18.6 315 M (142:) s
+50.1 315 M
+(         }) s
+18.6 303.5 M (143:) s
+50.1 303.5 M
+(      }) s
+18.6 292 M (144:) s
+50.1 292 M
+(      exit \(1\);) s
+18.6 280.5 M (145:) s
+50.1 280.5 M
+(   }) s
+18.6 269 M (146:) s
+18.6 257.5 M (147:) s
+50.1 257.5 M
+(   public static void main \(String[] args\) {) s
+18.6 246 M (148:) s
+50.1 246 M
+(      opts = new options \(args\);) s
+18.6 234.5 M (149:) s
+50.1 234.5 M
+(      try {) s
+18.6 223 M (150:) s
+50.1 223 M
+(         ServerSocket socket = new ServerSocket \(opts.portnumber\);) s
+18.6 211.5 M (151:) s
+50.1 211.5 M
+(         server_socket_info = new String[2];) s
+18.6 200 M (152:) s
+50.1 200 M
+(         server_socket_info[0] = "Server InetAddress: ") s
+18.6 188.5 M (153:) s
+50.1 188.5 M
+(                               + socket.getInetAddress\(\);) s
+18.6 177 M (154:) s
+50.1 177 M
+(         server_socket_info[1] = "Server LocalPort: ") s
+18.6 165.5 M (155:) s
+50.1 165.5 M
+(                               + socket.getLocalPort\(\);) s
+18.6 154 M (156:) s
+50.1 154 M
+(         out.printf \("%s: waiting for client%n", ident\(\)\);) s
+18.6 142.5 M (157:) s
+50.1 142.5 M
+(         for \(;;\) {) s
+18.6 131 M (158:) s
+50.1 131 M
+(            Socket client = socket.accept\(\);) s
+18.6 119.5 M (159:) s
+50.1 119.5 M
+(            out.printf \("%s: socket.accept OK%n", ident\(\)\);) s
+18.6 108 M (160:) s
+50.1 108 M
+(            Thread worker = new Thread \(new worker \(client\)\);) s
+18.6 96.5 M (161:) s
+50.1 96.5 M
+(            worker.start\(\);) s
+18.6 85 M (162:) s
+50.1 85 M
+(         }) s
+18.6 73.5 M (163:) s
+50.1 73.5 M
+(      }catch \(IOException exn\) {) s
+18.6 62 M (164:) s
+50.1 62 M
+(         quit \("%s: %s%n", ident\(\), exn\);) s
+18.6 50.5 M (165:) s
+50.1 50.5 M
+(      }catch \(IllegalArgumentException exn\) {) s
+18.6 39 M (166:) s
+50.1 39 M
+(         quit \("%s: %s%n", ident\(\), exn\);) s
+18.6 27.5 M (167:) s
+50.1 27.5 M
+(      }) s
+18.6 16 M (168:) s
+50.1 16 M
+(   }) s
+18.6 4.5 M (169:) s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (webserver.java) def
+/fdir () def
+/ftail (webserver.java) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (08/13/13) def
+/modtimestr (19:15:30) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18.6 694.5 M (170:) s
+50.1 694.5 M
+(}) s
+_R
+S
+%%Page: (1) 5
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (webserver.log) def
+/fdir () def
+/ftail (webserver.log) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/13/13) def
+/modtimestr (19:16:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+31.2 694.5 M (1:) s
+50.1 694.5 M
+(webserver: port 8888: waiting for client) s
+31.2 683 M (2:) s
+50.1 683 M
+(webserver: port 8888: socket.accept OK) s
+31.2 671.5 M (3:) s
+50.1 671.5 M
+(webserver: port 8888: worker 1: starting) s
+31.2 660 M (4:) s
+50.1 660 M
+(RECD: GET / HTTP/1.1) s
+31.2 648.5 M (5:) s
+50.1 648.5 M
+(RECD: Host: unix1.ic.ucsc.edu:8888) s
+31.2 637 M (6:) s
+50.1 637 M
+(RECD: User-Agent: Mozilla/5.0 \(X11; Linux x86_64; rv:10.0.5\) Gecko/20120606 ) s
+5 625.5 M
+(Firefox/10.0.5) s
+31.2 614 M (7:) s
+50.1 614 M
+(RECD: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.) s
+5 602.5 M
+(8) s
+31.2 591 M (8:) s
+50.1 591 M
+(RECD: Accept-Language: en-us,en;q=0.5) s
+31.2 579.5 M (9:) s
+50.1 579.5 M
+(RECD: Accept-Encoding: gzip, deflate) s
+24.9 568 M (10:) s
+50.1 568 M
+(RECD: DNT: 1) s
+24.9 556.5 M (11:) s
+50.1 556.5 M
+(RECD: Connection: keep-alive) s
+24.9 545 M (12:) s
+50.1 545 M
+(RECD: ) s
+24.9 533.5 M (13:) s
+50.1 533.5 M
+(SENT: HTTP/1.1 200 OK) s
+24.9 522 M (14:) s
+50.1 522 M
+(SENT: Server: webserver: port 8888) s
+24.9 510.5 M (15:) s
+50.1 510.5 M
+(SENT: Content-Type: text/html) s
+24.9 499 M (16:) s
+50.1 499 M
+(SENT: Content-Length: 452) s
+24.9 487.5 M (17:) s
+50.1 487.5 M
+(SENT: ) s
+24.9 476 M (18:) s
+50.1 476 M
+(SENT: <PRE>) s
+24.9 464.5 M (19:) s
+50.1 464.5 M
+(SENT: Server RCS Id: $Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $) s
+24.9 453 M (20:) s
+50.1 453 M
+(SENT: From HostName: unix1.ic.ucsc.edu) s
+24.9 441.5 M (21:) s
+50.1 441.5 M
+(SENT: From HostAddress: 128.114.108.152) s
+24.9 430 M (22:) s
+50.1 430 M
+(SENT: Server InetAddress: 0.0.0.0/0.0.0.0) s
+24.9 418.5 M (23:) s
+50.1 418.5 M
+(SENT: Server LocalPort: 8888) s
+24.9 407 M (24:) s
+50.1 407 M
+(SENT: Client InetAddress: /128.114.108.152) s
+24.9 395.5 M (25:) s
+50.1 395.5 M
+(SENT: Client LocalAddress: /128.114.108.152) s
+24.9 384 M (26:) s
+50.1 384 M
+(SENT: Client LocalPort: 8888) s
+24.9 372.5 M (27:) s
+50.1 372.5 M
+(SENT: Client Port: 52327) s
+24.9 361 M (28:) s
+50.1 361 M
+(SENT: Page sent: 2013 Aug 13 Tue 19:16:53.993) s
+24.9 349.5 M (29:) s
+50.1 349.5 M
+(SENT: ) s
+24.9 338 M (30:) s
+50.1 338 M
+(SENT: This is the README file in this directory.) s
+24.9 326.5 M (31:) s
+50.1 326.5 M
+(SENT: ) s
+24.9 315 M (32:) s
+50.1 315 M
+(SENT: $Id: README,v 1.1 2012-05-29 18:09:34-07 - - $) s
+24.9 303.5 M (33:) s
+50.1 303.5 M
+(webserver: port 8888: worker 1: finished) s
+24.9 292 M (34:) s
+50.1 292 M
+(webserver: port 8888: socket.accept OK) s
+24.9 280.5 M (35:) s
+50.1 280.5 M
+(webserver: port 8888: worker 2: starting) s
+24.9 269 M (36:) s
+50.1 269 M
+(RECD: GET /favicon.ico HTTP/1.1) s
+24.9 257.5 M (37:) s
+50.1 257.5 M
+(RECD: Host: unix1.ic.ucsc.edu:8888) s
+24.9 246 M (38:) s
+50.1 246 M
+(RECD: User-Agent: Mozilla/5.0 \(X11; Linux x86_64; rv:10.0.5\) Gecko/20120606 ) s
+5 234.5 M
+(Firefox/10.0.5) s
+24.9 223 M (39:) s
+50.1 223 M
+(RECD: Accept: image/png,image/*;q=0.8,*/*;q=0.5) s
+24.9 211.5 M (40:) s
+50.1 211.5 M
+(RECD: Accept-Language: en-us,en;q=0.5) s
+24.9 200 M (41:) s
+50.1 200 M
+(RECD: Accept-Encoding: gzip, deflate) s
+24.9 188.5 M (42:) s
+50.1 188.5 M
+(RECD: DNT: 1) s
+24.9 177 M (43:) s
+50.1 177 M
+(RECD: Connection: keep-alive) s
+24.9 165.5 M (44:) s
+50.1 165.5 M
+(RECD: ) s
+24.9 154 M (45:) s
+50.1 154 M
+(java.io.FileNotFoundException: favicon.ico \(No such file or directory\)) s
+24.9 142.5 M (46:) s
+50.1 142.5 M
+(SENT: HTTP/1.1 200 OK) s
+24.9 131 M (47:) s
+50.1 131 M
+(SENT: Server: webserver: port 8888) s
+24.9 119.5 M (48:) s
+50.1 119.5 M
+(SENT: Content-Type: text/html) s
+24.9 108 M (49:) s
+50.1 108 M
+(SENT: Content-Length: 414) s
+24.9 96.5 M (50:) s
+50.1 96.5 M
+(SENT: ) s
+24.9 85 M (51:) s
+50.1 85 M
+(SENT: <PRE>) s
+24.9 73.5 M (52:) s
+50.1 73.5 M
+(SENT: Server RCS Id: $Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $) s
+24.9 62 M (53:) s
+50.1 62 M
+(SENT: From HostName: unix1.ic.ucsc.edu) s
+24.9 50.5 M (54:) s
+50.1 50.5 M
+(SENT: From HostAddress: 128.114.108.152) s
+24.9 39 M (55:) s
+50.1 39 M
+(SENT: Server InetAddress: 0.0.0.0/0.0.0.0) s
+24.9 27.5 M (56:) s
+50.1 27.5 M
+(SENT: Server LocalPort: 8888) s
+24.9 16 M (57:) s
+50.1 16 M
+(SENT: Client InetAddress: /128.114.108.152) s
+24.9 4.5 M (58:) s
+50.1 4.5 M
+(SENT: Client LocalAddress: /128.114.108.152) s
+_R
+S
+%%Page: (2) 6
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (webserver.log) def
+/fdir () def
+/ftail (webserver.log) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (08/13/13) def
+/modtimestr (19:16:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/wk08b-java-sockets/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+24.9 694.5 M (59:) s
+50.1 694.5 M
+(SENT: Client LocalPort: 8888) s
+24.9 683 M (60:) s
+50.1 683 M
+(SENT: Client Port: 52328) s
+24.9 671.5 M (61:) s
+50.1 671.5 M
+(SENT: Page sent: 2013 Aug 13 Tue 19:16:54.046) s
+24.9 660 M (62:) s
+50.1 660 M
+(SENT: ) s
+24.9 648.5 M (63:) s
+50.1 648.5 M
+(SENT: IOException: favicon.ico \(No such file or directory\)) s
+24.9 637 M (64:) s
+50.1 637 M
+(webserver: port 8888: worker 2: finished) s
+24.9 625.5 M (65:) s
+50.1 625.5 M
+(webserver: port 8888: socket.accept OK) s
+24.9 614 M (66:) s
+50.1 614 M
+(webserver: port 8888: worker 3: starting) s
+24.9 602.5 M (67:) s
+50.1 602.5 M
+(RECD: GET /favicon.ico HTTP/1.1) s
+24.9 591 M (68:) s
+50.1 591 M
+(RECD: Host: unix1.ic.ucsc.edu:8888) s
+24.9 579.5 M (69:) s
+50.1 579.5 M
+(RECD: User-Agent: Mozilla/5.0 \(X11; Linux x86_64; rv:10.0.5\) Gecko/20120606 ) s
+5 568 M
+(Firefox/10.0.5) s
+24.9 556.5 M (70:) s
+50.1 556.5 M
+(RECD: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.) s
+5 545 M
+(8) s
+24.9 533.5 M (71:) s
+50.1 533.5 M
+(RECD: Accept-Language: en-us,en;q=0.5) s
+24.9 522 M (72:) s
+50.1 522 M
+(RECD: Accept-Encoding: gzip, deflate) s
+24.9 510.5 M (73:) s
+50.1 510.5 M
+(RECD: DNT: 1) s
+24.9 499 M (74:) s
+50.1 499 M
+(RECD: Connection: keep-alive) s
+24.9 487.5 M (75:) s
+50.1 487.5 M
+(RECD: ) s
+24.9 476 M (76:) s
+50.1 476 M
+(java.io.FileNotFoundException: favicon.ico \(No such file or directory\)) s
+24.9 464.5 M (77:) s
+50.1 464.5 M
+(SENT: HTTP/1.1 200 OK) s
+24.9 453 M (78:) s
+50.1 453 M
+(SENT: Server: webserver: port 8888) s
+24.9 441.5 M (79:) s
+50.1 441.5 M
+(SENT: Content-Type: text/html) s
+24.9 430 M (80:) s
+50.1 430 M
+(SENT: Content-Length: 414) s
+24.9 418.5 M (81:) s
+50.1 418.5 M
+(SENT: ) s
+24.9 407 M (82:) s
+50.1 407 M
+(SENT: <PRE>) s
+24.9 395.5 M (83:) s
+50.1 395.5 M
+(SENT: Server RCS Id: $Id: webserver.java,v 1.26 2013-08-12 12:41:45-07 - - $) s
+24.9 384 M (84:) s
+50.1 384 M
+(SENT: From HostName: unix1.ic.ucsc.edu) s
+24.9 372.5 M (85:) s
+50.1 372.5 M
+(SENT: From HostAddress: 128.114.108.152) s
+24.9 361 M (86:) s
+50.1 361 M
+(SENT: Server InetAddress: 0.0.0.0/0.0.0.0) s
+24.9 349.5 M (87:) s
+50.1 349.5 M
+(SENT: Server LocalPort: 8888) s
+24.9 338 M (88:) s
+50.1 338 M
+(SENT: Client InetAddress: /128.114.108.152) s
+24.9 326.5 M (89:) s
+50.1 326.5 M
+(SENT: Client LocalAddress: /128.114.108.152) s
+24.9 315 M (90:) s
+50.1 315 M
+(SENT: Client LocalPort: 8888) s
+24.9 303.5 M (91:) s
+50.1 303.5 M
+(SENT: Client Port: 52329) s
+24.9 292 M (92:) s
+50.1 292 M
+(SENT: Page sent: 2013 Aug 13 Tue 19:16:54.054) s
+24.9 280.5 M (93:) s
+50.1 280.5 M
+(SENT: ) s
+24.9 269 M (94:) s
+50.1 269 M
+(SENT: IOException: favicon.ico \(No such file or directory\)) s
+24.9 257.5 M (95:) s
+50.1 257.5 M
+(webserver: port 8888: worker 3: finished) s
+_R
+S
+%%Trailer
+%%Pages: 6
+%%DocumentNeededResources: font Times-Roman Courier-Bold Times-Bold 
+%%EOF

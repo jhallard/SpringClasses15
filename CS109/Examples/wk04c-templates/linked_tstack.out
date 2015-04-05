@@ -1,0 +1,51 @@
+==9970== Memcheck, a memory error detector
+==9970== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==9970== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright info
+==9970== Command: linked_tstack this is some test data for the stack
+==9970== 
+First: this is some test data for the stack
+popping: stack
+deleter(0x4e7d640)
+popping: the
+deleter(0x4e7d5f0)
+popping: for
+deleter(0x4e7d5a0)
+popping: data
+deleter(0x4e7d550)
+
+Second: this is some test data for the stack
+popping: 0x4e7daf0->stack
+ptr_deleter(0x4e7db40)
+popping: 0x4e7da50->the
+ptr_deleter(0x4e7daa0)
+popping: 0x4e7d9b0->for
+ptr_deleter(0x4e7da00)
+popping: 0x4e7d910->data
+ptr_deleter(0x4e7d960)
+
+Third: this is some test data for the stack
+array_ptr_deleter(0x4e7e040)
+array_ptr_deleter(0x4e7dfa0)
+array_ptr_deleter(0x4e7df00)
+array_ptr_deleter(0x4e7de60)
+array_ptr_deleter(0x4e7ddc0)
+array_ptr_deleter(0x4e7dd20)
+array_ptr_deleter(0x4e7dc80)
+array_ptr_deleter(0x4e7dbe0)
+ptr_deleter(0x4e7d8c0)
+ptr_deleter(0x4e7d820)
+ptr_deleter(0x4e7d780)
+ptr_deleter(0x4e7d6e0)
+deleter(0x4e7d500)
+deleter(0x4e7d4b0)
+deleter(0x4e7d460)
+deleter(0x4e7d410)
+==9970== 
+==9970== HEAP SUMMARY:
+==9970==     in use at exit: 0 bytes in 0 blocks
+==9970==   total heap usage: 50 allocs, 50 frees, 787 bytes allocated
+==9970== 
+==9970== All heap blocks were freed -- no leaks are possible
+==9970== 
+==9970== For counts of detected and suppressed errors, rerun with: -v
+==9970== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 6 from 6)

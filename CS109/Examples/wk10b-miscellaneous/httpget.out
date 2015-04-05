@@ -1,0 +1,63 @@
+bash: Running httpget tests:
+
+Command: ./httpget
+host = localhost = localhost = 127.0.0.1
+port = 80
+httpget: connect(): Connection refused
+
+Command: ./httpget Unknown.Host
+httpget: Unknown.Host: Unknown host
+
+Command: ./httpget soe.ucsc.edu
+host = soe.ucsc.edu = soe.ucsc.edu = 128.114.48.62
+port = 80
+request: GET /
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<HTML><HEAD>
+<TITLE>302 Found</TITLE>
+</HEAD><BODY>
+<H1>Found</H1>
+The document has moved <A HREF="http://www.soe.ucsc.edu/">here</A>.<P>
+</BODY></HTML>
+
+Command: ./httpget www2.ucsc.edu /courses/cmps109-wm/
+host = www2.ucsc.edu = www2-vip72.ucsc.edu = 128.114.119.72
+port = 80
+request: GET /courses/cmps109-wm/
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+ <head>
+  <title>Index of /courses/cmps109-wm</title>
+ </head>
+ <body>
+<h1>Index of /courses/cmps109-wm</h1>
+<table><tr><th><img src="/icons/blank.gif" alt="[ICO]" width="16" height="8"></th><th><a href="?C=N;O=D">Name</a></th><th><a href="?C=M;O=A">Last modified</a></th><th><a href="?C=S;O=A">Size</a></th><th><a href="?C=D;O=A">Description</a></th></tr><tr><th colspan="5"><hr></th></tr>
+<tr><td valign="top"><img src="/icons/back.gif" alt="[DIR]" width="16" height="8"></td><td><a href="/courses/">Parent Directory</a>                </td><td>&nbsp;</td><td align="right">  - </td></tr>
+<tr><td valign="top"><img src="/icons/folder.gif" alt="[DIR]" width="16" height="8"></td><td><a href="./:/">:/</a>                              </td><td align="right">12-Mar-2013 19:27  </td><td align="right">  - </td></tr>
+<tr><th colspan="5"><hr></th></tr>
+</table>
+<PRE><A HREF=:>
+
+There is no web page for this course, but instead, a Unix
+directory structure.  The proper way to access it is by using
+ssh to log into a IC Solaris host (unix.ic.ucsc.edu).  However,
+if you actually do like that silly pointy clicky method of
+accessing information, the local web server will format the Unix
+directories as web pages for you.
+
+If you are looking in this directory properly, i.e., via Unix
+commands, there is nothing of interest here.  Just ``cd ..''.
+If you are a pointy clicky type, click on the colon above or
+right here on this README to get to the course directory.  And
+don't call it a folder.  The web link labelled Parent Directory
+above is not actually the parent directory but a link to a
+course web directory.
+
+If you are using a web client on a ucsc.edu host, you should see
+no password request.  From off campus, you need to enter a
+username, but may leave the password field blank.  To discover
+the username, log into unix.ic and look at the hidden file
+``.htpasswd'' in the parent of this directory.
+
+$Id: README.html,v 1.1 2008-11-20 15:40:02-08 - - $
+

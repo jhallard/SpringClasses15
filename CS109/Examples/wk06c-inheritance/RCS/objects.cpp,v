@@ -1,0 +1,597 @@
+head	1.20;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.20
+date	2012.04.25.04.06.03;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2012.04.25.04.05.41;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2012.04.25.04.04.46;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2012.04.25.04.02.26;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2012.04.25.04.02.18;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2012.04.25.04.02.07;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2012.04.25.03.58.43;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2012.04.25.03.57.57;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2012.04.25.03.56.37;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.04.25.03.55.04;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.04.25.03.53.26;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.25.03.50.19;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.25.03.49.30;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.25.03.46.58;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.25.03.46.32;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.25.03.46.19;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.25.03.45.08;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.25.03.44.45;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.25.03.38.05;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.25.03.37.47;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.20
+log
+@-
+@
+text
+@// $Id: objects.cpp,v 1.19 2012-04-24 21:05:41-07 - - $
+
+//
+// Example using objects, with a base object and two derived objects.
+//
+
+#include <iostream>
+#include <typeinfo>
+#include <vector>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// class object
+/////////////////////////////////////////////////////////////////
+
+class object {
+   private:
+      object (const object &); // suppress copying
+      object &operator= (const object &); // suppress copying
+      static unsigned _next_id;;
+   protected:
+      const unsigned _id;
+      object(); // abstract class, so only derived can used ctor.
+   public:
+      virtual ~object(); // must be virtual
+      virtual void print (ostream &) const;
+};
+
+unsigned object::_next_id = 0;
+
+object::object(): _id(++_next_id) {
+   cout << "Create: ";
+   this->object::print (cout);
+   cout << endl;
+}
+
+object::~object() {
+   cout << "Destroy: ";
+   this->object::print (cout);
+   cout << endl;
+}
+
+void object::print (ostream &out) const {
+   out << typeid(*this).name() << " "
+        << static_cast<const void *const> (this)
+        << " id=" << _id << ": ";
+}
+
+ostream &operator<< (ostream &out, object *obj) {
+   obj->print (out);
+   return out;
+}
+
+
+/////////////////////////////////////////////////////////////////
+// class rectangle 
+/////////////////////////////////////////////////////////////////
+
+class rectangle: public object {
+   private:
+      size_t _width;
+      size_t _height;
+   public:
+      rectangle (size_t width = 0, size_t height = 0);
+      virtual void print (ostream &) const;
+};
+
+rectangle::rectangle (size_t width, size_t height):
+            _width(width), _height(height) {
+}
+
+void rectangle::print (ostream &out) const {
+   this->object::print (out);
+   out << "rectangle: " << ": width=" << _width 
+       << ", height=" << _height;
+}
+
+/////////////////////////////////////////////////////////////////
+// class rectangle 
+/////////////////////////////////////////////////////////////////
+
+class circle: public object {
+   private:
+      size_t _diameter;
+   public:
+      circle (size_t diameter = 0);
+      virtual void print (ostream &) const;
+};
+
+circle::circle (size_t diameter): _diameter(diameter) {
+}
+
+void circle::print (ostream &out) const {
+   this->object::print (out);
+   out << "circle: " << "diameter=" << _diameter;
+}
+
+
+
+/////////////////////////////////////////////////////////////////
+// main
+/////////////////////////////////////////////////////////////////
+
+int main() {
+   vector<object*> v;
+   // ERROR: v.push_back (new object());
+   // ERROR: object o;
+   v.push_back (new circle ());
+   v.push_back (new circle (10));
+   v.push_back (new rectangle());
+   v.push_back (new rectangle (5));
+   v.push_back (new rectangle (8));
+   cout << endl;
+
+   vector<object*>::const_iterator itor = v.begin();
+   const vector<object*>::const_iterator end = v.end();
+   for (; itor != end; ++itor) {
+      cout << *itor << endl;
+   }
+   cout << endl;
+
+   while (! v.empty()) {
+      object *obj = v.back();
+      delete obj;
+      v.pop_back();
+   }
+
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=objects.out.grind \
+//TEST//       objects >objects.out 2>&1
+//TEST// mkpspdf objects.ps objects.cpp* objects.out*
+*/
+
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.18 2012-04-24 21:04:46-07 - - $
+d55 1
+d100 1
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.17 2012-04-24 21:02:26-07 - - $
+d33 2
+a34 2
+   cout << __func__ << ": ";
+   object::print (cout);
+d39 2
+a40 2
+   cout << __func__ << ": ";
+   object::print (cout);
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.16 2012-04-24 21:02:18-07 - - $
+d112 2
+d119 8
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.15 2012-04-24 21:02:07-07 - - $
+d40 1
+a40 1
+   object::print (out);
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.14 2012-04-24 20:58:43-07 - - $
+d34 1
+a34 1
+   object::print (out);
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.13 2012-04-24 20:57:57-07 - - $
+d26 1
+a26 1
+      virtual ~object(){} // must be virtual
+d33 3
+d38 8
+a45 2
+void object::print (ostream &) const {
+   cout << typeid(*this).name() << " "
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.12 2012-04-24 20:56:37-07 - - $
+d36 2
+a37 1
+   cout << typeid(*this).name() << " " << static_cast<void*> (this)
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.11 2012-04-24 20:55:04-07 - - $
+d36 2
+a37 1
+   cout << typeid(*this).name() << " id " << _id << ": ";
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.10 2012-04-24 20:53:26-07 - - $
+d36 1
+a36 1
+   cout << typeid(*this).name() << ": " << endl;
+d63 2
+a64 1
+   out << "rectangle " << _id << ": " << _width << " x " << _height;
+d84 1
+a84 1
+   out << "circle " << _id << ": " << _diameter;
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.9 2012-04-24 20:50:19-07 - - $
+d36 1
+a36 1
+   cout << typeid(*this).name() << endl;
+d62 2
+a63 2
+   out << "rectangle " << _id << ": " << _width << " x "
+       << _height << endl;
+d82 2
+a83 1
+   out << "circle " << _id << ": " << _diameter << endl;
+d103 1
+a103 1
+      (*itor)->print();
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.8 2012-04-24 20:49:30-07 - - $
+d27 1
+a27 1
+      virtual void print() const;
+d35 7
+a41 2
+void object::print() {
+   cout << typeid(*this) << endl;
+d54 1
+a54 1
+      virtual void print() const;
+d61 3
+a63 3
+void rectangle::print() const {
+   cout << "rectangle " << _id << ": " << _width << " x "
+        << _height << endl;
+d75 1
+a75 1
+      virtual void print() const;
+d81 2
+a82 2
+void circle::print() const {
+   cout << "circle " << _id << ": " << _diameter << endl;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.7 2012-04-24 20:46:58-07 - - $
+d8 1
+a8 1
+#include <type_info>
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.4 2012-04-24 20:45:08-07 - - $
+d8 1
+d27 1
+a27 1
+      virtual void print() const = 0; // abstract function
+d35 4
+@
+
+
+1.6
+log
+@-
+@
+text
+@a23 1
+      virtual void print() const = 0; // abstract function
+d26 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d92 1
+a92 1
+      *itor->print();
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.3 2012-04-24 20:44:45-07 - - $
+d24 1
+a24 1
+      virtual void print() = 0; // abstract function
+d44 1
+a44 1
+      virtual void print();
+d51 1
+a51 1
+void rectangle::print() {
+d65 1
+a65 1
+      virtual void print();
+d71 1
+a71 1
+void circle::print() {
+d92 1
+a92 1
+      itor->print();
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: objects.cpp,v 1.1 2012-04-24 20:37:47-07 - - $
+d90 1
+a90 1
+   const vector<object*>::const_iterator itor = v.end();
+@
+
+
+1.2
+log
+@-
+@
+text
+@d29 1
+a29 1
+static unsigned object::_next_id = 0;
+d31 1
+a31 1
+object::object(): _id(++next_id) {
+d45 1
+a45 1
+}
+d47 1
+a47 1
+rectangle::rectangle (size_t width = 0, size_t height = 0):
+d51 1
+a51 1
+virtual void rectangle::print() {
+d66 1
+a66 1
+}
+d68 1
+a68 1
+circle::circle (size_t diameter = 0): _diameter(diameter) {
+d71 1
+a71 1
+virtual void circle::print() {
+d81 13
+a93 1
+   vector<object&> v;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d24 1
+a24 1
+      virtual void print() = 0; abstract function
+@

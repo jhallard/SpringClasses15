@@ -1,0 +1,403 @@
+head	1.9;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.9
+date	2012.05.19.01.04.03;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.05.19.01.03.45;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.05.19.01.02.05;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.05.19.00.56.17;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.05.19.00.48.19;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.05.19.00.32.18;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.05.19.00.31.51;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.05.18.23.59.03;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.18.23.55.49;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@-
+@
+text
+@// $Id: linkedtstack2.cpp,v 1.8 2012-05-18 18:03:45-07 - - $
+
+//
+// linkedtstack2 - show the linked list implementation of a stackk
+//
+// Deleting pointers in nodes is probably a bad idea here, since
+// that will prevent the stack from sharing pointee objects with
+// other data structures.
+//
+
+#include <cstddef>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// deleter classes
+/////////////////////////////////////////////////////////////////
+
+template <typename item_t>
+struct deleter {
+   static void destroy (const item_t &) {}
+};
+
+template <typename item_t>
+struct ptr_deleter: public deleter<item_t> {
+   static void destroy (const item_t &p) {delete p;}
+};
+
+template <typename item_t>
+struct array_deleter: public deleter<item_t> {
+   static void destroy (const item_t &p) {delete[] p;}
+};
+
+
+/////////////////////////////////////////////////////////////////
+// linkedtstack2.h
+/////////////////////////////////////////////////////////////////
+
+template <typename item_t, class del_t = deleter<item_t> >
+class linkedtstack2 {
+   private:
+      struct node {
+         item_t item;
+         node *link;
+         node (item_t item, node *link): item(item), link(link) {}
+      };
+      node *topnode;
+      int count;
+      linkedtstack2 (const linkedtstack2 &); // Disabled.
+      linkedtstack2 &operator= (const linkedtstack2 &); // Disabled.
+   public:
+      linkedtstack2();
+      ~linkedtstack2();
+      void push (const item_t &);
+      void pop();
+      item_t &top();
+      const item_t &top() const;
+      inline size_t size() const {return count;}
+      inline bool empty() const {return count == 0;}
+      static void null_deleter (const item_t &) {}
+      static void ptr_deleter (const item_t &p) {delete p;}
+      static void array_deleter (const item_t &pa) {delete[] pa;}
+};
+
+
+/////////////////////////////////////////////////////////////////
+// linkedtstack2.cpp
+/////////////////////////////////////////////////////////////////
+
+template <typename item_t, class del_t>
+linkedtstack2<item_t, del_t>::linkedtstack2(): topnode (0), count(0) { }
+
+template <typename item_t, class del_t>
+linkedtstack2<item_t, del_t>::~linkedtstack2() {
+   while (! empty()) pop();
+}
+
+template <typename item_t, class del_t>
+void linkedtstack2<item_t, del_t>::push (const item_t &item) {
+   topnode = new node (item, topnode);
+   ++count;
+}
+
+template <typename item_t, class del_t>
+void linkedtstack2<item_t, del_t>::pop() {
+   if (empty()) throw out_of_range ("linkedtstack2::pop()");
+   node *tmp = topnode;
+   topnode = topnode->link;
+   del_t::destroy (tmp->item);
+   delete tmp;
+   --count;
+}
+
+template <typename item_t, class del_t>
+item_t &linkedtstack2<item_t, del_t>::top() {
+   if (empty()) throw out_of_range ("linkedtstack2::top()");
+   return topnode->item;
+}
+
+template <typename item_t, class del_t>
+const item_t &linkedtstack2<item_t, del_t>::top() const {
+   if (empty()) throw out_of_range ("linkedtstack2::top()");
+   return topnode->item;
+}
+
+
+/////////////////////////////////////////////////////////////////
+// main.cpp
+/////////////////////////////////////////////////////////////////
+
+int main (int argc, char **argv) {
+
+   // First, with stack<string>:
+   cout << "First:" << endl;
+   linkedtstack2<string> stkstr;
+   for (int argi = 1; argi < argc; ++argi) {
+      stkstr.push (argv[argi]);
+   }
+   while (stkstr.size() > size_t (argc / 2)) {
+      cout << stkstr.top() << endl;
+      stkstr.pop();
+   }
+
+   // Second, with stack<string*>:
+   cout << endl << "Second:" << endl;
+   linkedtstack2<string*, ptr_deleter<string*> > stkpstr;
+   for (int argi = 1; argi < argc; ++argi) {
+      stkpstr.push (new string (argv[argi]));
+   }
+   while (stkpstr.size() > size_t (argc / 2)) {
+      string *top = stkpstr.top();
+      cout << top << " -> " << *top << endl;
+      stkpstr.pop();
+   }
+
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=linkedtstack2.out.grind \
+//TEST//       linkedtstack2 this is some test data for the stack \
+//TEST//       >linkedtstack2.out 2>&1
+//TEST// mkpspdf linkedtstack2.ps linkedtstack2.cpp* linkedtstack2.out*
+*/
+
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: linkedtstack2.cpp,v 1.6 2012-05-18 17:56:17-07 - - $
+d37 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d19 1
+a19 1
+// linkedtstack2.h
+d37 4
+d128 1
+a128 1
+   linkedtstack2<string*> stkpstr;
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: linkedtstack2.cpp,v 1.3 2012-05-18 17:31:51-07 - - $
+d23 1
+a23 1
+class deleter {
+d28 1
+a28 1
+class ptr_deleter: public deleter {
+d33 1
+a33 1
+class array_deleter: public deleter {
+d37 1
+a37 1
+template <typename item_t, class del_t = deleter>
+d40 5
+d69 1
+a69 1
+linkedtstack2<item_t>::linkedtstack2(): topnode (0), count(0) { }
+d72 1
+a72 1
+linkedtstack2<item_t>::~linkedtstack2() {
+d77 2
+a78 5
+void linkedtstack2<item_t>::push (const item_t &item) {
+   node *tmp = new node();
+   tmp->item = item;
+   tmp->link = topnode;
+   topnode = tmp;
+d83 1
+a83 1
+void linkedtstack2<item_t>::pop() {
+d87 1
+a87 1
+   deleter<item_t>::destroy (tmp->item);
+d93 1
+a93 1
+item_t &linkedtstack2<item_t>::top() {
+d99 1
+a99 1
+const item_t &linkedtstack2<item_t>::top() const {
+@
+
+
+1.5
+log
+@-
+@
+text
+@d23 15
+a39 12
+      template <typename T>
+      struct deleter {
+         static void destroy (T &p) {cout << "T&:" << p << endl;}
+      };
+      template <typename T>
+      struct deleter<T*> {
+         static void destroy (T *p) {cout << "T*:" << p << endl; delete p;}
+      };
+      struct node {
+         item_t item;
+         node *link;
+      };
+d63 1
+a63 1
+template <typename item_t>
+d66 1
+a66 1
+template <typename item_t>
+d71 1
+a71 1
+template <typename item_t>
+d80 1
+a80 1
+template <typename item_t>
+d90 1
+a90 1
+template <typename item_t>
+d96 1
+a96 1
+template <typename item_t>
+@
+
+
+1.4
+log
+@-
+@
+text
+@d25 8
+a32 2
+      template <typename T> void delete_ptr (const T&p) { cout<<p<<endl;}
+      template <typename T> void delete_ptr (T *p) { delete p; }
+d82 1
+a82 1
+   delete_ptr<item_t> (tmp->item);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: linkedtstack2.cpp,v 1.1 2012-05-18 16:55:49-07 - - $
+a21 4
+typedef void (*deleter) (const item_t
+template <typename item_t>
+void null_deleter (const item_t &) { }
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d22 5
+a26 1
+template <typename item_t, void (*deleter) (const item_t &) = null_deleter>
+d29 2
+a30 2
+      template <typename T> inline void delete_ptr (const T&) { }
+      template <typename T> inline void delete_ptr (T *p) { delete p; }
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: linkedtstack2.cpp,v 1.1 2012-05-11 18:14:34-07 - - $
+d22 1
+a22 1
+template <typename item_t>
+d42 5
+a46 2
+      size_t size() const;
+      bool empty() const;
+a92 10
+template <typename item_t>
+size_t linkedtstack2<item_t>::size() const {
+   return count;
+}
+
+template <typename item_t>
+bool linkedtstack2<item_t>::empty() const {
+   return count == 0;
+}
+
+@

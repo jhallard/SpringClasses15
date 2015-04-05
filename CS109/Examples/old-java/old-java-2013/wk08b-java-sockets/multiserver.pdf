@@ -1,0 +1,306 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/29/12)Tj
+-0.659766 -12.8004 Td
+(20:54:58)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 260.551 736.5 Tm
+(multiserver.java)Tj
+-85.1953 18 Td
+($cmps109-wm/Examples/wk09a-java-sockets/)Tj
+/R10 10 Tf
+-107.355 -35.5 Td
+[(1:)-600(// $Id: multiserver.java,v 1.4 2012-05-29 20:54:57-07 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(//)]TJ
+T*[(4:)-600(// Multi server.  Usage:  java multiserver hostport.  Accept a)]TJ
+T*[(5:)-600(// connection from many client and echo back any input.  Each)]TJ
+T*[(6:)-600(// client is assigned a worker thread.)]TJ
+(7:)'
+T*[(8:)-600(//)]TJ
+(9:)'
+-6 -11 Td
+[(10:)-600(import java.io.*;)]TJ
+T*[(11:)-600(import java.net.*;)]TJ
+T*[(12:)-600(import java.util.*;)]TJ
+T*[(13:)-600(import static java.lang.System.*;)]TJ
+(14:)'
+T*[(15:)-600(class multiserver {)]TJ
+(16:)'
+T*[(17:)-600(   static void quit \(String format, Object... params\) {)]TJ
+T*[(18:)-600(      err.printf \(format, params\);)]TJ
+T*[(19:)-600(      exit \(1\);)]TJ
+T*[(20:)-600(   })]TJ
+(21:)'
+T*[(22:)-600(   static String ident \(options opts\) {)]TJ
+T*[(23:)-600(      return String.format \("%s: port %d", opts.progname,)]TJ
+T*[(24:)-600(                            opts.portnumber\);)]TJ
+T*[(25:)-600(   })]TJ
+(26:)'
+T*[(27:)-600(   static String get_jarname\(\) {)]TJ
+T*[(28:)-600(      String jarpath = getProperty \("java.class.path"\);)]TJ
+T*[(29:)-600(      int lastslash = jarpath.lastIndexOf \('/'\);)]TJ
+T*[(30:)-600(      if \(lastslash < 0\) return jarpath;)]TJ
+T*[(31:)-600(      return jarpath.substring \(lastslash + 1\);)]TJ
+T*[(32:)-600(   })]TJ
+(33:)'
+T*[(34:)-600(   static class options {)]TJ
+T*[(35:)-600(      final String progname = get_jarname\(\);)]TJ
+T*[(36:)-600(      int portnumber;)]TJ
+T*[(37:)-600(      options \(String[] args\) {)]TJ
+T*[(38:)-600(         try {)]TJ
+T*[(39:)-600(            if \(args.length != 1\) throw new NumberFormatException\(\);)]TJ
+T*[(40:)-600(            portnumber = Integer.parseInt \(args[0]\);)]TJ
+T*[(41:)-600(         }catch \(NumberFormatException exn\) {)]TJ
+T*[(42:)-600(            quit \("Usage: %s portnumber%n", progname\);)]TJ
+T*[(43:)-600(         })]TJ
+T*[(44:)-600(      })]TJ
+T*[(45:)-600(   })]TJ
+(46:)'
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+2475
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(05/29/12)Tj
+-0.659766 -12.8004 Td
+(20:54:58)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 260.551 736.5 Tm
+(multiserver.java)Tj
+-85.1953 18 Td
+($cmps109-wm/Examples/wk09a-java-sockets/)Tj
+/R10 10 Tf
+-113.355 -35.5 Td
+(47:)Tj
+11 TL
+T*[(48:)-600(   static class worker implements Runnable {)]TJ
+T*[(49:)-600(      static int worker_count = 0;)]TJ
+T*[(50:)-600(      options opts;)]TJ
+T*[(51:)-600(      Socket client;)]TJ
+T*[(52:)-600(      int worker_id = ++worker_count;)]TJ
+T*[(53:)-600(      worker \(options opts, Socket client\) {)]TJ
+T*[(54:)-600(         this.opts = opts;)]TJ
+T*[(55:)-600(         this.client = client;)]TJ
+T*[(56:)-600(      })]TJ
+T*[(57:)-600(      public void run\(\) {)]TJ
+T*[(58:)-600(         out.printf \("%s: worker %d: starting%n",)]TJ
+T*[(59:)-600(                     ident \(opts\), worker_id\);)]TJ
+T*[(60:)-600(         try {)]TJ
+T*[(61:)-600(            Scanner client_in = new Scanner \(client.getInputStream\(\)\);)]TJ
+T*[(62:)-600(            PrintWriter client_out =)]TJ
+T*[(63:)-600(                        new PrintWriter \(client.getOutputStream\(\)\);)]TJ
+T*[(64:)-600(            for \(int count = 1; client_in.hasNextLine\(\); ++count\) {)]TJ
+T*[(65:)-600(               if \(client.isInputShutdown\(\))]TJ
+T*[(66:)-600(                || client.isOutputShutdown\(\)\) break;)]TJ
+T*[(67:)-600(               String line = client_in.nextLine\(\);)]TJ
+T*[(68:)-600(               out.printf \("%d[%d]%s%n", worker_id, count, line\);)]TJ
+T*[(69:)-600(               client_out.printf \("%d[%d]%s%n", worker_id, count, line\);)]TJ
+T*[(70:)-600(               client_out.flush\(\);)]TJ
+T*[(71:)-600(            })]TJ
+T*[(72:)-600(            client.close\(\);)]TJ
+T*[(73:)-600(            out.printf \("%s: worker %d: finished%n",)]TJ
+T*[(74:)-600(                        ident \(opts\), worker_id\);)]TJ
+T*[(75:)-600(         }catch \(IOException exn\) {)]TJ
+T*[(76:)-600(            quit \("%s: %s%n", ident \(opts\), exn\);)]TJ
+T*[(77:)-600(         })]TJ
+T*[(78:)-600(      })]TJ
+T*[(79:)-600(   })]TJ
+(80:)'
+T*[(81:)-600(   public static void main \(String[] args\) {)]TJ
+T*[(82:)-600(      options opts = new options \(args\);)]TJ
+T*[(83:)-600(      try {)]TJ
+T*[(84:)-600(         ServerSocket socket = new ServerSocket \(opts.portnumber\);)]TJ
+T*[(85:)-600(         out.printf \("%s: waiting for client%n", ident \(opts\)\);)]TJ
+T*[(86:)-600(         for \(;;\) {)]TJ
+T*[(87:)-600(            Socket client = socket.accept\(\);)]TJ
+T*[(88:)-600(            out.printf \("%s: socket.accept OK%n", ident \(opts\)\);)]TJ
+T*[(89:)-600(            Thread worker = new Thread \(new worker \(opts, client\)\);)]TJ
+T*[(90:)-600(            worker.start\(\);)]TJ
+T*[(91:)-600(         })]TJ
+T*[(92:)-600(      }catch \(IOException exn\) {)]TJ
+T*[(93:)-600(         quit \("%s: %s%n", ident \(opts\), exn\);)]TJ
+T*[(94:)-600(      }catch \(IllegalArgumentException exn\) {)]TJ
+T*[(95:)-600(         quit \("%s: %s%n", ident \(opts\), exn\);)]TJ
+T*[(96:)-600(      })]TJ
+T*[(97:)-600(   })]TJ
+(98:)'
+T*[(99:)-600(})]TJ
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+3364
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+] /Count 2
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20120529205954)
+/ModDate(D:20120529205954)>>endobj
+xref
+0 17
+0000000000 65535 f 
+0000006325 00000 n 
+0000006833 00000 n 
+0000006259 00000 n 
+0000005991 00000 n 
+0000000009 00000 n 
+0000002534 00000 n 
+0000006631 00000 n 
+0000006502 00000 n 
+0000006700 00000 n 
+0000006568 00000 n 
+0000006765 00000 n 
+0000006373 00000 n 
+0000006124 00000 n 
+0000002554 00000 n 
+0000005970 00000 n 
+0000006443 00000 n 
+trailer
+<< /Size 17 /Root 1 0 R /Info 2 0 R
+/ID [<E8EF0C1EC787DCA99FC3B41FCBDB4C34><E8EF0C1EC787DCA99FC3B41FCBDB4C34>]
+>>
+startxref
+6944
+%%EOF

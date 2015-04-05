@@ -1,0 +1,49 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.1
+date	2009.03.07.04.04.35;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+#ifndef __ARRAYSTACK_H__
+#define __ARRAYSTACK_H__
+
+#include "stack.h"
+
+template <class item_t>
+class arraystack: public stack<item_t> {
+   public:
+      arraystack ();
+      arraystack (const arraystack<item_t> &);
+      virtual arraystack<item_t> &operator= (
+                  const arraystack<item_t> &);
+      virtual ~arraystack ();
+      virtual bool empty ();
+      virtual void push (const item_t &);
+      virtual item_t pop ();
+   private:
+      int top;
+      int size;
+      item_t *data;
+};
+
+#endif
+
+@

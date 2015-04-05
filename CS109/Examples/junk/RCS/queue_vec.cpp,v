@@ -1,0 +1,276 @@
+head	1.10;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.10
+date	2014.07.18.22.53.49;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.07.12.01.31.33;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.07.12.01.31.02;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.07.12.01.30.39;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.07.12.01.30.28;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.07.12.01.28.34;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.07.12.01.28.21;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.07.12.01.28.09;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.07.12.01.27.54;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.07.12.01.27.11;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.10
+log
+@-
+@
+text
+@// $Id: queue_vec.cpp,v 1.9 2014-07-11 18:31:33-07 - - $
+
+#include <algorithm>
+#include <iostream>
+#include <vector>
+using namespace std;
+
+template <typename item_t>
+class queue {
+   private:
+      vector<item_t> front_vec;
+      vector<item_t> back_vec;
+      size_t front_pos {};
+      void maybe_switch();
+   public:
+      item_t& front() { return front_vec[front_pos]; }
+      const item_t& front() const { return front_vec[front_pos]; }
+      void pop_front();
+      void push_back (const item_t& val);
+      void push_back (item_t&& val);
+      size_t size() const;
+      bool empty() const { return size() == 0; }
+};
+
+template <typename item_t>
+void queue<item_t>::maybe_switch() {
+   if (front_pos == front_vec.size()) {
+      front_vec.clear();
+      front_pos = 0;
+      if (back_vec.size() > 0) swap (front_vec, back_vec);
+   }
+}
+
+template <typename item_t>
+void queue<item_t>::pop_front() {
+   item_t tmp = std::move (front_vec[front_pos++]);
+   maybe_switch();
+}
+
+template <typename item_t>
+void queue<item_t>::push_back (const item_t& val) {
+   back_vec.push_back (val);
+   maybe_switch();
+}
+
+template <typename item_t>
+void queue<item_t>::push_back (item_t&& val) {
+   back_vec.push_back (val);
+   maybe_switch();
+}
+
+template <typename item_t>
+size_t queue<item_t>::size() const {
+   return back_vec.size() + front_vec.size() - front_pos;
+}
+
+
+int main (int argc, char** argv) {
+   queue<string> que;
+   for_each (&argv[0], &argv[argc],
+             [&] (char* arg) { que.push_back (arg); });
+   while (not que.empty()) {
+      cout << que.front() << endl;
+      que.pop_front();
+   }
+   cout << "sizeof queue<string> = " << sizeof (queue<string>) << endl;
+}
+
+/*
+//TEST// alias grind='valgrind --leak-check=full --show-reachable=yes'
+//TEST// grind queue_vec This is a test of queue_vec. \
+//TEST//       >queue_vec.out 2>&1
+//TEST// mkpspdf queue_vec.ps queue_vec.cpp* queue_vec.out
+*/
+
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: queue_vec.cpp,v 1.8 2014-07-11 18:31:02-07 - - $
+d66 1
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: queue_vec.cpp,v 1.7 2014-07-11 18:30:39-07 - - $
+d69 1
+a69 1
+//TEST// export grind='valgrind --leak-check=full --show-reachable=yes'
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: queue_vec.cpp,v 1.6 2014-07-11 18:30:28-07 - - $
+d69 1
+a69 1
+//TEST// grind='valgrind --leak-check=full --show-reachable=yes'
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: queue_vec.cpp,v 1.5 2014-07-11 18:28:34-07 - - $
+d68 1
+d73 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: queue_vec.cpp,v 1.4 2014-07-11 18:28:21-07 - - $
+d68 3
+a70 1
+//TEST// ./queue_vec This is a test of a queue_vec. >queue_vec.out 2>&1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: queue_vec.cpp,v 1.3 2014-07-11 18:28:09-07 - - $
+d63 1
+a63 1
+      cout << que.front << endl;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: queue_vec.cpp,v 1.2 2014-07-11 18:27:54-07 - - $
+d4 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: queue_vec.cpp,v 1.1 2014-07-11 18:27:11-07 - - $
+d60 1
+a60 1
+             [] (char* arg) { que.push_back (arg); });
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: queue.h,v 1.1 2014-07-11 18:14:11-07 - - $
+d25 1
+a25 1
+void queue::maybe_switch() {
+d34 1
+a34 1
+void queue::pop_front() {
+d40 1
+a40 1
+void queue::push_back (const item_t& val) {
+d46 1
+a46 1
+void queue::push_back (item_t&& val) {
+d52 1
+a52 1
+size_t queue::size() const {
+@

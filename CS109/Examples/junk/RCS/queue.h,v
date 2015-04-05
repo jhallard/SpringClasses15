@@ -1,0 +1,77 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.1
+date	2014.07.12.01.14.11;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+template <typename item_t>
+class queue {
+   private:
+      vector<item_t> front_vec;
+      vector<item_t> back_vec;
+      size_t front_pos {};
+      void maybe_switch();
+   public:
+      item_t& front() { return front_vec[front_pos]; }
+      const item_t& front() const { return front_vec[front_pos]; }
+      void pop_front();
+      void push_back (const item_t& val);
+      void push_back (item_t&& val);
+      size_t size() const;
+      bool empty() const { return size() == 0; }
+};
+
+template <typename item_t>
+void queue::maybe_switch() {
+   if (front_pos == front_vec.size() and back_vec.size() > 0) {
+      swap (front_vec, back_vec);
+      front_pos = 0;
+   }
+}
+
+template <typename item_t>
+void queue::pop_front() {
+   item_t tmp = std::move (front_vec[front_pos++]);
+   maybe_switch();
+}
+
+template <typename item_t>
+void queue::push_back (const item_t& val) {
+   back_vec.push_back (val);
+   maybe_switch();
+}
+
+template <typename item_t>
+void queue::push_back (item_t&& val) {
+   back_vec.push_back (val);
+   maybe_switch();
+}
+
+template <typename item_t>
+size_t queue::size() const {
+   return back_vec.size() + front_vec.size() - front_pos;
+}
+
+@

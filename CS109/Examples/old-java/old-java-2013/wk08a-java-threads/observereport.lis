@@ -1,0 +1,49 @@
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+log: observereport.log
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+     1	Script  : /afs/cats.ucsc.edu/courses/cmps012b-wm/bin/runprog
+     2	limit c :    0 max core file size (KB)
+     3	limit f : 4194303 max output file size (KB)
+     4	limit t : 4294967295 max CPU time (sec)
+     5	stdin   : /dev/null
+     6	stdout  : observereport.out
+     7	stderr  : observereport.err
+     8	log     : observereport.log
+     9	listing : observereport.lis
+    10	Command : observereport
+    11	starting: pid 9657: 19:33:43.00
+    12	finished: pid 9657: 19:33:53.00, real 10.00, user 0.08, sys 0.02
+    13	pstatus: 0x0000 EXIT STATUS = 0
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stdin: /dev/null
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stdout: observereport.out
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+     1	     0.048: main(1): starting
+     2	     7.478: main(1): finished
+     3	     7.786: observer(8): starting
+     4	     7.834: reporter(9): starting
+     5	  1009.575: reporter(9): report   0: events:    90
+     6	  2010.103: reporter(9): report   1: events:    83
+     7	  3010.645: reporter(9): report   2: events:   110
+     8	  4011.175: reporter(9): report   3: events:    80
+     9	  5011.707: reporter(9): report   4: events:    80
+    10	  6012.225: reporter(9): report   5: events:    95
+    11	  7012.756: reporter(9): report   6: events:    82
+    12	  8013.281: reporter(9): report   7: events:    87
+    13	  9013.815: reporter(9): report   8: events:    94
+    14	 10014.339: reporter(9): report   9: events:    95
+    15	 10014.810: reporter(9): finished
+    16	 10016.828: observer(8): finished
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+stderr: observereport.err
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+

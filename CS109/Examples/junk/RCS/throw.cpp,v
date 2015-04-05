@@ -1,0 +1,49 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2014.06.06.02.27.16;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+struct foo_error: public runtime_error {
+   explicit error (const string& w): runtime_error("foo_error: " + w) {}
+}
+
+struct subfoo_error: public foo_error {
+   explicit error (const string& w): foo_error("subfoo_error: " + w) {}
+}
+
+void foo() {
+   throw subfoo_error();
+}
+
+int main() {
+   try {
+      foo();
+   }catch (foo_error& e) {
+      cout << e.what();
+   }
+}
+
+@

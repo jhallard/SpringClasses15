@@ -1,0 +1,9 @@
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting eightthreads.java
+* eightthreads.java: $Id: eightthreads.java,v 1.14 2012-11-30
+12:23:23-08 - - $
+* javac -Xlint eightthreads.java
+* jar cfm eightthreads Manifest eightthreads$printmsg.class
+eightthreads.class
+* chmod +x eightthreads
+* rm -f eightthreads$printmsg.class eightthreads.class
+* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished eightthreads.java

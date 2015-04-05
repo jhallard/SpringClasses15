@@ -1,0 +1,255 @@
+head	1.9;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.9
+date	2013.02.23.03.27.07;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.02.23.03.17.00;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.02.23.03.16.41;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.02.23.03.14.28;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.02.23.03.14.11;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.02.23.03.14.02;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.02.23.03.13.50;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.02.23.03.13.40;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.02.23.03.11.52;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@-
+@
+text
+@// $Id: ststring.cpp,v 1.8 2013-02-22 19:17:00-08 - - $
+
+// Simple traced string.
+// Print out message from constructor and destructor.
+
+#include <cstring>
+#include <iostream>
+
+using namespace std;
+
+class ststring {
+   private:
+      size_t length;
+      char *buffer;
+      void trace (const char *const label);
+   public:
+      ststring();
+      ststring (const ststring &that);
+      ststring &operator= (const ststring &that);
+      ~ststring();
+      ststring (const char *const str);
+      friend ostream &operator<< (ostream &out, const ststring &str);
+};
+
+void ststring::trace (const char *const label) {
+   cout << label << ": " << static_cast<void*> (this)
+        << "->ststring {" << length << "," << buffer << "}" << endl;
+}
+
+ststring::ststring(): length(0), buffer(new char[1]) {
+   buffer[0] = '\0';
+   trace ("ststring()");
+}
+
+ststring::ststring (const ststring &that):
+          length(that.length), buffer(new char[that.length]) {
+   strcpy (buffer, that.buffer);
+   trace ("ststring(const ststring &)");
+}
+
+ststring &ststring::operator= (const ststring &that) {
+   if (this == &that) return *this;
+   delete[] buffer;
+   length = that.length;
+   buffer = new char[length];
+   strcpy (buffer, that.buffer);
+   trace ("ststring::operator=");
+   return *this;
+}
+
+ststring::~ststring() {
+   trace ("~ststring");
+   delete[] buffer;
+}
+
+ststring::ststring (const char *const str):
+          length(strlen(str)), buffer(new char[length + 1]) {
+   strcpy (buffer, str);
+   trace ("ststring(const char *const)");
+}
+
+ostream &operator<< (ostream &out, const ststring &str) {
+   out << str.buffer;
+   return out;
+}
+
+int main (int argc, char **argv) {
+   ststring s1;
+   ststring s2 ("hello");
+   ststring s3 (s2);
+   s1 = s3;
+   return 0;
+}
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ststring.cpp,v 1.7 2013-02-22 19:16:41-08 - - $
+d15 1
+d25 5
+d32 1
+d38 1
+d47 2
+d52 1
+d59 1
+d67 7
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ststring.cpp,v 1.6 2013-02-22 19:14:28-08 - - $
+d46 1
+a46 2
+          length(strlen(str)),
+          buffer(new char[strlen + 1]) {
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ststring.cpp,v 1.5 2013-02-22 19:14:11-08 - - $
+d46 2
+a47 1
+          length(strlen(str)), buffer(new char[strlen + 1]) {
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ststring.cpp,v 1.4 2013-02-22 19:14:02-08 - - $
+d46 1
+a46 1
+          length(strlen(str), buffer(new char[strlen + 1] {
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ststring.cpp,v 1.3 2013-02-22 19:13:50-08 - - $
+d33 1
+a33 1
+ststring &stastring::operator= (const ststring &that) {
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ststring.cpp,v 1.2 2013-02-22 19:13:40-08 - - $
+d6 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: ststring.cpp,v 1.1 2013-02-22 19:11:52-08 - - $
+d21 1
+a21 1
+}
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d16 1
+a16 1
+      ststring (const ststrung &that);
+d27 1
+a27 1
+ststring::ststring (const ststrung &that):
+@

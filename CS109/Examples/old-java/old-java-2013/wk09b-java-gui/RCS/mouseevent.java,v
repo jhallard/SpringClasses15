@@ -1,0 +1,328 @@
+head	1.12;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.12
+date	2012.06.01.05.09.32;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2012.06.01.05.09.12;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2012.06.01.05.08.38;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.06.01.05.06.38;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.06.01.05.06.29;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.06.01.05.06.03;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.06.01.05.02.35;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.06.01.05.02.27;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.06.01.05.02.02;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.06.01.05.01.47;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.06.01.04.46.47;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.06.01.04.42.42;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.12
+log
+@-
+@
+text
+@// $Id: mouseevent.java,v 1.11 2012-05-31 22:09:12-07 - - $
+
+//
+// Shows how to handle mouse events.
+// Mouse is clicked, which is pressed then released.
+// Mouse enters or leaves on a mouseover.
+//
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import static java.lang.System.*;
+
+class mouseevent {
+
+   static void log_event (String name, MouseEvent event) {
+      out.printf ("Mouse %s:%n", name);
+      Point relative = event.getPoint();
+      Point absolute = event.getLocationOnScreen();
+      out.printf ("   relative = (%s,%s), screen = (%s,%s)%n",
+                  relative.getX(), relative.getY(),
+                  absolute.getX(), absolute.getY());
+      out.printf ("   button = %d, clicks = %d, when = %d%n",
+                  event.getButton(), event.getClickCount(),
+                  event.getWhen());
+      out.printf ("   modifiers =");
+      if (event.isAltDown()) out.printf (" Alt");
+      if (event.isAltGraphDown()) out.printf (" AltGraph");
+      if (event.isControlDown()) out.printf (" Control");
+      if (event.isMetaDown()) out.printf (" Meta");
+      if (event.isShiftDown()) out.printf (" Shift");
+      out.printf ("%n");
+   }
+
+   static class mouse_listener implements MouseListener {
+      public void mouseClicked (MouseEvent event) {
+         log_event ("Clicked", event);
+      }
+      public void mouseEntered (MouseEvent event) {
+         log_event ("Entered", event);
+      }
+      public void mouseExited (MouseEvent event) {
+         log_event ("Exited", event);
+      }
+      public void mousePressed (MouseEvent event) {
+         log_event ("Pressed", event);
+      }
+      public void mouseReleased (MouseEvent event) {
+         log_event ("Released", event);
+      }
+   }
+
+   public static void main (String[] args) {
+      JFrame frame = new JFrame ("mouseevent");
+      Container pane = frame.getContentPane ();
+      JButton button = new JButton ("Click this");
+      pane.add (button);
+      button.setFont (new Font ("Helvetica", Font.BOLD, 36));
+      button.addMouseListener (new mouse_listener ());
+      frame.setLocation (256, 256);
+      frame.pack ();
+      frame.setVisible (true);
+   }
+
+}
+
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.10 2012-05-31 22:08:38-07 - - $
+d20 1
+a20 1
+      out.printf ("   relative = (%g,%g), screen = (%g,%g)%n",
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.9 2012-05-31 22:06:38-07 - - $
+d20 1
+a20 1
+      out.printf ("   relative = (%.4g,%.4g), screen = (%.4g,%.4g)%n",
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.8 2012-05-31 22:06:29-07 - - $
+d20 1
+a20 1
+      out.printf ("   relative = (%d,%d), screen = (%d,%d)%n",
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.7 2012-05-31 22:06:03-07 - - $
+d19 1
+a19 1
+      Point absolute = event.event.getLocationOnScreen();
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.6 2012-05-31 22:02:35-07 - - $
+d22 1
+a22 1
+                  absolute.getX(), absolute.getY(),
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.5 2012-05-31 22:02:27-07 - - $
+d18 5
+a22 2
+      out.printf ("   relative = %s, screen = %s%n",
+                  event.getPoint(), event.getLocationOnScreen());
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.4 2012-05-31 22:02:02-07 - - $
+d19 1
+a19 1
+                  event.getPoint(), event.geetLocationOnScreen());
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.3 2012-05-31 22:01:47-07 - - $
+d27 2
+a28 2
+      if (event.isMetaDownDown()) out.printf (" MetaDown");
+      if (event.isShiftDownDown()) out.printf (" ShiftDown");
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.2 2012-05-31 21:46:47-07 - - $
+d16 1
+a16 1
+   static log (String name, MouseEvent event) {
+d34 1
+a34 1
+         log ("Clicked", event);
+d37 1
+a37 1
+         log ("Entered", event);
+d40 1
+a40 1
+         log ("Exited", event);
+d43 1
+a43 1
+         log ("Pressed", event);
+d46 1
+a46 1
+         log ("Released", event);
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.1 2012-05-31 21:42:42-07 - - $
+d16 16
+d34 1
+a34 1
+         out.println (event.paramString ());
+d37 1
+a37 1
+         out.println (event.paramString ());
+d40 1
+a40 1
+         out.println (event.paramString ());
+d43 1
+a43 1
+         out.println (event.paramString ());
+d46 1
+a46 1
+         out.println (event.paramString ());
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mouseevent.java,v 1.11 2010-03-10 15:07:37-08 - - $
+d39 1
+a39 1
+      button.setFont (new Font ("Helvetica", Font.BOLD, 43));
+@

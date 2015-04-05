@@ -1,0 +1,382 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2012.05.21.22.06.20;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.05.21.22.02.27;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: tcvector.cpp,v 1.1 2012-05-21 15:02:27-07 - - $
+
+//
+// Template class tvector showing implementation of a vector,
+// with its iterator and const_iterator.
+//
+
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+using namespace std;
+
+/////////////////////////////////////////////////////////////////
+// general utilities
+/////////////////////////////////////////////////////////////////
+
+template <typename one_t, typename two_t>
+struct tpair {
+   one_t one;
+   two_t two;
+   tpair (const one_t _one, const two_t _two): one(_one), two(_two) {}
+   tpair (): one(one_t()), two(two_t()) {}
+};
+
+
+/////////////////////////////////////////////////////////////////
+// interface tvector.h
+/////////////////////////////////////////////////////////////////
+
+template <typename, typename>
+class tvector_iterator;
+
+template <typename value_t>
+class tvector {
+   private:
+      typedef tvector<value_t> this_t;
+      size_t _size;
+      size_t _capacity;
+      value_t *_data;
+      void range_check (size_t);
+      void empty_check();
+      void copy_data (value_t *data);
+      static const size_t MIN_RESERVE = 8;
+
+   public:
+      friend class tvector_iterator<this_t, value_t>;
+      typedef tvector_iterator<this_t, value_t> iterator;
+      typedef tvector_iterator<const this_t, const value_t>
+                                                const_iterator;
+
+      // Override default members.
+      inline tvector(): _size(0), _capacity(0), _data(NULL) {};
+      tvector (const tvector &);
+      tvector &operator= (const tvector &);
+      inline ~tvector() {delete[] _data;}
+
+      // Other ctors.
+      explicit tvector (size_t size);
+
+      // Checked subscripting.
+      const value_t &operator[] (size_t pos) const; // x = a[i];
+      value_t &operator[] (size_t pos); // a[i] = x;
+
+      // Size and capacity checks and adjustments.
+      inline bool empty() const {return _size == 0;}
+      inline size_t size() const {return _size;}
+      inline size_t capacity() const {return _capacity;}
+      void resize (size_t size);
+      void reserve (size_t capacity);
+
+      // End access and adjustment.
+      void push_back (const value_t &);
+      void pop_back();
+      const value_t &back() const;
+      value_t &back();
+
+      // Iterator creation.
+      iterator begin() {return iterator (this, 0);}
+      iterator end() {return iterator (this, _size);}
+      
+};
+
+
+/////////////////////////////////////////////////////////////////
+// interface tvector::iterator
+/////////////////////////////////////////////////////////////////
+
+template <typename vector_t, typename value_t>
+class tvector_iterator {
+   private:
+      vector_t *_vector;
+      size_t _pos;
+      tvector_iterator (vector_t *vector, size_t pos);
+      friend class tvector<value_t>;
+   public:
+      template <typename vec_t, typename val_t>
+      friend ostream &operator<< (
+         ostream&, const tvector_iterator<vec_t, val_t> &
+      );
+      inline tvector_iterator(): _vector(NULL), _pos(0) {}
+      // Copy ctor, op=, and dtor accepted as default,
+      tvector_iterator &operator++(); // ++itor
+      tvector_iterator operator++ (int); // itor++
+      bool operator== (const tvector_iterator &) const;
+      bool operator!= (const tvector_iterator &) const;
+      value_t &operator*() const;
+      value_t *operator->() const;
+      operator iterator<const vector_t vec, const value_t val>() const {
+        return iterator<const vector_t vec, const value_t val>
+               (_vector, _pos);
+      }
+};
+
+
+/////////////////////////////////////////////////////////////////
+// implementation tvector
+/////////////////////////////////////////////////////////////////
+
+// void range_check (size_t);
+template <typename value_t>
+void tvector<value_t>::range_check (size_t pos) {
+   if (pos >= _size) throw out_of_range ("tvector::range_check");
+}
+
+// void empty_check();
+template <typename value_t>
+void tvector<value_t>::empty_check() {
+   if (empty()) throw out_of_range ("tvector::empty_check");
+}
+
+// void copy_data (value_t *data);
+template <typename value_t>
+void tvector<value_t>::copy_data (value_t *data) {
+   for (size_t pos = 0; pos < _size; ++pos) {
+      _data[pos] = data[pos];
+   }
+}
+
+// tvector (const tvector &);
+template <typename value_t>
+tvector<value_t>::tvector (const tvector &that):
+_size(that.size), _capacity(that.size) {
+   if (_size == 0) _data = NULL;
+   else {
+      _data = new value_t[_size];
+      copy_data (that._data);
+   }
+}
+
+// tvector &operator= (const tvector &);
+template <typename value_t>
+tvector<value_t> &tvector<value_t>::operator= (const tvector &that) {
+   if (this != &that) {
+      if (_capacity < that._size) {
+         delete[] _data;
+         _capacity = that._size;
+         _data = new value_t[_capacity];
+      }
+      _size = that._size;
+      copy_data (that._data);
+   }
+   return *this;
+}
+
+// explicit tvector (size_t size);
+template <typename value_t>
+tvector<value_t>::tvector (size_t size): _size(size), _capacity(size) {
+   if (_size == 0) _data = NULL;
+              else _data = new value_t[_size];
+   // What about unitialized value_t?
+}
+
+
+// const value_t &operator[] (size_t pos) const; // x = a[i];
+template <typename value_t>
+const value_t &tvector<value_t>::operator[] (size_t pos) const {
+   range_check (pos);
+   return _data[pos];
+}
+
+// value_t &operator[] (size_t pos); // a[i] = x;
+template <typename value_t>
+value_t &tvector<value_t>::operator[] (size_t pos) {
+   range_check (pos);
+   return _data[pos];
+}
+
+// void resize (size_t size);
+template <typename value_t>
+void tvector<value_t>::resize (size_t size) {
+   if (_size < size) reserve (size);
+   // What about uninitialized elements?
+   _size = size;
+}
+
+// void reserve (size_t capacity);
+template <typename value_t>
+void tvector<value_t>::reserve (size_t capacity) {
+   if (capacity < MIN_RESERVE) capacity = MIN_RESERVE;
+   if (_capacity < capacity) {
+      value_t *old_data = _data;
+      _capacity = capacity;
+      _data = new value_t[_capacity];
+      if (old_data != NULL) {
+         copy_data (old_data);
+         delete[] old_data;
+         // What about uninitialized elements?
+      }
+   }
+}
+
+
+// void push_back (const value_t &);
+template <typename value_t>
+void tvector<value_t>::push_back (const value_t &value) {
+   if (_data == NULL) reserve (MIN_RESERVE);
+   else if (_size == _capacity) reserve (2 * _capacity);
+   _data[_size++] = value;
+}
+
+// void pop_back();
+template <typename value_t>
+void tvector<value_t>::pop_back() {
+   empty_check();
+   --_size;
+}
+
+// const value_t &back() const;
+template <typename value_t>
+const value_t &tvector<value_t>::back() const {
+   empty_check();
+   return _data[_size - 1];
+}
+
+// value_t &back();
+template <typename value_t>
+value_t &tvector<value_t>::back() {
+   empty_check();
+   return _data[_size - 1];
+}
+
+
+/////////////////////////////////////////////////////////////////
+// implementation tvector_iterator
+/////////////////////////////////////////////////////////////////
+
+template <typename vector_t, typename value_t>
+ostream &operator<< (ostream &out, const tvector_iterator<vector_t,
+value_t> &it) {
+   cout << it._vector << "[" << it._pos << "]";
+   return out;
+}
+
+// tvector_iterator (vector_t vector, size_t pos);
+// called from tvector::begin and tvector::end.
+template <typename vector_t, typename value_t>
+tvector_iterator<vector_t, value_t>::tvector_iterator (
+   vector_t *vector, size_t pos
+): _vector(vector), _pos(pos) {
+}
+
+// tvector_iterator &operator++(); // ++itor
+template <typename vector_t, typename value_t>
+tvector_iterator<vector_t, value_t> &
+tvector_iterator<vector_t, value_t>::operator++() {
+   _vector->range_check (_pos);
+   ++_pos;
+   return *this;
+}
+
+// tvector_iterator operator++ (int); // itor++
+template <typename vector_t, typename value_t>
+tvector_iterator<vector_t, value_t>
+tvector_iterator<vector_t, value_t>::operator++ (int) {
+   tvector_iterator<vector_t, value_t> result (*this);
+   _vector->range_check (_pos);
+   ++_pos;
+   return result;
+}
+
+// bool operator== (const tvector_iterator &) const;
+template <typename vector_t, typename value_t>
+bool tvector_iterator<vector_t, value_t>::operator== (
+   const tvector_iterator<vector_t, value_t> &that
+) const {
+   return _vector == that._vector && _pos == that._pos;
+}
+
+// bool operator!= (const tvector_iterator &) const;
+template <typename vector_t, typename value_t>
+bool tvector_iterator<vector_t, value_t>::operator!= (
+   const tvector_iterator<vector_t, value_t> &that
+) const {
+   return ! (*this == that);
+}
+
+
+// value_t &operator*() const;
+template <typename vector_t, typename value_t>
+value_t &tvector_iterator<vector_t, value_t>::operator*() const {
+   _vector->range_check (_pos);
+   return _vector->_data[_pos];
+}
+
+// value_t *operator->() const;
+template <typename vector_t, typename value_t>
+value_t *tvector_iterator<vector_t, value_t>::operator->() const {
+   _vector->range_check (_pos);
+   return &_vector->_data[_pos];
+}
+
+/////////////////////////////////////////////////////////////////
+// main program test harness
+/////////////////////////////////////////////////////////////////
+
+typedef tpair<string, int> sipair_t;
+typedef tvector<sipair_t> vec_t;
+typedef vec_t::const_iterator vecitor_t;
+
+int main (int argc, char **argv) {
+   vec_t vec;
+   for (int pos = 1; pos < argc; ++pos) {
+      vec.push_back (sipair_t (argv[pos], pos));
+   }
+   for (vecitor_t itor = vec.begin(); itor != vec.end(); ++itor) {
+      cout << itor->one << ", " << itor->two << endl;
+   }
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=tvector.out.grind \
+//TEST//       tvector this is some test data for the tvector \
+//TEST//       >tvector.out 2>&1
+//TEST// mkpspdf tvector.ps tvector.cpp* tvector.out*
+*/
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: tvector.cpp,v 1.29 2012-05-18 19:35:38-07 - - $
+d49 2
+a50 1
+      typedef tvector_iterator<this_t, const value_t> const_iterator;
+d109 4
+@
