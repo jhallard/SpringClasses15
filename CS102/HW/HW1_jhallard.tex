@@ -1,0 +1,285 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Programming/Coding Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing assignment content.
+%
+% This template uses a Perl script as an example snippet of code, most other
+% languages are also usable. Configure them in the "CODE INCLUSION 
+% CONFIGURATION" section.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%   PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle} % Top center head
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+\newcommand{\tab}{\hspace*{3em}}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%   CODE INCLUSION CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0} % This is the color used for comments
+\lstloadlanguages{Perl} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=Perl, % Use Perl in this example
+        frame=single, % Single frame around code
+        basicstyle=\small\ttfamily, % Use small true type font
+        keywordstyle=[1]\color{Blue}\bf, % Perl functions bold and blue
+        keywordstyle=[2]\color{Purple}, % Perl function arguments purple
+        keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+        identifierstyle=, % Nothing special about identifiers                                         
+        commentstyle=\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small, % Comments small dark green courier font
+        stringstyle=\color{Purple}, % Strings are purple
+        showstringspaces=false, % Don't put marks in string spaces
+        tabsize=5, % 5 spaces per tab
+        %
+        % Put standard Perl functions not included in the default language here
+        morekeywords={rand},
+        %
+        % Put Perl function parameters here
+        morekeywords=[2]{on, off, interp},
+        %
+        % Put user defined functions here
+        morekeywords=[3]{test},
+        %
+        morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+        numbers=left, % Line numbers on left
+        firstnumber=1, % Line numbers start with line 1
+        numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+        stepnumber=5 % Line numbers go in steps of 5
+}
+
+% Creates a new command to include a perl script, the first parameter is the filename of the script (without .pl), the second parameter is the caption
+\newcommand{\perlscript}[2]{
+\begin{itemize}
+\item[]\lstinputlisting[caption=#2,label=#1]{#1.pl}
+\end{itemize}
+}
+
+%----------------------------------------------------------------------------------------
+%   DOCUMENT STRUCTURE COMMANDS
+%   Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Problem \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%   NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Homework\ \#1} % Assignment title
+\newcommand{\hmwkDueDate}{Tuesday,\ April\ 7,\ 2015} % Due date
+\newcommand{\hmwkClass}{CMPS\ 102} % Course/class
+\newcommand{\hmwkClassTime}{4:00pm} % Class/lecture time
+\newcommand{\hmwkClassInstructor}{Warmuth} % Teacher/lecturer
+\newcommand{\hmwkAuthorName}{John Allard \ 1437547
+} % Your name
+
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+\vspace{0.1in}\large{\textit{}}
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%   TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+%\setcounter{tocdepth}{1} % Uncomment this line if you don't want subsections listed in the ToC
+
+\newpage
+% \tableofcontents
+% \newpage
+
+%----------------------------------------------------------------------------------------
+%   PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\begin{homeworkProblem}
+In a binary tree all nodes are either internal or they are leaves. In our definition, internal
+nodes always have two children and leaves have zero children. Prove that for such trees, the
+number of leaves is always one more than the number of internal nodes.
+There are many possible proofs based on induction, but there might be others. \\
+
+\problemAnswer {
+Let $T$ be a binary tree subject to the definition above, $T_I$ be the number of internal nodes, and $T_L$ the number of leaves in $T$.
+Let $P(n)$ be the statement `Given a binary tree $T$ on $n$ internal nodes, $T_L = T_I + 1 = n + 1$'.
+
+\textbf{Base Case} \\
+$P(n=0)$ : A tree with no internal nodes consists of only a root node, which would be a leaf. Thus 
+$$T_L = 1, T_I = 0, T_L = T_I + 1 $$
+Thus the base case is confirmed. \\
+
+\textbf{Inductive Case} \\
+Assume for any binary tree $T$ on $ n \geq 1$ internal nodes that $P(n)$ is true, i.e. $T_L = T_I + 1 = n + 1$. Now, pick an arbitrary binary tree on $n+1$ internal nodes, call it $T$. Note that because $T_I = n+1 \geq 1$, at least one internal node with 2 leaves as children must exist. Select any of these internal nodes, label that node $k$. Take a new leaf node, and put it in place of the internal node $k$. This exchange has two effects, it reduces the number of internal nodes by one (removal of $k$), and reduces the number of leaves by one (remove the two leaf-children of $k$, place a new leaf in place of $k$, $-2+1 = -1$). Label this new tree $T'$. \\
+$$T_I' = T_I - 1$$
+Because $T$ was a binary tree on $n+1$ internal nodes :
+$$ T_I = n + 1$$
+$$ T_I' = (n + 1) - 1 $$
+$$ T_I' = n $$
+Since $T'$ is on $n$ internal nodes, we can apply our inductive hypothesis, $T_L = T_I+1$ 
+$$ T_L' = T_I'+1 $$
+$$ T_L' = (n)+1 $$
+To get from $T$ to $T'$, we removed one leaf node in the process. Thus :
+$$ T_L = T_L' + 1 $$
+$$ T_L = (n+1)+1 = n+2 $$
+$$ T_L = n+2 = (n+1)+1 = (T_I)+1 $$
+Which is exactly $P(n+1)$. 
+
+}
+\end{homeworkProblem}
+
+\newpage
+
+%----------------------------------------------------------------------------------------
+%   PROBLEM 2
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+
+For $n \geq 0$ consider $2^n \times 2^n$ matrices of 1s and 0s in which all elements are 1, except one which
+is 0 (The 0 is at an arbitrary position).  \\
+Operation: At each step, we can replace three 1s forming an ”L” with three 0s (The L’s can
+have an arbitrary orientation). \\ 
+Prove that for such matrices there always is a sequence of operations that transforms the
+matrix to the all 0 matrix. \\
+
+\problemAnswer{
+Let $M_n$ designate the $2^n \times 2^n$ matrix of all ones except a single zero as described above for $n \geq 0$. \\
+Let $P(n)$ be the statement `Given a matrix $M_n$ for $n \geq 0$, $M_n$ can be reduced to the all-zero matrix by a sequence of L-removal operations which changes 3 ones to zeros in an L pattern of arbitray orientation'. \\
+\textbf{Base Case} \\
+$P(n=0)$ : If $n=0$, then $M_n$ is a $2^0 \times 2^0 = 1 \times 1$ matrix. Because all matrices of the above form must have a single 0, and a $1 \times 1$ matrix has only one component, the entire matrix is zero and thus we need no operations to reduce it to the zero matrix. Thus the base case is confirmed.
+
+\textbf{Inductive Case} \\
+Assume for any given $n \geq 1$ that $P(n)$ holds, i.e. that the matrix $M_n$ can be reduced to the zero matrix via a sequence of L-removal operations. Construct a matrix of the form $M_{n+1}$ (all ones except a single zero placed anywhere). $M_{n+1}$ must be square and have sides that are a power of two, by its very definition ($M_k $ is size $2^k \times 2^k$). This means we can divide it into four equal quadrants by dividing along the vertical and horizontal gaps between the middle rows and columns. Each quadrant will have sides of length $2^n$, since $M_{n+1}$ had sides of length $2^{n+1}$ and we divided each side-length in half to get $M_n$. \\
+Now, regardless of where the single zero was initially placed, it must be in one and only one of these quadrants. Pick the other three quadrants that do not have a zero (consist of all ones). Place a single zero in the innermost component for each of the three quadrants that consist of all ones. What I mean by innermost are pieces touching the center of the matrix $M_{n+1}$, these 3 pieces form an L shape and thus this is a valid operation to perform. \\
+Now, all of the 4 quadrants are of size $2^n \times 2^n$ and consist of all ones except a single zero, so we can apply $P(n)$. This means that each quadrant can be reduced to a zero matrix in a finite sequence of remove-L operations. Because it took us only a finite (single) valid operation (removing the L in the 3 one-filled quadrants) to get to this step from $M_{n+1}$, then the matrix $M_{n+1}$ can also be reduced to the zero matrix in a finite sequence of steps. Thus we assumed $P(n)$ and showed that this implies $P(n+1)$, concluding the proof.  }
+\end{homeworkProblem}
+
+
+\newpage 
+
+
+
+\begin{homeworkProblem}
+Suppose you are given an array A of n distinct integers with the following property: There exists a unique index p such that the values of A[1...p] are increasing and the values of A[p...n] are is decreasing. \\
+For instance, in the example below we have $n=10$ and $p=4$.
+$$ A = [2, 5, 12, 17, 15, 10, 9, 4, 3, 1] $$ 
+
+Design a O(log n) algorithm to find p given an array A with the above property.
+
+\problemAnswer{
+        
+I applied a slight change to the typical binary search algrorithm to accomplish this task. My algorithm looks not for a specific key, but instead how the two elements compare to one another. If they are increasing (low to high index), then I recurse on the right half of the array, if they are decreasing I recurse on the left half. When I have only one element, I know that I have found the index of the number where the numbers change from increasing to decreasing.
+
+\texttt{// A = array of n elements, l = left element to sub-search, r = right element to subsearch} \\
+\texttt{findp(A, l, r) } \\
+\tab \texttt{    if l == r : // we found it} \\
+\tab \tab \texttt{        return r} \\
+\tab \texttt{    i = (r-l)/2 // get middle element} \\
+\tab \texttt{    if A[i] > A[i-1] // if increasing} \\
+\tab \tab \texttt{        return findp(A, i, r) // must be in right half} \\
+\tab \texttt{    else} \\
+\tab \tab \texttt{        findp(A, l, i) // must be in left half} \\
+
+}
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+\end{document}
