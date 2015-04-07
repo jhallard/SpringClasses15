@@ -300,41 +300,76 @@ Design a O(log n) algorithm to find p given an array A with the above property. 
     }
 
 \textbf{Proof of Correctness : } \\[.1in]
-    To start, we must acknowledge that if an array holds the partial-sorting property given above, then so must any contiguous sub-section of that array. Any sub-section will contain elements either strictly to the left, strictly to the right, or on both sides of the $p$ index, given the properties of the partial-sort, this sub-section then must also contain items that are either strictly increasing, strictly decreasing, or increasing and then decreasing from some given point, satisfying the definition of a valid partial-sort as defined above. This fact is used is the proof below. \\
-    Let $P(n)$ be the statement `On any array (or sub-array) $A$ of size $n$, the \texttt{findp} algorithm will find the correct index $p$.'.
+
+    To start, we must acknowledge that if an array holds the partial-sorting property given above, then so must any contiguous sub-section of that array. Any sub-section will contain elements either strictly to the left, strictly to the right, or on both sides of the $p$ index. Given the properties of the partial-sort this sub-section then must also contain items that are either strictly increasing, strictly decreasing, or increasing and then decreasing from some given point. This fact is used is the proof below. \\
+    Let $P(n)$ be the statement `On any array (or sub-array) $A$ of size $n$ that contains the $p$ index, the \texttt{findp} algorithm will find that correct index.'.\\
+    Notice that I explicitely am assuming the subarray contains the $p$ index in its bounds. This sets us up to show via induction that we can always choose correct sub-array to search for the $p$ index on the next recursive call. \\
 
     \textbf{Base Case : } \\
-    There are two base cases, if the length of the sub-array we are searching is 1 or 2.
+    There are two base cases, if the length of the sub-array we are searching is 1 or 2. Remember I am assuming that the $p$ index exists inside the bounds of the sub-array. \\
     $P(n = 1)$ : If the sub-array is of size one, then the correct index to return would be of the only element. \texttt{findp} will be called with $l = r$, which will be caught by the \texttt{if} statement on line 3 and $r$ would be returned, which is the item we are looking for. \\
     $P(n = 2)$ : If there are two elements in the sub-array, then the \texttt{else if} statement on line 5 with be caught. This will examine the two elements and return the right index if it is greater than or equal to the left and return the left index otherwise. Since a two-element sub-array must either be decreasing or increasing, this \texttt{else if} statement will return the correct index. \\
     \textbf{Inductive Case : } \\
-    Assume for $n > 2$ that $P(k)$ is true for $k = [1 \ldots n]$, i.e. that the correct index $p$ can be found for any given array $A$ on $k$ items that is partially-sorted (as described above). I will use strong induction to show that this implies $P(n+1)$ is true. \\
-    Take a given array $A$ on $n+1$ elements as described above. Since $n > 2$, $r > l+1$ so the first two $if$-statements don't execute. The algorithm then recurses on either $\left \lceil{(r+l)/2}\right \rceil$ or $\left \lceil{n-(r+l)/2}\right \rceil$ items depending on if it is in the left or right half respectively. Sicne both of these numbers of items are less than $n+1$, we can apply the inductive hypothesis on whichever half is taken. The inductive hypthesis says that the algorithm will be able to find the right $p$ index on any array from $k = [1 \ldots n]$, and since we are passing it a subarray in that range, we know that thte algorithm will be able to find the right $p$ index. \\
+    Assume for $n > 2$ that $P(k)$ is true for $k = [1 \ldots n]$, i.e. that the correct index $p$, if it exists, can be found for any given sub-array $A$ on $k$ items that is partially-sorted (as described above). I will use strong induction to show that this implies $P(n+1)$ is true. \\
+    Take a given array $A$ on $n+1$ elements as that has the partial-sorting property. Since $n > 2$, $r > l+1$ so the first two $if$-statements don't execute. Now, it compares the middle two elements to eachother. If the right one is larger than the left then the $p$ index must be in right half of the array, otherwise the partial-sort property of the array would be invalid. If the two middle elemenets are decreasing, then the $p$ index must be in the left half of the array for the partial-sort property to hold. The algorithm then recurses on either $\left \lfloor{n/2}\right \rfloor$ or n- $\left \lfloor {n/2}\right \rfloor $ items depending on the outcome of the comparisons just described.. Since both of these numbers of items to recurse on are less than $n+1$, we can apply the inductive hypothesis on whichever half is taken. The inductive hypthesis says that the algorithm will be able to find the right $p$ index (given it exists) on any array from $k = [1 \ldots n]$. Since we know that the $p$ index is in one of the two halves of the initial array, and that we recurse on the currect half that is of size less than $n+1$, then the inductive hypothesis says the \texttt{findp} algorithm will correctly find the $p$ index. \\[.2in]
 
 
 \textbf{Proof of Runtime Complexity : } \\
-    I will now attempt to prove that the run-time complexity for the above algorithm is of order $\log(n)$. \\
+    I will now attempt to prove that the run-time complexity for the above algorithm is of order $\log(n)$. I am assuming that all inital input arrays are a length that is a power of two to simplify the proof. \\
 
-    The \texttt{findp} takes an array $A$ of $n >= 1$ elements that is partially sorted in such a way that all elements increase up to a certain index $p$ and after that they all decrease. It also takes in a left and right index value between which the search will occur. For each call to the algorithm, we perform a constant number of comparisons, and for each recursive call we will be narrowing the search-space by about half. This can be formalized by the following recurrence relation : \\
+    The \texttt{findp} takes an array $A$ of $n >= 1$ elements that is partially sorted in such a way that all elements increase up to a certain index $p$ and after that they all decrease. It also takes in a left and right index value between which the search will occur. For each call to the algorithm, we perform a constant number of comparisons, and for each recursive call we will be narrowing the search-space by about half. 
+    This can be formalized by the following recurrence relation : \\
 
-    \[ 
-    T(n) = \left \{
+    for $n >= 1$ where $n$ is a power of 2 \\
+    \[
+    T(n) \left \{
       \begin{tabular}{c l}
-      1 & \text{ if } n = 1 \\
-      T(n/2) + c & \text{ if } $n>1$  \\
+      $= 1$ & \text{ if } n = 1 \\
+      $= 3$ & \text{ if } n = 2 \\
+      $\leq$ T(n/2) + 4 & \text{ if } $n>2$  \\
       \end{tabular}
     \right \}
     \]
 
 
-    Let $P(n)$ be the statement `On any array of size $A$ of size $n$, the \texttt{findp} algorithm will find the index $p$ in at most time $c*\log(n)$'.
+    Let $P(n)$ be the statement `On any array of size $A$ of size $n$, the \texttt{findp} algorithm will find the index $p$ in at most $3*\lg(n)+1$ comparisons of array elements.'.
 
     \textbf{Base Case : } \\
-        $P(n = 1)$ : If the array is of size one, then the correct index to return would be of the only element, namely $1$. \texttt{findp} will be called with $l = r = 1$, which will be caught by the \texttt{if} statement on line 3 and $r = 1$ would be returned. Thus the base case is confirmed.
+        $P(n = 1)$ : If the array is of size one, \texttt{findp} will be called with $l = r = 1$, which will be caught by the \texttt{if} statement on line 3 and $r = 1$ would be returned. Only a single comparison is performed. Thus \# comparisons = 1, and $3*\lg(n)+1 = 3*0+1 = 1$. $1 \leq 1$ is true so this base case is confirmed. \\
+        $P(n = 2)$ : If the array is of size 2, then in the worse case we need to perform 3 comparisons (lines 3, 5, and 6) to decide which of the two elements corresponds to the $p$ index. \# comp. = 3. $3 \leq 3*\lg(2)+4$, $3 \leq 3+4$ is true, so the second base case is confirmed.
 
     \textbf{Inductive Case : } \\
-        Assume for $n >= 1$ that $P(n)$ is true, i.e. that any given array that is partially-sorted (as described above) array $A$ on $n$  
+        Assume for $n > 2$ that $P(k)$ is true for $k$ in $[1 \ldots n-1$, i.e. that any given array or sub-array $A$ that is partially-sorted (as described above) on $k$ elements, the \texttt{findp} algorithm can find the correct $p$ index in at most $3*\lg(k)+4$ comparisons. Take an arbitray array $A$ of length $n$ that has the partial-sort property as described above a few times. Sicne it is a power of two, we will recurse on exactly half of the elements in the array, which will also be a power of two in length. Substituting into the recurrance relation given above.
+
+        $$ T(n) = T(n/2)+4 $$
+     $n/2$ is in the range $k = [1 \ldots n-1]$, so the inductive hypothesis is used
+        $$ T(n) = 3\lg(n/2) + 4$$
+        $$ T(n) = 3\lg(n) - 3\lg(2) + 4$$
+        $$ T(n) = 3\lg(n) - 3 + 4$$
+        $$ T(n) = 3\lg(n) + 1 $$
+        $$ T(n) < 3\lg(n) + 4 $$
+
+        Since order notation dicards constants and lower order terms, $T(n) = O(\log(n))$ as was required by the proof.
 \end{homeworkProblem}
+
+
+
+\begin{homeworkProblem}
+
+\end{homeworkProblem}
+
+
+
+\begin{homeworkProblem}
+Let $f$ and $g$ be two functions defined on the natural numbers. \\
+Show that 
+$$max_{n\geq 0} \{f(n), g(n)\} = O(f(n)+g(n))$$
+Using the definition of big-O notation.
+
+\textbf{Answer : } \\[.2in]
+
+\end{homeworkProblem}
+
 %----------------------------------------------------------------------------------------
 
 \end{document}
