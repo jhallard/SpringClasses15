@@ -1,0 +1,681 @@
+head	1.29;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.29
+date	2015.03.27.01.48.08;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2015.03.27.01.47.23;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2015.03.27.01.45.27;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2015.03.27.01.44.43;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2015.03.27.01.43.15;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2015.03.27.01.41.51;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2015.03.27.01.40.27;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2015.03.27.01.39.50;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2015.03.27.01.37.33;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2015.03.27.01.36.44;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2015.03.27.01.33.14;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2015.03.27.01.33.02;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2015.03.27.01.32.20;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2015.03.27.01.30.38;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2015.03.27.01.28.07;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2015.03.27.01.25.43;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2015.03.27.01.25.10;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2015.03.27.01.24.07;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2015.03.27.01.23.15;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2015.03.27.01.23.00;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2015.03.27.01.21.29;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2015.03.27.01.19.44;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2015.03.27.01.19.25;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2015.03.27.01.17.50;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2015.03.27.01.17.15;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2015.03.27.01.16.42;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2015.03.27.01.16.22;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2015.03.27.01.15.21;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2015.03.27.00.38.48;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.29
+log
+@-
+@
+text
+@// $Id: freetree.cpp,v 1.27 2015-03-26 18:45:27-07 - - $
+
+// Shared_ptrs use reference counting in order to automatically
+// free objects, but that does not work for cyclic data structures.
+// This illustrates how to avoid the problem.
+
+#include <iomanip>
+#include <iostream>
+#include <map>
+#include <memory>
+using namespace std;
+
+class tree;
+using tree_ptr = shared_ptr<tree>;
+using tree_dir = map<string,tree_ptr>;
+using tree_itor = tree_dir::iterator;
+
+class tree {
+   private:
+      static size_t next_seq;
+      size_t seq;
+      tree_dir data;
+      void print (size_t);
+   public:
+      tree (tree_ptr parent);
+      ~tree();
+      void emplace (const tree_dir::key_type&,
+                    const tree_dir::mapped_type&);
+      const tree_itor begin() { return data.begin(); }
+      const tree_itor end() { return data.end(); }
+      void print() { print (0); }
+};
+
+const string PARENT = "..";
+size_t tree::next_seq {0};
+
+tree::tree (tree_ptr parent): seq(next_seq++), data({{PARENT,parent}}) {
+}
+
+tree::~tree() {
+   data.erase (PARENT);
+}
+
+void tree::emplace (const tree_dir::key_type& key,
+                    const tree_dir::mapped_type& value) {
+   data.emplace (key, value);
+}
+
+void tree::print (size_t depth) {
+   for (const auto itor: data) {
+      cout << setw (depth * 3) << "" << itor.first << " -> ";
+      if (itor.second == nullptr) cout << "nullptr";
+                             else cout << itor.second;
+      cout << endl;
+      if (itor.first != PARENT and itor.second != nullptr) {
+         itor.second->print (depth + 1);
+      }
+   }
+}
+
+int main (int argc, char** argv) {
+   (void) argc;
+   (void) argv;
+   shared_ptr<tree> root = make_shared<tree> (nullptr);
+   root->emplace ("a", make_shared<tree> (root));
+   root->emplace ("b", make_shared<tree> (root));
+   for (auto itor: *root) {
+      if (itor.second == nullptr) continue;
+      itor.second->emplace ("1", make_shared<tree> (itor.second));
+      itor.second->emplace ("2", make_shared<tree> (itor.second));
+      itor.second->emplace ("null", nullptr);
+   }
+   cout << "root = " << root << endl;
+   root->print();
+   return 0;
+}
+
+@
+
+
+1.28
+log
+@-
+@
+text
+@d41 1
+a41 1
+   data.find (PARENT).remove();
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.26 2015-03-26 18:44:43-07 - - $
+d26 1
+d40 4
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.25 2015-03-26 18:43:15-07 - - $
+d46 4
+a49 3
+      cout << setw (depth * 3) << "" << itor.first << " -> "
+           << (itor.second == nullptr ? "nullptr" : itor.second)
+           << endl;
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.24 2015-03-26 18:41:51-07 - - $
+d46 3
+a48 2
+      cout << setw (depth * 3) << ""
+           << itor.first << " -> " << itor.second << endl;
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.23 2015-03-26 18:40:27-07 - - $
+d64 1
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.22 2015-03-26 18:39:50-07 - - $
+a22 1
+      ostream& indent (size_t);
+a43 5
+ostream& tree::indent (size_t depth) {
+   cout << setw (depth * 3) << "";
+   return cout;
+}
+
+a44 1
+   indent (depth) << this << ":" << endl;
+d46 2
+a47 1
+      indent (depth) << itor.first << " -> " << itor.second << endl;
+d65 1
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.21 2015-03-26 18:37:33-07 - - $
+d45 1
+a45 1
+ostream& indent (size_t depth) {
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.20 2015-03-26 18:36:44-07 - - $
+d23 1
+d45 5
+d51 1
+a51 1
+   cout << this << ":" << endl;
+d53 1
+a53 2
+      cout << setw(depth * 3) << "" << itor.first
+           << " -> " << itor.second << endl;
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.19 2015-03-26 18:33:14-07 - - $
+d45 1
+a58 1
+   cout << "root = " << root << endl;
+a65 1
+   cout << "root = " << root << endl;
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.18 2015-03-26 18:33:02-07 - - $
+a36 1
+   cout << __func__ << " (" << this << ")" << endl;
+a40 2
+   cout << this << "->" << __func__ << " (" << key
+        << ", " << value << ")" << endl;
+d66 1
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.17 2015-03-26 18:32:20-07 - - $
+d51 1
+a51 1
+      if (if itor.first != PARENT and itor.second != nullptr) {
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.16 2015-03-26 18:30:38-07 - - $
+a24 1
+      static const string PARENT = "..";
+d33 1
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.15 2015-03-26 18:28:07-07 - - $
+d25 1
+d36 1
+a36 1
+tree::tree (tree_ptr parent): seq(next_seq++), data({{"..",parent}}) {
+d51 3
+a53 1
+      if (itor.second != nullptr) itor.second->print (depth + 1);
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.14 2015-03-26 18:25:43-07 - - $
+d62 1
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.13 2015-03-26 18:25:10-07 - - $
+d41 2
+a42 1
+   cout << __func__ << " (" << key << ", " << value << ")" << endl;
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.12 2015-03-26 18:24:07-07 - - $
+d57 1
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.11 2015-03-26 18:23:15-07 - - $
+d36 1
+a36 1
+   cout << __func__ << this << endl;
+d41 1
+a41 1
+   cout << __func__ << key << value << endl;
+d49 1
+a49 1
+      //if (itor.second != nullptr) itor.second->print (depth + 1);
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.10 2015-03-26 18:23:00-07 - - $
+d36 1
+d41 1
+d63 1
+a63 1
+//   root->print();
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.9 2015-03-26 18:21:29-07 - - $
+d61 1
+a61 1
+   root->print();
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.8 2015-03-26 18:19:44-07 - - $
+d47 1
+a47 1
+      if (itor.second != nullptr) itor.second->print (depth + 1);
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.7 2015-03-26 18:19:25-07 - - $
+d45 3
+a47 2
+      cout << setw(depth * 3) << "" << itor.first << endl;
+      itor.second->print (depth + 1);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.6 2015-03-26 18:17:50-07 - - $
+d46 1
+a46 1
+      print (itor.second, depth + 1);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.5 2015-03-26 18:17:15-07 - - $
+d23 1
+a23 1
+      void print (const tree*, size_t);
+d30 1
+a30 1
+      void print() { print (this, 0); }
+d43 2
+a44 2
+void tree::print (const tree* root, size_t depth) {
+   for (const auto itor: *root) {
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.4 2015-03-26 18:16:42-07 - - $
+d45 2
+a46 2
+      cout << setw(depth * 3) << "" << itor->first << endl;
+      print (itor->second, depth + 1);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: freetree.cpp,v 1.2 2015-03-26 18:15:21-07 - - $
+d28 2
+a29 2
+      tree_itor begin() { return data.begin(); }
+      tree_itor end() { return data.end(); }
+@
+
+
+1.3
+log
+@-
+@
+text
+@d44 1
+a44 1
+   for (auto itor: *root) {
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d23 1
+a23 1
+      void print (tree_ptr, size_t);
+d43 1
+a43 1
+void tree::print (tree_ptr root, size_t depth) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d7 1
+d13 4
+a16 2
+struct node;
+using node_ptr = shared_ptr<node>;
+d18 13
+a30 5
+struct node {
+   static size_t next_seq = 0;
+   size_t seq;
+   map<string,node_ptr> data;
+   node (node_ptr parent);
+d33 15
+a47 1
+node::node (node_ptr parent): seq(next_seq++), data({"..",parent}) {
+d51 10
+a60 1
+   node tree (nullptr);
+@

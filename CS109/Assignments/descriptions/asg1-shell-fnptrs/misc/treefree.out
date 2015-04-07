@@ -1,0 +1,45 @@
+[0]0x4e7d108->tree(nullptr)
+[1]0x4e7d218->tree([0]0x4e7d108)
+[2]0x4e7d408->tree([0]0x4e7d108)
+[3]0x4e7d658->tree([2]0x4e7d408)
+[4]0x4e7d8a8->tree([2]0x4e7d408)
+[5]0x4e7daf8->tree([2]0x4e7d408)
+[6]0x4e7dce8->tree([1]0x4e7d218)
+[7]0x4e7df38->tree([1]0x4e7d218)
+[8]0x4e7e188->tree([1]0x4e7d218)
+[seq]address: key -> value (use count)
+print: [0]0x4e7d108: ".." -> [0]0x4e7d108 (5)
+print: [0]0x4e7d108: "bar" -> [2]0x4e7d408 (5)
+print:    [2]0x4e7d408: ".." -> [0]0x4e7d108 (5)
+print:    [2]0x4e7d408: "quuux" -> [5]0x4e7daf8 (2)
+print:       [5]0x4e7daf8: ".." -> [2]0x4e7d408 (6)
+print:    [2]0x4e7d408: "quux" -> [4]0x4e7d8a8 (2)
+print:       [4]0x4e7d8a8: ".." -> [2]0x4e7d408 (6)
+print:    [2]0x4e7d408: "qux" -> [3]0x4e7d658 (2)
+print:       [3]0x4e7d658: ".." -> [2]0x4e7d408 (6)
+print: [0]0x4e7d108: "foo" -> [1]0x4e7d218 (5)
+print:    [1]0x4e7d218: ".." -> [0]0x4e7d108 (5)
+print:    [1]0x4e7d218: "quuux" -> [8]0x4e7e188 (2)
+print:       [8]0x4e7e188: ".." -> [1]0x4e7d218 (6)
+print:    [1]0x4e7d218: "quux" -> [7]0x4e7df38 (2)
+print:       [7]0x4e7df38: ".." -> [1]0x4e7d218 (6)
+print:    [1]0x4e7d218: "qux" -> [6]0x4e7dce8 (2)
+print:       [6]0x4e7dce8: ".." -> [1]0x4e7d218 (6)
+disown: [0]0x4e7d108
+disown:    [2]0x4e7d408
+disown:       [5]0x4e7daf8
+disown:       [4]0x4e7d8a8
+disown:       [3]0x4e7d658
+disown:    [1]0x4e7d218
+disown:       [8]0x4e7e188
+disown:       [7]0x4e7df38
+disown:       [6]0x4e7dce8
+[0]0x4e7d108->~tree()
+[1]0x4e7d218->~tree()
+[6]0x4e7dce8->~tree()
+[7]0x4e7df38->~tree()
+[8]0x4e7e188->~tree()
+[2]0x4e7d408->~tree()
+[3]0x4e7d658->~tree()
+[4]0x4e7d8a8->~tree()
+[5]0x4e7daf8->~tree()

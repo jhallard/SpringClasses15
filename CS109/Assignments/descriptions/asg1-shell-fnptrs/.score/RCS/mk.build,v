@@ -1,0 +1,31 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2013.01.03.03.11.43;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@#!/bin/sh
+# $Id: mk.build,v 1.2 2010-12-13 20:24:14-08 - - $
+# Checksource and do the build.
+PATH=$PATH:/afs/cats.ucsc.edu/courses/cmps012b-wm/bin/
+export PATH
+partnercheck 2>&1 | tee partnercheck.log
+checksource Makefile README* *.h *.cc *.cpp >checksource.log 2>&1
+gmake >gmake.log 2>&1
+@
