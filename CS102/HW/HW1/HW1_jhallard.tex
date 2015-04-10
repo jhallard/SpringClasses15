@@ -367,7 +367,13 @@ $$max_{n\geq 0} \{f(n), g(n)\} = O(f(n)+g(n))$$
 Using the definition of big-O notation.
 
 \textbf{Answer : } \\[.2in]
+Since $f$ and $g$ are defined over the natural numbers ($n > 0$), they are both non-negative functions. This implies the following :
+$$f(n)+g(n) \geq f(n) \geq 0$$  
+$$f(n)+g(n) \geq g(n) \geq 0$$
+Since $max_{n\geq 0} \{f(n), g(n)\}$ is just the larger of $f$ and $g$, we get the following equation for $n \geq 0$ :
+$$ f(n)+g(n) \geq max_{n\geq 0} \{f(n), g(n)\}$$
 
+Thus $max_{n\geq 0} \{f(n), g(n)\} \leq c*f(n)+g(n)$ for all $n >= n_0$ where $n_0 = 1$ and $c = 1$, satisfying the definiton of big-O.
 \end{homeworkProblem}
 
 %----------------------------------------------------------------------------------------

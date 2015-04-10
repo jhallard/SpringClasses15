@@ -40,7 +40,6 @@ bool want_echo() {
           << ", cout_is_not_a_tty = " << cout_is_not_a_tty);
    return cin_is_not_a_tty or cout_is_not_a_tty;
 }
-
 
 wordvec split (const string& line, const string& delimiters) {
    wordvec words;
