@@ -1,0 +1,63 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.2
+date	2015.03.27.01.53.54;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2015.03.27.01.53.13;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: freelist.cpp,v 1.1 2015-03-26 18:53:13-07 - - $
+
+#include <iostream>
+#include <memory>
+using namespace std;
+
+struct node;
+
+using node_ptr = shared_ptr<node>;
+
+struct node {
+   int value;
+   node_ptr link;
+   node (int value, node_ptr link): value(value), link(link) {}
+};
+
+int main() {
+   node_ptr list = make_shared<node> (1, make_shared<node> (2, make_shared<node> (3, list)));
+   
+   return 0;
+}
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d18 1
+a18 1
+   node_ptr a = make_shared (1, make_shared (2, make_shared (3, a)));
+@

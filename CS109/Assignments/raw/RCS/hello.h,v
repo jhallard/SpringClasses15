@@ -1,0 +1,89 @@
+head	1.3;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.3
+date	2014.06.11.03.00.20;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.06.11.02.54.02;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.06.11.02.49.12;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@-
+@
+text
+@// $Id: hello.h,v 1.2 2014-06-10 19:54:02-07 - - $
+
+#ifndef __HELLO_H__
+#define __HELLO_H__
+
+#include <iostream>
+#include <string>
+
+class hello {
+   private:
+      std::string message {"Hello, World!"};
+   public:
+      hello();                         // default constructor
+      hello (const hello&);            // copy constructor
+      hello& operator= (const hello&); // copy operator=
+      hello (hello&&);                 // move constructor
+      hello& operator= (hello&&);      // move operator=
+      ~hello();                        // destructor
+      hello (const string&);           // alternate constructor
+      void say (ostream&);             // member function
+};
+
+#endif
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: hello.h,v 1.1 2014-06-10 19:49:12-07 - - $
+d13 8
+a20 7
+      hello();
+      hello (const hello&);
+      hello& operator= (const hello&);
+      hello (hello&&);
+      hello& operator= (hello&&);
+      ~hello();
+      void say (ostream&);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d13 6
+@

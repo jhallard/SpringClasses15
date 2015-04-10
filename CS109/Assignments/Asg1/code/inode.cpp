@@ -98,33 +98,46 @@ size_t directory::size() const {
 }
 
 void directory::remove (const string& filename) {
-   DEBUGF ('i', filename);
+  if(dirents.find(filename) == dirents.end()) {
+    throw yshell_exn("remove arg not present in map");
+  }
+  dirents.erase(filename);
+  DEBUGF ('i', filename);
 }
 
 inode& directory::mkdir (const string& dirname, inode_ptr parent) {
   
   if(dirents.find(dirname) != dirents.end()) {
-    throw new yshell_exn("directory already exists");
+    throw yshell_exn("directory already exists");
   }
- 
+
   inode_ptr new_node = make_shared<inode>(DIR_INODE);
   dirents.insert({dirname, new_node});
-  directory_ptr new_dir = directory_ptr_of(new_node->get_contents());
-  new_dir->init(parent, new_node);
+
+  auto dir_ptr = directory_ptr_of(new_node->get_contents());
+  dir_ptr->init(new_node, parent);
 
   return *new_node;
 }
 
 inode& directory::mkfile (const string& filename) {
+
   if(dirents.find(filename) != dirents.end()) {
-    throw new yshell_exn("file already exists");
+    throw yshell_exn("file already exists");
   }
+
   inode_ptr new_node = make_shared<inode>(PLAIN_INODE);
   dirents.insert({filename, new_node});
 
   return *new_node;
 }
 
+// @func - init
+// @info - initializes a new directory with the two links to itself
+// and its parent directory.
+// @note - This is only to be called explicitely on the root by
+// the inode_state ctor, otherwise it will be called auto-lly
+// be the directory::mkdir function when a sub-dir is made.
 void directory::init(inode_ptr current, inode_ptr parent) {
   if(current == nullptr || parent == nullptr) {
     throw invalid_argument("directory init() arguments null");
@@ -133,6 +146,8 @@ void directory::init(inode_ptr current, inode_ptr parent) {
   dirents.insert({"..", parent});
 }
 
+// @func - get_subdirent
+// @info - given a string get a ptr to a subdirectory of this directory
 inode_ptr directory::get_subdirent(string fn) const {
   if(dirents.find(fn) == dirents.end()) {
     return nullptr;
@@ -164,7 +179,70 @@ inode_state::inode_state() {
           << ", prompt = \"" << prompt << "\"");
 }
 
+// takes in a string and parses it to return a pointer to the
+// appropriate inode that it is referncing
+inode_ptr inode_state::get_inode_from_path(const string & path) {
 
+  inode_ptr iter = get_parent_from_path(path);
+
+  directory_ptr iter_dir = directory_ptr_of(iter->get_contents());
+
+  wordvec parts = split(path, "/");
+
+  iter = iter_dir->get_subdirent(parts.at(parts.size()-1));
+
+  return iter;
+}
+
+// takes a string representing a complete path and returns a ptr
+// to the parent of the inode represented by the path. Useful for
+// the mkdir and makefile functions where a given path doesn't
+// fully exist yet, only up until the parent.
+inode_ptr inode_state::get_parent_from_path(const string & path) {
+  inode_ptr iter = cwd;
+
+  if(path.at(0) == '/') {
+    iter = root;
+  }
+
+  directory_ptr iter_dir = directory_ptr_of(iter->get_contents());
+
+  wordvec parts = split(path, "/");
+
+  // we use this loop to follow all of the directories between the curr
+  // and the parent of the final inode we want to point to. Throws 
+  // yshell_exns if it discovers the path is invalid.
+  for(auto & part : wordvec(parts.begin(), parts.end()-1)) {
+    iter = iter_dir->get_subdirent(part);
+
+    // subdirectory doesn't exist
+    if(iter == nullptr) {
+      throw yshell_exn("invalid path name.");
+    }
+
+    // a filename should only be the final part of the path, not
+    // in the middle somewhere.
+    if(iter->get_type() == PLAIN_INODE) {
+      throw yshell_exn("invalid path name.");
+    }
+
+    iter_dir = directory_ptr_of(iter->get_contents());
+  }
+
+  return iter;
+}
+
+
+inode_ptr inode_state::get_cwd() const {
+  return cwd;
+}
+void inode_state::set_cwd(inode & new_cwd) {
+  *cwd = new_cwd;
+}
+
+inode_ptr inode_state::get_root() const {
+  return root;
+}
 
 
 

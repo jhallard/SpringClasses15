@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting listfree.cpp
+listfree.cpp:
+     $Id: listfree.cpp,v 1.20 2015-03-26 22:10:36-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 listfree.cpp -o listfree -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f listfree.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished listfree.cpp

@@ -45,12 +45,6 @@ class inode_state {
       string prompt {"% "};
    public:
       inode_state();
-
-      inode_ptr get_cwd() const;
-      void set_cwd(inode &);
-      inode_ptr get_root() const;
-      inode_ptr get_inode_from_path(const string &);
-      inode_ptr get_parent_from_path(const string & path); 
 };
 
 
@@ -72,7 +66,6 @@ class inode_state {
 class inode {
    friend class inode_state;
    private:
-      // member fields
       static int next_inode_nr;
       int inode_nr;
       inode_t type;
@@ -80,8 +73,6 @@ class inode {
    public:
       inode (inode_t init_type);
       int get_inode_nr() const;
-      file_base_ptr get_contents() const;
-      inode_t get_type() const;
 };
 
 //
@@ -156,11 +147,8 @@ class directory: public file_base {
    public:
       size_t size() const override;
       void remove (const string& filename);
-      inode& mkdir (const string& dirname, inode_ptr);
+      inode& mkdir (const string& dirname);
       inode& mkfile (const string& filename);
-
-      void init(inode_ptr, inode_ptr);
-      inode_ptr get_subdirent(string) const;
 };
 
 #endif

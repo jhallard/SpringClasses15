@@ -70,19 +70,18 @@ void fn_mkdir (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
 
-   if(words.size() <= 1) {
-      throw yshell_exn("mkdir needs a filename argument");
+   if(words.size() <= 0) {
+      throw new yshell_exn("mkdir needs a filename argument");
    }
 
-   wordvec parts = split(words[1], "/");
-   string new_dirname = parts.at(parts.size()-1);
+   inode_ptr parent = nullptr;
 
-   inode_ptr parent = state.get_parent_from_path(words[1]);
-   auto parent_dir = directory_ptr_of(parent->get_contents());
-   parent_dir->mkdir(new_dirname, parent);
-
-   if(parent_dir->get_subdirent(new_dirname) != nullptr) {
-      std::cout << "woohoo it worked!\n";
+   try {
+      inode_ptr parent = state->get_parent_from_path(words);
+      directory_ptr parent_dir = directory_ptr_of(parent->get_contents());
+      std::cout "Hey we are over here now";
+   } catch(yshell_exn e) {
+      std::cout << "mkdir : " << e.what() << endl;
    }
 }
 
