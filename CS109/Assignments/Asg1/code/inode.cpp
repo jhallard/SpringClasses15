@@ -18,8 +18,8 @@ using namespace std;
 
 int inode::next_inode_nr {1};
 
-inode::inode(inode_t init_type):
-   inode_nr (next_inode_nr++), type (init_type)
+inode::inode(inode_t init_type, string name):
+   inode_nr (next_inode_nr++), type (init_type), name(name)
 {
    switch (type) {
       case PLAIN_INODE:
@@ -47,6 +47,10 @@ inode_t inode::get_type() const {
   return type;
 }
 
+string inode::get_name() const {
+  return name;
+}
+
 
 
 
@@ -70,7 +74,8 @@ directory_ptr directory_ptr_of (file_base_ptr ptr) {
 size_t plain_file::size() const {
    size_t size {0};
    DEBUGF ('i', "size = " << size);
-   return size;
+   std::cout << "plain_file.size needs to be fixed!!\n";
+   return data.size();
 }
 
 const wordvec& plain_file::readfile() const {
@@ -80,6 +85,11 @@ const wordvec& plain_file::readfile() const {
 
 void plain_file::writefile (const wordvec& words) {
    DEBUGF ('i', words);
+   data = words;
+}
+
+void plain_file::reset() {
+  data.clear();
 }
 
 
@@ -111,7 +121,7 @@ inode& directory::mkdir (const string& dirname, inode_ptr parent) {
     throw yshell_exn("directory already exists");
   }
 
-  inode_ptr new_node = make_shared<inode>(DIR_INODE);
+  inode_ptr new_node = make_shared<inode>(DIR_INODE, dirname);
   dirents.insert({dirname, new_node});
 
   auto dir_ptr = directory_ptr_of(new_node->get_contents());
@@ -122,11 +132,22 @@ inode& directory::mkdir (const string& dirname, inode_ptr parent) {
 
 inode& directory::mkfile (const string& filename) {
 
+  // if something with that name exists in the directory
   if(dirents.find(filename) != dirents.end()) {
-    throw yshell_exn("file already exists");
+    auto node = dirents.at(filename);
+
+    // if that thing is a dir, that's an exception
+    if(node->get_type() == DIR_INODE) {
+      throw yshell_exn("directory exists in that location");
+    }
+
+    // else just reset the content of the file
+    auto pf = plain_file_ptr_of(node->get_contents());
+    pf->reset();
+    return *node;
   }
 
-  inode_ptr new_node = make_shared<inode>(PLAIN_INODE);
+  inode_ptr new_node = make_shared<inode>(PLAIN_INODE, filename);
   dirents.insert({filename, new_node});
 
   return *new_node;
@@ -166,7 +187,7 @@ inode_ptr directory::get_subdirent(string fn) const {
 inode_state::inode_state() {
 
   // initialize the root inode_ptr
-  root = make_shared<inode>(DIR_INODE);
+  root = make_shared<inode>(DIR_INODE, "");
   directory_ptr root_dir = directory_ptr_of(root->get_contents());
 
   // set the '.' and '..' to both point to itself.
@@ -237,7 +258,7 @@ inode_ptr inode_state::get_cwd() const {
   return cwd;
 }
 void inode_state::set_cwd(inode & new_cwd) {
-  *cwd = new_cwd;
+  cwd.reset(&new_cwd);
 }
 
 inode_ptr inode_state::get_root() const {

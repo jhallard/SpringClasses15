@@ -5,6 +5,7 @@
 
 #include <exception>
 #include <iostream>
+#include <sstream>  
 #include <memory>
 #include <map>
 #include <vector>
@@ -76,12 +77,15 @@ class inode {
       static int next_inode_nr;
       int inode_nr;
       inode_t type;
+      const string name;
       file_base_ptr contents;
    public:
-      inode (inode_t init_type);
+      inode (inode_t init_type, string);
       int get_inode_nr() const;
       file_base_ptr get_contents() const;
       inode_t get_type() const;
+      string get_name() const;
+      // void set_name(string) const;
 };
 
 //
@@ -128,6 +132,7 @@ class plain_file: public file_base {
       size_t size() const override;
       const wordvec& readfile() const;
       void writefile (const wordvec& newdata);
+      void reset();
 };
 
 //
