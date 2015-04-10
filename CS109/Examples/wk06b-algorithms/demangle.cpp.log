@@ -1,6 +1,0 @@
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting demangle.cpp
-demangle.cpp:
-     $Id: demangle.cpp,v 1.9 2015-02-05 19:05:17-08 - - $
-g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 demangle.cpp -o demangle -lglut -lGLU -lGL -lX11 -lrt -lm
-rm -f demangle.o
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished demangle.cpp

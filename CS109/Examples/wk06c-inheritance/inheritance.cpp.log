@@ -1,6 +1,0 @@
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting inheritance.cpp
-inheritance.cpp:
-     $Id: inheritance.cpp,v 1.29 2015-02-10 17:43:42-08 - - $
-g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 inheritance.cpp -o inheritance -lglut -lGLU -lGL -lX11 -lrt -lm
-rm -f inheritance.o
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished inheritance.cpp
