@@ -51,6 +51,52 @@ string inode::get_name() const {
   return name;
 }
 
+void inode::print_recursive(stringstream & ss) const {
+
+  directory_ptr dir_ptr = nullptr;
+  plain_file_ptr file_ptr = nullptr;
+
+  switch(type) {
+     case DIR_INODE:
+        dir_ptr = directory_ptr_of(contents);
+        for(auto & node_pair : dir_ptr->to_vector()) {
+          node_pair.second->print_description(ss, node_pair.first);
+        }
+     break;
+
+     case PLAIN_INODE:
+        file_ptr = plain_file_ptr_of(contents);
+        ss << get_inode_nr() << "\t";
+        ss << file_ptr->size() << "\t";
+        ss << get_name() << "\n";
+     break;
+    }
+}
+
+void inode::print_description(stringstream & ss, string name) const {
+
+  directory_ptr dir_ptr = nullptr;
+  plain_file_ptr file_ptr = nullptr;
+
+  if(name == "") {name = get_name();};
+
+  switch(type) {
+     case DIR_INODE:
+        dir_ptr = directory_ptr_of(contents);
+        ss << get_inode_nr() << "\t";
+        ss << dir_ptr->size() << "\t";
+        ss << name << "/\n";
+     break;
+
+     case PLAIN_INODE:
+        file_ptr = plain_file_ptr_of(contents);
+        ss << get_inode_nr() << "\t";
+        ss << file_ptr->size() << "\t";
+        ss << name << "\n";
+     break;
+    }
+}
+
 
 
 
@@ -73,8 +119,17 @@ directory_ptr directory_ptr_of (file_base_ptr ptr) {
 
 size_t plain_file::size() const {
    size_t size {0};
+
+   // add on 1 for each character in each word
+   for(auto & word : data) {
+    size += word.length();
+   }
+
+   // add on the number of spaces (words-1)
+   size += data.size()-1;
+
    DEBUGF ('i', "size = " << size);
-   std::cout << "plain_file.size needs to be fixed!!\n";
+
    return data.size();
 }
 
@@ -103,12 +158,14 @@ void plain_file::print_file(stringstream & ss) const {
 
 
 
+
 // ============ === === ============ //
 // ============= DIREC ============= //
 // ============ === === ============ //
 
 size_t directory::size() const {
    size_t size {0};
+   size = dirents.size();
    DEBUGF ('i', "size = " << size);
    return size;
 }
@@ -181,6 +238,18 @@ inode_ptr directory::get_subdirent(string fn) const {
   }
   return dirents.at(fn);
 }
+
+
+vector<dirent_pair> directory::to_vector() const {
+  vector<dirent_pair > v(dirents.size());
+  copy(dirents.begin(), dirents.end(), v.begin());
+  sort(v.begin()+2, v.end(),
+    [](const dirent_pair & p1, const dirent_pair & p2) {
+    return p1.first < p2.first;}
+  );
+  return v;
+}
+
 
 
 

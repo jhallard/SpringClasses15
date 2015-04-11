@@ -9,6 +9,7 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 #include "util.h"
@@ -27,6 +28,7 @@ using inode_ptr = shared_ptr<inode>;
 using file_base_ptr = shared_ptr<file_base>;
 using plain_file_ptr = shared_ptr<plain_file>;
 using directory_ptr = shared_ptr<directory>;
+using dirent_pair = pair<string, inode_ptr>;
 
 //
 // inode_state -
@@ -85,7 +87,10 @@ class inode {
       file_base_ptr get_contents() const;
       inode_t get_type() const;
       string get_name() const;
-      // void set_name(string) const;
+
+      void print_description(stringstream &, string = "") const;
+      void print_recursive(stringstream & ss) const;
+
 };
 
 //
@@ -159,6 +164,7 @@ class plain_file: public file_base {
 class directory: public file_base {
    private:
       map<string,inode_ptr> dirents;
+      // bool cmp(const dirent_pair &, const dirent_pair &);
    public:
       size_t size() const override;
       void remove (const string& filename);
@@ -167,6 +173,7 @@ class directory: public file_base {
 
       void init(inode_ptr, inode_ptr);
       inode_ptr get_subdirent(string) const;
+      vector<dirent_pair> to_vector() const;
 };
 
 #endif

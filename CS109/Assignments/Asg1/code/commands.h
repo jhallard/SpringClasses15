@@ -4,7 +4,6 @@
 #define __COMMANDS_H__
 
 #include <map>
-#include <algorithm>
 using namespace std;
 
 #include "inode.h"

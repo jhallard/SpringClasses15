@@ -98,6 +98,31 @@ void fn_exit (inode_state& state, const wordvec& words){
 void fn_ls (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   stringstream ss; ss << "";
+
+   if(words.size() <= 1) {
+      ss << state.get_cwd()->get_name() << ":" << "\n";
+      state.get_cwd()->print_recursive(ss);
+      cout << ss.str() << "\n";
+      return;
+   }
+
+   for(auto & fn : wordvec(words.begin()+1, words.end())) {
+
+      inode_ptr node = state.get_inode_from_path(fn);
+
+      if(node->get_type() == DIR_INODE) {
+         ss << fn << ":" << "\n";
+      }
+
+      node->print_recursive(ss);
+
+      ss << "\n";
+   }
+
+      cout << ss.str() << "\n";
+
 }
 
 void fn_lsr (inode_state& state, const wordvec& words){
