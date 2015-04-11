@@ -10,6 +10,7 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <deque>
 using namespace std;
 
 #include "util.h"
@@ -89,7 +90,9 @@ class inode {
       string get_name() const;
 
       void print_description(stringstream &, string = "") const;
-      void print_recursive(stringstream & ss) const;
+      void print_directory(stringstream & ss) const;
+      void print_recursive(stringstream & ss,
+       deque<dirent_pair> &) const;
 
 };
 

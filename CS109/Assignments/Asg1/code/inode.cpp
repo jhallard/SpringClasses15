@@ -51,26 +51,55 @@ string inode::get_name() const {
   return name;
 }
 
-void inode::print_recursive(stringstream & ss) const {
+void inode::print_recursive(stringstream & ss,
+  deque<dirent_pair> & r_stack) const {
 
   directory_ptr dir_ptr = nullptr;
   plain_file_ptr file_ptr = nullptr;
 
   switch(type) {
-     case DIR_INODE:
+
+      case DIR_INODE:
+        ss << get_name() << ":" << "\n";
+        print_directory(ss); // print yourself
         dir_ptr = directory_ptr_of(contents);
+
+        // add all your children to the stack
         for(auto & node_pair : dir_ptr->to_vector()) {
-          node_pair.second->print_description(ss, node_pair.first);
+
+          if(node_pair.first != "." && node_pair.first!="..") {
+            r_stack.push_back(node_pair);
+          }
         }
-     break;
+      break;
 
      case PLAIN_INODE:
-        file_ptr = plain_file_ptr_of(contents);
-        ss << get_inode_nr() << "\t";
-        ss << file_ptr->size() << "\t";
-        ss << get_name() << "\n";
-     break;
+      print_description(ss);
+      break;
     }
+
+    if(r_stack.size()) {
+      auto & nxt = r_stack.front();
+      r_stack.pop_front();
+      nxt.second->print_recursive(ss, r_stack);
+    }
+
+}
+
+void inode::print_directory(stringstream & ss) const {
+ 
+ directory_ptr dir_ptr = nullptr;
+
+  if(type == PLAIN_INODE) {
+    throw logic_error("print_directory called on plain inode object");
+  }
+
+  dir_ptr = directory_ptr_of(contents);
+  for(auto & node_pair : dir_ptr->to_vector()) {
+
+    node_pair.second->print_description(ss, node_pair.first);
+  }
+
 }
 
 void inode::print_description(stringstream & ss, string name) const {
@@ -262,7 +291,7 @@ vector<dirent_pair> directory::to_vector() const {
 inode_state::inode_state() {
 
   // initialize the root inode_ptr
-  root = make_shared<inode>(DIR_INODE, "");
+  root = make_shared<inode>(DIR_INODE, "/");
   directory_ptr root_dir = directory_ptr_of(root->get_contents());
 
   // set the '.' and '..' to both point to itself.

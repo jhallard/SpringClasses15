@@ -101,9 +101,10 @@ void fn_ls (inode_state& state, const wordvec& words){
 
    stringstream ss; ss << "";
 
+   // catch for the case with no arguments, call on cwd
    if(words.size() <= 1) {
       ss << state.get_cwd()->get_name() << ":" << "\n";
-      state.get_cwd()->print_recursive(ss);
+      state.get_cwd()->print_directory(ss);
       cout << ss.str() << "\n";
       return;
    }
@@ -114,20 +115,47 @@ void fn_ls (inode_state& state, const wordvec& words){
 
       if(node->get_type() == DIR_INODE) {
          ss << fn << ":" << "\n";
+         node->print_directory(ss);
       }
-
-      node->print_recursive(ss);
-
-      ss << "\n";
+      else {
+         node->print_description(ss, fn);
+      }
    }
-
       cout << ss.str() << "\n";
-
 }
 
 void fn_lsr (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   deque<dirent_pair> r_stack;
+
+   stringstream ss; ss << "";
+
+   // catch for the case with no arguments, call on cwd
+   if(words.size() <= 1) {
+      // r_stack.push_back({".", state.get_cwd()});
+      // ss << state.get_cwd()->get_name() << ":" << "\n";
+      state.get_cwd()->print_recursive(ss, r_stack);
+      cout << ss.str() << "\n";
+      return;
+   }
+
+   for(auto & fn : wordvec(words.begin()+1, words.end())) {
+
+      inode_ptr node = state.get_inode_from_path(fn);
+
+      if(node->get_type() == DIR_INODE) {
+         // r_stack.push_back({"fn", node});
+         // ss << fn << ":" << "\n";
+         node->print_recursive(ss, r_stack);
+         r_stack.clear();
+      }
+      else {
+         node->print_description(ss, fn);
+      }
+   }
+      cout << ss.str() << "\n";
 }
 
 
