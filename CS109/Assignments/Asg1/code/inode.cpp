@@ -92,6 +92,12 @@ void plain_file::reset() {
   data.clear();
 }
 
+void plain_file::print_file(stringstream & ss) const {
+  for(const auto & word : data) {
+    ss << word << " ";
+  }
+}
+
 
 
 
@@ -208,9 +214,21 @@ inode_ptr inode_state::get_inode_from_path(const string & path) {
 
   directory_ptr iter_dir = directory_ptr_of(iter->get_contents());
 
+  // split the path into its components
   wordvec parts = split(path, "/");
 
+  // if it is just the root directory
+  if(parts.size() <= 0) {
+    return iter;
+  }
+
+  // else get sub-dirent from the parent based on the filename
+  // (parts.size()-1)
   iter = iter_dir->get_subdirent(parts.at(parts.size()-1));
+
+  if(iter == nullptr) {
+    throw yshell_exn("invalid path name");
+  }
 
   return iter;
 }
@@ -220,6 +238,7 @@ inode_ptr inode_state::get_inode_from_path(const string & path) {
 // the mkdir and makefile functions where a given path doesn't
 // fully exist yet, only up until the parent.
 inode_ptr inode_state::get_parent_from_path(const string & path) {
+
   inode_ptr iter = cwd;
 
   if(path.at(0) == '/') {
@@ -229,6 +248,11 @@ inode_ptr inode_state::get_parent_from_path(const string & path) {
   directory_ptr iter_dir = directory_ptr_of(iter->get_contents());
 
   wordvec parts = split(path, "/");
+
+  // if there is just one part to the path we are already at the parent
+  if(parts.size() <= 1) {
+    return iter;
+  }
 
   // we use this loop to follow all of the directories between the curr
   // and the parent of the final inode we want to point to. Throws 
@@ -257,8 +281,8 @@ inode_ptr inode_state::get_parent_from_path(const string & path) {
 inode_ptr inode_state::get_cwd() const {
   return cwd;
 }
-void inode_state::set_cwd(inode & new_cwd) {
-  cwd.reset(&new_cwd);
+void inode_state::set_cwd(inode_ptr new_cwd) {
+  cwd = new_cwd;
 }
 
 inode_ptr inode_state::get_root() const {

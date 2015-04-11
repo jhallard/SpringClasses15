@@ -48,7 +48,7 @@ class inode_state {
       inode_state();
 
       inode_ptr get_cwd() const;
-      void set_cwd(inode &);
+      void set_cwd(inode_ptr);
       inode_ptr get_root() const;
       inode_ptr get_inode_from_path(const string &);
       inode_ptr get_parent_from_path(const string & path); 
@@ -133,6 +133,7 @@ class plain_file: public file_base {
       const wordvec& readfile() const;
       void writefile (const wordvec& newdata);
       void reset();
+      void print_file(stringstream &) const;
 };
 
 //

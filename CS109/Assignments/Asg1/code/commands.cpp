@@ -32,16 +32,61 @@ command_fn commands::at (const string& cmd) {
 void fn_cat (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if(words.size() <= 1) {
+      throw yshell_exn("requires 1 or more filename arguments");
+   }
+
+   for(auto & fn : wordvec(words.begin()+1, words.end())) {
+
+      inode_ptr node = state.get_inode_from_path(fn);
+
+      if(node->get_type() == DIR_INODE) {
+         throw yshell_exn("path-name leads to directory, not file");
+      }
+
+      auto file_ptr = plain_file_ptr_of(node->get_contents());
+
+      stringstream ss; ss << "";
+      file_ptr->print_file(ss);
+
+      std::cout << ss.str() << "\n";
+
+   }
 }
 
 void fn_cd (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if(words.size() <= 1) {
+      throw yshell_exn("needs a dirname argument");
+   }
+
+   inode_ptr node = state.get_inode_from_path(words.at(1));
+
+   if(node->get_type() == PLAIN_INODE) {
+      throw yshell_exn("path-name leads to file, not directory");
+   }
+
+   state.set_cwd(node);
 }
 
 void fn_echo (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if(words.size() <= 1) {
+      cout << "\n";
+      return;
+   }
+
+   stringstream ss;
+   for(auto & word : wordvec(words.begin()+1, words.end())) {
+       ss << word << " ";
+   }
+
+   cout << ss.str() << endl;
 }
 
 void fn_exit (inode_state& state, const wordvec& words){
@@ -116,15 +161,23 @@ void fn_pwd (inode_state& state, const wordvec& words){
 
    stringstream ss;
 
-   ss << "/";
+   wordvec path_parts = {"/"};
+
    inode_ptr walker = state.get_cwd();
 
    while(walker->get_name() != state.get_root()->get_name()) {
-      ss << walker->get_name() << "/";
+      path_parts.push_back(walker->get_name());
+      path_parts.push_back("/");
+
       auto contents = directory_ptr_of(walker->get_contents());
       walker = contents->get_subdirent("..");
    }
 
+   reverse(path_parts.begin(), path_parts.end());
+
+   for(auto & part : path_parts) {
+      ss << part;
+   }
    std::cout << ss.str() << endl;
 }
 
