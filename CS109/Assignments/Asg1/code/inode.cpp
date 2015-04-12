@@ -10,8 +10,6 @@ using namespace std;
 
 
 
-
-
 // ============ === === ============ //
 // ============= INODE ============= //
 // ============ === === ============ //
@@ -52,37 +50,33 @@ string inode::get_name() const {
 }
 
 void inode::print_recursive(stringstream & ss,
-  deque<dirent_pair> & r_stack) const {
+  deque<dirent_pair> & r_stack, string name) const {
 
   directory_ptr dir_ptr = nullptr;
-  plain_file_ptr file_ptr = nullptr;
 
-  switch(type) {
+  if(type == PLAIN_INODE) {
+    print_description(ss);
+    return;
+  }
 
-      case DIR_INODE:
-        ss << get_name() << ":" << "\n";
-        print_directory(ss); // print yourself
-        dir_ptr = directory_ptr_of(contents);
+  ss << name << ":" << "\n";
+  print_directory(ss); // print yourself
+  dir_ptr = directory_ptr_of(contents);
 
-        // add all your children to the stack
-        for(auto & node_pair : dir_ptr->to_vector()) {
-
-          if(node_pair.first != "." && node_pair.first!="..") {
-            r_stack.push_back(node_pair);
-          }
-        }
-      break;
-
-     case PLAIN_INODE:
-      print_description(ss);
-      break;
+  // add all your children to the stack
+  for(auto & node_pair : dir_ptr->to_vector()) {
+    if(node_pair.first != "." && node_pair.first!=".." &&
+    node_pair.second->get_type() == DIR_INODE) {
+      string temp = name+"/"+node_pair.first;
+      r_stack.push_back({temp, node_pair.second});
     }
+  }
 
-    if(r_stack.size()) {
-      auto & nxt = r_stack.front();
-      r_stack.pop_front();
-      nxt.second->print_recursive(ss, r_stack);
-    }
+  if(r_stack.size()) {
+    auto nxt = r_stack.front();
+    r_stack.pop_front();
+    nxt.second->print_recursive(ss, r_stack, nxt.first);
+  }
 
 }
 
@@ -96,7 +90,6 @@ void inode::print_directory(stringstream & ss) const {
 
   dir_ptr = directory_ptr_of(contents);
   for(auto & node_pair : dir_ptr->to_vector()) {
-
     node_pair.second->print_description(ss, node_pair.first);
   }
 
@@ -109,12 +102,17 @@ void inode::print_description(stringstream & ss, string name) const {
 
   if(name == "") {name = get_name();};
 
+  ss << "\t";
   switch(type) {
      case DIR_INODE:
         dir_ptr = directory_ptr_of(contents);
         ss << get_inode_nr() << "\t";
         ss << dir_ptr->size() << "\t";
-        ss << name << "/\n";
+        ss << name;
+        if(name != "." && name != "..") {
+          ss << "/";
+        }
+        ss << "\n";
      break;
 
      case PLAIN_INODE:
@@ -133,6 +131,7 @@ void inode::print_description(stringstream & ss, string name) const {
 // =========== === === =========== //
 // ============ PLAIN ============ //
 // =========== === === =========== //
+
 plain_file_ptr plain_file_ptr_of (file_base_ptr ptr) {
    plain_file_ptr pfptr = dynamic_pointer_cast<plain_file> (ptr);
    if (pfptr == nullptr) throw invalid_argument ("plain_file_ptr_of");
@@ -147,19 +146,19 @@ directory_ptr directory_ptr_of (file_base_ptr ptr) {
 
 
 size_t plain_file::size() const {
-   size_t size {0};
+  size_t size {0};
 
-   // add on 1 for each character in each word
-   for(auto & word : data) {
+  if(!data.size()) {
+    return 0;
+  }
+  // add on 1 for each character in each word
+  for(auto & word : data) {
     size += word.length();
-   }
-
-   // add on the number of spaces (words-1)
-   size += data.size()-1;
-
-   DEBUGF ('i', "size = " << size);
-
-   return data.size();
+  }
+  // add on the number of spaces (words-1)
+  size += data.size()-1;
+  DEBUGF ('i', "size = " << size);
+  return size;
 }
 
 const wordvec& plain_file::readfile() const {
@@ -199,11 +198,14 @@ size_t directory::size() const {
    return size;
 }
 
-void directory::remove (const string& filename) {
-  if(dirents.find(filename) == dirents.end()) {
-    throw yshell_exn("remove arg not present in map");
+
+void directory::remove(const string& filename) {
+
+  auto tbd = dirents.find(filename);
+  if(tbd == dirents.end()) {
+    throw logic_error("directory to be removed doesn't exist");
   }
-  dirents.erase(filename);
+  dirents.erase(tbd);
   DEBUGF ('i', filename);
 }
 
@@ -268,7 +270,12 @@ inode_ptr directory::get_subdirent(string fn) const {
   return dirents.at(fn);
 }
 
+bool directory::is_empty() const {
+  return dirents.empty();
+}
 
+// get the contents of the directory as a sorted vector 
+// (sorted after the '.' and '..' elements)
 vector<dirent_pair> directory::to_vector() const {
   vector<dirent_pair > v(dirents.size());
   copy(dirents.begin(), dirents.end(), v.begin());

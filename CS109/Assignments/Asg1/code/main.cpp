@@ -74,6 +74,9 @@ int main (int argc, char** argv) {
             // Split the line into words and lookup the appropriate
             // function.  Complain or call it.
             wordvec words = split (line, " \t");
+
+            if(!words.size() || words.at(0) == "#") {continue;}
+
             DEBUGF ('y', "words = " << words);
             command_fn fn = cmdmap.at(words.at(0));
             fn (state, words);

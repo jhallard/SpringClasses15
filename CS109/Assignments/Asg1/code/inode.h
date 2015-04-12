@@ -92,7 +92,7 @@ class inode {
       void print_description(stringstream &, string = "") const;
       void print_directory(stringstream & ss) const;
       void print_recursive(stringstream & ss,
-       deque<dirent_pair> &) const;
+       deque<dirent_pair> &, string) const;
 
 };
 
@@ -167,7 +167,6 @@ class plain_file: public file_base {
 class directory: public file_base {
    private:
       map<string,inode_ptr> dirents;
-      // bool cmp(const dirent_pair &, const dirent_pair &);
    public:
       size_t size() const override;
       void remove (const string& filename);
@@ -177,6 +176,7 @@ class directory: public file_base {
       void init(inode_ptr, inode_ptr);
       inode_ptr get_subdirent(string) const;
       vector<dirent_pair> to_vector() const;
+      bool is_empty() const;
 };
 
 #endif

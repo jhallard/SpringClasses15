@@ -193,9 +193,8 @@
 
 %\setcounter{tocdepth}{1} % Uncomment this line if you don't want subsections listed in the ToC
 
-\newpage
 % \tableofcontents
-% \newpage
+\newpage
 
 %----------------------------------------------------------------------------------------
 %   PROBLEM 1
@@ -204,10 +203,48 @@
 % To have just one problem per page, simply put a \clearpage after each problem
 
 \begin{homeworkProblem}
+ Design 3 algorithms based on binary min heaps that find the $k$th smallest \# out of a set of $n$ \#'s in time:
+\begin{enumerate}
+\item[a)] $O(n \log k)$
+\item[b)] $O(n + k \log n)$
+\item[c)] $O(n + k \log k)$
+\end{enumerate}
+
+Use the heap operations (here $s$ is the size):
+\begin{itemize}
+\item   Insert, delete: $O(\log s)$
+\item   Buildheap: $O(s)$
+\item   Smallest: $O(1)$
+\end{itemize}
+  
+Give high level descriptions of the 3 algorithms and briefly reason correctness and running time. Part c) is the most challenging.
+
+
+\begin{enumerate}
+
+\item \textbf{Part A} - I found this to be a very wierd problem, any attempts to get the required run-time had me going out of my way to find a slower
+than optimal algorithm. I know from looking at the runtime that we need to perform $n$ total insertion or deletion operations on a heap of size $k$, which would give runtime $O(n\log(k))$, but there didn't seem to be a natural way of doing so.
+
+\item \textbf{Part B} - Designing an algorithm to run in $O(n + k\log(n))$ seemed the most inutive to me. My algorithm is like heapsort, except it stops after $k$ iterations, which reduces its run time from $O(n\log(n))$ to $O(n + k\log(n))$. \\[.15in]
+\problemAnswer{
+\texttt{// A = array of n elements of arbitray order} \\
+\texttt{ 1.} \texttt{ findp(A) } \\
+\texttt{ 2.} \texttt{ \tab BuildHeap(A) // O(n)} \\
+\texttt{ 3.} \texttt{ \tab for i in [1..k-1] // O(k)} \\
+\texttt{ 4.} \texttt{ \tab \tab Delete(A) // O(log(n))} \\
+\texttt{ 5.} \texttt{ \tab return Smallest(A) // O(1)} \\
+\texttt{ 6.} \texttt{ \tab // O(n) + O(k)*O(logn) + O(1)} \\
+}
+
+The algorithm starts by constructing a heap over all $n$ elements, which is where the $O(n)$ term comes from in the runtime. Now, we simply perform $k-1$ deletion operations, which each take $O(\log(n))$ time to complete. After these operations, the $k$th smallest element will be at the top of the heap, so we can perform a simple Smallest retrieval operation, which will give us the $k$th smallest element. Runtime - $O(n)$ for Buildheap, $O(k)$ iterations of delete-min at a cost of $O(\log(n))$ gives a total run-time of $O(n + k\log(n))$. \\
+
+
+\item \textbf{Part C} - 
+
+\end{enumerate}
 
 \end{homeworkProblem}
 
-\newpage
 
 %----------------------------------------------------------------------------------------
 %   PROBLEM 2
@@ -215,26 +252,76 @@
 
 \begin{homeworkProblem}
 
+Consider the following sorting algorithm for an array of numbers (Assume the size $n$ of the array is divisible by 3):
+\begin{itemize}
+\item   Sort the initial 2/3 of the array.
+\item   Sort the final 2/3 and then again the initial 2/3.
+\end{itemize}
+
+Reason that this algorithm properly sorts the array. What is its running time?
+
+\textbf{Proof of Correctness} \\
+ I am assuming that this is a recursive definition, and that we recurse until we reach two elements at which point we just swap them into place with a single operation. Let $P(n)$ be the statement `for $n \geq 1$, an array $A$ on $3n$ elements of arbitrary order will be corectly sorted by the 2/3rds sorting algorithm. '
+
+ \textbf{Base Case} \\
+ $P(n=1)$ - 
+
 \end{homeworkProblem}
 
 
-\newpage 
+\begin{homeworkProblem}
+
+KT, problem 1, p 246.
+
+\end{homeworkProblem}
 
 
 
 \begin{homeworkProblem}
 
+Suppose you are choosing between the following 3 algorithms:
+\begin{enumerate}
+\item Algorithm $A$ solves problems by dividing them into 5 subproblems of half the size, recursively solving each subproblem, and then combining the solutions in linear time.
+\item Algorithm $B$ solves problems of size n by recursively solving 2 subproblems of size $n-1$ and the combining the solutions in constant time.
+\item Algorithm $C$ solves problems of size $n$ by dividing them into nine subproblems of size $n/3$, recursively solving each subproblem, and the combining the solution in $O(n^2)$ time.
+\end{enumerate}
+
+What are the running times of each of these algs. (in big-O notation), and which would you choose?
+
+
 \end{homeworkProblem}
 
 
 
 \begin{homeworkProblem}
 
+ The \textit{Hadamard matrices} $H_0, H_1, H_2, \ldots$ are defined as follows:
+\begin{itemize}
+\item $H_0$ is the $1 \times 1$ matrix $[1]$
+\item For $k>0, H_k$ is the $2^k \times 2^k$ matrix
+\end{itemize}
+\begin{displaymath}
+H_k =
+\begin{bmatrix}
+H_{k-1} & H_{k-1} \\
+H_{k-1} & -H_{k-1} 
+\end{bmatrix}
+\end{displaymath}
+Show that if $v$ is a column vector of length $n = 2^k$, then the matrix-vector product $H_kv$ can be calculated using $O(n \log n)$ operations. Assume that all the numbers involved are small enough that basic arithmetic operations like addition and multiplication take unit time.
+
+
 \end{homeworkProblem}
 
-
-
 \begin{homeworkProblem}
+
+ \textbf{(Extra Credit)} The square of a matrix $A$ is its product with itself, $A A$.
+
+\begin{enumerate}
+\item Show that 5 multiplications are sufficient to compute the square of a $2 \times 2$ matrix.
+\item What is wrong with the following algorithm for computing the square of an $n \times n$ matrix.\\
+``Use a divide-and-conquer approach as in Strassen's algorithm, except that instead of getting 7 subproblems of size $n/2$, we now get 5 subproblems of size $n/2$ thanks to part a). Using the same analysis as in Strassen's algorithm we can conclude that the algorithm runs in time $O(n^{\log_2 5})$.''
+\item In fact, squaring matrices is no easier that matrix multiplication. Show that if $n \times n$ matrices can be squared in time $O(n^c)$, then any two $n \times n$ matrices can be multiplied in time $O(n^c)$.
+\end{enumerate}
 
 \end{homeworkProblem}
 
