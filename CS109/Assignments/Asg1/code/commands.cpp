@@ -34,7 +34,7 @@ void fn_cat (inode_state& state, const wordvec& words){
    DEBUGF ('c', words);
 
    if(words.size() <= 1) {
-      throw yshell_exn("requires 1 or more filename arguments");
+      throw yshell_exn("cat: requires 1 or more filename args");
    }
 
    // go through all arguments and attempt to print them out
@@ -42,7 +42,7 @@ void fn_cat (inode_state& state, const wordvec& words){
 
       inode_ptr node = state.get_inode_from_path(fn);
       if(node->get_type() == DIR_INODE) {
-         throw yshell_exn("path-name leads to directory, not file");
+         throw yshell_exn("cat: path-name leads to directory");
       }
 
       auto file_ptr = plain_file_ptr_of(node->get_contents());
@@ -66,7 +66,7 @@ void fn_cd (inode_state& state, const wordvec& words){
    node = state.get_inode_from_path(words.at(1));
 
    if(node->get_type() == PLAIN_INODE) {
-      throw yshell_exn("path-name leads to file, not directory");
+      throw yshell_exn("cd: path-name leads to file");
    }
    state.set_cwd(node);
 }
@@ -161,7 +161,7 @@ void fn_make (inode_state& state, const wordvec& words){
    DEBUGF ('c', words);
 
    if(words.size() <= 1) {
-      throw yshell_exn("make needs a filename argument");
+      throw yshell_exn("make: requires a filename argument");
    }
 
    string new_fn = split(words[1], "/").back();
@@ -175,9 +175,6 @@ void fn_make (inode_state& state, const wordvec& words){
    if(words.size() > 2) {
       auto new_node = parent_dir->get_subdirent(new_fn);
       auto new_file = plain_file_ptr_of(new_node->get_contents());
-
-      // the first two strings are the command and filename,
-      // omit those from the file text.
       new_file->writefile(wordvec(words.begin()+2, words.end()));
    }
 
@@ -240,12 +237,22 @@ void fn_pwd (inode_state& state, const wordvec& words){
    std::cout << ss.str() << endl;
 }
 
+
+// =======================================================
+// ====================== @BUG ===========================
+// =======================================================
+// There is a bug in this function, technically if you can
+// be in an empty directory, so you can call 'rm .' and it
+// should delete the cwd and make the new cwd the parent.
+// This works if you call 'rm /path/to/cwd' but not with
+// 'rm .' for some reason.
+// =======================================================
 void fn_rm (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
 
    if(words.size() != 2) {
-      throw yshell_exn("requires single file/directory name");
+      throw yshell_exn("rm: requires single file or dir. name");
    }
 
    // get the end of the path
@@ -261,7 +268,7 @@ void fn_rm (inode_state& state, const wordvec& words){
    if(node->get_type() == DIR_INODE && 
    directory_ptr_of(node->get_contents())->to_vector().size()>2)
    {
-      throw yshell_exn("directory is not empty, cannot remove");
+      throw yshell_exn("rm: directory non-empty, cannot remove");
    }
 
    // if the directory to be deleted is the one we are in
