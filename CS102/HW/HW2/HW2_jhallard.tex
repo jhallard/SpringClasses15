@@ -261,10 +261,43 @@ Consider the following sorting algorithm for an array of numbers (Assume the siz
 Reason that this algorithm properly sorts the array. What is its running time?
 
 \textbf{Proof of Correctness} \\
- I am assuming that this is a recursive definition, and that we recurse until we reach two elements at which point we just swap them into place with a single operation. Let $P(n)$ be the statement `for $n \geq 1$, an array $A$ on $3n$ elements of arbitrary order will be corectly sorted by the 2/3rds sorting algorithm. '
+ I am assuming that this is a recursive definition, and that we recurse until we reach two elements at which point we just swap them into place with a single operation. Let $P(n)$ be the statement `for $n \geq 1$, an array $A$ of length $n$ on elements of arbitrary order will be corectly sorted by the 2/3rds sorting algorithm.'
 
  \textbf{Base Case} \\
- $P(n=1)$ - 
+ $P(n=1)$ - If $n=1$, there is only one element to be sorted so we just return the array. Confirmed.\\
+ $P(n=2)$ - If $n=2$. no recursion is needed, we simply perform a single comparison and swap the items into place, then return the array. Confirmed. \\
+ % $P(n=3)$ - If $n=3$, then we need to recurse once. Call the three indices of the array $A_1, A_2,$ and $A_3$. The algorithm will start by recursing on the first two elements, which will perform a single comparison and swap them into place. We now know that whichever element is in $A_2$ is greater or equal to the element in index $A_1$. Next, we recurse on elements $A_2$ and $A_3$, swapping them into place. After this operation, whatever element is in index $A_3$ is greater than what is in $A_2$, and by extension of the result of the last recursive call, the value in $A_3$ is in the correct place (greater or equal to both other elements). Because $A_3$ is correct, we know that $A_1$ and $A_2$ contain the smallest and middle values of the array, but possibly out of order. One final recursive call on $A_1$ and $A_2$ swaps these two final elements into correct order, and the array is now sorted. \\
+
+ \textbf{Inductive Step} \\
+ For $n \geq 3$ where n is a multiple of 3, assume that $P(k)$ is true for $3 \leq k \leq n$, i.e. that an array of length $k$ can be sorted correctly by the given sorting algorithm. \\
+ Start with an array of size $n+3$ (the next multiple of 3). Let $A_1, A_2,$ and $A_3$ represent the 1st, 2nd, and final thirds of the array indices. 
+ On the first call we attempt to recurse on $A_1 \cup A_2$.
+ Because this sub-array is of size $\frac{2}{3} (n+3)$, which is less than or equal to $n$ for $n \geq 3$, we can apply the inductive hypothesis on this subarray. \\
+ After applying the inductive hypothesis, $A_1 \cup A_2$ will be sorted properly, and thus all of the elements in $A_2$ will be at least as great as the elements in $A_1$.
+ $$\forall x \in A_1, y \in A_2, x \leq y \tab (1)$$ 
+ We then recurse on $A_2 \cup A_3$, once again the inductive hypothesis applies by the same argument given above, which means $A_2 \cup A_3$ is sorted.
+ This implies that all elements in $A_3$ are at least as great as those in $A_2$.
+  $$\forall x \in A_2, y \in A_3, x \leq y \tab (2)$$ 
+ If you combine this fact with the result of the last recursive call (1), we deduce the following :
+   $$\forall x \in A_1 \cup A_2, y \in A_3, x \leq y \tab (3)$$ 
+ This means that all elements in $A_3$ are in the right place. The final 3rd of the array being in the right place implies that all of the elements in the indices $A_1 \cup A_2$ belong in that first 2/3rds of the array, but they are possbily scattered and out of orderby our last sorting call. \\
+ With one final recursive call on $A_1 \cup A_2$, our inductive hypothesis once again applies and (1) is restored. (3) is still valid because the last sort only rearranged items in $A_1$ and $A_2$, which were all less than or equal to items in $A_3$ to begin with. Combining (1) and (3) : \\
+ $$\forall x \in A_1, y \in A_2, z \in A_3, x \leq y \leq z \tab (4)$$
+ Add to this the fact that the individual thirds are correctly sorted internally (by our ind. hyp.), and we have shown that the entire array of $n+3$ elements has been properly sorted. /// \\
+
+\textbf{Runtime} \\
+This algorithm is slightly odd be it does almost no work while dividing nor when recombining. When we get down to a length less than 3, we simply compare pairs of elements are swap them if necessary. Only at the bottom level do we perform any comparisons, on every other level we simply recurse 3 times on an input of size 2/3rds the current sub-array size. Thus the recurrence is : \\
+    \[
+    T(n) \left \{
+      \begin{tabular}{c l}
+      $= O(1)$ & if  $1 \geq n \leq 2$ \\
+      $\leq$ 3T(2n/3) + O(1) & \text{ if } $n \geq 3$  \\
+      \end{tabular}
+    \right \}
+    \]
+
+    We can apply the master theorum with $a = 3$, $b=2/3$, and $f(n) = O(1)$. 
+
 
 \end{homeworkProblem}
 
