@@ -1,5 +1,8 @@
 // $Id: inode.h,v 1.13 2014-06-12 18:10:25-07 - - $
 
+// @student John Allard //
+// @ID      1437547     //
+
 #ifndef __INODE_H__
 #define __INODE_H__
 

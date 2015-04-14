@@ -1,5 +1,8 @@
 // $Id: main.cpp,v 1.3 2014-06-11 13:52:31-07 - - $
 
+// @student John Allard //
+// @ID      1437547     //
+
 #include <cstdlib>
 #include <iostream>
 #include <string>

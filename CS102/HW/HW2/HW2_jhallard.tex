@@ -308,7 +308,21 @@ This algorithm is slightly odd be it does almost no work while dividing nor when
 KT, problem 1, p 246. :
 You are interested in analyzing some hard-to-obtain data from two separate databases. Each database contains n numerical values, so there are 2n values total and you may assume that no two values are the same. You’d like to determine the median of this set of 2n values, which we will define here to be the nth smallest value. \\
 However, the only way you can access these values is through queries to the databases. In a single query, you can specify a value k to one of the two databases, and the chosen database will return the kth smallest value that it contains. Since queries are expensive, you would like to compute the median using as few queries as possible. \\
+
 Give an algorithm that finds the median value using at most O(log n) queries \\
+Since I am required to write an algorithm that runs in $O(\log n)$ quries, I know that I have to divide my search space by a constant multiple every constant number of queries, like how bianry search narrows the search space by a factor of a half every iteration. Like binary search, I'll start by looking in the middle of the data sets, which is the $\frac{n}{2}$ smallest number in each database of size $n$. The key idea that I'll use is that the median of the data set has to have a value that is between the medians of the individual data-sets. This is because if get the $\frac{n}{2}$ smallest number from both data-sets, we know there are at minimum going to be n-numbers smaller than the greater of the two medians. I'll go into this in more detail in the proof of correctness. \\ 
+
+\problemAnswer{
+\texttt{// db\_n = data base \#n} \\
+\texttt{// db\_query(k, db\_n) returns the kth smallest item in db\_n } \\
+\texttt{ 1.} \texttt{ FindMedian(db\_1, db\_2, n) } \\
+\texttt{ 2.} \texttt{ \tab ind\_1 = n/2; // get the median value \#1 } \\
+\texttt{ 2.} \texttt{ \tab ind\_2 = n/2; // get the median value \#2} \\
+\texttt{ 3.} \texttt{ \tab for k in [1..log(n)] // log(n) iterations to find median} \\
+\texttt{ 4.} \texttt{ \tab \tab } \\
+\texttt{ 5.} \texttt{ \tab return Smallest(A) // O(1)} \\
+\texttt{ 6.} \texttt{ \tab // O(n) + O(k)*O(logn) + O(1)} \\
+}
 
 \end{homeworkProblem}
 

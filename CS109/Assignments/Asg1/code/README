@@ -1,16 +1,84 @@
 $Id: README,v 1.1 2013-06-18 17:32:08-07 - - $
 
-Author  - John Allard Jr.
+Author  - John Allard 
 ID      - 1437547
 CruzID  - jhallard
-Project - yshell
+Date    = Apr. 12th 2015
+Program - yshell
 
 
-Description :
+Description : This program simulates a shell, it starts with a
+     root
+directory and allows the user to add/remove/edit plain text 
+    files and
+other directories. Any assumptions I made about the individual
+     functions
+or misc. design notes are noted below.
+
+cat    : Outputs the text contained in a file to the screen. 
+     I made the choice to print the contents of at
+     most one file per line.
+cd     : Changes the cwd to the argument given. If no argument
+     is given it redirects to the root directory.
+echo   : Echos the text given as an argument to the screen on
+     its own line.
+exit   : Causes the program to exit with the given numeric 
+    argument. If the given arg is
+       non-numeric (any character is a non-digit), it exits
+            with code 127. If no arg is
+       given it exits with code 0.
+ls     : Takes one or more directory paths as an argument and
+     outputs the contents of those
+       directories in a non-recursive manner.
+lsr    : Takes one or more directory paths as an argument and
+     outputs the contents of those
+       directories in a recursive manner.
+make   : Make or update a file at the path given as first 
+    argument. The rest of the arguments 
+       serve as the words in the file. 
+mkdir  : Make a directory at the path given as first argument.
+prompt : Change the prompt to the given string argument.
+pwd    : prints the path to the current working directory.
+rm     : Deletes a file or empty directory at the given argument
+     path. Note that it cannot be used to delete 
+     a directory you are currently in even if it is empty).
+rmr    : Deletes a file or a directory using a recursive approach.
+     Internally, this is done from the 
+     bottom up, we take the argument directory, go to all the 
+         leaves that are descendents, and
+     un-hook these nodes from their parents on the way up to
+          the given node tbd. This is to avoid
+     the memory leaks that occur when using shared pointers.
 
 
 
 Files :
 
+inode.h, inode.cpp - These files contain the declarations and
+def. of the inode, inode_state, file_base_ptr, directory, and
+plain_file classes. They deal with the internal structure of
+the tree.
 
-Notes :
+command.h, commands.cpp -
+
+debug.h, debug.cpp -
+
+until.h, util.cpp -
+
+main.cpp - Holds the main function and the main input
+loop from stdin.
+
+README - The file you are reading.
+
+Makefile - Builds the yshell program and other utilities
+for the program.
+
+
+Notes : I did not edit the makefile at all, I didn't think we were
+supposed to. I did run valgrind on a very large custom directory,
+using rmr and rm, and ^D, and I had no memory leaks. I hope the
+same works when you  build it. I did all of the editing and testing
+on my home Linux system but I also built before I submitted in 
+my unix.ucsc.edu /private/cmps109/asg1 directory.I'm also assuming
+that you guys are going to make sure that  checksource is in the
+build path?

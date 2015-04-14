@@ -1,5 +1,8 @@
 // $Id: util.cpp,v 1.10 2014-06-11 13:34:25-07 - - $
 
+// @student John Allard //
+// @ID      1437547     //
+
 #include <cstdlib>
 #include <unistd.h>
 

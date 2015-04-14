@@ -1,5 +1,8 @@
 // $Id: inode.cpp,v 1.12 2014-07-03 13:29:57-07 - - $
 
+// @student John Allard //
+// @ID      1437547     //
+
 #include <iostream>
 #include <stdexcept>
 
@@ -336,9 +339,7 @@ bool inode_state::free_recursive(inode_ptr node) {
 
   // recurse all the way down the tree, seperate all of those links.
   for(auto & x : dir_ptr->to_vector()) {
-
-    if(x.first == "." || x.first == "..")
-      continue;
+    if(x.first == "." || x.first == "..") continue;
     if(x.second->get_type() == DIR_INODE) {
       // recurse on a directory.
       free_recursive(x.second);
@@ -347,8 +348,17 @@ bool inode_state::free_recursive(inode_ptr node) {
     }
   }
 
+  for(auto & x : dir_ptr->to_vector()) {
+    if(x.first == "." || x.first == "..") continue;
+    if(x.second->get_type() == DIR_INODE) {
+      // remove it from the map.
+      dir_ptr->remove(x.first);
+    }
+  }
+
   // unhook yourself from your parent.
   dir_ptr->remove("..");
+  dir_ptr->remove(".");
   // make the current node null
   // node = nullptr;
   return true;

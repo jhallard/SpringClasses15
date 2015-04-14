@@ -1,5 +1,8 @@
 // $Id: util.h,v 1.9 2014-06-12 16:44:08-07 - - $
 
+// @student John Allard //
+// @ID      1437547     //
+
 //
 // util -
 //    A utility class to provide various services not conveniently

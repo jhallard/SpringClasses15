@@ -1,5 +1,8 @@
 // $Id: commands.cpp,v 1.11 2014-06-11 13:49:31-07 - - $
 
+// @student John Allard //
+// @ID      1437547     //
+
 #include "commands.h"
 #include "debug.h"
 
@@ -60,14 +63,20 @@ void fn_cd (inode_state& state, const wordvec& words){
 
    inode_ptr node = nullptr;
 
-   if(words.size() != 2) {
-      node = state.get_inode_from_path("/");
+   try {
+      if(words.size() != 2) {
+         node = state.get_inode_from_path("/");
+      }
+      else {
+         node = state.get_inode_from_path(words.at(1));
+      }
+   }
+   catch(yshell_exn e) {
+      throw yshell_exn("cd: "+words.at(1)+": "+e.what());
    }
 
-   node = state.get_inode_from_path(words.at(1));
-
    if(node->get_type() == PLAIN_INODE) {
-      throw yshell_exn("cd: path-name leads to file");
+      throw yshell_exn("cd: "+words.at(1)+": path leads to file");
    }
    state.set_cwd(node);
 }
@@ -128,11 +137,14 @@ void fn_ls (inode_state& state, const wordvec& words){
       cout << ss.str() << "\n";
       return;
    }
-
-   // else go through each argument and print out the contents
+   inode_ptr node = nullptr;
+      // else go through each argument and print out the contents
    for(auto & fn : wordvec(words.begin()+1, words.end())) {
-      inode_ptr node = state.get_inode_from_path(fn);
-
+      try {
+         node = state.get_inode_from_path(fn);
+      } catch(yshell_exn e) {
+         throw yshell_exn("ls: "+fn+": "+e.what());
+      }
       if(node->get_type() == DIR_INODE) {
          ss << fn << ":" << "\n";
          node->print_directory(ss);
@@ -141,6 +153,7 @@ void fn_ls (inode_state& state, const wordvec& words){
          node->print_description(ss, fn);
       }
    }
+
       cout << ss.str() << "\n";
 }
 
@@ -161,9 +174,14 @@ void fn_lsr (inode_state& state, const wordvec& words){
       return;
    }
 
-   for(auto & fn : wordvec(words.begin()+1, words.end())) {
-      inode_ptr node = state.get_inode_from_path(fn);
+   inode_ptr node = nullptr;
 
+   for(auto & fn : wordvec(words.begin()+1, words.end())) {
+      try {
+         node = state.get_inode_from_path(fn);
+      } catch(yshell_exn e) {
+         throw yshell_exn("lsr: "+fn+": "+e.what());
+      }
       if(node->get_type() == DIR_INODE) {
          node->print_recursive(ss, r_stack, fn);
          r_stack.clear();
@@ -187,16 +205,20 @@ void fn_make (inode_state& state, const wordvec& words){
 
    string new_fn = split(words[1], "/").back();
    
-   inode_ptr parent = state.get_parent_from_path(words[1]);
-   auto parent_dir = directory_ptr_of(parent->get_contents());
+   try {
+      inode_ptr parent = state.get_parent_from_path(words[1]);
+      auto parent_dir = directory_ptr_of(parent->get_contents());
 
-   parent_dir->mkfile(new_fn);
+      parent_dir->mkfile(new_fn);
 
-   // if there are words to insert into the file
-   if(words.size() > 2) {
-      auto new_node = parent_dir->get_subdirent(new_fn);
-      auto new_file = plain_file_ptr_of(new_node->get_contents());
-      new_file->writefile(wordvec(words.begin()+2, words.end()));
+      // if there are words to insert into the file
+      if(words.size() > 2) {
+         auto new_node = parent_dir->get_subdirent(new_fn);
+         auto new_file = plain_file_ptr_of(new_node->get_contents());
+         new_file->writefile(wordvec(words.begin()+2, words.end()));
+      }
+   } catch(yshell_exn e) {
+      throw yshell_exn("make: "+new_fn+": "+e.what());
    }
 
 }
@@ -216,9 +238,13 @@ void fn_mkdir (inode_state& state, const wordvec& words){
    }
    string new_dirname = parts.at(parts.size()-1);
 
-   inode_ptr parent = state.get_parent_from_path(words[1]);
-   auto parent_dir = directory_ptr_of(parent->get_contents());
-   parent_dir->mkdir(new_dirname, parent);
+   try {
+      inode_ptr parent = state.get_parent_from_path(words[1]);
+      auto parent_dir = directory_ptr_of(parent->get_contents());
+      parent_dir->mkdir(new_dirname, parent);
+   } catch(yshell_exn e) {
+      throw yshell_exn("mkdir: "+new_dirname+": "+e.what());
+   }
 }
 
 void fn_prompt (inode_state& state, const wordvec& words){
@@ -280,15 +306,6 @@ void fn_pwd (inode_state& state, const wordvec& words){
 }
 
 
-// =======================================================
-// ====================== @BUG ===========================
-// =======================================================
-// There is a bug in this function, technically if you can
-// be in an empty directory, so you can call 'rm .' and it
-// should delete the cwd and make the new cwd the parent.
-// This works if you call 'rm /path/to/cwd' but not with
-// 'rm .' for some reason.
-// =======================================================
 void fn_rm (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
@@ -299,31 +316,31 @@ void fn_rm (inode_state& state, const wordvec& words){
 
    // get the end of the path
    string tbd = split(words[1], "/").back();
-
+   inode_ptr parent = nullptr, node = nullptr;
    // get the node and its parent
-   auto node = state.get_inode_from_path(words.at(1));
-   auto parent = state.get_parent_from_path(words.at(1));
-
-   bool deleting_cwd = false; // flag for if we are del. cws
+   try {
+      node = state.get_inode_from_path(words.at(1));
+      parent = state.get_parent_from_path(words.at(1));
+   } catch(yshell_exn e) {
+      throw yshell_exn("rm: "+tbd+": "+e.what());
+   }
+   // if the directory to be deleted is the one we are in
+   if(node->get_inode_nr() == state.get_cwd()->get_inode_nr()){
+      throw yshell_exn("rm: "+tbd+": cannot delete current directory");
+   }
 
    // make sure we don't delete a filled directory
    if(node->get_type() == DIR_INODE && 
    directory_ptr_of(node->get_contents())->to_vector().size()>2)
    {
-      throw yshell_exn("rm: directory non-empty, cannot remove");
-   }
-
-   // if the directory to be deleted is the one we are in
-   if(node->get_inode_nr() == state.get_cwd()->get_inode_nr()){
-      deleting_cwd = true;
+      throw yshell_exn("rm: "+tbd+": directory non-empty,"+
+         " cannot remove");
    }
 
    auto dir_ptr = directory_ptr_of(parent->get_contents());
    dir_ptr->remove(node->get_name());
    node = nullptr;
 
-   if(deleting_cwd)
-      state.set_cwd(parent);
 }
 
 void fn_rmr (inode_state& state, const wordvec& words){
@@ -340,10 +357,13 @@ void fn_rmr (inode_state& state, const wordvec& words){
 
    // get the end of the path
    string tbd = split(words[1], "/").back();
-
-   auto parent = state.get_parent_from_path(words[1]);
-   auto node = state.get_inode_from_path(words[1]);
-
+   inode_ptr parent = nullptr, node = nullptr;
+   try {
+   parent = state.get_parent_from_path(words[1]);
+   node = state.get_inode_from_path(words[1]);
+   } catch(yshell_exn e) {
+      throw yshell_exn("rmr: "+tbd+": "+e.what());
+   }
    state.free_recursive(node);
 
    auto dir_ptr = directory_ptr_of(parent->get_contents());
