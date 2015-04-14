@@ -4,6 +4,8 @@
 #define __COMMANDS_H__
 
 #include <map>
+#include <cctype>
+#include <cstdlib>
 using namespace std;
 
 #include "inode.h"

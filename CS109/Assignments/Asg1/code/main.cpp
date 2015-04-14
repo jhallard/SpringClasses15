@@ -60,7 +60,7 @@ int main (int argc, char** argv) {
    
             // Read a line, break at EOF, and echo print the prompt
             // if one is needed.
-            cout << prompt << " ";
+            cout << state.get_prompt() << " ";
             string line;
             getline (cin, line);
             if (cin.eof()) {

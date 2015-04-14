@@ -89,9 +89,29 @@ void fn_echo (inode_state& state, const wordvec& words){
    cout << ss.str() << endl;
 }
 
+bool is_number(const string & str) {
+   for(auto x : str) {
+      if(!isdigit(x)) {
+         return false;
+      }
+   }
+   return true;
+}
+
 void fn_exit (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if(words.size() <= 1) {   
+      exit_status::set (0);
+   }
+   else if(is_number(words[1])) {
+      int res = atoi(words[1].c_str());
+      exit_status::set (res);
+   }
+   else {
+      exit_status::set (127);
+   }
    throw ysh_exit_exn();
 }
 
@@ -204,6 +224,21 @@ void fn_mkdir (inode_state& state, const wordvec& words){
 void fn_prompt (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if(words.size() <= 1) {
+      state.set_prompt(" ");
+      return;
+   }
+
+   stringstream ss; ss << "";
+
+   for(auto & str : wordvec(words.begin()+1, words.end())) {
+      ss << str << " ";
+   }
+
+   state.set_prompt(ss.str());
+
+   return;
 }
 
 void fn_pwd (inode_state& state, const wordvec& words){
@@ -215,6 +250,12 @@ void fn_pwd (inode_state& state, const wordvec& words){
    wordvec path_parts = {""};
 
    inode_ptr walker = state.get_cwd();
+
+   // if we are already at the root there is no work to do
+   if(walker->get_name() == state.get_root()->get_name()) {
+      cout << "/" << endl;
+      return;
+   }
 
    while(walker->get_name() != state.get_root()->get_name()) {
       path_parts.push_back(walker->get_name());
@@ -303,14 +344,11 @@ void fn_rmr (inode_state& state, const wordvec& words){
    auto parent = state.get_parent_from_path(words[1]);
    auto node = state.get_inode_from_path(words[1]);
 
-   cout << "1\n";
    state.free_recursive(node);
 
-   cout << "6\n";
    auto dir_ptr = directory_ptr_of(parent->get_contents());
    dir_ptr->remove(node->get_name());
    node = nullptr;
-   cout << "8\n";
 
 }
 

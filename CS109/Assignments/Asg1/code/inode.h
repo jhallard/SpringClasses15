@@ -56,6 +56,9 @@ class inode_state {
       inode_ptr get_inode_from_path(const string &);
       inode_ptr get_parent_from_path(const string & path); 
       bool free_recursive(inode_ptr);
+
+      string get_prompt() const;
+      void set_prompt(string);
 };
 
 

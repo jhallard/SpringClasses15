@@ -1,0 +1,100 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.4
+date	2015.04.01.01.46.25;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2015.04.01.01.46.08;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.06.19.00.22.47;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.01.03.03.11.43;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@#!/bin/bash
+# $Id: mk.tests,v 1.3 2015-03-31 18:46:08-07 - - $
+export PATH=$PATH:/afs/cats.ucsc.edu/courses/cmps012b-wm/bin
+ulimit -f 32
+ulimit -t 120
+
+PROG=./yshell
+
+for test in test*.ysh
+do
+   $PROG <$test 1>$test.out 2>$test.err
+   echo status = $? >$test.status
+done
+
+valgrind --leak-check=full$PROG <test2.ysh 1>grind.out 2>grind.err
+echo status = $? >grind.status
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: mk.tests,v 1.2 2013-06-18 17:22:47-07 - - $
+d15 1
+a15 1
+valgrind $PROG <test2.ysh 1>grind.out 2>grind.err
+@
+
+
+1.2
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: mk.tests,v 1.1 2013-01-02 19:11:43-08 - - $
+d14 4
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 6
+a6 5
+#!/bin/sh
+# $Id: mk.tests,v 1.1 2010-12-13 20:21:17-08 - - $
+PATH=$PATH:/afs/cats.ucsc.edu/courses/cmps012b-wm/bin
+export PATH
+RUN=runprogram.perl
+d8 1
+d11 2
+a12 1
+   $RUN -o$test -0$test $PROG
+@

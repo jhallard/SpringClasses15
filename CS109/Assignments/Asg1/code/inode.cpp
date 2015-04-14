@@ -334,7 +334,6 @@ bool inode_state::free_recursive(inode_ptr node) {
   }
   auto dir_ptr = directory_ptr_of(node->get_contents());
 
-   cout << "2\n";
   // recurse all the way down the tree, seperate all of those links.
   for(auto & x : dir_ptr->to_vector()) {
 
@@ -342,17 +341,14 @@ bool inode_state::free_recursive(inode_ptr node) {
       continue;
     if(x.second->get_type() == DIR_INODE) {
       // recurse on a directory.
-       cout << "3\n";
       free_recursive(x.second);
       // remove it from the map.
       dir_ptr->remove(x.first);
-     cout << "4\n";
     }
   }
 
   // unhook yourself from your parent.
   dir_ptr->remove("..");
-   cout << "5\n";
   // make the current node null
   // node = nullptr;
   return true;
@@ -441,6 +437,12 @@ inode_ptr inode_state::get_root() const {
   return root;
 }
 
+string inode_state::get_prompt() const {
+  return prompt;
+}
+void inode_state::set_prompt(string str) {
+  prompt = str;
+}
 
 
 // === === === === //
