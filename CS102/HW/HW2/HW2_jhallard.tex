@@ -290,13 +290,14 @@ This algorithm is slightly odd be it does almost no work while dividing nor when
     \[
     T(n) \left \{
       \begin{tabular}{c l}
-      $= O(1)$ & if  $1 \geq n \leq 2$ \\
+      $= O(1)$ & if  $1 \leq n \leq 2$ \\
       $\leq$ 3T(2n/3) + O(1) & \text{ if } $n \geq 3$  \\
       \end{tabular}
     \right \}
     \]
 
-    We can apply the master theorum with $a = 3$, $b=2/3$, and $f(n) = O(1)$. 
+    We can apply the master theorum with $a = 3$, $b=3/2$, and $f(n) = O(1)$. $\log_b(a) = log_{\frac{3}{2}}(3) = 2.7095$. The exponent on $f$ is $0$, so $f = O(n^{\log_b(a)-\epsilon})$, thus we are in case A of the master theorem. This means that :
+    $$ T(n) = \Theta(n^{\log_{1.5}(3)} = n^{2.7095}) $$ ///
 
 
 \end{homeworkProblem}
@@ -304,7 +305,10 @@ This algorithm is slightly odd be it does almost no work while dividing nor when
 
 \begin{homeworkProblem}
 
-KT, problem 1, p 246.
+KT, problem 1, p 246. :
+You are interested in analyzing some hard-to-obtain data from two separate databases. Each database contains n numerical values, so there are 2n values total and you may assume that no two values are the same. You’d like to determine the median of this set of 2n values, which we will define here to be the nth smallest value. \\
+However, the only way you can access these values is through queries to the databases. In a single query, you can specify a value k to one of the two databases, and the chosen database will return the kth smallest value that it contains. Since queries are expensive, you would like to compute the median using as few queries as possible. \\
+Give an algorithm that finds the median value using at most O(log n) queries \\
 
 \end{homeworkProblem}
 

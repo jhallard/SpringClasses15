@@ -49,12 +49,13 @@ class inode_state {
       string prompt {"% "};
    public:
       inode_state();
-
+      ~inode_state();
       inode_ptr get_cwd() const;
       void set_cwd(inode_ptr);
       inode_ptr get_root() const;
       inode_ptr get_inode_from_path(const string &);
       inode_ptr get_parent_from_path(const string & path); 
+      bool free_recursive(inode_ptr);
 };
 
 

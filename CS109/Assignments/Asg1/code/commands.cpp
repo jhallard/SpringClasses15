@@ -15,6 +15,7 @@ commands::commands(): map ({
    {"prompt", fn_prompt},
    {"pwd"   , fn_pwd   },
    {"rm"    , fn_rm    },
+   {"rmr"    , fn_rmr    },
 }){}
 
 command_fn commands::at (const string& cmd) {
@@ -287,6 +288,30 @@ void fn_rm (inode_state& state, const wordvec& words){
 void fn_rmr (inode_state& state, const wordvec& words){
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if(words.size() != 2) {
+      throw yshell_exn("rmr: takes a single directory name argument");
+   }
+
+   if(words[1] == "/") {
+      throw yshell_exn("rmr: /: Cannot delete root directory");
+   }
+
+   // get the end of the path
+   string tbd = split(words[1], "/").back();
+
+   auto parent = state.get_parent_from_path(words[1]);
+   auto node = state.get_inode_from_path(words[1]);
+
+   cout << "1\n";
+   state.free_recursive(node);
+
+   cout << "6\n";
+   auto dir_ptr = directory_ptr_of(parent->get_contents());
+   dir_ptr->remove(node->get_name());
+   node = nullptr;
+   cout << "8\n";
+
 }
 
 int exit_status_message() {

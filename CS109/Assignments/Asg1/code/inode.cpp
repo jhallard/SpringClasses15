@@ -311,6 +311,53 @@ inode_state::inode_state() {
           << ", prompt = \"" << prompt << "\"");
 }
 
+inode_state::~inode_state() {
+  // need to go through, recurse all the way to the bottom of the tree,
+  // and free all of the nodes from the bottom up by emptying the 
+  // dirents maps that exist. These would free themselves but there are 
+  // loop where the children also point back to their parents so thier
+  // reference counts never go to 0;
+  free_recursive(root);
+  root = nullptr;
+  cwd = nullptr;
+}
+
+// @func - free_recursive
+// @info - This function takes in a node and recursively unhooks it from
+// all of its children going from the bottom up. This allows the ref
+// counts to go to zero resolving any memory leaks that may occur. 
+bool inode_state::free_recursive(inode_ptr node) {
+  string name = node->get_name();
+  if(node->get_type() == PLAIN_INODE) {
+    node = nullptr;
+    return true;
+  }
+  auto dir_ptr = directory_ptr_of(node->get_contents());
+
+   cout << "2\n";
+  // recurse all the way down the tree, seperate all of those links.
+  for(auto & x : dir_ptr->to_vector()) {
+
+    if(x.first == "." || x.first == "..")
+      continue;
+    if(x.second->get_type() == DIR_INODE) {
+      // recurse on a directory.
+       cout << "3\n";
+      free_recursive(x.second);
+      // remove it from the map.
+      dir_ptr->remove(x.first);
+     cout << "4\n";
+    }
+  }
+
+  // unhook yourself from your parent.
+  dir_ptr->remove("..");
+   cout << "5\n";
+  // make the current node null
+  // node = nullptr;
+  return true;
+}
+
 // takes in a string and parses it to return a pointer to the
 // appropriate inode that it is referncing
 inode_ptr inode_state::get_inode_from_path(const string & path) {
