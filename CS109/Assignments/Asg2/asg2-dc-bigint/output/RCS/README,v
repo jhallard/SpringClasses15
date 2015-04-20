@@ -1,0 +1,28 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2011.01.21.02.28.31;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@$Id: README,v 1.1 2011-01-20 18:28:17-08 - - $
+
+This directory contains sample output created by running
+/usr/bin/dc against the test data.  Your program's output,
+when diff'd against this should be identical.
+@

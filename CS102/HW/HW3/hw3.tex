@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage{fullpage,amsthm,amsfonts,amssymb,epsfig,amsmath}
+
+\begin{document}
+
+\begin{center}
+{\bf\large HW3 - S15}\\
+Handed out 4-14 \hfill Warmuth/Rahmanian \hfill 4-21, beg. of class \\
+\end{center}
+
+\begin{enumerate}
+\item
+\textit{Hadamard matrices} $H_0, H_1, H_2,
+\ldots$ are defined as follows:
+\begin{itemize} 
+\item $H_0$ is the $1 \times 1$ matrix $[1]$
+\item For $k>0, H_k$ is the $2^k \times 2^k$ matrix
+\end{itemize}
+\begin{displaymath}
+H_k =
+\begin{bmatrix}
+H_{k-1} & H_{k-1} \\
+H_{k-1} & -H_{k-1} 
+\end{bmatrix}
+\end{displaymath}
+
+Show by induction that the dot product between any two distinct rows of
+such a Hadamard matrix is zero.
+
+\vspace*{.2cm}
+\item Consider the Coin Changing problem with following set of coins:
+\begin{displaymath}
+\{ 1, k, k^2, ..., k^n \}.
+\end{displaymath}
+
+Prove that the Cashier's Algorithm is optimal for all 
+amounts $x \in \mathbb{N}$ given the above set of coins 
+for any $k,n\in \mathbb{N}$ s.t. $k\ge2$, $n\geq0$.
+
+Hint: Follow the proof given in the slides for the American coin set.
+First show an upper bound on the number of coins of
+each type that an optimal solution can have and then use a
+geometric sum in your proof.
+
+\vspace*{.2cm}
+\item 
+You are given an unbounded array $A[1],A[2],A[3], \ldots]$ containing
+distinct integers sorted in ascending order. Describe an
+efficient algorithm that takes an integer $k$ as input and
+finds out whether $k$ is in the array in time
+$O(\log p)$ time where $p$ is the number of integers in the
+array that are strictly less than $k$.
+
+\vspace*{.2cm}
+\item We define an array $A$ of $n$ objects has a \emph{dominant} object if at least $\lfloor n/2 \rfloor+1$ entries of $A$ are identical. Our goal is to design an efficient algorithm to tell whether the array has a dominant object, and, if so, to find that object. Our only access to $A$ is by making a \textit{query} asking whether $A[i] = A[j]$ for any two $i,j \in \{ 1, 2, \ldots, n \}$. 
+\begin{enumerate}
+\item[\textbf{(a)}] Design an algorithm to solve this problem with $O(n \log n)$ queries. (\textbf{Hint:} Split the array $A$ into two arrays of half the size.)
+\item[\textbf{(b)}] Design an algorithm to solve this problem with $O(n)$ queries. (\textbf{Hint:} Don't Split. Pair up the elements arbitrarily and get rid of as many as you can, repeatedly.)
+\end{enumerate}
+
+\vspace*{.2cm}
+\item (KT, problem 17, p 197.)\\
+Consider the following variation on the Interval Scheduling Problem.You have a processor that can operate 24 hours a day, every day. People submit requests to run \textit{daily jobs} on the processor. Each such job comes with a \textit{start time} and an \textit{end time}; if the job is accepted to run on the processor, it must run continuously, every day, for the period between its start and end times. (Note that certain jobs can begin before midnight and end after midnight; this makes for a type of situation different from what we saw in the Interval Scheduling Problem.)\\
+
+Given a list of $n$ such jobs, your goal is to accept as many jobs as possible (regardless of their length), subject to the constraint that the processor can run at most one job at any given point in time. Provide an algorithm to do this with a running time that is polynomial in $n$. You may assume for simplicity that no two jobs have the same start or end times.\\
+
+\textbf{Example.} Consider the following four jobs, specified by (\textit{start-time, end- time}) pairs.\\
+\begin{displaymath}
+\text{(6 PM, 6 AM), (9 PM, 4 AM), (3 AM, 2 PM), (1 PM, 7 PM)}
+\end{displaymath}
+
+The optimal solution would be to pick the two jobs (9 P.M., 4 A.M.) and (1 P.M., 7 P.M.), which can be scheduled without overlapping.
+
+\vspace*{.2cm}
+\item (KT, problem 4, p 190)\\
+Sorry too long to retype. Use a greedy algorithm.
+Reason your time bound as well as correctness.
+
+\vspace*{.2cm}
+\item EC: We discussed an algorithm in class
+that finds the $k$-th largest element in an array for $n\ge
+k$ elements in worst case time $O(n)$. This algorithm
+starts by finding the medians of groups of 5 elements and
+then finds the medians of the roughly $n/5$ medians.
+
+Why is this algorithm based on groups of size 5?
+Does it also work with groups of size 3? Why or why not?
+\end{enumerate}
+\end{document}

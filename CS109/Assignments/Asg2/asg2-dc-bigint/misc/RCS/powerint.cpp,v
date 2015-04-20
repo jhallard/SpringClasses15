@@ -1,0 +1,420 @@
+head	1.13;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.13
+date	2014.04.10.00.39.43;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.04.10.00.38.43;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.04.10.00.36.49;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.04.10.00.36.15;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.18.02.54.51;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.18.02.54.07;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.18.02.53.39;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.18.02.53.21;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.18.02.52.43;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.18.02.50.13;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.18.02.44.43;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.18.02.42.25;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.18.02.39.24;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.13
+log
+@-
+@
+text
+@// $Id: powerint.cpp,v 1.12 2014-04-09 17:38:43-07 - - $
+
+//
+// NAME
+//    powerint - power function raising a double to an int power
+//
+// SYNOPSIS
+//    double powi (double base, int exponent);
+//
+// DESCRIPTION
+//    The powi() function computes the value of base raised to the
+//    power exponent.
+//
+// RETURN VALUES
+//    Upon successful completion, powi() returns the value of base
+//    raised to the power of exponent.  If exponent is 0, 1.0 is
+//    returned regardless of the value of base (a number, 0, NaN,
+//    or +-Infinity).  Otherwise multiplication and division are
+//    subject to the rules of IEEE-754 floating point arithmetic,
+//    for CPUs which support that.
+//
+// MATHEMATICS USED
+//
+//    powi (x, - n)   => powi (1 / x, n)
+//    powi (x, 2 n)   => powi (x ** 2, n / 2)
+//    powi (x, n + 1) => x * powi (x, n)
+//
+//    .EQ
+//    x sup { - n }   = { ( 1 / x ) ) } sup n
+//    x sup { 2 n }   = ( x sup 2 ) sup { n / 2 }
+//    x sup { n + 1 } = x ( x sup n )
+//    .EN
+//
+//    $$
+//    x ^ { - n}    = { ( 1 / x ) } ^ n
+//    x ^ { 2 n }   = ( x ^ 2 ) ^ ( n / 2 )
+//    x ^ { n + 1 } = x ( x ^ n )
+//    $$
+//
+//
+
+#include <cstdlib>
+#include <iomanip>
+#include <iostream>
+#include <libgen.h>
+#include <limits>
+#include <sstream>
+#include <string>
+#include <typeinfo>
+#include <vector>
+
+using namespace std;
+
+const int DIGITS = numeric_limits<double>::digits10 + 6;
+
+template <typename item_t>
+item_t from_string (const string &arg) {
+   stringstream stream {arg};
+   item_t result;
+   stream >> result;
+   return result;
+}
+
+void print_powi (double base, int exponent, double result) {
+   cout << "powi: " << base << " ** " << exponent << " * "
+        << result << endl;
+}
+
+double powi (double base, int exponent) {
+   double result = 1.0;
+   print_powi (base, exponent, result);
+   if (exponent < 0) {
+      base = 1.0 / base;
+      exponent = - exponent;
+      print_powi (base, exponent, result);
+   }
+   while (exponent > 0) {
+      if (exponent % 2 == 0) { /* is even */
+         base *= base;
+         exponent /= 2;
+      }else {
+         result *= base;
+         --exponent;
+      }
+      print_powi (base, exponent, result);
+   }
+   return result;
+}
+
+int main (int argc, char **argv) {
+   vector<string> args (&argv[1], &argv[argc]);
+   for (auto arg = args.cbegin(); arg != args.cend(); ++arg) {
+      double base = from_string<double> (*arg);
+      if (++arg == args.cend()) break;
+      int exponent = from_string<int> (*arg);
+      cout << endl << setprecision (DIGITS);
+      double result = powi (base, exponent);
+      cout << "ANSWER: " << base << " ** " << exponent 
+           << " == " << result << endl;
+   }
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=powerint.out.grind \
+//TEST//       powerint 2 2 2 9 2 15 2 16 2 24 \
+//TEST//       >powerint.out 2>&1
+//TEST// mkpspdf powerint.ps powerint.cpp* powerint.out*
+*/
+
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.11 2014-04-09 17:36:49-07 - - $
+d58 1
+a58 2
+   stringstream stream;
+   stream << arg;
+d103 1
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.10 2014-04-09 17:36:15-07 - - $
+d54 1
+a55 2
+const int DIGITS = numeric_limits<double>::digits10;
+
+d97 1
+a97 1
+      cout << endl << setprecision (DIGITS + 5);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.9 2012-04-17 19:54:51-07 - - $
+d94 1
+a94 1
+   for (auto arg = args.cbegin(); arg != args.size(); ++arg) {
+d96 1
+a96 1
+      if (++arg == args.size()) break;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.8 2012-04-17 19:54:07-07 - - $
+d23 1
+d27 1
+d33 1
+d50 1
+d54 1
+a65 1
+
+d93 5
+a97 8
+   if (argc % 2 != 1) {
+      cerr << "Usage: " << basename (argv[0]) << " [base expt]..."
+           << endl;
+      return EXIT_FAILURE;
+   }
+   for (int argi = 1; argi + 1 < argc; argi += 2) {
+      double base = from_string<double> (argv[argi]);
+      int exponent = from_string<int> (argv[argi + 1]);
+d103 1
+a103 1
+   return EXIT_SUCCESS;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.7 2012-04-17 19:53:39-07 - - $
+d97 1
+a97 1
+      cout << setprecision (DIGITS + 5);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.6 2012-04-17 19:53:21-07 - - $
+d61 1
+a87 1
+
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.5 2012-04-17 19:52:43-07 - - $
+d40 1
+d43 1
+a43 1
+#include <iomanpi>
+a44 1
+#include <limits>
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.4 2012-04-17 19:50:13-07 - - $
+d42 1
+d87 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.3 2012-04-17 19:44:43-07 - - $
+d43 1
+d49 2
+d95 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.2 2012-04-17 19:42:25-07 - - $
+d57 2
+a58 2
+void print (double base, int exponent, double result) {
+   cout << "powi (" << base << ", " << exponent << ") = "
+d64 1
+a64 1
+   print (base, exponent, result);
+d68 1
+a68 1
+      print (base, exponent, result);
+d78 1
+a78 1
+      print (base, exponent, result);
+d93 2
+a94 2
+      cout << "ANSWER: ";
+      print (base, exponent, result);
+d101 1
+a101 1
+//TEST//       powerint 8 8 8 9 8 15 8 16 8 24 \
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powerint.cpp,v 1.1 2012-04-17 19:39:24-07 - - $
+d32 2
+a33 2
+//    x ^ { - n}    = { ( 1 / x ) } ^ n     \\
+//    x ^ { 2 n }   = ( x ^ 2 ) ^ ( n / 2 ) \\
+d49 1
+a49 1
+double from_string (const string &arg) {
+d101 1
+a101 1
+//TEST//       powerint 10 7 8 9 12 13 \
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: powi.cpp,v 1.2 2012-04-17 18:51:36-07 - - $
+d5 1
+a5 1
+//    powi - power function raising a double to an int power
+d48 9
+d90 2
+a91 2
+      double base = atof (argv[argi]);
+      int exponent = atoi (argv[argi + 1]);
+d98 8
+@

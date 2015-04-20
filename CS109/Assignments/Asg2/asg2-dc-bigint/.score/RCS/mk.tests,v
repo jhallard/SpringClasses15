@@ -1,0 +1,121 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.4
+date	2014.06.27.00.24.49;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.07.10.03.01.44;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.06.27.21.08.15;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.11.04.03.01;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@#!/bin/sh
+# $Id: mk.tests,v 1.3 2013-07-09 20:01:44-07 - - $
+#
+# This program just runs ydc from input to output.
+# It, like dc, does not bother with exit status or stdout/stderr.
+#
+export PATH=$PATH:/afs/cats.ucsc.edu/courses/cmps012b-wm/bin
+ulimit -f 32
+ulimit -t 120
+
+PROG=./ydc
+GRIND="valgrind --leak-check=full --show-reachable=yes"
+
+for test in test[0-9]-*.ydc
+do
+   $PROG <$test 1>$test.out 2>$test.err
+   echo status = $? >$test.status
+done
+
+$GRIND $PROG <testx-leaks.ydc 1>leaks-test.out 2>leaks-test.err
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: mk.tests,v 1.2 2013-06-27 14:08:15-07 - - $
+d14 1
+a14 1
+for test in test[0-9].ysh
+@
+
+
+1.2
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: mk.tests,v 1.1 2012-04-10 21:03:01-07 - - $
+d7 4
+a10 3
+PATH=$PATH:/afs/cats.ucsc.edu/courses/cmps012b-wm/bin
+export PATH
+RUN=runprogram.perl
+d12 1
+a12 3
+GRIND="valgrind --leak-check=full \
+                --show-reachable=yes --log-file=valgrind.log"
+echo $GRIND
+d14 5
+a18 7
+$RUN    -otest0-stk   -0test0-stk.ydc   $PROG
+$RUN    -otest1-stk   -0test1-stk.ydc   $PROG
+$RUN    -otest2-add   -0test2-add.ydc   $PROG
+$RUN    -otest3-sub   -0test3-sub.ydc   $PROG
+$RUN    -otest4-mul   -0test4-mul.ydc   $PROG
+$RUN    -otest5-div   -0test5-div.ydc   $PROG
+$RUN    -otest6-exp   -0test6-exp.ydc   $PROG
+d20 1
+a20 1
+$GRIND $PROG <testx-leaks.ydc 2>&1 | tee leaks-test.out
+@
+
+
+1.1
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: mk.tests,v 1.3 2011-01-20 18:26:20-08 - - $
+d11 3
+a13 2
+GRIND="valgrind --leak-check=full --show-reachable=yes"
+GRIND="$GRIND --log-file=valgrind.log"
+@

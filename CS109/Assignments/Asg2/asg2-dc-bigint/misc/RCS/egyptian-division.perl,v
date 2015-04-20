@@ -1,0 +1,82 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.2
+date	2015.01.21.01.50.47;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2015.01.21.01.49.20;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@#!/usr/bin/perl
+# $Id: egyptian-division.perl,v 1.1 2015-01-20 17:49:20-08 - - $
+
+$0 =~ s|.*/||;
+print STDERR "Usage: $0 numerator denominator\n" and exit
+unless @@ARGV == 2 and ($numer, $denom) = @@ARGV
+       and $numer =~ m/^\d+$/ and $denom =~ m/^\d+$/;
+
+print "$0: verification: $numer / $denom = ", int $numer / $denom,
+      " remainder ", $numer % $denom, "\n\n";
+
+$top = 1;
+$right = $denom;
+
+while ($right <= $numer) {
+   push @@stack, [$top, $right];
+   $top += $top;
+   $right += $right;
+}
+
+($remdr, $quot) = ($numer, 0);
+$fmt = "%12s %12s   %12s %12s\n";
+while (@@stack) {
+   printf $fmt, "", "", $remdr, $quot;
+   ($top, $right) = @@{pop @@stack};
+   if ($right <= $remdr) {
+      $remdr -= $right;
+      $quot += $top;
+      printf $fmt, $top, $right, "- " . $right, "+ " . $top;
+   }else {
+      printf $fmt, $top, $right, "- 0", "+ 0";
+   }
+   printf $fmt, "", "", "= " . $remdr, "= " . $quot;
+   printf "\n";
+}
+
+printf $fmt, "", "", "remainder", "quotient";
+
+__DATA__
+//TEST// egyptian-division.perl 76543 123 >egyptian-division.out
+//TEST// mkpspdf egyptian-division.ps \
+//TEST//         egyptian-division.perl egyptian-division.out
+@
+
+
+1.1
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: egypt-div.perl,v 1.1 2015-01-20 17:48:30-08 - - $
+d38 5
+@

@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Programming/Coding Assignment
 % LaTeX Template
 %
@@ -223,16 +223,31 @@ Give high level descriptions of the 3 algorithms and briefly reason correctness 
 \begin{enumerate}
 
 \item \textbf{Part A} - I found this to be a very wierd problem, any attempts to get the required run-time had me going out of my way to find a slower
-than optimal algorithm. I know from looking at the runtime that we need to perform $n$ total insertion or deletion operations on a heap of size $k$, which would give runtime $O(n\log(k))$, but there didn't seem to be a natural way of doing so.
+than optimal algorithm. I know from looking at the runtime that we need to perform $n$ total insertion or deletion operations on a heap of size $k$, which would give runtime $O(n\log(k))$, but there didn't seem to be a natural way of doing so. Edit - so after seeing the hint by the TA on piazza, I think I know how to build the algorithm. We start by building a max-heap of the first k elements in the array. We then scan through the array, and everytime we find a smaller element we delete the max element from the heap and insert the new smaller element. Since we will continually add the smallest elements to a max-heap of constant size k, at the end the kth smallest (the largest of the k smallest elements) will be at the top of the heap and we can simply grab that value with a single function call. \\
+
+\problemAnswer{
+\texttt{// A = array of n elements of arbitray order} \\
+\texttt{ 1.} \texttt{ findp(A) } \\
+\texttt{ 2.} \texttt{ \tab H = BuildMaxHeap(A[1..k]) // build max-heap of first k elements} \\
+\texttt{ 3.} \texttt{ \tab for i in [k..n] // O(n)} \\
+\texttt{ 4.} \texttt{ \tab \tab if A[i] < Largest(H) // if new val belongs in heap} \\
+\texttt{ 5.} \texttt{ \tab \tab \tab Delete(H) // remove top value} \\
+\texttt{ 5.} \texttt{ \tab \tab \tab Insert(H, A[i]) // push new val into heap} \\
+\texttt{ 6.} \texttt{ \tab return Largest(H)} \\
+}
+
+The algorithm starts by constructing a heap on k elements. This is key, because this lets us achieve the log(k) insetion and deletion time that is needed. We then iterate over the rest of the elements (on the order N, could be much less if k is close to n), performing a single deletion and insertion operation if we find an element that is smaller than the max item in the max heap. Doing this ensures that the smallest values are inserted into the heap, and since we start with k values and only perform single deletions and insertions together, the size of the heap will always remain constant at k. Thus at the end, we will have a max-heap containing the k smallest elements in A. The max of these elements will be at the top of the heap, and it will be the kth smallest element of A (the largest of the k smallest elements), so we return it. This algorithm runs for O(n) iterations, performing an insert and deletion operation each iteration for the worse case. Thus the run-time is : \\
+$$ (n-k)*2*\lg(k) = 2*n*\log(k) - 2*k = O(n\log(k))$$
+
 
 \item \textbf{Part B} - Designing an algorithm to run in $O(n + k\log(n))$ seemed the most inutive to me. My algorithm is like heapsort, except it stops after $k$ iterations, which reduces its run time from $O(n\log(n))$ to $O(n + k\log(n))$. \\[.15in]
 \problemAnswer{
 \texttt{// A = array of n elements of arbitray order} \\
 \texttt{ 1.} \texttt{ findp(A) } \\
-\texttt{ 2.} \texttt{ \tab BuildHeap(A) // O(n)} \\
+\texttt{ 2.} \texttt{ \tab H = BuildHeap(A) // O(n)} \\
 \texttt{ 3.} \texttt{ \tab for i in [1..k-1] // O(k)} \\
-\texttt{ 4.} \texttt{ \tab \tab Delete(A) // O(log(n))} \\
-\texttt{ 5.} \texttt{ \tab return Smallest(A) // O(1)} \\
+\texttt{ 4.} \texttt{ \tab \tab Delete(H) // O(log(n))} \\
+\texttt{ 5.} \texttt{ \tab return Smallest(H) // O(1)} \\
 \texttt{ 6.} \texttt{ \tab // O(n) + O(k)*O(logn) + O(1)} \\
 }
 
@@ -307,23 +322,47 @@ This algorithm is slightly odd be it does almost no work while dividing nor when
 
 KT, problem 1, p 246. :
 You are interested in analyzing some hard-to-obtain data from two separate databases. Each database contains n numerical values, so there are 2n values total and you may assume that no two values are the same. You’d like to determine the median of this set of 2n values, which we will define here to be the nth smallest value. \\
-However, the only way you can access these values is through queries to the databases. In a single query, you can specify a value k to one of the two databases, and the chosen database will return the kth smallest value that it contains. Since queries are expensive, you would like to compute the median using as few queries as possible. \\
+However, the only way you can access these values is through queries to the databases. In a single query, you can specify a value k to one of the two databases, and the chosen database will return the kth smallest value that it contains. Since queries are expensive, you would like to compute the median using as few queries as possible. Give an algorithm that finds the median value using at most O(log n) queries \\
 
-Give an algorithm that finds the median value using at most O(log n) queries \\
-Since I am required to write an algorithm that runs in $O(\log n)$ quries, I know that I have to divide my search space by a constant multiple every constant number of queries, like how bianry search narrows the search space by a factor of a half every iteration. Like binary search, I'll start by looking in the middle of the data sets, which is the $\frac{n}{2}$ smallest number in each database of size $n$. The key idea that I'll use is that the median of the data set has to have a value that is between the medians of the individual data-sets. This is because if get the $\frac{n}{2}$ smallest number from both data-sets, we know there are at minimum going to be n-numbers smaller than the greater of the two medians. I'll go into this in more detail in the proof of correctness. \\ 
+Since I am required to write an algorithm that runs in $O(\log n)$ quries, I know that I have to divide my search space by a constant multiple every constant number of queries, like how binary search narrows the search space by a factor of a half every iteration. Like binary search, I'll start by looking in the middle of the data sets, which is the $\frac{n}{2}$ smallest number in each database of size $n$. The key idea that I'll use is that the median of the data set has to have a value that is between the medians of the individual data-sets. This is because if get the $\frac{n}{2}$ smallest number from both data-sets, we know there are at minimum going to be n-numbers smaller than the greater of the two medians. I'll go into this in more detail in the proof of correctness. \\ 
 
 \problemAnswer{
 \texttt{// db\_n = data base \#n} \\
 \texttt{// db\_query(k, db\_n) returns the kth smallest item in db\_n } \\
+\texttt{// pow(x, n) raises x to the nth power } \\
 \texttt{ 1.} \texttt{ FindMedian(db\_1, db\_2, n) } \\
 \texttt{ 2.} \texttt{ \tab ind\_1 = n/2; // get the median value \#1 } \\
-\texttt{ 2.} \texttt{ \tab ind\_2 = n/2; // get the median value \#2} \\
-\texttt{ 3.} \texttt{ \tab for k in [1..log(n)] // log(n) iterations to find median} \\
-\texttt{ 4.} \texttt{ \tab \tab } \\
-\texttt{ 5.} \texttt{ \tab return Smallest(A) // O(1)} \\
-\texttt{ 6.} \texttt{ \tab // O(n) + O(k)*O(logn) + O(1)} \\
+\texttt{ 3.} \texttt{ \tab ind\_2 = n/2; // get the median value \#2} \\
+\texttt{ 4.} \texttt{ \tab for k in [2..log(n)] : // log(n) iterations to find median} \\
+\texttt{ 4.} \texttt{ \tab \tab med\_1 = db\_query(ind\_1, db\_1) // get ind. median value} \\
+\texttt{ 4.} \texttt{ \tab \tab med\_2 = db\_query(ind\_2, db\_2) // get ind. median value} \\
+\texttt{ 5.} \texttt{ \tab \tab if med\_2 < med\_1 : } \\
+\texttt{ 6.} \texttt{ \tab \tab \tab ind\_1 = ind\_1 - n/pow(2,k) // recurse in the lower half} \\
+\texttt{ 7.} \texttt{ \tab \tab \tab ind\_2 = ind\_2 + n/pow(2,k) // recurse in the upper half} \\
+\texttt{ 8.} \texttt{ \tab \tab else : // med\_1 > med\_2 (no dups) } \\
+\texttt{ 9.} \texttt{ \tab \tab \tab ind\_1 = ind\_1 + n/pow(2,k) } \\
+\texttt{ 10.} \texttt{ \tab \tab \tab ind\_2 = ind\_2 - n/pow(2,k) } \\
+\texttt{ 11.} \texttt{ \tab // at this point the median is the smaller of the two ind\_n vals} \\
+\texttt{ 12.} \texttt{ \tab if med\_1 < med\_2 : } \\
+\texttt{ 13.} \texttt{ \tab \tab return med\_1} \\
+\texttt{ 14.} \texttt{ \tab else : } \\
+\texttt{ 15.} \texttt{ \tab \tab return med\_2} \\
+\texttt{ 16.} \texttt{ \tab // 2+ [lg(n)-1] = lg(n)+1 = O(log(n)) db queries} \\
 }
 
+Continuing from above, I start by getting the two medians of the respective data-bases, \texttt{ind\_1} and \texttt{ind\_2}. Because these are the
+n/2 smallest number in their respective sets, there are at least n numbers smaller than the max of the two medians. We also know that the median has to be greater than or equal to the minimum of the two individual medians, otherwise it would no longer be the nth smallest number in the union of the two data-bases. \\
+Since we can pin the median to being between the two individual medians, we can then iterate through half the search space by looking only in the halves of the databases that could possibly contain the global median. If \texttt{ind\_1} $<$ \texttt{ind\_2}, then we know that the median must either be in the lower half of db\_1 or in the upper half of db\_2, so we narrow the search space to those halves by adjusting the index. If \texttt{ind\_1} $>$ \texttt{ind\_2}, we do the opposite and narrow the search space to the upper half of db\_1 and the lower half of db\_2. Since we are narrowing the search space of each data-base of length n by half each time, we only need to perform lg(n) iterations to reduce the halves to single elements. Once we have done this, \texttt{ind\_1} and \texttt{ind\_2} will the nth and n+1st smallest items (in some order) in the total data set. This means we can simply return the smaller of the two values, which will be nth smallest value in the combined data-set, which is exactly what the algiorithm is supposed to do. \\
+
+\textbf{Runtime Analysis} - Given two datasets of unique elements in which we can only query individual sets for the kth smallest element, the algorithm given above will run in time O(log(n)). To start, notice that we always iterate lg(n)-1 times, this is because we are cutting the space in half every time and we start the for-loop already at the middle of the search spaces. Each iteration of the loop we perform 2 query operations, so f(n) = 2. Thus the recurrance for this algorithm is :
+
+$$T(n) = T(n/2) + 2$$
+
+Which, can be solved using the master theorum : 
+
+$$ \log_b(a) = \log_2(1) = 0, f(n) = 2*n^0. \text{ Case \#2} $$
+
+$$ T(n) = O(log(n)) $$
 \end{homeworkProblem}
 
 
@@ -339,6 +378,40 @@ Suppose you are choosing between the following 3 algorithms:
 
 What are the running times of each of these algs. (in big-O notation), and which would you choose?
 
+\begin{enumerate}
+
+\item The recurrance (extracted from the desceription) is as follows :
+$$ T(n) = 5T(n/2) + O(n) $$
+
+Since $\log_2(5) > 1$, then $f(n) = O(n^{\log_2(5)-\epsilon}$, we are in case one of the master theorum. Thus :
+$$ T(n) = O(n^{log_2(5)) = O(n^{2.322})} ) $$
+
+\item The master theorem doesn't directly apply to this one, so I used iteration and substitution like is used in the derivation of the master theorem. The recurrence is : \\
+$$ T(n) = 2T(n-1)+c $$
+Substituting $T(n-1)$ and multiplying out: 
+$$ T(n) = 4T(n-2) + 3c $$
+Substituting in $T(n-2)$ and multiplying :
+$$ T(n) = 8T(n-3)+ 7c $$
+
+Generalizing from this pattern :
+$$ T(n) = 2^kT(n-k) + (k-1)c $$
+
+If we let $k$ go to $n$, which bottoms out the recurrance, we get :
+$$ T(n) = 2^nT(0) + (n-1)c $$
+$$ T(n) = 2^n + O(n)$$
+$$T(n) = O(2^n) $$
+
+Thus the run-time is of exponential order for this algortihm. This makes sense to me, as we double the amount of problems we have to solve for every call while only reducing the amount of work each subsequent call has to by 1.  \\
+
+\item The recurrance (extracted from the desceription) is as follows :
+$$ T(n) = 9T(n/3) + O(n^2) $$
+
+Since $\log_3(9) = 2$, then $f(n) = \Theta(n^{log_3(9))} = n^2$, we are in case two of the master theorum. Thus :
+$$ T(n) = O(n^2\log(n)) $$
+
+Between the first and the third options, the third option just barely wins out. This is because $n^xlog(n) = O(n^{x+\epsilon})$ for all $x \geq 1$. Letting $x = 2, \epsilon = \log_2(5)-2$ we can see that the third option is Big-O of the first, which makes the third option the better choice. Option \#2 is obviously the worse choice with super-polynomial run-time, so both option \#3 and option \#1 are better choices than it. This leaves option \#3 as the best choice for fastest algorithm.
+
+\end{enumerate}
 
 \end{homeworkProblem}
 

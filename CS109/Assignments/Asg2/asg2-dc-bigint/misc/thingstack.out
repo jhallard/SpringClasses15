@@ -1,0 +1,63 @@
+
+enter scope 55
+thing(int)[25]: 0xffefff8e0-> ser=1, val=0
+
+stk.push (t);
+thing(const thing &)[29]: 0x4e7d090-> ser=2, val=0
+
+leave scope 59
+~thing()[41]: 0xffefff8e0-> ser=1, val=0
+
+enter scope 55
+thing(int)[25]: 0xffefff8e0-> ser=3, val=1
+
+stk.push (t);
+thing(const thing &)[29]: 0x4e7d0e8-> ser=4, val=1
+thing(const thing &)[29]: 0x4e7d0e0-> ser=5, val=0
+~thing()[41]: 0x4e7d090-> ser=2, val=0
+
+leave scope 59
+~thing()[41]: 0xffefff8e0-> ser=3, val=1
+
+enter scope 55
+thing(int)[25]: 0xffefff8e0-> ser=6, val=2
+
+stk.push (t);
+thing(const thing &)[29]: 0x4e7d140-> ser=7, val=2
+thing(const thing &)[29]: 0x4e7d130-> ser=8, val=0
+thing(const thing &)[29]: 0x4e7d138-> ser=9, val=1
+~thing()[41]: 0x4e7d0e0-> ser=5, val=0
+~thing()[41]: 0x4e7d0e8-> ser=4, val=1
+
+leave scope 59
+~thing()[41]: 0xffefff8e0-> ser=6, val=2
+
+enter scope 62
+thing(const thing &)[29]: 0xffefff8d0-> ser=10, val=2
+stk.top()[64]: 0xffefff8d0-> ser=10, val=2
+
+stk.pop();
+~thing()[41]: 0x4e7d140-> ser=7, val=2
+
+leave scope 67
+~thing()[41]: 0xffefff8d0-> ser=10, val=2
+
+enter scope 62
+thing(const thing &)[29]: 0xffefff8d0-> ser=11, val=1
+stk.top()[64]: 0xffefff8d0-> ser=11, val=1
+
+stk.pop();
+~thing()[41]: 0x4e7d138-> ser=9, val=1
+
+leave scope 67
+~thing()[41]: 0xffefff8d0-> ser=11, val=1
+
+enter scope 62
+thing(const thing &)[29]: 0xffefff8d0-> ser=12, val=0
+stk.top()[64]: 0xffefff8d0-> ser=12, val=0
+
+stk.pop();
+~thing()[41]: 0x4e7d130-> ser=8, val=0
+
+leave scope 67
+~thing()[41]: 0xffefff8d0-> ser=12, val=0

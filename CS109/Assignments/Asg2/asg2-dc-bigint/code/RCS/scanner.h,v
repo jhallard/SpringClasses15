@@ -1,0 +1,83 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.2
+date	2014.04.09.02.04.03;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.01.19.06.17.09;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@// $Id: scanner.h,v 1.1 2011-01-18 22:17:09-08 - - $
+
+#ifndef __SCANNER_H__
+#define __SCANNER_H__
+
+#include <iostream>
+#include <utility>
+using namespace std;
+
+#include "debug.h"
+
+enum terminal_symbol {NUMBER, OPERATOR, SCANEOF};
+struct token_t {
+   terminal_symbol symbol;
+   string lexinfo;
+};
+
+class scanner {
+   private:
+      bool seen_eof;
+      char lookahead;
+      void advance();
+   public:
+      scanner();
+      token_t scan();
+};
+
+ostream& operator<< (ostream&, const terminal_symbol&);
+ostream& operator<< (ostream&, const token_t&);
+
+#endif
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: scanner.h,v 1.1 2011-01-18 18:28:41-08 - - $
+a7 1
+
+d10 1
+a10 1
+#include "trace.h"
+d25 1
+a25 1
+      token_t scan ();
+d28 2
+a29 2
+ostream &operator<< (ostream &, const terminal_symbol &);
+ostream &operator<< (ostream &, const token_t &);
+@

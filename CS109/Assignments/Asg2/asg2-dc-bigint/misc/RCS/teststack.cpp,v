@@ -1,0 +1,313 @@
+head	1.12;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.12
+date	2014.04.16.02.16.24;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.04.11.19.39.56;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.04.11.19.24.31;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.04.10.00.29.51;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.01.24.04.03.12;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.18.03.32.51;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.18.01.57.36;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.18.01.55.20;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.18.01.50.21;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.12.23.46.20;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.12.23.45.37;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.12.23.41.22;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.12
+log
+@-
+@
+text
+@// $Id: teststack.cpp,v 1.11 2014-04-11 12:39:56-07 - - $
+
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include "iterstack.h"
+
+int main (int argc, char **argv) {
+   vector<string> args (&argv[1], &argv[argc]);
+   
+   iterstack<string> stk;
+   for (const auto& arg: args) {
+      cout << "Pushing: " << arg << endl;
+      stk.push (arg);
+   }
+   for (const auto& elt: stk) cout << "Iteration: " << elt << endl;
+
+   while (not stk.empty()) {
+      cout << "Popping: " << stk.top() << endl;
+      stk.pop();
+   }
+   return 0;
+}
+
+/*
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST//       --log-file=teststack.out.grind \
+//TEST//       teststack foo bar baz qux quux >teststack.out 2>&1
+//TEST// mkpspdf teststack.ps iterstack.h teststack.cpp* teststack.out*
+*/
+
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.10 2014-04-11 12:24:31-07 - - $
+d31 1
+a31 1
+//TEST// mkpspdf teststack.ps teststack.cpp* iterstack.h teststack.out*
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.9 2014-04-09 17:29:51-07 - - $
+a9 2
+typedef iterstack<string>::const_reverse_iterator stack_ritor;
+
+d16 1
+a16 1
+      stk.push_back (arg);
+d21 2
+a22 2
+      cout << "Popping: " << stk.back() << endl;
+      stk.pop_back();
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.8 2013-01-23 20:03:12-08 - - $
+a15 1
+   cout << endl << "Pushing loop:" << endl;
+d17 1
+a17 1
+      cout << arg << endl;
+d20 1
+a20 2
+   cout << endl << "Iteration loop:" << endl;
+   for (const auto& elt: stk) cout << *itor << endl;
+a21 1
+   cout << endl << "Popping loop:" << endl;
+d23 1
+a23 1
+      cout << stk.back() << endl;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.7 2012-04-17 20:32:51-07 - - $
+d4 2
+a5 1
+
+d13 2
+d17 3
+a19 3
+   for (int index = 0; index < argc; ++index) {
+      cout << argv[index] << endl;
+      stk.push_back (argv[index]);
+a20 2
+   stack_ritor itor = stk.rbegin();
+   const stack_ritor end = stk.rend();
+d22 2
+a23 3
+   for (; itor != end; ++itor) {
+      cout << *itor << endl;
+   }
+d25 1
+a25 1
+   while (! stk.empty()) {
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.6 2012-04-17 18:57:36-07 - - $
+d36 1
+a36 1
+//TEST// mkpspdf teststack.ps iterstack.h teststack.cpp* teststack.out*
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.5 2012-04-17 18:55:20-07 - - $
+d36 1
+a36 1
+//TEST// mkpspdf teststack.ps teststack.cpp* teststack.out*
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.4 2012-04-17 18:50:21-07 - - $
+d9 2
+a11 1
+   typedef iterstack<string>::const_reverse_iterator stack_ritor;
+d13 5
+a17 1
+   for (int i = 0; i < argc; ++i) stk.push_back (argv[i]);
+d20 1
+a20 1
+   cout << "First loop:" << endl;
+d24 1
+a24 1
+   cout << "Second loop:" << endl;
+d35 1
+a35 1
+//TEST//       teststack >teststack.out 2>&1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.3 2012-04-12 16:46:20-07 - - $
+d26 8
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.2 2012-04-12 16:45:37-07 - - $
+d15 5
+a19 1
+   for (; itor != end; ++itor) cout << *itor << endl;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: teststack.cpp,v 1.1 2012-04-12 16:41:22-07 - - $
+d12 1
+a12 1
+   for (int i = 0; i < argc; ++i) stk.push_front (argv[i]);
+d16 4
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: test.cpp,v 1.3 2012-04-12 16:40:06-07 - - $
+d10 1
+d13 2
+a14 2
+   iterstack<string>::const_iterator itor = stk.begin();
+   const iterstack<string>::const_iterator end = stk.end();
+@

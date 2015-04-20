@@ -1,0 +1,3203 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: Listing.ps
+%%For: Wesley Mackey
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Tue Apr 14 12:29:14 2015
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier-Bold /F-gs-font MF
+/F-gs-font 11 11 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript-mycolor 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+/HeaderPageCountF /Helvetica-Bold findfont 18 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    /dhw d_header_w 4 sub def
+
+    /linecolor {0 0 0 setrgbcolor} bind def  % line color
+    /txcolor   {0 0 0 setrgbcolor} bind def  % text color
+    /fncolor   {0 0 0 setrgbcolor} bind def  % filename line color
+
+    .5 setlinewidth
+
+    % line across bottom of the header area
+    linecolor
+    0 0 moveto dhw 0 lineto
+
+    % side boxes
+    /sbw d_header_h 2 mul def	% side box width
+
+    % left side box
+    0 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % date/time in left box
+    txcolor
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 5 div moveto show
+
+    % right side box
+    dhw sbw sub 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % get width of pagecount
+    HeaderPageCountF setfont
+    pagecountstr stringwidth pop
+
+    txcolor
+    HeaderPageNumF setfont
+    pagenumstr stringwidth pop add  % add to width of pagecount
+    sbw exch sub 2 div dhw sbw sub add
+    d_header_h .2 mul moveto
+
+    pagenumstr show
+
+    HeaderPageCountF setfont
+    pagecountstr show
+
+    % filename
+    fncolor
+    HeaderHDRF setfont
+    dhw fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % HACK around a bug in enscript 1.6.0:
+      % for some reason this is getting set to "(null)" and
+      %
+      user_header_center_str (\(null\)) eq {
+        /user_header_center_str () def
+      } if
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        dhw user_header_left_str stringwidth pop sub 2 div
+        h moveto user_header_left_str show
+      } {
+        sbw 5 add h moveto user_header_left_str show
+
+        dhw user_header_center_str stringwidth pop sub 2 div
+        h moveto user_header_center_str show
+
+	dhw sbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} bind def
+%%EndResource
+/d_page_w 536 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 708 def
+/d_header_w 536 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 536 def
+/d_footer_h 0 def
+/d_output_w 536 def
+/d_output_h 708 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (bigint.h) def
+/fdir () def
+/ftail (bigint.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/2) def
+/modtimestr (12:28:53) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: bigint.h,v 1.16 2014-07-02 20:01:17-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#ifndef __BIGINT_H__) s
+32.4 658 M (4:) s
+52.2 658 M
+(#define __BIGINT_H__) s
+32.4 646 M (5:) s
+32.4 634 M (6:) s
+52.2 634 M
+(#include <exception>) s
+32.4 622 M (7:) s
+52.2 622 M
+(#include <iostream>) s
+32.4 610 M (8:) s
+52.2 610 M
+(#include <utility>) s
+32.4 598 M (9:) s
+52.2 598 M
+(using namespace std;) s
+25.8 586 M (10:) s
+25.8 574 M (11:) s
+52.2 574 M
+(#include "debug.h") s
+25.8 562 M (12:) s
+25.8 550 M (13:) s
+52.2 550 M
+(//) s
+25.8 538 M (14:) s
+52.2 538 M
+(// Define class bigint) s
+25.8 526 M (15:) s
+52.2 526 M
+(//) s
+25.8 514 M (16:) s
+52.2 514 M
+(class bigint {) s
+25.8 502 M (17:) s
+52.2 502 M
+(      friend ostream& operator<< \(ostream&, const bigint&\);) s
+25.8 490 M (18:) s
+52.2 490 M
+(   private:) s
+25.8 478 M (19:) s
+52.2 478 M
+(      long long_value {};) s
+25.8 466 M (20:) s
+52.2 466 M
+(      using quot_rem = pair<bigint,bigint>;) s
+25.8 454 M (21:) s
+52.2 454 M
+(      using unumber = unsigned long;) s
+25.8 442 M (22:) s
+52.2 442 M
+(      friend quot_rem divide \(const bigint&, const bigint&\);) s
+25.8 430 M (23:) s
+52.2 430 M
+(      friend void multiply_by_2 \(unumber&\);) s
+25.8 418 M (24:) s
+52.2 418 M
+(      friend void divide_by_2 \(unumber&\);) s
+25.8 406 M (25:) s
+52.2 406 M
+(   public:) s
+25.8 394 M (26:) s
+25.8 382 M (27:) s
+52.2 382 M
+(      //) s
+25.8 370 M (28:) s
+52.2 370 M
+(      // Ensure synthesized members are genrated.) s
+25.8 358 M (29:) s
+52.2 358 M
+(      //) s
+25.8 346 M (30:) s
+52.2 346 M
+(      bigint\(\) = default;) s
+25.8 334 M (31:) s
+52.2 334 M
+(      bigint \(const bigint&\) = default;) s
+25.8 322 M (32:) s
+52.2 322 M
+(      bigint \(bigint&&\) = default;) s
+25.8 310 M (33:) s
+52.2 310 M
+(      bigint& operator= \(const bigint&\) = default;) s
+25.8 298 M (34:) s
+52.2 298 M
+(      bigint& operator= \(bigint&&\) = default;) s
+25.8 286 M (35:) s
+52.2 286 M
+(      ~bigint\(\) = default;) s
+25.8 274 M (36:) s
+25.8 262 M (37:) s
+52.2 262 M
+(      //) s
+25.8 250 M (38:) s
+52.2 250 M
+(      // Extra ctors to make bigints.) s
+25.8 238 M (39:) s
+52.2 238 M
+(      //) s
+25.8 226 M (40:) s
+52.2 226 M
+(      bigint \(const long\);) s
+25.8 214 M (41:) s
+52.2 214 M
+(      bigint \(const string&\);) s
+25.8 202 M (42:) s
+25.8 190 M (43:) s
+52.2 190 M
+(      //) s
+25.8 178 M (44:) s
+52.2 178 M
+(      // Basic add/sub operators.) s
+25.8 166 M (45:) s
+52.2 166 M
+(      //) s
+25.8 154 M (46:) s
+52.2 154 M
+(      friend bigint operator+ \(const bigint&, const bigint&\);) s
+25.8 142 M (47:) s
+52.2 142 M
+(      friend bigint operator- \(const bigint&, const bigint&\);) s
+25.8 130 M (48:) s
+52.2 130 M
+(      friend bigint operator+ \(const bigint&\);) s
+25.8 118 M (49:) s
+52.2 118 M
+(      friend bigint operator- \(const bigint&\);) s
+25.8 106 M (50:) s
+52.2 106 M
+(      long to_long\(\) const;) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (bigint.h) def
+/fdir () def
+/ftail (bigint.h) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (04/14/15) def
+/pagecountstr (/2) def
+/modtimestr (12:28:53) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (51:) s
+25.8 682 M (52:) s
+52.2 682 M
+(      //) s
+25.8 670 M (53:) s
+52.2 670 M
+(      // Extended operators implemented with add/sub.) s
+25.8 658 M (54:) s
+52.2 658 M
+(      //) s
+25.8 646 M (55:) s
+52.2 646 M
+(      friend bigint operator* \(const bigint&, const bigint&\);) s
+25.8 634 M (56:) s
+52.2 634 M
+(      friend bigint operator/ \(const bigint&, const bigint&\);) s
+25.8 622 M (57:) s
+52.2 622 M
+(      friend bigint operator% \(const bigint&, const bigint&\);) s
+25.8 610 M (58:) s
+25.8 598 M (59:) s
+52.2 598 M
+(      //) s
+25.8 586 M (60:) s
+52.2 586 M
+(      // Comparison operators.) s
+25.8 574 M (61:) s
+52.2 574 M
+(      //) s
+25.8 562 M (62:) s
+52.2 562 M
+(      friend bool operator== \(const bigint&, const bigint&\);) s
+25.8 550 M (63:) s
+52.2 550 M
+(      friend bool operator<  \(const bigint&, const bigint&\);) s
+25.8 538 M (64:) s
+52.2 538 M
+(};) s
+25.8 526 M (65:) s
+25.8 514 M (66:) s
+52.2 514 M
+(//) s
+25.8 502 M (67:) s
+52.2 502 M
+(// The rest of the operators do not need to be friends.) s
+25.8 490 M (68:) s
+52.2 490 M
+(// Make the comparisons inline for efficiency.) s
+25.8 478 M (69:) s
+52.2 478 M
+(//) s
+25.8 466 M (70:) s
+25.8 454 M (71:) s
+52.2 454 M
+(bigint pow \(const bigint& base, const bigint& exponent\);) s
+25.8 442 M (72:) s
+25.8 430 M (73:) s
+52.2 430 M
+(inline bool operator!= \(const bigint &left, const bigint &right\) {) s
+25.8 418 M (74:) s
+52.2 418 M
+(   return not \(left == right\);) s
+25.8 406 M (75:) s
+52.2 406 M
+(}) s
+25.8 394 M (76:) s
+52.2 394 M
+(inline bool operator>  \(const bigint &left, const bigint &right\) {) s
+25.8 382 M (77:) s
+52.2 382 M
+(   return right < left;) s
+25.8 370 M (78:) s
+52.2 370 M
+(}) s
+25.8 358 M (79:) s
+52.2 358 M
+(inline bool operator<= \(const bigint &left, const bigint &right\) {) s
+25.8 346 M (80:) s
+52.2 346 M
+(   return not \(right < left\);) s
+25.8 334 M (81:) s
+52.2 334 M
+(}) s
+25.8 322 M (82:) s
+52.2 322 M
+(inline bool operator>= \(const bigint &left, const bigint &right\) {) s
+25.8 310 M (83:) s
+52.2 310 M
+(   return not \(left < right\);) s
+25.8 298 M (84:) s
+52.2 298 M
+(}) s
+25.8 286 M (85:) s
+25.8 274 M (86:) s
+52.2 274 M
+(#endif) s
+25.8 262 M (87:) s
+_R
+S
+%%Page: (1) 3
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (scanner.h) def
+/fdir () def
+/ftail (scanner.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/1) def
+/modtimestr (12:28:53) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: scanner.h,v 1.2 2014-04-08 19:04:03-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#ifndef __SCANNER_H__) s
+32.4 658 M (4:) s
+52.2 658 M
+(#define __SCANNER_H__) s
+32.4 646 M (5:) s
+32.4 634 M (6:) s
+52.2 634 M
+(#include <iostream>) s
+32.4 622 M (7:) s
+52.2 622 M
+(#include <utility>) s
+32.4 610 M (8:) s
+52.2 610 M
+(using namespace std;) s
+32.4 598 M (9:) s
+25.8 586 M (10:) s
+52.2 586 M
+(#include "debug.h") s
+25.8 574 M (11:) s
+25.8 562 M (12:) s
+52.2 562 M
+(enum terminal_symbol {NUMBER, OPERATOR, SCANEOF};) s
+25.8 550 M (13:) s
+52.2 550 M
+(struct token_t {) s
+25.8 538 M (14:) s
+52.2 538 M
+(   terminal_symbol symbol;) s
+25.8 526 M (15:) s
+52.2 526 M
+(   string lexinfo;) s
+25.8 514 M (16:) s
+52.2 514 M
+(};) s
+25.8 502 M (17:) s
+25.8 490 M (18:) s
+52.2 490 M
+(class scanner {) s
+25.8 478 M (19:) s
+52.2 478 M
+(   private:) s
+25.8 466 M (20:) s
+52.2 466 M
+(      bool seen_eof;) s
+25.8 454 M (21:) s
+52.2 454 M
+(      char lookahead;) s
+25.8 442 M (22:) s
+52.2 442 M
+(      void advance\(\);) s
+25.8 430 M (23:) s
+52.2 430 M
+(   public:) s
+25.8 418 M (24:) s
+52.2 418 M
+(      scanner\(\);) s
+25.8 406 M (25:) s
+52.2 406 M
+(      token_t scan\(\);) s
+25.8 394 M (26:) s
+52.2 394 M
+(};) s
+25.8 382 M (27:) s
+25.8 370 M (28:) s
+52.2 370 M
+(ostream& operator<< \(ostream&, const terminal_symbol&\);) s
+25.8 358 M (29:) s
+52.2 358 M
+(ostream& operator<< \(ostream&, const token_t&\);) s
+25.8 346 M (30:) s
+25.8 334 M (31:) s
+52.2 334 M
+(#endif) s
+25.8 322 M (32:) s
+_R
+S
+%%Page: (1) 4
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (debug.h) def
+/fdir () def
+/ftail (debug.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/2) def
+/modtimestr (12:28:53) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: debug.h,v 1.1 2014-04-08 19:04:03-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#ifndef __DEBUG_H__) s
+32.4 658 M (4:) s
+52.2 658 M
+(#define __DEBUG_H__) s
+32.4 646 M (5:) s
+32.4 634 M (6:) s
+52.2 634 M
+(#include <string>) s
+32.4 622 M (7:) s
+52.2 622 M
+(#include <vector>) s
+32.4 610 M (8:) s
+52.2 610 M
+(using namespace std;) s
+32.4 598 M (9:) s
+25.8 586 M (10:) s
+52.2 586 M
+(//) s
+25.8 574 M (11:) s
+52.2 574 M
+(// debug -) s
+25.8 562 M (12:) s
+52.2 562 M
+(//    static class for maintaining global debug flags, each indicated) s
+25.8 550 M (13:) s
+52.2 550 M
+(//    by a single character.) s
+25.8 538 M (14:) s
+52.2 538 M
+(// setflags -) s
+25.8 526 M (15:) s
+52.2 526 M
+(//    Takes a string argument, and sets a flag for each char in the) s
+25.8 514 M (16:) s
+52.2 514 M
+(//    string.  As a special case, '@', sets all flags.) s
+25.8 502 M (17:) s
+52.2 502 M
+(// getflag -) s
+25.8 490 M (18:) s
+52.2 490 M
+(//    Used by the DEBUGF macro to check to see if a flag has been set.) s
+25.8 478 M (19:) s
+52.2 478 M
+(//    Not to be called by user code.) s
+25.8 466 M (20:) s
+52.2 466 M
+(//) s
+25.8 454 M (21:) s
+25.8 442 M (22:) s
+52.2 442 M
+(class debugflags {) s
+25.8 430 M (23:) s
+52.2 430 M
+(   private:) s
+25.8 418 M (24:) s
+52.2 418 M
+(      static vector<bool> flags;) s
+25.8 406 M (25:) s
+52.2 406 M
+(   public:) s
+25.8 394 M (26:) s
+52.2 394 M
+(      static void setflags \(const string& optflags\);) s
+25.8 382 M (27:) s
+52.2 382 M
+(      static bool getflag \(char flag\);) s
+25.8 370 M (28:) s
+52.2 370 M
+(      static void where \(char flag, const char* file, int line,) s
+25.8 358 M (29:) s
+52.2 358 M
+(                         const char* func\);) s
+25.8 346 M (30:) s
+52.2 346 M
+(};) s
+25.8 334 M (31:) s
+_R
+S
+%%Page: (2) 5
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (debug.h) def
+/fdir () def
+/ftail (debug.h) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (04/14/15) def
+/pagecountstr (/2) def
+/modtimestr (12:28:53) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (32:) s
+25.8 682 M (33:) s
+52.2 682 M
+(//) s
+25.8 670 M (34:) s
+52.2 670 M
+(// DEBUGF -) s
+25.8 658 M (35:) s
+52.2 658 M
+(//    Macro which expands into trace code.  First argument is a) s
+25.8 646 M (36:) s
+52.2 646 M
+(//    trace flag char, second argument is output code that can) s
+25.8 634 M (37:) s
+52.2 634 M
+(//    be sandwiched between <<.  Beware of operator precedence.) s
+25.8 622 M (38:) s
+52.2 622 M
+(//    Example:) s
+25.8 610 M (39:) s
+52.2 610 M
+(//       DEBUGF \('u', "foo = " << foo\);) s
+25.8 598 M (40:) s
+52.2 598 M
+(//    will print two words and a newline if flag 'u' is  on.) s
+25.8 586 M (41:) s
+52.2 586 M
+(//    Traces are preceded by filename, line number, and function.) s
+25.8 574 M (42:) s
+52.2 574 M
+(//) s
+25.8 562 M (43:) s
+25.8 550 M (44:) s
+52.2 550 M
+(#ifdef NDEBUG) s
+25.8 538 M (45:) s
+52.2 538 M
+(#define DEBUGF\(FLAG,CODE\) ;) s
+25.8 526 M (46:) s
+52.2 526 M
+(#define DEBUGS\(FLAG,STMT\) ;) s
+25.8 514 M (47:) s
+52.2 514 M
+(#else) s
+25.8 502 M (48:) s
+52.2 502 M
+(#define DEBUGF\(FLAG,CODE\) { \\) s
+25.8 490 M (49:) s
+52.2 490 M
+(           if \(debugflags::getflag \(FLAG\)\) { \\) s
+25.8 478 M (50:) s
+52.2 478 M
+(              debugflags::where \(FLAG, __FILE__, __LINE__, __func__\); \\) s
+25.8 466 M (51:) s
+52.2 466 M
+(              cerr << CODE << endl; \\) s
+25.8 454 M (52:) s
+52.2 454 M
+(           } \\) s
+25.8 442 M (53:) s
+52.2 442 M
+(        }) s
+25.8 430 M (54:) s
+52.2 430 M
+(#define DEBUGS\(FLAG,STMT\) { \\) s
+25.8 418 M (55:) s
+52.2 418 M
+(           if \(debugflags::getflag \(FLAG\)\) { \\) s
+25.8 406 M (56:) s
+52.2 406 M
+(              debugflags::where \(FLAG, __FILE__, __LINE__, __func__\); \\) s
+25.8 394 M (57:) s
+52.2 394 M
+(              STMT; \\) s
+25.8 382 M (58:) s
+52.2 382 M
+(           } \\) s
+25.8 370 M (59:) s
+52.2 370 M
+(        }) s
+25.8 358 M (60:) s
+52.2 358 M
+(#endif) s
+25.8 346 M (61:) s
+25.8 334 M (62:) s
+52.2 334 M
+(#endif) s
+25.8 322 M (63:) s
+_R
+S
+%%Page: (1) 6
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (util.h) def
+/fdir () def
+/ftail (util.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/2) def
+/modtimestr (12:28:53) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: util.h,v 1.5 2014-04-09 17:03:58-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(//) s
+32.4 658 M (4:) s
+52.2 658 M
+(// util -) s
+32.4 646 M (5:) s
+52.2 646 M
+(//    A utility class to provide various services not conveniently) s
+32.4 634 M (6:) s
+52.2 634 M
+(//    included in other modules.) s
+32.4 622 M (7:) s
+52.2 622 M
+(//) s
+32.4 610 M (8:) s
+32.4 598 M (9:) s
+52.2 598 M
+(#ifndef __UTIL_H__) s
+25.8 586 M (10:) s
+52.2 586 M
+(#define __UTIL_H__) s
+25.8 574 M (11:) s
+25.8 562 M (12:) s
+52.2 562 M
+(#include <iostream>) s
+25.8 550 M (13:) s
+52.2 550 M
+(#include <stdexcept>) s
+25.8 538 M (14:) s
+52.2 538 M
+(#include <vector>) s
+25.8 526 M (15:) s
+52.2 526 M
+(using namespace std;) s
+25.8 514 M (16:) s
+25.8 502 M (17:) s
+52.2 502 M
+(#include "debug.h") s
+25.8 490 M (18:) s
+25.8 478 M (19:) s
+52.2 478 M
+(//) s
+25.8 466 M (20:) s
+52.2 466 M
+(// ydc_exn -) s
+25.8 454 M (21:) s
+52.2 454 M
+(//    Indicate a problem where processing should be abandoned and) s
+25.8 442 M (22:) s
+52.2 442 M
+(//    the main function should take control.) s
+25.8 430 M (23:) s
+52.2 430 M
+(//) s
+25.8 418 M (24:) s
+25.8 406 M (25:) s
+52.2 406 M
+(class ydc_exn: public runtime_error {) s
+25.8 394 M (26:) s
+52.2 394 M
+(   public:) s
+25.8 382 M (27:) s
+52.2 382 M
+(      explicit ydc_exn \(const string& what\);) s
+25.8 370 M (28:) s
+52.2 370 M
+(};) s
+25.8 358 M (29:) s
+25.8 346 M (30:) s
+52.2 346 M
+(//) s
+25.8 334 M (31:) s
+52.2 334 M
+(// octal -) s
+25.8 322 M (32:) s
+52.2 322 M
+(//    Convert integer to octal string.) s
+25.8 310 M (33:) s
+52.2 310 M
+(//) s
+25.8 298 M (34:) s
+25.8 286 M (35:) s
+52.2 286 M
+(const string octal \(long decimal\);) s
+25.8 274 M (36:) s
+_R
+S
+%%Page: (2) 7
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (util.h) def
+/fdir () def
+/ftail (util.h) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (04/14/15) def
+/pagecountstr (/2) def
+/modtimestr (12:28:53) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (37:) s
+25.8 682 M (38:) s
+52.2 682 M
+(//) s
+25.8 670 M (39:) s
+52.2 670 M
+(// sys_info -) s
+25.8 658 M (40:) s
+52.2 658 M
+(//    Keep track of execname and exit status.  Must be initialized) s
+25.8 646 M (41:) s
+52.2 646 M
+(//    as the first thing done inside main.  Main should call:) s
+25.8 634 M (42:) s
+52.2 634 M
+(//       sys_info::execname \(argv[0]\);) s
+25.8 622 M (43:) s
+52.2 622 M
+(//    before anything else.) s
+25.8 610 M (44:) s
+52.2 610 M
+(//) s
+25.8 598 M (45:) s
+25.8 586 M (46:) s
+52.2 586 M
+(class sys_info {) s
+25.8 574 M (47:) s
+52.2 574 M
+(   private:) s
+25.8 562 M (48:) s
+52.2 562 M
+(      static string execname_;) s
+25.8 550 M (49:) s
+52.2 550 M
+(      static int status_;) s
+25.8 538 M (50:) s
+52.2 538 M
+(   public:) s
+25.8 526 M (51:) s
+52.2 526 M
+(      static void execname \(const string& argv0\);) s
+25.8 514 M (52:) s
+52.2 514 M
+(      static const string& execname\(\) {return execname_; }) s
+25.8 502 M (53:) s
+52.2 502 M
+(      static void status \(int status\) {status_ = status; }) s
+25.8 490 M (54:) s
+52.2 490 M
+(      static int status\(\) {return status_; }) s
+25.8 478 M (55:) s
+52.2 478 M
+(};) s
+25.8 466 M (56:) s
+25.8 454 M (57:) s
+52.2 454 M
+(//) s
+25.8 442 M (58:) s
+52.2 442 M
+(// complain -) s
+25.8 430 M (59:) s
+52.2 430 M
+(//    Used for starting error messages.  Sets the exit status to) s
+25.8 418 M (60:) s
+52.2 418 M
+(//    EXIT_FAILURE, writes the program name to cerr, and then) s
+25.8 406 M (61:) s
+52.2 406 M
+(//    returns the cerr ostream.  Example:) s
+25.8 394 M (62:) s
+52.2 394 M
+(//       complain\(\) << filename << ": some problem" << endl;) s
+25.8 382 M (63:) s
+52.2 382 M
+(//) s
+25.8 370 M (64:) s
+25.8 358 M (65:) s
+52.2 358 M
+(ostream& complain\(\);) s
+25.8 346 M (66:) s
+25.8 334 M (67:) s
+52.2 334 M
+(//) s
+25.8 322 M (68:) s
+52.2 322 M
+(// operator<< \(vector\) -) s
+25.8 310 M (69:) s
+52.2 310 M
+(//    An overloaded template operator which allows vectors to be) s
+25.8 298 M (70:) s
+52.2 298 M
+(//    printed out as a single operator, each element separated from) s
+25.8 286 M (71:) s
+52.2 286 M
+(//    the next with spaces.  The item_t must have an output operator) s
+25.8 274 M (72:) s
+52.2 274 M
+(//    defined for it.) s
+25.8 262 M (73:) s
+52.2 262 M
+(//) s
+25.8 250 M (74:) s
+25.8 238 M (75:) s
+52.2 238 M
+(template <typename item_t>) s
+25.8 226 M (76:) s
+52.2 226 M
+(ostream& operator<< \(ostream& out, const vector<item_t>& vec\){) s
+25.8 214 M (77:) s
+52.2 214 M
+(   string space = "";) s
+25.8 202 M (78:) s
+52.2 202 M
+(   for \(const auto& elem: vec\) {) s
+25.8 190 M (79:) s
+52.2 190 M
+(      out << space << elem; ) s
+25.8 178 M (80:) s
+52.2 178 M
+(      space = " ";) s
+25.8 166 M (81:) s
+52.2 166 M
+(   }) s
+25.8 154 M (82:) s
+52.2 154 M
+(   return out;) s
+25.8 142 M (83:) s
+52.2 142 M
+(}) s
+25.8 130 M (84:) s
+25.8 118 M (85:) s
+52.2 118 M
+(#endif) s
+25.8 106 M (86:) s
+_R
+S
+%%Page: (1) 8
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (iterstack.h) def
+/fdir () def
+/ftail (iterstack.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/1) def
+/modtimestr (12:28:53) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: iterstack.h,v 1.13 2014-06-26 17:21:55-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(// ) s
+32.4 658 M (4:) s
+52.2 658 M
+(// The class std::stack does not provide an iterator, which is) s
+32.4 646 M (5:) s
+52.2 646 M
+(// needed for this class.  So, like std::stack, class iterstack) s
+32.4 634 M (6:) s
+52.2 634 M
+(// is implemented on top of a container.) s
+32.4 622 M (7:) s
+52.2 622 M
+(// ) s
+32.4 610 M (8:) s
+52.2 610 M
+(// We use private inheritance because we want to restrict) s
+32.4 598 M (9:) s
+52.2 598 M
+(// operations only to those few that are approved.  All functions) s
+25.8 586 M (10:) s
+52.2 586 M
+(// are merely inherited from the container, with only ones needed) s
+25.8 574 M (11:) s
+52.2 574 M
+(// being exported as public.) s
+25.8 562 M (12:) s
+52.2 562 M
+(// ) s
+25.8 550 M (13:) s
+52.2 550 M
+(// No implementation file is needed because all functions are) s
+25.8 538 M (14:) s
+52.2 538 M
+(// inherited, and the convenience functions that are added are) s
+25.8 526 M (15:) s
+52.2 526 M
+(// trivial, and so can be inline.) s
+25.8 514 M (16:) s
+52.2 514 M
+(//) s
+25.8 502 M (17:) s
+52.2 502 M
+(// Any underlying container which supports the necessary operations) s
+25.8 490 M (18:) s
+52.2 490 M
+(// could be used, such as vector, list, or deque.) s
+25.8 478 M (19:) s
+52.2 478 M
+(// ) s
+25.8 466 M (20:) s
+25.8 454 M (21:) s
+52.2 454 M
+(#ifndef __ITERSTACK_H__) s
+25.8 442 M (22:) s
+52.2 442 M
+(#define __ITERSTACK_H__) s
+25.8 430 M (23:) s
+25.8 418 M (24:) s
+52.2 418 M
+(#include <vector>) s
+25.8 406 M (25:) s
+52.2 406 M
+(using namespace std;) s
+25.8 394 M (26:) s
+25.8 382 M (27:) s
+52.2 382 M
+(template <typename value_type>) s
+25.8 370 M (28:) s
+52.2 370 M
+(class iterstack: private vector<value_type> {) s
+25.8 358 M (29:) s
+52.2 358 M
+(   private:) s
+25.8 346 M (30:) s
+52.2 346 M
+(      using stack_t = vector<value_type>;) s
+25.8 334 M (31:) s
+52.2 334 M
+(      using stack_t::crbegin;) s
+25.8 322 M (32:) s
+52.2 322 M
+(      using stack_t::crend;) s
+25.8 310 M (33:) s
+52.2 310 M
+(      using stack_t::push_back;) s
+25.8 298 M (34:) s
+52.2 298 M
+(      using stack_t::pop_back;) s
+25.8 286 M (35:) s
+52.2 286 M
+(      using stack_t::back;) s
+25.8 274 M (36:) s
+52.2 274 M
+(      using const_iterator = typename stack_t::const_reverse_iterator;) s
+25.8 262 M (37:) s
+52.2 262 M
+(   public:) s
+25.8 250 M (38:) s
+52.2 250 M
+(      using stack_t::clear;) s
+25.8 238 M (39:) s
+52.2 238 M
+(      using stack_t::empty;) s
+25.8 226 M (40:) s
+52.2 226 M
+(      using stack_t::size;) s
+25.8 214 M (41:) s
+52.2 214 M
+(      inline const_iterator begin\(\) {return crbegin\(\);}) s
+25.8 202 M (42:) s
+52.2 202 M
+(      inline const_iterator end\(\) {return crend\(\);}) s
+25.8 190 M (43:) s
+52.2 190 M
+(      inline void push \(const value_type& value\) {push_back \(value\);}) s
+25.8 178 M (44:) s
+52.2 178 M
+(      inline void pop\(\) {pop_back\(\);}) s
+25.8 166 M (45:) s
+52.2 166 M
+(      inline const value_type& top\(\) const {return back\(\);}) s
+25.8 154 M (46:) s
+52.2 154 M
+(};) s
+25.8 142 M (47:) s
+25.8 130 M (48:) s
+52.2 130 M
+(#endif) s
+25.8 118 M (49:) s
+_R
+S
+%%Page: (1) 9
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (bigint.cpp) def
+/fdir () def
+/ftail (bigint.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/4) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: bigint.cpp,v 1.61 2014-06-26 17:06:06-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <cstdlib>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <exception>) s
+32.4 646 M (5:) s
+52.2 646 M
+(#include <limits>) s
+32.4 634 M (6:) s
+52.2 634 M
+(#include <stack>) s
+32.4 622 M (7:) s
+52.2 622 M
+(#include <stdexcept>) s
+32.4 610 M (8:) s
+52.2 610 M
+(using namespace std;) s
+32.4 598 M (9:) s
+25.8 586 M (10:) s
+52.2 586 M
+(#include "bigint.h") s
+25.8 574 M (11:) s
+52.2 574 M
+(#include "debug.h") s
+25.8 562 M (12:) s
+25.8 550 M (13:) s
+52.2 550 M
+(bigint::bigint \(long that\): long_value \(that\) {) s
+25.8 538 M (14:) s
+52.2 538 M
+(   DEBUGF \('~', this << " -> " << long_value\)) s
+25.8 526 M (15:) s
+52.2 526 M
+(}) s
+25.8 514 M (16:) s
+25.8 502 M (17:) s
+52.2 502 M
+(bigint::bigint \(const string& that\) {) s
+25.8 490 M (18:) s
+52.2 490 M
+(   auto itor = that.cbegin\(\);) s
+25.8 478 M (19:) s
+52.2 478 M
+(   bool isnegative = false;) s
+25.8 466 M (20:) s
+52.2 466 M
+(   if \(itor != that.cend\(\) and *itor == '_'\) {) s
+25.8 454 M (21:) s
+52.2 454 M
+(      isnegative = true;) s
+25.8 442 M (22:) s
+52.2 442 M
+(      ++itor;) s
+25.8 430 M (23:) s
+52.2 430 M
+(   }) s
+25.8 418 M (24:) s
+52.2 418 M
+(   int newval = 0;) s
+25.8 406 M (25:) s
+52.2 406 M
+(   while \(itor != that.end\(\)\) newval = newval * 10 + *itor++ - '0';) s
+25.8 394 M (26:) s
+52.2 394 M
+(   long_value = isnegative ? - newval : + newval;) s
+25.8 382 M (27:) s
+52.2 382 M
+(   DEBUGF \('~', this << " -> " << long_value\)) s
+25.8 370 M (28:) s
+52.2 370 M
+(}) s
+25.8 358 M (29:) s
+_R
+S
+%%Page: (2) 10
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (bigint.cpp) def
+/fdir () def
+/ftail (bigint.cpp) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (04/14/15) def
+/pagecountstr (/4) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (30:) s
+25.8 682 M (31:) s
+52.2 682 M
+(bigint operator+ \(const bigint& left, const bigint& right\) {) s
+25.8 670 M (32:) s
+52.2 670 M
+(   return left.long_value + right.long_value;) s
+25.8 658 M (33:) s
+52.2 658 M
+(}) s
+25.8 646 M (34:) s
+25.8 634 M (35:) s
+52.2 634 M
+(bigint operator- \(const bigint& left, const bigint& right\) {) s
+25.8 622 M (36:) s
+52.2 622 M
+(   return left.long_value - right.long_value;) s
+25.8 610 M (37:) s
+52.2 610 M
+(}) s
+25.8 598 M (38:) s
+25.8 586 M (39:) s
+52.2 586 M
+(bigint operator+ \(const bigint& right\) {) s
+25.8 574 M (40:) s
+52.2 574 M
+(   return +right.long_value;) s
+25.8 562 M (41:) s
+52.2 562 M
+(}) s
+25.8 550 M (42:) s
+25.8 538 M (43:) s
+52.2 538 M
+(bigint operator- \(const bigint& right\) {) s
+25.8 526 M (44:) s
+52.2 526 M
+(   return -right.long_value;) s
+25.8 514 M (45:) s
+52.2 514 M
+(}) s
+25.8 502 M (46:) s
+25.8 490 M (47:) s
+52.2 490 M
+(long bigint::to_long\(\) const {) s
+25.8 478 M (48:) s
+52.2 478 M
+(   if \(*this <= bigint \(numeric_limits<long>::min\(\)\)) s
+25.8 466 M (49:) s
+52.2 466 M
+(    or *this > bigint \(numeric_limits<long>::max\(\)\)\)) s
+25.8 454 M (50:) s
+52.2 454 M
+(               throw range_error \("bigint__to_long: out of range"\);) s
+25.8 442 M (51:) s
+52.2 442 M
+(   return long_value;) s
+25.8 430 M (52:) s
+52.2 430 M
+(}) s
+25.8 418 M (53:) s
+25.8 406 M (54:) s
+52.2 406 M
+(bool abs_less \(const long& left, const long& right\) {) s
+25.8 394 M (55:) s
+52.2 394 M
+(   return left < right;) s
+25.8 382 M (56:) s
+52.2 382 M
+(}) s
+25.8 370 M (57:) s
+25.8 358 M (58:) s
+52.2 358 M
+(//) s
+25.8 346 M (59:) s
+52.2 346 M
+(// Multiplication algorithm.) s
+25.8 334 M (60:) s
+52.2 334 M
+(//) s
+25.8 322 M (61:) s
+52.2 322 M
+(bigint operator* \(const bigint& left, const bigint& right\) {) s
+25.8 310 M (62:) s
+52.2 310 M
+(   return left.long_value * right.long_value;) s
+25.8 298 M (63:) s
+52.2 298 M
+(}) s
+25.8 286 M (64:) s
+25.8 274 M (65:) s
+52.2 274 M
+(//) s
+25.8 262 M (66:) s
+52.2 262 M
+(// Division algorithm.) s
+25.8 250 M (67:) s
+52.2 250 M
+(//) s
+25.8 238 M (68:) s
+25.8 226 M (69:) s
+52.2 226 M
+(void multiply_by_2 \(bigint::unumber& unumber_value\) {) s
+25.8 214 M (70:) s
+52.2 214 M
+(   unumber_value *= 2;) s
+25.8 202 M (71:) s
+52.2 202 M
+(}) s
+25.8 190 M (72:) s
+25.8 178 M (73:) s
+52.2 178 M
+(void divide_by_2 \(bigint::unumber& unumber_value\) {) s
+25.8 166 M (74:) s
+52.2 166 M
+(   unumber_value /= 2;) s
+25.8 154 M (75:) s
+52.2 154 M
+(}) s
+25.8 142 M (76:) s
+_R
+S
+%%Page: (3) 11
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (bigint.cpp) def
+/fdir () def
+/ftail (bigint.cpp) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (04/14/15) def
+/pagecountstr (/4) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (77:) s
+25.8 682 M (78:) s
+52.2 682 M
+(bigint::quot_rem divide \(const bigint& left, const bigint& right\) {) s
+25.8 670 M (79:) s
+52.2 670 M
+(   if \(right == 0\) throw domain_error \("divide by 0"\);) s
+25.8 658 M (80:) s
+52.2 658 M
+(   using unumber = unsigned long;) s
+25.8 646 M (81:) s
+52.2 646 M
+(   static unumber zero = 0;) s
+25.8 634 M (82:) s
+52.2 634 M
+(   if \(right == 0\) throw domain_error \("bigint::divide"\);) s
+25.8 622 M (83:) s
+52.2 622 M
+(   unumber divisor = right.long_value;) s
+25.8 610 M (84:) s
+52.2 610 M
+(   unumber quotient = 0;) s
+25.8 598 M (85:) s
+52.2 598 M
+(   unumber remainder = left.long_value;) s
+25.8 586 M (86:) s
+52.2 586 M
+(   unumber power_of_2 = 1;) s
+25.8 574 M (87:) s
+52.2 574 M
+(   while \(abs_less \(divisor, remainder\)\) {) s
+25.8 562 M (88:) s
+52.2 562 M
+(      multiply_by_2 \(divisor\);) s
+25.8 550 M (89:) s
+52.2 550 M
+(      multiply_by_2 \(power_of_2\);) s
+25.8 538 M (90:) s
+52.2 538 M
+(   }) s
+25.8 526 M (91:) s
+52.2 526 M
+(   while \(abs_less \(zero, power_of_2\)\) {) s
+25.8 514 M (92:) s
+52.2 514 M
+(      if \(not abs_less \(remainder, divisor\)\) {) s
+25.8 502 M (93:) s
+52.2 502 M
+(         remainder = remainder - divisor;) s
+25.8 490 M (94:) s
+52.2 490 M
+(         quotient = quotient + power_of_2;) s
+25.8 478 M (95:) s
+52.2 478 M
+(      }) s
+25.8 466 M (96:) s
+52.2 466 M
+(      divide_by_2 \(divisor\);) s
+25.8 454 M (97:) s
+52.2 454 M
+(      divide_by_2 \(power_of_2\);) s
+25.8 442 M (98:) s
+52.2 442 M
+(   }) s
+25.8 430 M (99:) s
+52.2 430 M
+(   return {quotient, remainder};) s
+19.2 418 M (100:) s
+52.2 418 M
+(}) s
+19.2 406 M (101:) s
+19.2 394 M (102:) s
+52.2 394 M
+(bigint operator/ \(const bigint& left, const bigint& right\) {) s
+19.2 382 M (103:) s
+52.2 382 M
+(   return divide \(left, right\).first;) s
+19.2 370 M (104:) s
+52.2 370 M
+(}) s
+19.2 358 M (105:) s
+19.2 346 M (106:) s
+52.2 346 M
+(bigint operator% \(const bigint& left, const bigint& right\) {) s
+19.2 334 M (107:) s
+52.2 334 M
+(   return divide \(left, right\).second;) s
+19.2 322 M (108:) s
+52.2 322 M
+(}) s
+19.2 310 M (109:) s
+19.2 298 M (110:) s
+52.2 298 M
+(bool operator== \(const bigint& left, const bigint& right\) {) s
+19.2 286 M (111:) s
+52.2 286 M
+(   return left.long_value == right.long_value;) s
+19.2 274 M (112:) s
+52.2 274 M
+(}) s
+19.2 262 M (113:) s
+19.2 250 M (114:) s
+52.2 250 M
+(bool operator< \(const bigint& left, const bigint& right\) {) s
+19.2 238 M (115:) s
+52.2 238 M
+(   return left.long_value < right.long_value;) s
+19.2 226 M (116:) s
+52.2 226 M
+(}) s
+19.2 214 M (117:) s
+19.2 202 M (118:) s
+52.2 202 M
+(ostream& operator<< \(ostream& out, const bigint& that\) {) s
+19.2 190 M (119:) s
+52.2 190 M
+(   out << that.long_value;) s
+19.2 178 M (120:) s
+52.2 178 M
+(   return out;) s
+19.2 166 M (121:) s
+52.2 166 M
+(}) s
+19.2 154 M (122:) s
+_R
+S
+%%Page: (4) 12
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (bigint.cpp) def
+/fdir () def
+/ftail (bigint.cpp) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (04/14/15) def
+/pagecountstr (/4) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (123:) s
+19.2 682 M (124:) s
+52.2 682 M
+(bigint pow \(const bigint& base, const bigint& exponent\) {) s
+19.2 670 M (125:) s
+52.2 670 M
+(   DEBUGF \('^', "base = " << base << ", exponent = " << exponent\);) s
+19.2 658 M (126:) s
+52.2 658 M
+(   if \(base == 0\) return 0;) s
+19.2 646 M (127:) s
+52.2 646 M
+(   bigint base_copy = base;) s
+19.2 634 M (128:) s
+52.2 634 M
+(   long expt = exponent.to_long\(\);) s
+19.2 622 M (129:) s
+52.2 622 M
+(   bigint result = 1;) s
+19.2 610 M (130:) s
+52.2 610 M
+(   if \(expt < 0\) {) s
+19.2 598 M (131:) s
+52.2 598 M
+(      base_copy = 1 / base_copy;) s
+19.2 586 M (132:) s
+52.2 586 M
+(      expt = - expt;) s
+19.2 574 M (133:) s
+52.2 574 M
+(   }) s
+19.2 562 M (134:) s
+52.2 562 M
+(   while \(expt > 0\) {) s
+19.2 550 M (135:) s
+52.2 550 M
+(      if \(expt & 1\) { //odd) s
+19.2 538 M (136:) s
+52.2 538 M
+(         result = result * base_copy;) s
+19.2 526 M (137:) s
+52.2 526 M
+(         --expt;) s
+19.2 514 M (138:) s
+52.2 514 M
+(      }else { //even) s
+19.2 502 M (139:) s
+52.2 502 M
+(         base_copy = base_copy * base_copy;) s
+19.2 490 M (140:) s
+52.2 490 M
+(         expt /= 2;) s
+19.2 478 M (141:) s
+52.2 478 M
+(      }) s
+19.2 466 M (142:) s
+52.2 466 M
+(   }) s
+19.2 454 M (143:) s
+52.2 454 M
+(   DEBUGF \('^', "result = " << result\);) s
+19.2 442 M (144:) s
+52.2 442 M
+(   return result;) s
+19.2 430 M (145:) s
+52.2 430 M
+(}) s
+_R
+S
+%%Page: (1) 13
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (scanner.cpp) def
+/fdir () def
+/ftail (scanner.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/1) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: scanner.cpp,v 1.7 2014-04-08 18:43:33-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <iostream>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <locale>) s
+32.4 646 M (5:) s
+52.2 646 M
+(using namespace std;) s
+32.4 634 M (6:) s
+32.4 622 M (7:) s
+52.2 622 M
+(#include "scanner.h") s
+32.4 610 M (8:) s
+52.2 610 M
+(#include "debug.h") s
+32.4 598 M (9:) s
+25.8 586 M (10:) s
+52.2 586 M
+(scanner::scanner\(\) {) s
+25.8 574 M (11:) s
+52.2 574 M
+(   seen_eof = false;) s
+25.8 562 M (12:) s
+52.2 562 M
+(   advance\(\);) s
+25.8 550 M (13:) s
+52.2 550 M
+(}) s
+25.8 538 M (14:) s
+25.8 526 M (15:) s
+52.2 526 M
+(void scanner::advance\(\) {) s
+25.8 514 M (16:) s
+52.2 514 M
+(   if \(not seen_eof\) {) s
+25.8 502 M (17:) s
+52.2 502 M
+(      cin.get \(lookahead\);) s
+25.8 490 M (18:) s
+52.2 490 M
+(      if \(cin.eof\(\)\) seen_eof = true;) s
+25.8 478 M (19:) s
+52.2 478 M
+(   }) s
+25.8 466 M (20:) s
+52.2 466 M
+(}) s
+25.8 454 M (21:) s
+25.8 442 M (22:) s
+52.2 442 M
+(token_t scanner::scan\(\) {) s
+25.8 430 M (23:) s
+52.2 430 M
+(   token_t result;) s
+25.8 418 M (24:) s
+52.2 418 M
+(   while \(not seen_eof and isspace \(lookahead\)\) advance\(\);) s
+25.8 406 M (25:) s
+52.2 406 M
+(   if \(seen_eof\) {) s
+25.8 394 M (26:) s
+52.2 394 M
+(      result.symbol = SCANEOF;) s
+25.8 382 M (27:) s
+52.2 382 M
+(   }else if \(lookahead == '_' or isdigit \(lookahead\)\) {) s
+25.8 370 M (28:) s
+52.2 370 M
+(      result.symbol = NUMBER;) s
+25.8 358 M (29:) s
+52.2 358 M
+(      do {) s
+25.8 346 M (30:) s
+52.2 346 M
+(         result.lexinfo += lookahead;) s
+25.8 334 M (31:) s
+52.2 334 M
+(         advance\(\);) s
+25.8 322 M (32:) s
+52.2 322 M
+(      }while \(not seen_eof and isdigit \(lookahead\)\);) s
+25.8 310 M (33:) s
+52.2 310 M
+(   }else {) s
+25.8 298 M (34:) s
+52.2 298 M
+(      result.symbol = OPERATOR;) s
+25.8 286 M (35:) s
+52.2 286 M
+(      result.lexinfo += lookahead;) s
+25.8 274 M (36:) s
+52.2 274 M
+(      advance\(\);) s
+25.8 262 M (37:) s
+52.2 262 M
+(   }) s
+25.8 250 M (38:) s
+52.2 250 M
+(   DEBUGF \('S', result\);) s
+25.8 238 M (39:) s
+52.2 238 M
+(   return result;) s
+25.8 226 M (40:) s
+52.2 226 M
+(}) s
+25.8 214 M (41:) s
+25.8 202 M (42:) s
+52.2 202 M
+(ostream& operator<< \(ostream& out, const terminal_symbol& symbol\) {) s
+25.8 190 M (43:) s
+52.2 190 M
+(   switch \(symbol\) {) s
+25.8 178 M (44:) s
+52.2 178 M
+(      case NUMBER  : out << "NUMBER"  ; break;) s
+25.8 166 M (45:) s
+52.2 166 M
+(      case OPERATOR: out << "OPERATOR"; break;) s
+25.8 154 M (46:) s
+52.2 154 M
+(      case SCANEOF : out << "SCANEOF" ; break;) s
+25.8 142 M (47:) s
+52.2 142 M
+(   }) s
+25.8 130 M (48:) s
+52.2 130 M
+(   return out;) s
+25.8 118 M (49:) s
+52.2 118 M
+(}) s
+25.8 106 M (50:) s
+25.8 94 M (51:) s
+52.2 94 M
+(ostream& operator<< \(ostream& out, const token_t& token\) {) s
+25.8 82 M (52:) s
+52.2 82 M
+(   out << token.symbol << ": \\"" << token.lexinfo << "\\"";) s
+25.8 70 M (53:) s
+52.2 70 M
+(   return out;) s
+25.8 58 M (54:) s
+52.2 58 M
+(}) s
+25.8 46 M (55:) s
+_R
+S
+%%Page: (1) 14
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (debug.cpp) def
+/fdir () def
+/ftail (debug.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/1) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: debug.cpp,v 1.3 2014-06-26 16:51:09-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <climits>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <iostream>) s
+32.4 646 M (5:) s
+52.2 646 M
+(#include <vector>) s
+32.4 634 M (6:) s
+52.2 634 M
+(using namespace std;) s
+32.4 622 M (7:) s
+32.4 610 M (8:) s
+52.2 610 M
+(#include "debug.h") s
+32.4 598 M (9:) s
+52.2 598 M
+(#include "util.h") s
+25.8 586 M (10:) s
+25.8 574 M (11:) s
+52.2 574 M
+(vector<bool> debugflags::flags \(UCHAR_MAX + 1, false\);) s
+25.8 562 M (12:) s
+25.8 550 M (13:) s
+52.2 550 M
+(void debugflags::setflags \(const string& initflags\) {) s
+25.8 538 M (14:) s
+52.2 538 M
+(   for \(const unsigned char flag: initflags\) {) s
+25.8 526 M (15:) s
+52.2 526 M
+(      if \(flag == '@'\) flags.assign \(flags.size\(\), true\);) s
+25.8 514 M (16:) s
+52.2 514 M
+(                  else flags[flag] = true;) s
+25.8 502 M (17:) s
+52.2 502 M
+(   }) s
+25.8 490 M (18:) s
+52.2 490 M
+(   // Note that DEBUGF can trace setflags.) s
+25.8 478 M (19:) s
+52.2 478 M
+(   if \(getflag \('x'\)\) {) s
+25.8 466 M (20:) s
+52.2 466 M
+(      string flag_chars;) s
+25.8 454 M (21:) s
+52.2 454 M
+(      for \(size_t index = 0; index < flags.size\(\); ++index\) {) s
+25.8 442 M (22:) s
+52.2 442 M
+(         if \(getflag \(index\)\) flag_chars += \(char\) index;) s
+25.8 430 M (23:) s
+52.2 430 M
+(      }) s
+25.8 418 M (24:) s
+52.2 418 M
+(      DEBUGF \('x', "debugflags::flags = " << flag_chars\);) s
+25.8 406 M (25:) s
+52.2 406 M
+(   }) s
+25.8 394 M (26:) s
+52.2 394 M
+(}) s
+25.8 382 M (27:) s
+25.8 370 M (28:) s
+52.2 370 M
+(//) s
+25.8 358 M (29:) s
+52.2 358 M
+(// getflag -) s
+25.8 346 M (30:) s
+52.2 346 M
+(//    Check to see if a certain flag is on.) s
+25.8 334 M (31:) s
+52.2 334 M
+(//) s
+25.8 322 M (32:) s
+25.8 310 M (33:) s
+52.2 310 M
+(bool debugflags::getflag \(char flag\) {) s
+25.8 298 M (34:) s
+52.2 298 M
+(   return flags[static_cast<unsigned char> \(flag\)];) s
+25.8 286 M (35:) s
+52.2 286 M
+(}) s
+25.8 274 M (36:) s
+25.8 262 M (37:) s
+52.2 262 M
+(void debugflags::where \(char flag, const char* file, int line,) s
+25.8 250 M (38:) s
+52.2 250 M
+(                        const char* func\) {) s
+25.8 238 M (39:) s
+52.2 238 M
+(   cout << sys_info::execname\(\) << ": DEBUG\(" << flag << "\) ") s
+25.8 226 M (40:) s
+52.2 226 M
+(        << file << "[" << line << "] " << func << "\(\)" << endl;) s
+25.8 214 M (41:) s
+52.2 214 M
+(}) s
+25.8 202 M (42:) s
+_R
+S
+%%Page: (1) 15
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (util.cpp) def
+/fdir () def
+/ftail (util.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/1) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: util.cpp,v 1.10 2014-04-09 16:45:33-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <cstdlib>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <sstream>) s
+32.4 646 M (5:) s
+52.2 646 M
+(using namespace std;) s
+32.4 634 M (6:) s
+32.4 622 M (7:) s
+52.2 622 M
+(#include "util.h") s
+32.4 610 M (8:) s
+32.4 598 M (9:) s
+52.2 598 M
+(ydc_exn::ydc_exn \(const string& what\): runtime_error \(what\) {) s
+25.8 586 M (10:) s
+52.2 586 M
+(}) s
+25.8 574 M (11:) s
+25.8 562 M (12:) s
+52.2 562 M
+(const string octal \(long decimal\) {) s
+25.8 550 M (13:) s
+52.2 550 M
+(   ostringstream ostring;) s
+25.8 538 M (14:) s
+52.2 538 M
+(   ostring.setf \(ios::oct\);) s
+25.8 526 M (15:) s
+52.2 526 M
+(   ostring << decimal;) s
+25.8 514 M (16:) s
+52.2 514 M
+(   return ostring.str\(\);) s
+25.8 502 M (17:) s
+52.2 502 M
+(}) s
+25.8 490 M (18:) s
+25.8 478 M (19:) s
+52.2 478 M
+(string sys_info::execname_; // Must be initialized from main\(\).) s
+25.8 466 M (20:) s
+52.2 466 M
+(int sys_info::status_ = EXIT_SUCCESS;) s
+25.8 454 M (21:) s
+25.8 442 M (22:) s
+52.2 442 M
+(void sys_info::execname \(const string& argv0\) {) s
+25.8 430 M (23:) s
+52.2 430 M
+(   execname_ = argv0;) s
+25.8 418 M (24:) s
+52.2 418 M
+(   cout << boolalpha;) s
+25.8 406 M (25:) s
+52.2 406 M
+(   cerr << boolalpha;) s
+25.8 394 M (26:) s
+52.2 394 M
+(   DEBUGF \('Y', "execname = " << execname_\);) s
+25.8 382 M (27:) s
+52.2 382 M
+(}) s
+25.8 370 M (28:) s
+25.8 358 M (29:) s
+52.2 358 M
+(ostream& complain\(\) {) s
+25.8 346 M (30:) s
+52.2 346 M
+(   sys_info::status \(EXIT_FAILURE\);) s
+25.8 334 M (31:) s
+52.2 334 M
+(   cerr << sys_info::execname\(\) << ": ";) s
+25.8 322 M (32:) s
+52.2 322 M
+(   return cerr;) s
+25.8 310 M (33:) s
+52.2 310 M
+(}) s
+25.8 298 M (34:) s
+_R
+S
+%%Page: (1) 16
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (main.cpp) def
+/fdir () def
+/ftail (main.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/4) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: main.cpp,v 1.41 2014-07-02 20:01:17-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(#include <deque>) s
+32.4 658 M (4:) s
+52.2 658 M
+(#include <iostream>) s
+32.4 646 M (5:) s
+52.2 646 M
+(#include <map>) s
+32.4 634 M (6:) s
+52.2 634 M
+(#include <stdexcept>) s
+32.4 622 M (7:) s
+52.2 622 M
+(#include <utility>) s
+32.4 610 M (8:) s
+52.2 610 M
+(using namespace std;) s
+32.4 598 M (9:) s
+25.8 586 M (10:) s
+52.2 586 M
+(#include <unistd.h>) s
+25.8 574 M (11:) s
+25.8 562 M (12:) s
+52.2 562 M
+(#include "bigint.h") s
+25.8 550 M (13:) s
+52.2 550 M
+(#include "debug.h") s
+25.8 538 M (14:) s
+52.2 538 M
+(#include "iterstack.h") s
+25.8 526 M (15:) s
+52.2 526 M
+(#include "scanner.h") s
+25.8 514 M (16:) s
+52.2 514 M
+(#include "util.h") s
+25.8 502 M (17:) s
+25.8 490 M (18:) s
+52.2 490 M
+(using bigint_stack = iterstack<bigint>;) s
+25.8 478 M (19:) s
+25.8 466 M (20:) s
+52.2 466 M
+(void do_arith \(bigint_stack& stack, const char oper\) {) s
+25.8 454 M (21:) s
+52.2 454 M
+(   if \(stack.size\(\) < 2\) throw ydc_exn \("stack empty"\);) s
+25.8 442 M (22:) s
+52.2 442 M
+(   bigint right = stack.top\(\);) s
+25.8 430 M (23:) s
+52.2 430 M
+(   stack.pop\(\);) s
+25.8 418 M (24:) s
+52.2 418 M
+(   DEBUGF \('d', "right = " << right\);) s
+25.8 406 M (25:) s
+52.2 406 M
+(   bigint left = stack.top\(\);) s
+25.8 394 M (26:) s
+52.2 394 M
+(   stack.pop\(\);) s
+25.8 382 M (27:) s
+52.2 382 M
+(   DEBUGF \('d', "left = " << left\);) s
+25.8 370 M (28:) s
+52.2 370 M
+(   bigint result;) s
+25.8 358 M (29:) s
+52.2 358 M
+(   switch \(oper\) {) s
+25.8 346 M (30:) s
+52.2 346 M
+(      case '+': result = left + right; break;) s
+25.8 334 M (31:) s
+52.2 334 M
+(      case '-': result = left - right; break;) s
+25.8 322 M (32:) s
+52.2 322 M
+(      case '*': result = left * right; break;) s
+25.8 310 M (33:) s
+52.2 310 M
+(      case '/': result = left / right; break;) s
+25.8 298 M (34:) s
+52.2 298 M
+(      case '%': result = left % right; break;) s
+25.8 286 M (35:) s
+52.2 286 M
+(      case '^': result = pow \(left, right\); break;) s
+25.8 274 M (36:) s
+52.2 274 M
+(      default: throw invalid_argument \() s
+25.8 262 M (37:) s
+52.2 262 M
+(                     string \("do_arith operator is "\) + oper\);) s
+25.8 250 M (38:) s
+52.2 250 M
+(   }) s
+25.8 238 M (39:) s
+52.2 238 M
+(   DEBUGF \('d', "result = " << result\);) s
+25.8 226 M (40:) s
+52.2 226 M
+(   stack.push \(result\);) s
+25.8 214 M (41:) s
+52.2 214 M
+(}) s
+25.8 202 M (42:) s
+25.8 190 M (43:) s
+52.2 190 M
+(void do_clear \(bigint_stack& stack, const char\) {) s
+25.8 178 M (44:) s
+52.2 178 M
+(   DEBUGF \('d', ""\);) s
+25.8 166 M (45:) s
+52.2 166 M
+(   stack.clear\(\);) s
+25.8 154 M (46:) s
+52.2 154 M
+(}) s
+25.8 142 M (47:) s
+25.8 130 M (48:) s
+52.2 130 M
+(void do_dup \(bigint_stack& stack, const char\) {) s
+25.8 118 M (49:) s
+52.2 118 M
+(   bigint top = stack.top\(\);) s
+25.8 106 M (50:) s
+52.2 106 M
+(   DEBUGF \('d', top\);) s
+25.8 94 M (51:) s
+52.2 94 M
+(   stack.push \(top\);) s
+25.8 82 M (52:) s
+52.2 82 M
+(}) s
+25.8 70 M (53:) s
+_R
+S
+%%Page: (2) 17
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (main.cpp) def
+/fdir () def
+/ftail (main.cpp) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (04/14/15) def
+/pagecountstr (/4) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (54:) s
+25.8 682 M (55:) s
+52.2 682 M
+(void do_printall \(bigint_stack& stack, const char\) {) s
+25.8 670 M (56:) s
+52.2 670 M
+(   for \(const auto &elem: stack\) cout << elem << endl;) s
+25.8 658 M (57:) s
+52.2 658 M
+(}) s
+25.8 646 M (58:) s
+25.8 634 M (59:) s
+52.2 634 M
+(void do_print \(bigint_stack& stack, const char\) {) s
+25.8 622 M (60:) s
+52.2 622 M
+(   cout << stack.top\(\) << endl;) s
+25.8 610 M (61:) s
+52.2 610 M
+(}) s
+25.8 598 M (62:) s
+25.8 586 M (63:) s
+52.2 586 M
+(void do_debug \(bigint_stack& stack, const char\) {) s
+25.8 574 M (64:) s
+52.2 574 M
+(   \(void\) stack; // SUPPRESS: warning: unused parameter 'stack') s
+25.8 562 M (65:) s
+52.2 562 M
+(   cout << "Y not implemented" << endl;) s
+25.8 550 M (66:) s
+52.2 550 M
+(}) s
+25.8 538 M (67:) s
+25.8 526 M (68:) s
+52.2 526 M
+(class ydc_quit: public exception {};) s
+25.8 514 M (69:) s
+52.2 514 M
+(void do_quit \(bigint_stack&, const char\) {) s
+25.8 502 M (70:) s
+52.2 502 M
+(   throw ydc_quit\(\);) s
+25.8 490 M (71:) s
+52.2 490 M
+(}) s
+25.8 478 M (72:) s
+25.8 466 M (73:) s
+52.2 466 M
+(using function_t = void \(*\)\(bigint_stack&, const char\);) s
+25.8 454 M (74:) s
+52.2 454 M
+(using fn_map = map<string,function_t>;) s
+25.8 442 M (75:) s
+52.2 442 M
+(fn_map do_functions = {) s
+25.8 430 M (76:) s
+52.2 430 M
+(   {"+", do_arith},) s
+25.8 418 M (77:) s
+52.2 418 M
+(   {"-", do_arith},) s
+25.8 406 M (78:) s
+52.2 406 M
+(   {"*", do_arith},) s
+25.8 394 M (79:) s
+52.2 394 M
+(   {"/", do_arith},) s
+25.8 382 M (80:) s
+52.2 382 M
+(   {"%", do_arith},) s
+25.8 370 M (81:) s
+52.2 370 M
+(   {"^", do_arith},) s
+25.8 358 M (82:) s
+52.2 358 M
+(   {"Y", do_debug},) s
+25.8 346 M (83:) s
+52.2 346 M
+(   {"c", do_clear},) s
+25.8 334 M (84:) s
+52.2 334 M
+(   {"d", do_dup},) s
+25.8 322 M (85:) s
+52.2 322 M
+(   {"f", do_printall},) s
+25.8 310 M (86:) s
+52.2 310 M
+(   {"p", do_print},) s
+25.8 298 M (87:) s
+52.2 298 M
+(   {"q", do_quit},) s
+25.8 286 M (88:) s
+52.2 286 M
+(};) s
+25.8 274 M (89:) s
+_R
+S
+%%Page: (3) 18
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (main.cpp) def
+/fdir () def
+/ftail (main.cpp) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (04/14/15) def
+/pagecountstr (/4) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (90:) s
+25.8 682 M (91:) s
+52.2 682 M
+(//) s
+25.8 670 M (92:) s
+52.2 670 M
+(// scan_options) s
+25.8 658 M (93:) s
+52.2 658 M
+(//    Options analysis:  The only option is -Dflags. ) s
+25.8 646 M (94:) s
+52.2 646 M
+(//) s
+25.8 634 M (95:) s
+25.8 622 M (96:) s
+52.2 622 M
+(void scan_options \(int argc, char** argv\) {) s
+25.8 610 M (97:) s
+52.2 610 M
+(   if \(sys_info::execname\(\).size\(\) == 0\) sys_info::execname \(argv[0]\);) s
+25.8 598 M (98:) s
+52.2 598 M
+(   opterr = 0;) s
+25.8 586 M (99:) s
+52.2 586 M
+(   for \(;;\) {) s
+19.2 574 M (100:) s
+52.2 574 M
+(      int option = getopt \(argc, argv, "@:"\);) s
+19.2 562 M (101:) s
+52.2 562 M
+(      if \(option == EOF\) break;) s
+19.2 550 M (102:) s
+52.2 550 M
+(      switch \(option\) {) s
+19.2 538 M (103:) s
+52.2 538 M
+(         case '@':) s
+19.2 526 M (104:) s
+52.2 526 M
+(            debugflags::setflags \(optarg\);) s
+19.2 514 M (105:) s
+52.2 514 M
+(            break;) s
+19.2 502 M (106:) s
+52.2 502 M
+(         default:) s
+19.2 490 M (107:) s
+52.2 490 M
+(            complain\(\) << "-" << \(char\) optopt << ": invalid option") s
+19.2 478 M (108:) s
+52.2 478 M
+(                       << endl;) s
+19.2 466 M (109:) s
+52.2 466 M
+(            break;) s
+19.2 454 M (110:) s
+52.2 454 M
+(      }) s
+19.2 442 M (111:) s
+52.2 442 M
+(   }) s
+19.2 430 M (112:) s
+52.2 430 M
+(   if \(optind < argc\) {) s
+19.2 418 M (113:) s
+52.2 418 M
+(      complain\(\) << "operand not permitted" << endl;) s
+19.2 406 M (114:) s
+52.2 406 M
+(   }) s
+19.2 394 M (115:) s
+52.2 394 M
+(}) s
+_R
+S
+%%Page: (4) 19
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (main.cpp) def
+/fdir () def
+/ftail (main.cpp) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (04/14/15) def
+/pagecountstr (/4) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (116:) s
+19.2 682 M (117:) s
+52.2 682 M
+(//) s
+19.2 670 M (118:) s
+52.2 670 M
+(// Main function.) s
+19.2 658 M (119:) s
+52.2 658 M
+(//) s
+19.2 646 M (120:) s
+19.2 634 M (121:) s
+52.2 634 M
+(int main \(int argc, char** argv\) {) s
+19.2 622 M (122:) s
+52.2 622 M
+(   sys_info::execname \(argv[0]\);) s
+19.2 610 M (123:) s
+52.2 610 M
+(   scan_options \(argc, argv\);) s
+19.2 598 M (124:) s
+52.2 598 M
+(   bigint_stack operand_stack;) s
+19.2 586 M (125:) s
+52.2 586 M
+(   scanner input;) s
+19.2 574 M (126:) s
+52.2 574 M
+(   try {) s
+19.2 562 M (127:) s
+52.2 562 M
+(      for \(;;\) {) s
+19.2 550 M (128:) s
+52.2 550 M
+(         try {) s
+19.2 538 M (129:) s
+52.2 538 M
+(            token_t token = input.scan\(\);) s
+19.2 526 M (130:) s
+52.2 526 M
+(            if \(token.symbol == SCANEOF\) break;) s
+19.2 514 M (131:) s
+52.2 514 M
+(            switch \(token.symbol\) {) s
+19.2 502 M (132:) s
+52.2 502 M
+(               case NUMBER:) s
+19.2 490 M (133:) s
+52.2 490 M
+(                  operand_stack.push \(token.lexinfo\);) s
+19.2 478 M (134:) s
+52.2 478 M
+(                  break;) s
+19.2 466 M (135:) s
+52.2 466 M
+(               case OPERATOR: {) s
+19.2 454 M (136:) s
+52.2 454 M
+(                  fn_map::const_iterator fn) s
+19.2 442 M (137:) s
+52.2 442 M
+(                           = do_functions.find \(token.lexinfo\);) s
+19.2 430 M (138:) s
+52.2 430 M
+(                  if \(fn == do_functions.end\(\)\) {) s
+19.2 418 M (139:) s
+52.2 418 M
+(                     throw ydc_exn \(octal \(token.lexinfo[0]\)) s
+19.2 406 M (140:) s
+52.2 406 M
+(                                    + " is unimplemented"\);) s
+19.2 394 M (141:) s
+52.2 394 M
+(                  }) s
+19.2 382 M (142:) s
+52.2 382 M
+(                  fn->second \(operand_stack, token.lexinfo.at\(0\)\);) s
+19.2 370 M (143:) s
+52.2 370 M
+(                  break;) s
+19.2 358 M (144:) s
+52.2 358 M
+(                  }) s
+19.2 346 M (145:) s
+52.2 346 M
+(               default:) s
+19.2 334 M (146:) s
+52.2 334 M
+(                  break;) s
+19.2 322 M (147:) s
+52.2 322 M
+(            }) s
+19.2 310 M (148:) s
+52.2 310 M
+(         }catch \(ydc_exn& exn\) {) s
+19.2 298 M (149:) s
+52.2 298 M
+(            cout << exn.what\(\) << endl;) s
+19.2 286 M (150:) s
+52.2 286 M
+(         }) s
+19.2 274 M (151:) s
+52.2 274 M
+(      }) s
+19.2 262 M (152:) s
+52.2 262 M
+(   }catch \(ydc_quit&\) {) s
+19.2 250 M (153:) s
+52.2 250 M
+(      // Intentionally left empty.) s
+19.2 238 M (154:) s
+52.2 238 M
+(   }) s
+19.2 226 M (155:) s
+52.2 226 M
+(   return sys_info::status\(\);) s
+19.2 214 M (156:) s
+52.2 214 M
+(}) s
+19.2 202 M (157:) s
+_R
+S
+%%Page: (1) 20
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (Makefile) def
+/fdir () def
+/ftail (Makefile) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/1) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(# $Id: Makefile,v 1.11 2014-07-02 20:01:17-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(MKFILE      = Makefile) s
+32.4 658 M (4:) s
+52.2 658 M
+(DEPFILE     = ${MKFILE}.dep) s
+32.4 646 M (5:) s
+52.2 646 M
+(NOINCL      = ci clean spotless) s
+32.4 634 M (6:) s
+52.2 634 M
+(NEEDINCL    = ${filter ${NOINCL}, ${MAKECMDGOALS}}) s
+32.4 622 M (7:) s
+52.2 622 M
+(GMAKE       = ${MAKE} --no-print-directory) s
+32.4 610 M (8:) s
+32.4 598 M (9:) s
+52.2 598 M
+(COMPILECPP  = g++ -g -O0 -Wall -Wextra -std=gnu++11) s
+25.8 586 M (10:) s
+52.2 586 M
+(MAKEDEPCPP  = g++ -MM) s
+25.8 574 M (11:) s
+25.8 562 M (12:) s
+52.2 562 M
+(CPPHEADER   = bigint.h   scanner.h   debug.h   util.h   iterstack.h) s
+25.8 550 M (13:) s
+52.2 550 M
+(CPPSOURCE   = bigint.cpp scanner.cpp debug.cpp util.cpp main.cpp) s
+25.8 538 M (14:) s
+52.2 538 M
+(EXECBIN     = ydc) s
+25.8 526 M (15:) s
+52.2 526 M
+(OBJECTS     = ${CPPSOURCE:.cpp=.o}) s
+25.8 514 M (16:) s
+52.2 514 M
+(OTHERS      = ${MKFILE} README) s
+25.8 502 M (17:) s
+52.2 502 M
+(ALLSOURCES  = ${CPPHEADER} ${CPPSOURCE} ${OTHERS}) s
+25.8 490 M (18:) s
+52.2 490 M
+(LISTING     = Listing.ps) s
+25.8 478 M (19:) s
+25.8 466 M (20:) s
+52.2 466 M
+(all : ${EXECBIN}) s
+25.8 454 M (21:) s
+52.2 454 M
+(        - checksource ${ALLSOURCES}) s
+25.8 442 M (22:) s
+25.8 430 M (23:) s
+52.2 430 M
+(${EXECBIN} : ${OBJECTS}) s
+25.8 418 M (24:) s
+52.2 418 M
+(        ${COMPILECPP} -o $@ ${OBJECTS}) s
+25.8 406 M (25:) s
+25.8 394 M (26:) s
+52.2 394 M
+(%.o : %.cpp) s
+25.8 382 M (27:) s
+52.2 382 M
+(        ${COMPILECPP} -c $<) s
+25.8 370 M (28:) s
+25.8 358 M (29:) s
+52.2 358 M
+(ci : ${ALLSOURCES}) s
+25.8 346 M (30:) s
+52.2 346 M
+(        - checksource ${ALLSOURCES}) s
+25.8 334 M (31:) s
+52.2 334 M
+(        cid + ${ALLSOURCES}) s
+25.8 322 M (32:) s
+25.8 310 M (33:) s
+52.2 310 M
+(lis : ${ALLSOURCES}) s
+25.8 298 M (34:) s
+52.2 298 M
+(        mkpspdf ${LISTING} ${ALLSOURCES} ${DEPFILE}) s
+25.8 286 M (35:) s
+25.8 274 M (36:) s
+52.2 274 M
+(clean :) s
+25.8 262 M (37:) s
+52.2 262 M
+(        - rm ${OBJECTS} ${DEPFILE} core ${EXECBIN}.errs) s
+25.8 250 M (38:) s
+25.8 238 M (39:) s
+52.2 238 M
+(spotless : clean) s
+25.8 226 M (40:) s
+52.2 226 M
+(        - rm ${EXECBIN} ${LISTING} ${LISTING:.ps=.pdf}) s
+25.8 214 M (41:) s
+25.8 202 M (42:) s
+52.2 202 M
+(dep : ${CPPSOURCE} ${CPPHEADER}) s
+25.8 190 M (43:) s
+52.2 190 M
+(        @ echo "# ${DEPFILE} created `LC_TIME=C date`" >${DEPFILE}) s
+25.8 178 M (44:) s
+52.2 178 M
+(        ${MAKEDEPCPP} ${CPPSOURCE} >>${DEPFILE}) s
+25.8 166 M (45:) s
+25.8 154 M (46:) s
+52.2 154 M
+(${DEPFILE} :) s
+25.8 142 M (47:) s
+52.2 142 M
+(        @ touch ${DEPFILE}) s
+25.8 130 M (48:) s
+52.2 130 M
+(        ${GMAKE} dep) s
+25.8 118 M (49:) s
+25.8 106 M (50:) s
+52.2 106 M
+(again :) s
+25.8 94 M (51:) s
+52.2 94 M
+(        ${GMAKE} spotless dep ci all lis) s
+25.8 82 M (52:) s
+25.8 70 M (53:) s
+52.2 70 M
+(ifeq \(${NEEDINCL}, \)) s
+25.8 58 M (54:) s
+52.2 58 M
+(include ${DEPFILE}) s
+25.8 46 M (55:) s
+52.2 46 M
+(endif) s
+25.8 34 M (56:) s
+_R
+S
+%%Page: (1) 21
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (README) def
+/fdir () def
+/ftail (README) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/1) def
+/modtimestr (12:28:54) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+($Id: README,v 1.2 2011-01-18 22:18:39-08 - - $) s
+32.4 682 M (2:) s
+_R
+S
+%%Page: (1) 22
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (Makefile.dep) def
+/fdir () def
+/ftail (Makefile.dep) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (04/14/15) def
+/pagecountstr (/1) def
+/modtimestr (12:28:44) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Assignments/asg2-dc-bigint/code/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(# Makefile.dep created Tue Apr 14 12:28:42 PDT 2015) s
+32.4 682 M (2:) s
+52.2 682 M
+(bigint.o: bigint.cpp bigint.h debug.h) s
+32.4 670 M (3:) s
+52.2 670 M
+(scanner.o: scanner.cpp scanner.h debug.h) s
+32.4 658 M (4:) s
+52.2 658 M
+(debug.o: debug.cpp debug.h util.h) s
+32.4 646 M (5:) s
+52.2 646 M
+(util.o: util.cpp util.h debug.h) s
+32.4 634 M (6:) s
+52.2 634 M
+(main.o: main.cpp bigint.h debug.h iterstack.h scanner.h util.h) s
+_R
+S
+%%Trailer
+%%Pages: 22
+%%DocumentNeededResources: font Times-Roman Courier-Bold Times-Bold 
+%%EOF
