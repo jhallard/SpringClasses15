@@ -277,7 +277,9 @@ distinct integers sorted in ascending order. Describe an
 efficient algorithm that takes an integer $k$ as input and
 finds out whether $k$ is in the array in time
 $O(\log p)$ time where $p$ is the number of integers in the
-array that are strictly less than $k$.
+array that are strictly less than $k$. \\
+
+Since the required runtime is $O(log(p))$, I know I am going to have to shrink the search space by a constant factor for each iteration. This will result in an exponentially growing search of the space, which will reduce the run-time needed to process search  $n$ elements from linear to logarithmic. To do this, I will use a technique inspired by the exponential backoff algorithm. Instead of looking at each element in the array from the strart to the end, I will look at every $2^n$th item for $n \in \mathbb{n}$. Once I find an element larger than the desired element, I can simply perform a binary search in between the last two elements I have looked at. Since the entire array is ordered, binary search will work correctly and the element will be found. This is discussed in detail below : \\ 
 \end{homeworkProblem}
 
 

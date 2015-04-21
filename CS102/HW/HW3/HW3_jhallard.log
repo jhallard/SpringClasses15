@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.9.9)  20 APR 2015 02:24
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.9.9)  20 APR 2015 15:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -377,7 +377,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 270--271
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 298--300
+Underfull \hbox (badness 10000) in paragraph at lines 275--281
 
  []
 
@@ -388,12 +388,17 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 301--302
+Underfull \hbox (badness 10000) in paragraph at lines 300--302
 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 303--304
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 305--306
 
  []
 
@@ -413,7 +418,7 @@ Here is how much of TeX's memory you used:
  8077 multiletter control sequences out of 15000+600000
  12802 words of font info for 49 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,12n,43p,951b,245s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,12n,43p,951b,310s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/ams
 fonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cme
@@ -426,7 +431,7 @@ st/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
 ic/amsfonts/symbols/msbm10.pfb>
-Output written on HW3_jhallard.pdf (4 pages, 138701 bytes).
+Output written on HW3_jhallard.pdf (4 pages, 140187 bytes).
 PDF statistics:
  65 PDF objects out of 1000 (max. 8388607)
  46 compressed objects within 1 object stream
