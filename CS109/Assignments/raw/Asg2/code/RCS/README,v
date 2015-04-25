@@ -1,0 +1,41 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.2
+date	2011.01.19.06.18.39;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.01.19.06.17.09;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@$Id: README,v 1.2 2011-01-18 21:27:24-08 - - $
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 2
+a2 1
+$Id$
+@

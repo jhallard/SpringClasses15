@@ -1,0 +1,212 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.5
+date	2014.04.10.00.03.58;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.04.09.02.04.03;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.06.27.19.39.10;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.11.04.02.20;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2011.01.19.06.17.09;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: util.h,v 1.4 2014-04-08 19:04:03-07 - - $
+
+//
+// util -
+//    A utility class to provide various services not conveniently
+//    included in other modules.
+//
+
+#ifndef __UTIL_H__
+#define __UTIL_H__
+
+#include <iostream>
+#include <stdexcept>
+#include <vector>
+using namespace std;
+
+#include "debug.h"
+
+//
+// ydc_exn -
+//    Indicate a problem where processing should be abandoned and
+//    the main function should take control.
+//
+
+class ydc_exn: public runtime_error {
+   public:
+      explicit ydc_exn (const string& what);
+};
+
+//
+// octal -
+//    Convert integer to octal string.
+//
+
+const string octal (long decimal);
+
+
+//
+// sys_info -
+//    Keep track of execname and exit status.  Must be initialized
+//    as the first thing done inside main.  Main should call:
+//       sys_info::execname (argv[0]);
+//    before anything else.
+//
+
+class sys_info {
+   private:
+      static string execname_;
+      static int status_;
+   public:
+      static void execname (const string& argv0);
+      static const string& execname() {return execname_; }
+      static void status (int status) {status_ = status; }
+      static int status() {return status_; }
+};
+
+//
+// complain -
+//    Used for starting error messages.  Sets the exit status to
+//    EXIT_FAILURE, writes the program name to cerr, and then
+//    returns the cerr ostream.  Example:
+//       complain() << filename << ": some problem" << endl;
+//
+
+ostream& complain();
+
+//
+// operator<< (vector) -
+//    An overloaded template operator which allows vectors to be
+//    printed out as a single operator, each element separated from
+//    the next with spaces.  The item_t must have an output operator
+//    defined for it.
+//
+
+template <typename item_t>
+ostream& operator<< (ostream& out, const vector<item_t>& vec){
+   string space = "";
+   for (const auto& elem: vec) {
+      out << space << elem; 
+      space = " ";
+   }
+   return out;
+}
+
+#endif
+
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.h,v 1.3 2013-06-27 12:39:10-07 - - $
+d76 8
+a83 1
+ostream& operator<< (ostream& out, const vector<item_t>& vec);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.h,v 1.2 2012-04-10 21:02:20-07 - - $
+d13 1
+a14 5
+
+#ifdef __GNUC__
+#include <stdexcept>
+#endif
+
+d17 1
+a17 1
+#include "trace.h"
+d27 1
+a27 1
+      explicit ydc_exn (const string &what);
+d42 1
+a42 1
+//       sys_info::set_execname (argv[0]);
+d48 2
+a49 2
+      static string execname;
+      static int exit_status;
+d51 4
+a54 4
+      static void set_execname (const string &argv0);
+      static const string &get_execname () {return execname; }
+      static void set_status (int status) {exit_status = status; }
+      static int get_status () {return exit_status; }
+d65 1
+a65 1
+ostream &complain();
+d76 1
+a76 1
+ostream &operator<< (ostream &out, const vector<item_t> &vec);
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.h,v 1.1 2011-01-18 22:17:09-08 - - $
+d39 1
+a39 1
+const string octal (int decimal);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.h,v 1.1 2011-01-18 18:28:41-08 - - $
+d41 1
+@

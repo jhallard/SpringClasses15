@@ -1,0 +1,1268 @@
+head	1.41;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.41
+date	2014.07.03.03.01.17;	author -;	state -;
+branches;
+next	1.40;
+
+1.40
+date	2014.06.26.23.51.09;	author -;	state -;
+branches;
+next	1.39;
+
+1.39
+date	2014.05.30.02.14.23;	author -;	state -;
+branches;
+next	1.38;
+
+1.38
+date	2014.04.09.01.57.45;	author -;	state -;
+branches;
+next	1.37;
+
+1.37
+date	2014.04.09.01.57.30;	author -;	state -;
+branches;
+next	1.36;
+
+1.36
+date	2014.04.09.01.45.09;	author -;	state -;
+branches;
+next	1.35;
+
+1.35
+date	2014.04.09.01.34.00;	author -;	state -;
+branches;
+next	1.34;
+
+1.34
+date	2014.04.09.01.32.12;	author -;	state -;
+branches;
+next	1.33;
+
+1.33
+date	2014.04.09.01.29.21;	author -;	state -;
+branches;
+next	1.32;
+
+1.32
+date	2014.04.09.01.29.12;	author -;	state -;
+branches;
+next	1.31;
+
+1.31
+date	2013.07.09.21.49.11;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2013.07.06.03.19.04;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2013.07.06.03.18.51;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2013.06.25.23.31.13;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2013.06.25.23.08.01;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2013.06.25.23.06.33;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2013.06.25.23.04.55;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2013.06.25.22.59.55;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2013.06.25.22.58.27;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2013.06.25.22.58.06;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2013.06.25.22.57.46;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2013.06.25.22.56.30;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2013.06.25.22.54.48;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2013.06.25.22.51.32;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2013.06.25.22.46.21;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2013.06.25.22.44.29;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.06.25.22.37.34;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2013.06.25.22.35.13;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.06.25.22.34.47;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.01.24.03.10.00;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.01.24.03.08.59;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.01.24.03.08.35;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2012.04.21.01.06.49;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2012.04.13.02.31.01;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2012.04.13.00.00.26;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2012.04.12.23.59.21;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2012.04.12.23.58.35;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2012.04.12.23.57.39;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2012.04.12.21.12.42;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2012.04.11.04.02.20;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.11.03.43.21;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.41
+log
+@-
+@
+text
+@// $Id: main.cpp,v 1.40 2014-06-26 16:51:09-07 - - $
+
+#include <deque>
+#include <iostream>
+#include <map>
+#include <stdexcept>
+#include <utility>
+using namespace std;
+
+#include <unistd.h>
+
+#include "bigint.h"
+#include "debug.h"
+#include "iterstack.h"
+#include "scanner.h"
+#include "util.h"
+
+using bigint_stack = iterstack<bigint>;
+
+void do_arith (bigint_stack& stack, const char oper) {
+   if (stack.size() < 2) throw ydc_exn ("stack empty");
+   bigint right = stack.top();
+   stack.pop();
+   DEBUGF ('d', "right = " << right);
+   bigint left = stack.top();
+   stack.pop();
+   DEBUGF ('d', "left = " << left);
+   bigint result;
+   switch (oper) {
+      case '+': result = left + right; break;
+      case '-': result = left - right; break;
+      case '*': result = left * right; break;
+      case '/': result = left / right; break;
+      case '%': result = left % right; break;
+      case '^': result = pow (left, right); break;
+      default: throw invalid_argument (
+                     string ("do_arith operator is ") + oper);
+   }
+   DEBUGF ('d', "result = " << result);
+   stack.push (result);
+}
+
+void do_clear (bigint_stack& stack, const char) {
+   DEBUGF ('d', "");
+   stack.clear();
+}
+
+void do_dup (bigint_stack& stack, const char) {
+   bigint top = stack.top();
+   DEBUGF ('d', top);
+   stack.push (top);
+}
+
+
+void do_printall (bigint_stack& stack, const char) {
+   for (const auto &elem: stack) cout << elem << endl;
+}
+
+void do_print (bigint_stack& stack, const char) {
+   cout << stack.top() << endl;
+}
+
+void do_debug (bigint_stack& stack, const char) {
+   (void) stack; // SUPPRESS: warning: unused parameter 'stack'
+   cout << "Y not implemented" << endl;
+}
+
+class ydc_quit: public exception {};
+void do_quit (bigint_stack&, const char) {
+   throw ydc_quit();
+}
+
+using function_t = void (*)(bigint_stack&, const char);
+using fn_map = map<string,function_t>;
+fn_map do_functions = {
+   {"+", do_arith},
+   {"-", do_arith},
+   {"*", do_arith},
+   {"/", do_arith},
+   {"%", do_arith},
+   {"^", do_arith},
+   {"Y", do_debug},
+   {"c", do_clear},
+   {"d", do_dup},
+   {"f", do_printall},
+   {"p", do_print},
+   {"q", do_quit},
+};
+
+
+//
+// scan_options
+//    Options analysis:  The only option is -Dflags. 
+//
+
+void scan_options (int argc, char** argv) {
+   if (sys_info::execname().size() == 0) sys_info::execname (argv[0]);
+   opterr = 0;
+   for (;;) {
+      int option = getopt (argc, argv, "@@:");
+      if (option == EOF) break;
+      switch (option) {
+         case '@@':
+            debugflags::setflags (optarg);
+            break;
+         default:
+            complain() << "-" << (char) optopt << ": invalid option"
+                       << endl;
+            break;
+      }
+   }
+   if (optind < argc) {
+      complain() << "operand not permitted" << endl;
+   }
+}
+
+//
+// Main function.
+//
+
+int main (int argc, char** argv) {
+   sys_info::execname (argv[0]);
+   scan_options (argc, argv);
+   bigint_stack operand_stack;
+   scanner input;
+   try {
+      for (;;) {
+         try {
+            token_t token = input.scan();
+            if (token.symbol == SCANEOF) break;
+            switch (token.symbol) {
+               case NUMBER:
+                  operand_stack.push (token.lexinfo);
+                  break;
+               case OPERATOR: {
+                  fn_map::const_iterator fn
+                           = do_functions.find (token.lexinfo);
+                  if (fn == do_functions.end()) {
+                     throw ydc_exn (octal (token.lexinfo[0])
+                                    + " is unimplemented");
+                  }
+                  fn->second (operand_stack, token.lexinfo.at(0));
+                  break;
+                  }
+               default:
+                  break;
+            }
+         }catch (ydc_exn& exn) {
+            cout << exn.what() << endl;
+         }
+      }
+   }catch (ydc_quit&) {
+      // Intentionally left empty.
+   }
+   return sys_info::status();
+}
+
+@
+
+
+1.40
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.39 2014-05-29 19:14:23-07 - - $
+d116 4
+@
+
+
+1.39
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.38 2014-04-08 18:57:45-07 - - $
+a2 1
+#include <cassert>
+d21 7
+a27 6
+   bigint right = stack.top(); \
+   stack.pop(); \
+   DEBUGF ('d', "right = " << right); \
+   bigint left = stack.top(); \
+   stack.pop(); \
+   DEBUGF ('d', "left = " << left); \
+d39 2
+a40 2
+   DEBUGF ('d', "result = " << result); \
+   stack.push (result); \
+d97 1
+a97 1
+   assert (sys_info::execname().size() > 0);
+@
+
+
+1.38
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.37 2014-04-08 18:57:30-07 - - $
+d19 1
+a19 1
+typedef iterstack<bigint> bigint_stack;
+d73 2
+a74 2
+typedef void (*function_t) (bigint_stack&, const char);
+typedef map <string, function_t> fn_map;
+@
+
+
+1.37
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.36 2014-04-08 18:45:09-07 - - $
+d3 1
+@
+
+
+1.36
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.35 2014-04-08 18:34:00-07 - - $
+d96 1
+d117 1
+a117 1
+   sys_info::set_execname (argv[0]);
+@
+
+
+1.35
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.33 2014-04-08 18:29:21-07 - - $
+d8 1
+d10 1
+a10 1
+using namespace std;
+d69 1
+a69 1
+   throw ydc_quit ();
+d102 1
+a102 1
+            traceflags::setflags (optarg);
+d149 1
+a149 1
+   return sys_info::get_status ();
+@
+
+
+1.34
+log
+@-
+@
+text
+@d54 1
+a54 1
+   for (const auto elem: stack) cout << elem << endl;
+@
+
+
+1.33
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.32 2014-04-08 18:29:12-07 - - $
+d54 1
+a54 3
+   for (const auto stack.crbegin(); itor != stack.crend(); ++itor) {
+      cout << *itor << endl;
+   }
+@
+
+
+1.32
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.31 2013-07-09 14:49:11-07 - - $
+d12 1
+d14 1
+a15 2
+#include "scanner.h"
+#include "trace.h"
+@
+
+
+1.31
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.30 2013-07-05 20:19:04-07 - - $
+d19 1
+a19 1
+void do_arith (bigint_stack &stack, const char oper) {
+d22 1
+a22 1
+   TRACE ('d', "right = " << right); \
+d25 1
+a25 1
+   TRACE ('d', "left = " << left); \
+d37 1
+a37 1
+   TRACE ('d', "result = " << result); \
+d41 2
+a42 2
+void do_clear (bigint_stack &stack, const char) {
+   TRACE ('d', "");
+d46 1
+a46 1
+void do_dup (bigint_stack &stack, const char) {
+d48 1
+a48 1
+   TRACE ('d', top);
+d53 4
+a56 4
+void do_printall (bigint_stack &stack, const char) {
+   bigint_stack::const_reverse_iterator itor = stack.rbegin();
+   const bigint_stack::const_reverse_iterator end = stack.rend();
+   for (; itor != end; ++itor) cout << *itor << endl;
+d59 1
+a59 1
+void do_print (bigint_stack &stack, const char) {
+d63 1
+a63 1
+void do_debug (bigint_stack &stack, const char) {
+d69 1
+a69 1
+void do_quit (bigint_stack &, const char) {
+d73 1
+a73 1
+typedef void (*function_t) (bigint_stack &, const char);
+d96 1
+a96 1
+void scan_options (int argc, char **argv) {
+d116 1
+a116 1
+int main (int argc, char **argv) {
+d143 1
+a143 1
+         }catch (ydc_exn &exn) {
+d147 1
+a147 1
+   }catch (ydc_quit &) {
+@
+
+
+1.30
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.29 2013-07-05 20:18:51-07 - - $
+d55 1
+a55 1
+   bigint_stack::const_reverse_iterator end = stack.rend();
+@
+
+
+1.29
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.28 2013-06-25 16:31:13-07 - - $
+a89 19
+/*
+fn_map load_fn () {
+   fn_map do_functions;
+   do_functions["+"] = do_arith;
+   do_functions["-"] = do_arith;
+   do_functions["*"] = do_arith;
+   do_functions["/"] = do_arith;
+   do_functions["%"] = do_arith;
+   do_functions["^"] = do_arith;
+   do_functions["Y"] = do_debug;
+   do_functions["c"] = do_clear;
+   do_functions["d"] = do_dup;
+   do_functions["f"] = do_printall;
+   do_functions["p"] = do_print;
+   do_functions["q"] = do_quit;
+   return do_functions;
+}
+*/
+
+a118 1
+   fn_map do_functions = load_fn();
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.26 2013-06-25 16:06:33-07 - - $
+d52 1
+d75 16
+d107 1
+d109 1
+@
+
+
+1.27
+log
+@-
+@
+text
+@a3 1
+#include <functional>
+d19 17
+a35 21
+struct do_arith: public binary_function <bigint_stack &, char, void> {
+   void operator() (bigint_stack &stack, char oper) {
+      bigint right = stack.top(); \
+      stack.pop(); \
+      TRACE ('d', "right = " << right); \
+      bigint left = stack.top(); \
+      stack.pop(); \
+      TRACE ('d', "left = " << left); \
+      bigint result;
+      switch (oper) {
+         case '+': result = left + right; break;
+         case '-': result = left - right; break;
+         case '*': result = left * right; break;
+         case '/': result = left / right; break;
+         case '%': result = left % right; break;
+         case '^': result = pow (left, right); break;
+         default: throw invalid_argument (
+                        string ("do_arith operator is ") + oper);
+      }
+      TRACE ('d', "result = " << result); \
+      stack.push (result); \
+d37 3
+a39 1
+};
+d41 1
+a41 1
+void do_clear (bigint_stack &stack) {
+d46 1
+a46 1
+void do_dup (bigint_stack &stack) {
+d52 1
+a52 1
+void do_printall (bigint_stack &stack) {
+d58 1
+a58 1
+void do_print (bigint_stack &stack) {
+d62 1
+a62 1
+void do_debug (bigint_stack &stack) {
+d68 1
+a68 1
+void do_quit (bigint_stack &) {
+d72 2
+a73 2
+typedef pointer_to_unary_function <bigint_stack &, void> unary_fn_t;
+typedef map <string, unary_fn_t> fn_map;
+d76 12
+a87 12
+   do_functions["+"] = bind2nd (do_arith(), '+');
+   do_functions["-"] = bind2nd (do_arith(), '-');
+   do_functions["*"] = bind2nd (do_arith(), '*');
+   do_functions["/"] = bind2nd (do_arith(), '/');
+   do_functions["%"] = bind2nd (do_arith(), '%');
+   do_functions["^"] = bind2nd (do_arith(), '^'));
+   do_functions["Y"] = unary_fn (do_debug);
+   do_functions["c"] = unary_fn (do_clear);
+   do_functions["d"] = unary_fn (do_dup);
+   do_functions["f"] = unary_fn (do_printall);
+   do_functions["p"] = unary_fn (do_print);
+   do_functions["q"] = unary_fn (do_quit);
+d138 1
+a138 1
+                  fn->second (operand_stack);
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.25 2013-06-25 16:04:55-07 - - $
+a75 1
+typedef void (*unary_fn_t) (bigint_stack &);
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.24 2013-06-25 15:59:55-07 - - $
+a69 1
+
+d75 3
+a77 3
+typedef void (*do_function_t) (bigint_stack &);
+typedef map <string, do_function_t> fn_map;
+typedef pointer_to_unary_function <bigint_stack &, void> unary_fn;
+a119 1
+
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.23 2013-06-25 15:58:27-07 - - $
+d20 1
+a20 1
+struct do_arith: public binary_function<bigint_stack &, char, void> {
+d78 1
+d86 7
+a92 7
+   do_functions["^"] = bind2nd (do_arith(), '^');
+   do_functions["Y"] = do_debug;
+   do_functions["c"] = do_clear;
+   do_functions["d"] = do_dup;
+   do_functions["f"] = do_printall;
+   do_functions["p"] = do_print;
+   do_functions["q"] = do_quit;;
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.22 2013-06-25 15:58:06-07 - - $
+d80 6
+a85 6
+   do_functions["+"] = bind2nd (do_arith, '+');
+   do_functions["-"] = bind2nd (do_arith, '-');
+   do_functions["*"] = bind2nd (do_arith, '*');
+   do_functions["/"] = bind2nd (do_arith, '/');
+   do_functions["%"] = bind2nd (do_arith, '%');
+   do_functions["^"] = bind2nd (do_arith, '^');
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.21 2013-06-25 15:57:46-07 - - $
+d143 1
+a143 1
+                  (*fn) (operand_stack);
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.19 2013-06-25 15:54:48-07 - - $
+d143 1
+a143 1
+                  fn (operand_stack);
+@
+
+
+1.20
+log
+@-
+@
+text
+@d77 3
+a79 3
+typedef map <string, do_function_t> fnmap;
+fnmap load_fn () {
+   fnmap do_functions;
+d124 1
+a124 1
+   fnmap do_functions = load_fn();
+d137 1
+a137 1
+                  do_function_t::const_iterator fn
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.18 2013-06-25 15:51:32-07 - - $
+d137 2
+a138 1
+                  do_function_t fn = do_functions.find (token.lexinfo);
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.17 2013-06-25 15:46:21-07 - - $
+d76 2
+a77 2
+typedef void (*do_function) (bigint_stack&);
+typedef map <string, do_function> fnmap;
+d137 2
+a138 2
+                  do_function fn = fnmap.find (token.lexinfo);
+                  if (fn == fnmap.end()) {
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.16 2013-06-25 15:44:29-07 - - $
+d21 1
+a21 1
+   void operator() (bigint_stack &stack, const char oper) {
+d42 1
+a42 1
+}
+d76 2
+a77 2
+typedef void (*function) (bigint_stack&);
+typedef map <string, function> fnmap;
+d79 14
+a92 14
+   fnmap functions;
+   functions["+"] = bind2nd (do_arith, '+');
+   functions["-"] = bind2nd (do_arith, '-');
+   functions["*"] = bind2nd (do_arith, '*');
+   functions["/"] = bind2nd (do_arith, '/');
+   functions["%"] = bind2nd (do_arith, '%');
+   functions["^"] = bind2nd (do_arith, '^');
+   functions["Y"] = do_debug;
+   functions["c"] = do_clear;
+   functions["d"] = do_dup;
+   functions["f"] = do_printall;
+   functions["p"] = do_print;
+   functions["q"] = do_quit;;
+   return functions;
+d124 1
+a124 1
+   fnmap functions = load_fn();
+d137 2
+a138 2
+                  function fn = functions.find (token.lexinfo);
+                  if (fn == functions.end()) {
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.15 2013-06-25 15:37:34-07 - - $
+d24 1
+a24 1
+      TRACE (TFLAG, "right = " << right); \
+d27 1
+a27 1
+      TRACE (TFLAG, "left = " << left); \
+d39 1
+a39 1
+      TRACE (TFLAG, "result = " << result); \
+d45 1
+a45 1
+   TRACE ('c', "");
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.14 2013-06-25 15:35:13-07 - - $
+d20 21
+a40 17
+void do_arith (bigint_stack &stack, const char oper) {
+   bigint right = stack.top(); \
+   stack.pop(); \
+   TRACE (TFLAG, "right = " << right); \
+   bigint left = stack.top(); \
+   stack.pop(); \
+   TRACE (TFLAG, "left = " << left); \
+   bigint result;
+   switch (oper) {
+      case '+': result = left + right; break;
+      case '-': result = left - right; break;
+      case '*': result = left * right; break;
+      case '/': result = left / right; break;
+      case '%': result = left % right; break;
+      case '^': result = pow (left, right); break;
+      default: throw invalid_argument (
+                     string ("do_arith operator is ") + oper);
+a41 2
+   TRACE (TFLAG, "result = " << result); \
+   stack.push (result); \
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.13 2013-06-25 15:34:47-07 - - $
+d135 2
+a136 2
+                  function fn = functions[token.lexinfo];
+                  if (fn == NULL) {
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.12 2013-01-23 19:10:00-08 - - $
+d20 1
+a20 1
+void do_arith (bigint_stack &stack, const char operator) {
+d28 1
+a28 1
+   switch (operator) {
+d36 1
+a36 1
+                     string ("do_arith operator is ") + operator);
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.11 2013-01-23 19:08:59-08 - - $
+d4 1
+a4 1
+#include <exception>
+d7 1
+d20 17
+a36 11
+#define DO_BINOP(FN_NAME,TFLAG,OPER) \
+   void FN_NAME (bigint_stack &stack) { \
+      bigint right = stack.top(); \
+      stack.pop(); \
+      TRACE (TFLAG, "right = " << right); \
+      bigint left = stack.top(); \
+      stack.pop(); \
+      TRACE (TFLAG, "left = " << left); \
+      bigint result = left OPER (right); \
+      TRACE (TFLAG, "result = " << result); \
+      stack.push (result); \
+d38 3
+a40 6
+DO_BINOP(do_add, '+', +   )
+DO_BINOP(do_sub, '-', -   )
+DO_BINOP(do_mul, '*', *   )
+DO_BINOP(do_div, '/', /   )
+DO_BINOP(do_rem, '%', %   )
+DO_BINOP(do_pow, '^', .pow)
+d78 6
+a83 6
+   functions["+"] = do_add;
+   functions["-"] = do_sub;
+   functions["*"] = do_mul;
+   functions["/"] = do_div;
+   functions["%"] = do_rem;
+   functions["^"] = do_pow;
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.10 2013-01-23 19:08:35-08 - - $
+a8 2
+#include <unistd.h>
+
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.9 2012-04-20 18:06:49-07 - - $
+a2 1
+#include <cstdlib>
+d9 2
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.8 2012-04-12 19:31:01-07 - - $
+d3 1
+d6 1
+a7 1
+#include <iostream>
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.7 2012-04-12 17:00:26-07 - - $
+d66 1
+a66 2
+void do_quit (bigint_stack &stack) {
+   (void) stack; // SUPPRESS: warning: unused parameter 'stack'
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.6 2012-04-12 16:59:21-07 - - $
+d21 2
+a22 2
+      bigint right = stack.back(); \
+      stack.pop_back(); \
+d24 2
+a25 2
+      bigint left = stack.back(); \
+      stack.pop_back(); \
+d29 1
+a29 1
+      stack.push_back (result); \
+d44 1
+a44 1
+   bigint top = stack.back();
+d46 1
+a46 1
+   stack.push_back (top);
+d56 1
+a56 1
+   cout << stack.back() << endl;
+d129 1
+a129 1
+                  operand_stack.push_back (token.lexinfo);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.5 2012-04-12 16:58:35-07 - - $
+d50 2
+a51 2
+   bigint_stack::const_iterator itor = stack.rbegin();
+   bigint_stack::const_iterator end = stack.rend();
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.4 2012-04-12 16:57:39-07 - - $
+d21 1
+a21 1
+      bigint right = stack.front(); \
+d24 1
+a24 1
+      bigint left = stack.front(); \
+d44 1
+a44 1
+   bigint top = stack.front();
+d56 1
+a56 1
+   cout << stack.front() << endl;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.3 2012-04-12 14:12:42-07 - - $
+d22 1
+a22 1
+      stack.pop_front(); \
+d25 1
+a25 1
+      stack.pop_front(); \
+d29 1
+a29 1
+      stack.push_front (result); \
+d46 1
+a46 1
+   stack.push_front (top);
+d129 1
+a129 1
+                  operand_stack.push_front (token.lexinfo);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.2 2012-04-10 21:02:20-07 - - $
+d50 2
+a51 2
+   bigint_stack::const_iterator itor = stack.begin();
+   bigint_stack::const_iterator end = stack.end();
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.1 2012-04-10 20:43:21-07 - - $
+d143 1
+a143 1
+         }catch (ydc_exn exn) {
+d147 2
+a148 1
+   }catch (ydc_quit) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cc,v 1.1 2011-01-18 22:17:09-08 - - $
+d64 1
+d115 1
+@
