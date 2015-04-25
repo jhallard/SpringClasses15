@@ -1,0 +1,52 @@
+bigint.cpp:13:1: warning: unused parameter ‘that’ [-Wunused-parameter]
+ bigint::bigint (long that) {
+ ^
+bigint.cpp: In constructor ‘bigint::bigint(const string&)’:
+bigint.cpp:37:8: warning: unused variable ‘newval’ [-Wunused-variable]
+    int newval = 0;
+        ^
+bigint.cpp: At global scope:
+bigint.cpp:69:8: warning: unused parameter ‘left’ [-Wunused-parameter]
+ bigint operator+ (const bigint& left, const bigint& right) {
+        ^
+bigint.cpp:69:8: warning: unused parameter ‘right’ [-Wunused-parameter]
+bigint.cpp:75:8: warning: unused parameter ‘left’ [-Wunused-parameter]
+ bigint operator- (const bigint& left, const bigint& right) {
+        ^
+bigint.cpp:75:8: warning: unused parameter ‘right’ [-Wunused-parameter]
+bigint.cpp:81:8: warning: unused parameter ‘right’ [-Wunused-parameter]
+ bigint operator+ (const bigint& right) {
+        ^
+bigint.cpp:87:8: warning: unused parameter ‘right’ [-Wunused-parameter]
+ bigint operator- (const bigint& right) {
+        ^
+bigint.cpp: In member function ‘long int bigint::to_long() const’:
+bigint.cpp:103:11: error: cannot convert ‘const bigvalue_t {aka const std::vector<unsigned char>}’ to ‘long int’ in return
+    return big_value;
+           ^
+bigint.cpp: At global scope:
+bigint.cpp:113:8: warning: unused parameter ‘left’ [-Wunused-parameter]
+ bigint operator* (const bigint& left, const bigint& right) {
+        ^
+bigint.cpp:113:8: warning: unused parameter ‘right’ [-Wunused-parameter]
+bigint.cpp: In function ‘bigint::quot_rem divide(const bigint&, const bigint&)’:
+bigint.cpp:137:28: error: cannot convert ‘const bigvalue_t {aka const std::vector<unsigned char>}’ to ‘unumber {aka long unsigned int}’ in initialization
+    unumber divisor = right.big_value;
+                            ^
+bigint.cpp:139:29: error: cannot convert ‘const bigvalue_t {aka const std::vector<unsigned char>}’ to ‘unumber {aka long unsigned int}’ in initialization
+    unumber remainder = left.big_value;
+                             ^
+bigint.cpp: At global scope:
+bigint.cpp:164:6: warning: unused parameter ‘left’ [-Wunused-parameter]
+ bool operator== (const bigint& left, const bigint& right) {
+      ^
+bigint.cpp:164:6: warning: unused parameter ‘right’ [-Wunused-parameter]
+bigint.cpp:169:6: warning: unused parameter ‘left’ [-Wunused-parameter]
+ bool operator< (const bigint& left, const bigint& right) {
+      ^
+bigint.cpp:169:6: warning: unused parameter ‘right’ [-Wunused-parameter]
+bigint.cpp: In member function ‘long int bigint::to_long() const’:
+bigint.cpp:104:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+make: *** [bigint.o] Error 1

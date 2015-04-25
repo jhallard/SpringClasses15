@@ -16,15 +16,21 @@ using namespace std;
 class bigint {
       friend ostream& operator<< (ostream&, const bigint&);
    private:
+      // long long_value {};
+            
       using digit_t = unsigned char;
       using bigvalue_t = vector<digit_t>;
       bool negative;
       bigvalue_t big_value;
+
       using quot_rem = pair<bigint,bigint>;
       using unumber = unsigned long;
       friend quot_rem divide (const bigint&, const bigint&);
       friend void multiply_by_2 (unumber&);
       friend void divide_by_2 (unumber&);
+      friend bigvalue_t do_bigadd (const bigvalue_t&, const bigvalue_t&);
+      friend bigvalue_t do_bigsub (const bigvalue_t&, const bigvalue_t&);
+
    public:
 
       //
@@ -42,7 +48,6 @@ class bigint {
       //
       bigint (const long);
       bigint (const string&);
-
       //
       // Basic add/sub operators.
       //
