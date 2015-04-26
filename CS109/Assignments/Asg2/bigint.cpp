@@ -51,6 +51,9 @@ bigint::bigvalue_t do_bigadd (const bigint::bigvalue_t& left,
  const bigint::bigvalue_t& right) {
 
    int carry = 0;
+   bool left_bigger = left.size() > right.size();
+   bool right_bigger = left.size() < right.size();
+   bool equal_size = !(left_bigger || right_bigger);
    bigint::bigvalue_t big_ret;
    auto lt = left.begin();
    auto rt = right.begin();
@@ -72,14 +75,37 @@ bigint::bigvalue_t do_bigadd (const bigint::bigvalue_t& left,
       ++lt; ++rt;
    }
 
+// edit still need to account for if a carry still exists
+// at this points
 
-   while(lt != left.end()) {
-      big_ret.push_back(*lt);
-      ++lt;
+   if(left_bigger) {
+      while(lt != left.end()) {
+         int dig = *lt - '0';
+         dig += carry;
+         carry = 0;
+         if(dig >= 10) {
+            carry++;
+            dig -= 10;
+         }
+         big_ret.push_back(dig+'0');
+         ++lt;
+      }
    }
-   while(rt != right.end()) {
-      big_ret.push_back(*rt);
-      ++rt;
+   else if(right_bigger) {
+      while(rt != right.end()) {
+         int dig = *rt - '0';
+         dig += carry;
+         carry = 0;
+         if(dig >= 10) {
+            carry++;
+            dig -= 10;
+         }
+         big_ret.push_back(dig+'0');
+         ++rt;
+      }
+   }
+   else if(carry) {
+      big_ret.push_back('1');
    }
    return big_ret;
 }
