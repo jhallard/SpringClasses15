@@ -3,91 +3,201 @@
 #include <cstdlib>
 #include <exception>
 #include <limits>
+#include <algorithm>
 #include <stack>
 #include <stdexcept>
+#include <sstream>
 using namespace std;
 
 #include "bigint.h"
 #include "debug.h"
 
-bigint::bigint (long that) {
-   
-   // DEBUGF ('~', this << " -> " << that);
+
+bigint::bigint (long that) : negative(false){
+   if(that < 0) negative = true;
+   big_value.clear();
+   string val;
+   stringstream s_val;
+   s_val << that;
+   val = s_val.str();
+   for(auto & c : val) {
+      big_value.push_back(val.back());
+      val.pop_back();
+   }
+   DEBUGF ('~', this << " -> " << that);
 }
 
-// bigint::bigint (const string& that) {
-//    auto itor = that.cbegin();
-//    bool isnegative = false;
-//    if (itor != that.cend() and *itor == '_') {
-//       isnegative = true;
-//       ++itor;
-//    }
-//    int newval = 0;
-//    while (itor != that.end()) newval = newval * 10 + *itor++ - '0';
-//    big_value = isnegative ? - newval : + newval;
-//    DEBUGF ('~', this << " -> " << big_value)
-// }
-
-bigint::bigint (const string& that) {
+bigint::bigint (const string& that) : negative(false) {
    auto itor = that.cbegin();
-   bool isnegative = false;
    if (itor != that.cend() and *itor == '_') {
-      isnegative = true;
+      negative = true;
       ++itor;
    }
-   int newval = 0;
-   for(auto iter = that.rbegin(); iter != that.rend()-1; ++iter) {
-      big_value.push_back(*iter);
+
+   while (itor != that.end()) {
+      big_value.push_back(*itor);
+      itor++;
    }
 
-   if(isnegative) big_value.push_back('_');
- 
+   reverse(big_value.begin(), big_value.end());
+   // int newval = 0;
    // while (itor != that.end()) newval = newval * 10 + *itor++ - '0';
    // big_value = isnegative ? - newval : + newval;
- 
-   // DEBUGF ('~', this << " -> " << big_value)
+   // cout << that << "--" << *this << "\n";
+   DEBUGF ('~', this << " -> " << that)
 }
 
-bigint::bigvalue_t do_bigadd (const bigint::bigvalue_t&,
- const bigint::bigvalue_t&) {
+bigint::bigvalue_t do_bigadd (const bigint::bigvalue_t& left,
+ const bigint::bigvalue_t& right) {
 
-   // replace line below.s
-   bigint::bigvalue_t ret({'1','2','3'});
+   int carry = 0;
+   bigint::bigvalue_t big_ret;
+   auto lt = left.begin();
+   auto rt = right.begin();
+   for(; lt != left.end() && rt != right.end();) {
 
-   return ret;
+      int ldig = *lt - '0';
+      int rdig = *rt - '0';
+
+      ldig += carry;
+      carry = 0;
+      std::cout << ldig << "_" << rdig << endl;
+
+      int res = ldig+rdig;
+      while(res >= 10) {
+         carry++;
+         res = res-10;
+      }
+      big_ret.push_back(res+'0');
+      ++lt; ++rt;
+   }
+
+
+   while(lt != left.end()) {
+      big_ret.push_back(*lt);
+      ++lt;
+   }
+   while(rt != right.end()) {
+      big_ret.push_back(*rt);
+      ++rt;
+   }
+   return big_ret;
 }
 
-bigint::bigvalue_t do_bigsub (const bigint::bigvalue_t&,
- const bigint::bigvalue_t&) {
+bigint::bigvalue_t do_bigsub (const bigint::bigvalue_t& left,
+ const bigint::bigvalue_t& right) {
 
-   // replace line below.s
-   bigint::bigvalue_t ret({'1','2','3'});
+   if(right.size() > left.size()) {
+      throw ydc_exn("do_bigsub : right val > left val\n");
+   }
+   bool carry = false;
+   bigint::bigvalue_t big_ret;
+   auto lt = left.cbegin();
+   auto rt = right.cbegin();
+   for(; lt != left.end() && rt != right.end();) {
 
-   return ret;
+      int ldig = *lt - '0';
+      int rdig = *rt - '0';
+
+      if(carry==true) {
+         ldig-=1;
+         carry = false;
+      }
+
+      if(ldig<rdig) {
+         ldig +=10;
+         carry = true;
+      }
+
+      int res = ldig-rdig;
+      big_ret.push_back(res+'0');
+      ++lt; ++rt;
+   }
+
+   while(lt != left.cend()) {
+      big_ret.push_back(*lt);
+      ++lt;
+   }
+   while(rt != right.cend()) {
+      big_ret.push_back(*rt);
+      ++rt;
+   }
+   return big_ret;
+}
+
+// returns true if left is less than right
+bool do_bigless (const bigint::bigvalue_t& left, 
+   const bigint::bigvalue_t& right) {
+
+
+   // go through all digits and find which is smaller first
+   for(int it = 0; it < left.size(); it++) {
+      // if the left digit is smaller return true (or false
+      // if both are negative)
+      if(left.at(it) < right.at(it)) {
+         return true;
+      }
+   }
+
+   return false;
+
 }
 
 
 bigint operator+ (const bigint& left, const bigint& right) {
-   bigint ret_val('0');
-   return ret_val;
+   // if they're both negative this flag is hot, meaning we just 
+   // flip the output we would get if they were both positive
+   bool flip = left.negative && right.negative;
+   bigint ret(0);
+   if(left.negative && !right.negative) {
+      ret.big_value = do_bigsub(right.big_value, left.big_value);
+      return ret;
+   }
+   if(!left.negative && right.negative) {
+      ret.big_value = do_bigsub(left.big_value, right.big_value);
+      return ret;
+   }
+
+   ret.big_value = do_bigadd(left.big_value, right.big_value);
+
+   if(flip) ret.negative = true;
+
+   return ret;
+
+   // return bigint("191");
    // return left.big_value + right.big_value;
 }
 
 bigint operator- (const bigint& left, const bigint& right) {
-   bigint ret_val('0');
-   return ret_val;
+   bigint ret(0);
+   return ret;
    // return left.big_value - right.big_value;
 }
 
-bigint operator+ (const bigint& right) {
-   bigint ret_val('0');
-   return ret_val;
-   // return +right.big_value;
+bigint bigint::operator+ (const bigint& right) {
+   // if they're both negative this flag is hot, meaning we just 
+   // flip the we would get if they were both positive
+   bool flip = negative && right.negative;
+   bigint ret(0);
+   if(negative && !right.negative) {
+      ret.big_value = do_bigsub(right.big_value, big_value);
+      return ret;
+   }
+   if(!negative && right.negative) {
+      ret.big_value = do_bigsub(big_value, right.big_value);
+      return ret;
+   }
+
+   ret.big_value = do_bigadd(big_value, right.big_value);
+
+   if(flip) ret.negative = true;
+
+   return ret;
 }
 
-bigint operator- (const bigint& right) {
-   bigint ret_val('0');
-   return ret_val;
+bigint bigint::operator- (const bigint& right) {
+   bigint ret(0);
+   return ret;
    // return -right.big_value;
 }
 
@@ -100,12 +210,20 @@ long bigint::to_long() const {
    long ret = 0, i = 1;
    for(auto & x : big_value) {
       ret += i*(x-'0');
+      i++;
    }
-   return big_value;
+
+   return this->negative ? -1*ret : ret; 
+   // return ret;
+   // return big_value;
 }
 
-bool abs_less (const long& left, const long& right) {
-   return left < right;
+// bool abs_less (const long& left, const long& right) {
+//    return left < right;
+// }
+
+bool abs_less (const bigint & left, const bigint & right) {
+   return do_bigless(left.big_value, right.big_value);
 }
 
 //
@@ -122,11 +240,11 @@ bigint operator* (const bigint& left, const bigint& right) {
 //
 
 void multiply_by_2 (bigint & value) {
-   value *= 2;
+   // value *= 2;
 }
 
 void divide_by_2 (bigint & value) {
-   value /= 2;
+   // value /= 2;
 }
 
 
@@ -135,23 +253,23 @@ bigint::quot_rem divide (const bigint& left, const bigint& right) {
    using unumber = unsigned long;
    static unumber zero = 0;
    if (right == 0) throw domain_error ("bigint::divide");
-   unumber divisor = right.big_value;
-   unumber quotient = 0;
-   unumber remainder = left.big_value;
-   unumber power_of_2 = 1;
-   while (abs_less (divisor, remainder)) {
+   bigint divisor = right;
+   bigint quotient = bigint('0');
+   bigint rem = left;
+   bigint power_of_2 = bigint('1');
+   while (abs_less (divisor, rem)) {
       multiply_by_2 (divisor);
       multiply_by_2 (power_of_2);
    }
    while (abs_less (zero, power_of_2)) {
-      if (not abs_less (remainder, divisor)) {
-         remainder = remainder - divisor;
+      if (not abs_less (rem, divisor)) {
+         rem = rem - divisor;
          quotient = quotient + power_of_2;
       }
       divide_by_2 (divisor);
       divide_by_2 (power_of_2);
    }
-   return {quotient, remainder};
+   return {quotient, rem};
 }
 
 bigint operator/ (const bigint& left, const bigint& right) {
@@ -168,14 +286,35 @@ bool operator== (const bigint& left, const bigint& right) {
 }
 
 bool operator< (const bigint& left, const bigint& right) {
-   return false;
-   // return left.big_value < right.big_value;
+   // if they're both negative this flag is hot, meaning we just 
+   // flip the output we would get if they were both positive
+   bool flip = !left.negative && !right.negative;
+   if(left.negative && !right.negative) {
+      return true;
+   }
+   if(!left.negative && right.negative) {
+      return false;
+   }
+
+   if(left.big_value.size() != right.big_value.size()) {
+      bool ret = left.big_value.size() < right.big_value.size();
+      if(flip) ret = !ret;
+      return ret;
+   }
+
+
+   bool ret = do_bigless(left.big_value, right.big_value);
+
+   return flip? !ret : ret;
+
 }
 
 ostream& operator<< (ostream& out, const bigint& that) {
    // out << that.big_value;
-   for(auto & x : that.big_value) {
-      out << x;
+   // cout << that.big_value.size();
+   for(auto x = that.big_value.rbegin();
+    x != that.big_value.rend(); x++) {
+      out << *x;
    }
    return out;
 }

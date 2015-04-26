@@ -6,6 +6,7 @@
 #include <exception>
 #include <iostream>
 #include <utility>
+#include "util.h"
 using namespace std;
 
 #include "debug.h"
@@ -30,6 +31,9 @@ class bigint {
       friend void divide_by_2 (unumber&);
       friend bigvalue_t do_bigadd (const bigvalue_t&, const bigvalue_t&);
       friend bigvalue_t do_bigsub (const bigvalue_t&, const bigvalue_t&);
+      friend bool do_bigless (const bigvalue_t&, const bigvalue_t&);
+      friend bool abs_less (const bigint & left, const bigint & right);
+
 
    public:
 
@@ -53,8 +57,8 @@ class bigint {
       //
       friend bigint operator+ (const bigint&, const bigint&);
       friend bigint operator- (const bigint&, const bigint&);
-      friend bigint operator+ (const bigint&);
-      friend bigint operator- (const bigint&);
+      bigint operator+ (const bigint&);
+      bigint operator- (const bigint&);
       long to_long() const;
 
       //
