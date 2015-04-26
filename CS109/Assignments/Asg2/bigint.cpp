@@ -141,13 +141,24 @@ bigint::bigvalue_t do_bigsub (const bigint::bigvalue_t& left,
    }
 
    while(lt != left.cend()) {
-      big_ret.push_back(*lt);
+      int dig = *lt - '0';
+      if(carry==true) {
+         dig-=1;
+         carry = false;
+      }
+
+      if(dig<0) {
+         dig +=10;
+         carry = true;
+      }
+
+      big_ret.push_back(dig+'0');
       ++lt;
    }
-   while(rt != right.cend()) {
-      big_ret.push_back(*rt);
-      ++rt;
-   }
+
+   // clear meaningless zeros
+   while(big_ret.back() == '0') big_ret.pop_back();
+
    return big_ret;
 }
 
