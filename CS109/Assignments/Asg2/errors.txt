@@ -6,32 +6,28 @@ bigint.cpp: In function ‘bigint::bigvalue_t do_bigadd(const bigvalue_t&, const
 bigint.cpp:56:9: warning: unused variable ‘equal_size’ [-Wunused-variable]
     bool equal_size = !(left_bigger || right_bigger);
          ^
-bigint.cpp: In function ‘bool do_bigless(const bigvalue_t&, const bigvalue_t&)’:
-bigint.cpp:171:35: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-    for(int it = 0; it < left.size(); it++) {
-                                   ^
 bigint.cpp: At global scope:
-bigint.cpp:208:8: warning: unused parameter ‘left’ [-Wunused-parameter]
+bigint.cpp:226:8: warning: unused parameter ‘left’ [-Wunused-parameter]
  bigint operator- (const bigint& left, const bigint& right) {
         ^
-bigint.cpp:208:8: warning: unused parameter ‘right’ [-Wunused-parameter]
-bigint.cpp:235:8: warning: unused parameter ‘right’ [-Wunused-parameter]
+bigint.cpp:226:8: warning: unused parameter ‘right’ [-Wunused-parameter]
+bigint.cpp:270:8: warning: unused parameter ‘right’ [-Wunused-parameter]
  bigint bigint::operator- (const bigint& right) {
         ^
-bigint.cpp:269:8: warning: unused parameter ‘left’ [-Wunused-parameter]
+bigint.cpp:304:8: warning: unused parameter ‘left’ [-Wunused-parameter]
  bigint operator* (const bigint& left, const bigint& right) {
         ^
-bigint.cpp:269:8: warning: unused parameter ‘right’ [-Wunused-parameter]
-bigint.cpp:279:6: warning: unused parameter ‘value’ [-Wunused-parameter]
+bigint.cpp:304:8: warning: unused parameter ‘right’ [-Wunused-parameter]
+bigint.cpp:314:6: warning: unused parameter ‘value’ [-Wunused-parameter]
  void multiply_by_2 (bigint & value) {
       ^
-bigint.cpp:283:6: warning: unused parameter ‘value’ [-Wunused-parameter]
+bigint.cpp:318:6: warning: unused parameter ‘value’ [-Wunused-parameter]
  void divide_by_2 (bigint & value) {
       ^
-bigint.cpp:320:6: warning: unused parameter ‘left’ [-Wunused-parameter]
+bigint.cpp:355:6: warning: unused parameter ‘left’ [-Wunused-parameter]
  bool operator== (const bigint& left, const bigint& right) {
       ^
-bigint.cpp:320:6: warning: unused parameter ‘right’ [-Wunused-parameter]
+bigint.cpp:355:6: warning: unused parameter ‘right’ [-Wunused-parameter]
 checksource: line length > 72 characters
    file "bigint.h": 2 errors: lines 32--33
 checksource: TOTAL COMPLAINTS: 2

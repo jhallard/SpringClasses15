@@ -64,7 +64,6 @@ bigint::bigvalue_t do_bigadd (const bigint::bigvalue_t& left,
 
       ldig += carry;
       carry = 0;
-      std::cout << ldig << "_" << rdig << endl;
 
       int res = ldig+rdig;
       while(res >= 10) {
@@ -166,14 +165,16 @@ bigint::bigvalue_t do_bigsub (const bigint::bigvalue_t& left,
 bool do_bigless (const bigint::bigvalue_t& left, 
    const bigint::bigvalue_t& right) {
 
+   if(left.size() != right.size()) {
+      return left.size() < right.size();
+   }
 
    // go through all digits and find which is smaller first
-   for(int it = 0; it < left.size(); it++) {
+   for(int it = left.size(); it >=0; --it) {
       // if the left digit is smaller return true (or false
       // if both are negative)
-      if(left.at(it) < right.at(it)) {
-         return true;
-      }
+      if(left.at(it) < right.at(it)) return true;
+      else if(left.at(it) > right.at(it)) return false;
    }
 
    return false;
@@ -187,14 +188,31 @@ bigint operator+ (const bigint& left, const bigint& right) {
    bool flip = left.negative && right.negative;
    bigint ret(0);
    if(left.negative && !right.negative) {
-      ret.big_value = do_bigsub(right.big_value, left.big_value);
+      if(do_bigless(left.big_value, right.big_value)) {
+         cout << "Case #1" << endl;
+         ret.big_value = do_bigsub(right.big_value, left.big_value);
+      }
+      else {
+         cout << "Case #2" << endl;
+         ret.big_value = do_bigsub(left.big_value, right.big_value);
+         ret.negative = true;
+      }
       return ret;
    }
    if(!left.negative && right.negative) {
-      ret.big_value = do_bigsub(left.big_value, right.big_value);
+      if(do_bigless(left.big_value, right.big_value)) {
+         cout << "Case #3" << endl;
+         ret.big_value = do_bigsub(right.big_value, left.big_value);
+         ret.negative = true;
+      }
+      else {
+         cout << "Case #4" << endl;
+         ret.big_value = do_bigsub(left.big_value, right.big_value);
+      }
       return ret;
    }
 
+cout << "Case #5" << endl;
    ret.big_value = do_bigadd(left.big_value, right.big_value);
 
    if(flip) ret.negative = true;
@@ -213,19 +231,36 @@ bigint operator- (const bigint& left, const bigint& right) {
 
 bigint bigint::operator+ (const bigint& right) {
    // if they're both negative this flag is hot, meaning we just 
-   // flip the we would get if they were both positive
-   bool flip = negative && right.negative;
+   // flip the output we would get if they were both positive
+   bool flip = this->negative && right.negative;
    bigint ret(0);
-   if(negative && !right.negative) {
-      ret.big_value = do_bigsub(right.big_value, big_value);
+   if(this->negative && !right.negative) {
+      if(do_bigless(this->big_value, right.big_value)) {
+         cout << "Case #1" << endl;
+         ret.big_value = do_bigsub(right.big_value, this->big_value);
+      }
+      else {
+         cout << "Case #2" << endl;
+         ret.big_value = do_bigsub(this->big_value, right.big_value);
+         ret.negative = true;
+      }
       return ret;
    }
-   if(!negative && right.negative) {
-      ret.big_value = do_bigsub(big_value, right.big_value);
+   if(!this->negative && right.negative) {
+      if(do_bigless(this->big_value, right.big_value)) {
+         cout << "Case #3" << endl;
+         ret.big_value = do_bigsub(right.big_value, this->big_value);
+         ret.negative = true;
+      }
+      else {
+         cout << "Case #4" << endl;
+         ret.big_value = do_bigsub(this->big_value, right.big_value);
+      }
       return ret;
    }
 
-   ret.big_value = do_bigadd(big_value, right.big_value);
+   cout << "Case #5" << endl;
+   ret.big_value = do_bigadd(this->big_value, right.big_value);
 
    if(flip) ret.negative = true;
 
@@ -349,6 +384,7 @@ bool operator< (const bigint& left, const bigint& right) {
 ostream& operator<< (ostream& out, const bigint& that) {
    // out << that.big_value;
    // cout << that.big_value.size();
+   if(that.negative) out << '-';
    for(auto x = that.big_value.rbegin();
     x != that.big_value.rend(); x++) {
       out << *x;
