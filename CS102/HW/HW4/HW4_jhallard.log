@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.4.25)  25 APR 2015 16:43
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.4.25)  26 APR 2015 20:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -243,25 +243,25 @@ LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
 ) (./HW4_jhallard.aux)
 \openout1 = `HW4_jhallard.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 187.
-LaTeX Font Info:    ... okay on input line 187.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 187.
-LaTeX Font Info:    ... okay on input line 187.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 187.
-LaTeX Font Info:    ... okay on input line 187.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 187.
-LaTeX Font Info:    ... okay on input line 187.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 187.
-LaTeX Font Info:    ... okay on input line 187.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 187.
-LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             http://www.ctan.org/tex-archive/ 
 (lastpage)             macros/latex/contrib/pageslts/ 
 (lastpage)             or
 (lastpage)             http://www.ctan.org/tex-archive/ 
 (lastpage)             install/macros/latex/contrib/pageslts.tds.zip
-(lastpage)             ! on input line 187.
+(lastpage)             ! on input line 186.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -325,38 +325,71 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 \c@lstlisting=\count120
-LaTeX Font Info:    Try loading font information for U+msa on input line 189.
+LaTeX Font Info:    Try loading font information for U+msa on input line 188.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 189.
+LaTeX Font Info:    Try loading font information for U+msb on input line 188.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 215.
+Underfull \hbox (badness 10000) in paragraph at lines 211--212
 
+ []
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 215.
+<DPV41.PNG, id=9, 319.94531pt x 152.82094pt>
+File: DPV41.PNG Graphic file (type png)
+ <use DPV41.PNG>
+Package pdftex.def Info: DPV41.PNG used on input line 214.
+(pdftex.def)             Requested size: 216.81pt x 103.56007pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 248--251
+Underfull \hbox (badness 10000) in paragraph at lines 219--220
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 252--253
+Underfull \hbox (badness 10000) in paragraph at lines 248--249
+
+ []
+
+<sssp_tree.png, id=11, 243.91125pt x 385.44pt>
+File: sssp_tree.png Graphic file (type png)
+ <use sssp_tree.png>
+Package pdftex.def Info: sssp_tree.png used on input line 251.
+(pdftex.def)             Requested size: 144.54pt x 228.40746pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (0.0pt): 
+ Make it at least 12.0pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[2 <./DPV41.PNG> <./sssp_tree.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 271--272
+
+ []
+
+<DPV51.PNG, id=17, 324.46219pt x 139.27031pt>
+File: DPV51.PNG Graphic file (type png)
+ <use DPV51.PNG>
+Package pdftex.def Info: DPV51.PNG used on input line 274.
+(pdftex.def)             Requested size: 216.81pt x 93.0641pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 284--285
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 254--255
+Underfull \hbox (badness 10000) in paragraph at lines 312--318
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 319--320
 
  []
 
@@ -366,64 +399,33 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
+[3 <./DPV51.PNG>]
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 354.
 
-LaTeX Warning: Reference `LastPage' on page 2 undefined on input line 269.
-
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 276--277
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 278--279
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 290--296
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 297--298
-
- []
-
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 332.
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 332--332
+Underfull \hbox (badness 10000) in paragraph at lines 354--354
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 332--332
+Underfull \hbox (badness 10000) in paragraph at lines 354--354
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 332--333
+Underfull \hbox (badness 10000) in paragraph at lines 354--355
 
  []
 
 
-Package Fancyhdr Warning: \headheight is too small (0.0pt): 
- Make it at least 12.0pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-
-LaTeX Warning: Reference `LastPage' on page 3 undefined on input line 333.
-
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 334--335
+Underfull \hbox (badness 10000) in paragraph at lines 356--357
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 336--339
+Underfull \hbox (badness 10000) in paragraph at lines 358--361
 
  []
 
@@ -432,22 +434,19 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  Make it at least 12.0pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
-
-
-LaTeX Warning: Reference `LastPage' on page 4 undefined on input line 339.
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 340--341
+Underfull \hbox (badness 10000) in paragraph at lines 362--363
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 341--342
+Underfull \hbox (badness 10000) in paragraph at lines 363--364
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--346
+Underfull \hbox (badness 10000) in paragraph at lines 366--368
 
  []
 
@@ -456,37 +455,34 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  Make it at least 12.0pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
-
-
-LaTeX Warning: Reference `LastPage' on page 5 undefined on input line 354.
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 354--356
+Underfull \hbox (badness 10000) in paragraph at lines 376--378
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 357--358
+Underfull \hbox (badness 10000) in paragraph at lines 379--380
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 359--360
+Underfull \hbox (badness 10000) in paragraph at lines 381--382
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 390--392
+Underfull \hbox (badness 10000) in paragraph at lines 412--414
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 393--394
+Underfull \hbox (badness 10000) in paragraph at lines 415--416
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--396
+Underfull \hbox (badness 10000) in paragraph at lines 417--418
 
  []
 
@@ -496,14 +492,7 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-
-LaTeX Warning: Reference `LastPage' on page 6 undefined on input line 413.
-
-[6]
-
-Package lastpage Warning: Rerun to get the references right on input line 442.
-
-
+[6] 
 AED: lastpage setting LastPage
 
 Package Fancyhdr Warning: \headheight is too small (0.0pt): 
@@ -511,42 +500,32 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-
-LaTeX Warning: Reference `LastPage' on page 7 undefined on input line 442.
-
-[7] (./HW4_jhallard.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+[7] (./HW4_jhallard.aux) ) 
 Here is how much of TeX's memory you used:
  4999 strings out of 495028
- 70792 string characters out of 6181497
+ 70720 string characters out of 6181497
  234866 words of memory out of 5000000
- 8107 multiletter control sequences out of 15000+600000
+ 8105 multiletter control sequences out of 15000+600000
  13317 words of font info for 51 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,12n,43p,1281b,284s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb>
-Output written on HW4_jhallard.pdf (7 pages, 166042 bytes).
+ 38i,12n,43p,1281b,287s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8
+r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/sy
+mbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.
+pfb>
+Output written on HW4_jhallard.pdf (7 pages, 200326 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
- 58 compressed objects within 1 object stream
+ 83 PDF objects out of 1000 (max. 8388607)
+ 56 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

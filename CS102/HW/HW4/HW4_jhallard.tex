@@ -147,13 +147,12 @@
 %   NAME AND CLASS SECTION
 %----------------------------------------------------------------------------------------
 
-\newcommand{\hmwkTitle}{Homework\ \#3} % Assignment title
-\newcommand{\hmwkDueDate}{Tuesday,\ April\ 21st,\ 2015} % Due date
+\newcommand{\hmwkTitle}{Homework\ \#4} % Assignment title
+\newcommand{\hmwkDueDate}{Tuesday,\ April\ 28st,\ 2015} % Due date
 \newcommand{\hmwkClass}{CMPS\ 102} % Course/class
 \newcommand{\hmwkClassTime}{4:00pm} % Class/lecture time
 \newcommand{\hmwkClassInstructor}{Warmuth} % Teacher/lecturer
-\newcommand{\hmwkAuthorName}{John Allard \ 1437547
-} % Your name
+\newcommand{\hmwkAuthorName}{John Allard \ 1437547} % Your name
 
 
 %----------------------------------------------------------------------------------------
@@ -209,22 +208,51 @@
 
 \begin{homeworkProblem}
 
-\textit{Hadamard matrices} $H_0, H_1, H_2,
-\ldots$ are defined as follows:
-\begin{itemize} 
-\item $H_0$ is the $1 \times 1$ matrix $[1]$
-\item For $k>0, H_k$ is the $2^k \times 2^k$ matrix
-\end{itemize}
-\begin{displaymath}
-H_k =
-\begin{bmatrix}
-H_{k-1} & H_{k-1} \\
-H_{k-1} & -H_{k-1} 
-\end{bmatrix}
-\end{displaymath}
+Suppose Dijkstra's algorithm is run on the following graph, starting at node A. \\
 
-Show by induction that the dot product between any two distinct rows of
-such a Hadamard matrix is zero.
+\begin{center}
+\includegraphics[width=3in]{DPV41.PNG}
+\end{center}
+
+\begin{enumerate}
+
+\item Draw a table showing the intermediate distance values of all the nodes at each iteration of the algorithm. \\    
+
+% \begin{tabular}{|c|c|c|c|c|c|c|c|c|} \hline
+%        &   a   &   b   &   c   &   d   &   e   &   f   &   g   &   h   \\ \hline
+%    a   &   0   &   6   &   .   &   .   &   1   &   .   &   .   &   .   \\ \hline
+%    b   &   6   &   0   &   5   &   .   &   2   &   2   &   .   &   .   \\ \hline
+%    c   &   .   &   5   &   0   &   6   &   .   &   5   &   4   &   .   \\ \hline
+%    d   &   .   &   .   &   6   &   0   &   .   &   .   &   5   &   7   \\ \hline
+%    e   &   1   &   2   &   .   &   .   &   0   &   1   &   .   &   .   \\ \hline
+%    f   &   .   &   2   &   5   &   .   &   1   &   0   &   3   &   .   \\ \hline
+%    g   &   .   &   .   &   4   &   5   &   .   &   3   &   0   &   3   \\ \hline
+%    h   &   .   &   .   &   .   &   7   &   .   &   .   &   3   &   3   \\ \hline
+% \end{tabular} 
+
+The table below shows each iteration as a row, with later iterations being below earlier iterations. The numbers in each table section represent the shortest distance knows from the source (vertex A) to the vertex corresponding to that column during the iteration given by the row number. The distances to A are always zero because A is the source. For brevity, I use a `.' instead of an $\infty$ to represent infinite distances.
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|} \hline
+ d(x) &   a   &   b   &   c   &   d   &   e   &   f   &   g   &   h   \\ \hline
+      &   0   &   .   &   .   &   .   &   .   &   .   &   .   &   .   \\ \hline
+      &   0   &   1   &   .   &   .   &   4   &   8   &   .   &   .   \\ \hline
+      &   0   &   1   &   3   &   .   &   4   &   7   &   7   &   .   \\ \hline
+      &   0   &   1   &   3   &   4   &   4   &   7   &   5   &   4   \\ \hline
+      &   0   &   1   &   3   &   4   &   4   &   7   &   5   &   4   \\ \hline
+      &   0   &   1   &   3   &   4   &   4   &   7   &   5   &   4   \\ \hline
+      &   0   &   1   &   3   &   4   &   4   &   6   &   5   &   4   \\ \hline
+      &   0   &   1   &   3   &   4   &   4   &   6   &   5   &   4   \\ \hline
+\end{tabular} 
+
+
+\item Show the final shortest-path tree. \\
+
+\begin{center}
+\includegraphics[width=2in]{sssp_tree.png}
+\end{center}
+
+
+\end{enumerate}
 
 
 \end{homeworkProblem}
@@ -240,42 +268,36 @@ such a Hadamard matrix is zero.
 
 \begin{homeworkProblem}
 
-Consider the Coin Changing problem with following set of coins:
-\begin{displaymath}
-\{ 1, k, k^2, ..., k^n \}.
-\end{displaymath}
+Consider the following graph \\
 
-Prove that the Cashier's Algorithm is optimal for all 
-amounts $x \in \mathbb{N}$ given the above set of coins 
-for any $k,n\in \mathbb{N}$ s.t. $k\ge2$, $n\geq0$. \\
+\begin{center}
+\includegraphics[width=3in]{DPV51.PNG}
+\end{center}
 
-I will start by showing the maximum number of times that each coin can appear in the optimal solution, then I will use this information to prove that the greedy algorithm will produce the optimal solution. \\
+\begin{enumerate}
 
-An optimal solution on $k \geq 2$, $n \geq 0$ requires that each coin (except the highest denomination, $c_n = \$k^n)$ is present at most $k-1$ times. Proof : Take a coin $c_m$ of value $k^m$ for $m \geq 2$. If we were to have $k+\alpha$ for $\alpha \geq 0$ $c_m$ coins in our solutions, these coins would account for $(k+\alpha)(k^m) = k^{m+1}+\alpha k$ units of currency. But, (assuming $m+1 \leq n$), we could just replace the $k$ $c_m$ coins with a single $c_{m+1}$ coin, because $k$ $c_m$ coins is $k*k^m = k^{m+1}$ units of currency. Because $k \geq 2$, replacing $k$ coins with a single coin of higher-value will reduce the total number of coins by at least one. Thus any optimal solution, which by definition is the lowest number of coins which add up to the given total, cannot have more than $k-1$ of each coin denomination (except the highest) else we could remove one or more coins and create an even better solution. \\
+\item What is the cost of it's minimum spanning tree? \\ The total cost of the minimum spanning tree is 14, it consists of the following edges :
+$$ [(A,E,1), (E,B,2), (E,F,1), (F,G,3), (G,C,4), (G,H,3)] $$
 
-Now that I have established that each (except the highest value) coin can only appear at most $k-1$ times in our final solution, I will attempt to prove that the cashiers greedy algorithm will find the optimal solution. \\
-To start, choose an $m \in \mathbb{N}$ arbitrarily, and let $k \geq 2$ also be chosen arbitrarily. We use a coin-space consisting of $m+1$ different coin values, $\{1, k, k^2, \ldots, k^m \}$, which will form the individual components of our solution. Pick a value $t : 1 \leq t \leq m$, and assume that $\forall y : 1 \leq y < k^t$, that the algorithm produces the optimal solution. Now choose a value of $x : k^t \leq x < k^{t+1}$. In this situation, the greedy algorithm will choose to insert the coin $c_t$ with value $k^t$ into our solution set, because it is the largest value coin that is less than or equal to the value $x$. I wish to show that the optimal solution will also contain this coin. The information revealed in the table below is used to construct this proof. It is inspired from the example in the slides. \\
-\begin{tabular}{|c|c|c|c|} \hline
-$p$ & $k^p$ & restrictions   & max val of $c_0, c_1, \ldots, c_{p-1}$              \\ \hline
-0     & 1     & $c_o \leq k-1$ & /                                                 \\
-1     & $k$   & $c_1 \leq k-1$ & $1*(k-1)$                                         \\
-2     & $k^2$ & $c_2 \leq k-1$ & $1*(k-1) + k*(k-1) = k^2-1$                       \\
-3     & $k^3$ & $c_3 \leq k-1$ & $1*(k-1) + k*(k-1) + k^2*(k-1) = k^3-1$           \\
-      &       &    ....        &          ...                                      \\
-n     & $k^n$ & none           & $(k-1)*\sum_{i=0}^{n-1} k^i$                        \\ \hline
+\item How many minimum spanning trees does it have? \\ By Caley's theorem, there are $n^{n-2}$ spanning trees, given that $n=8$, the number of spanning trees is $8^6=262144$.
+
+\item Suppose Kruskals algortithm is run on this graph. In what order are the edges added to the MST? For each edge in this sequence give a cut that justifies its addition. \\
+
+Below is a table that answers the question above. It shows the steps of the algorithm going down the table, with the groups
+of vertices being shown in the other columns. Notice they all start out as singletons before being formed into a single tree.
+This example is odd in that no other components of size greater than one were created, all iterations consisted of adding a singleton to the current tree, which does not have to happen with Kruskal's algorithm. \\
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|} \hline
+iteration & A & B & C & D & E & F & G & H \\ \hline
+        1 & AE & B & C & D &  & F & G & H \\ \hline
+        2 & AEF & B & C & D &  &  & G & H \\ \hline
+        3 & AEFB &  & C & D &  &  & G & H \\ \hline
+        4 & AEFBG &  & C & D &  &  &  & H \\ \hline
+        5 & AEFBGH &  & C & D &  &  &  &  \\ \hline
+        6 & AEFBGHC &  &  & D &  &  &  &  \\ \hline
+        7 & AEFBGHCD &  &  &  &  &  &  &  \\ \hline 
 \end{tabular}
 
-I will concentrate on the general term. For any given coin $c_n$, the maximum combined values of all coins less than that coin, $M_{n}$ is defined as :
-$$ M_{n} = (k-1)*\sum_{i=0}^{n} k^i $$
-This is of course a geometric series with common ratio $k$, which reduces to the following equation.
-$$ M_{n} = (k-1)*\frac{(1-k^{n})}{1-k} $$
-$$ M_{n} = \frac{(k-1)}{(1-k)}*1-k^{n} $$
-$$ M_{n} = -1*(1-k^{n}) $$
-$$ M_{n} = k^{n} - 1 $$
-
-Thus, we claimed that given a value $x : k^t \leq x < k^{t+1}$, the greedy algorithm will select the coin $c_t$ with a value of $k_t$ and that any optimal solution will also contain this coin. For this to be true, there must be no other way to creating a value of $x$ with coins that are of a value less than $k^t$. The proof above showed that given a coin $c_n$, the max combined value ($M_n$) of all coins less than that coin is given by the equation $ M_{n} = k^{n} - 1$. This is strictly less than $k^n$, which is the value of the coin $c_n$. Thus there is no valid way to construct the value $x$ by selecting a coin other than $c_t$, which means the optimal solution will also contain $c_t$.  \\
-
-We now recurse on a problem of size $x - c_t$, if this value is still greater than $c_t$, the greedy algorithm will select another $c_t$ coin, and the argument above again applies, confirming that the optimal solution will also contain another $c_t$ coin. This process can repeat at most $k-1$ times (we can have at most that many of each coin), before we will be at a value $x < k^t$, so the inductive hypothesis applies and we infer that the optimal solution will be produced by our greedy algorithm. \\
+\end{enumerate}
 
 \end{homeworkProblem}
 
