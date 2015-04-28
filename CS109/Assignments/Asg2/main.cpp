@@ -1,5 +1,11 @@
 // $Id: main.cpp,v 1.41 2014-07-02 20:01:17-07 - - $
 
+
+// Author : John Allard
+// Date   : April 26th 2015
+// Project: CS109 Asg #2
+
+
 #include <deque>
 #include <iostream>
 #include <map>

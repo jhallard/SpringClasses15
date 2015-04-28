@@ -1,2 +1,37 @@
 $Id: README,v 1.2 2011-01-18 22:18:39-08 - - $
 
+Author : John Allard
+CruzID : 1437547
+
+Assignment #2 - CS109 UCSC Spring 2015
+
+ydc program
+
+This program is a calculator that can work on very large numbers,
+because it stores each number as a series of digits inside of a vector. 
+
+The files included in this program are :
+
+General utility files
+util.h
+util.cpp
+
+Debugging utility files, not changed by myself.
+debug.h
+debug.cpp
+
+The main code for the project, these files hold the class definition
+and declaration for bigint. This class wraps around a vector of digits
+that are used to represent arbitrarily large integers.
+bigint.h
+bigint.cpp
+
+A trimmed down vector to hold our stack of big integers
+iterstack.h
+
+The scanner files handle scanning and parsing the input
+scanner.h
+scanner.cpp
+
+Makefile - builds the project
+

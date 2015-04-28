@@ -18,6 +18,11 @@
 // could be used, such as vector, list, or deque.
 // 
 
+
+// Author : John Allard
+// Date   : April 26th 2015
+// Project: CS109 Asg #2
+
 #ifndef __ITERSTACK_H__
 #define __ITERSTACK_H__
 

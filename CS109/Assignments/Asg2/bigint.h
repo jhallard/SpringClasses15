@@ -1,5 +1,10 @@
 // $Id: bigint.h,v 1.16 2014-07-02 20:01:17-07 - - $
 
+
+// Author : John Allard
+// Date   : April 26th 2015
+// Project: CS109 Asg #2
+
 #ifndef __BIGINT_H__
 #define __BIGINT_H__
 

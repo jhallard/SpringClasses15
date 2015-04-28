@@ -1,4 +1,4 @@
 bigint.cpp: In constructor ‘bigint::bigint(long int)’:
-bigint.cpp:23:42: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+bigint.cpp:27:42: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
     for(int i = 0; i < s_val.str().length(); i++) {
                                           ^

@@ -1,5 +1,9 @@
 // $Id: bigint.cpp,v 1.61 2014-06-26 17:06:06-07 - - $
 
+// Author : John Allard
+// Date   : April 26th 2015
+// Project: CS109 Asg #2
+
 #include <cstdlib>
 #include <exception>
 #include <limits>
@@ -43,7 +47,6 @@ bigint::bigint (const string& that) : negative(false) {
    // int newval = 0;
    // while (itor != that.end()) newval = newval * 10 + *itor++ - '0';
    // big_value = isnegative ? - newval : + newval;
-   // cout << that << "--" << *this << "\n";
    DEBUGF ('~', this << " -> " << that)
 }
 
@@ -117,7 +120,6 @@ bigint::bigvalue_t do_bigsub (const bigint::bigvalue_t& left,
 
    if(!right.size() || !left.size())
       throw ydc_exn("zero size in do_bigsub\n");
-   cout << "Here #1" << endl;
    bool carry = false;
    bigint::bigvalue_t big_ret;
    auto lt = left.cbegin();
@@ -136,21 +138,18 @@ bigint::bigvalue_t do_bigsub (const bigint::bigvalue_t& left,
          ldig +=10;
          carry = true;
       }
-      cout << "Here #2" << endl;
 
       int res = ldig-rdig;
       big_ret.push_back(res+'0');
       ++lt; ++rt;
    }
 
-cout << "Here #3" << endl;
    while(lt != left.cend()) {
       int dig = *lt - '0';
       if(carry==true) {
          dig-=1;
          carry = false;
       }
-      cout << "Here #4" << endl;
 
       if(dig<0) {
          dig +=10;
@@ -195,10 +194,8 @@ bigint operator+ (const bigint& left, const bigint& right) {
    bool flip = left.negative && right.negative;
    bigint ret(0);
    if(left.negative && !right.negative) {
-      cout << "Here #16" << endl;
 
       if(do_bigless(left.big_value, right.big_value)) {
-         cout << "Here #17" << endl;
          ret.big_value = do_bigsub(right.big_value, left.big_value);
       }
       else {
@@ -357,11 +354,8 @@ bigint operator* (const bigint& left, const bigint& right) {
 
    if(neg_count % 2) ret.negative = true;
 
-   std::cout << left.to_long() << endl << endl;
    for(int i = 0; i < left.to_long(); i++) {
-      for(auto x : vector<char>(num.rbegin(), num.rend())) cout << x;
       num = do_bigadd(num, right.big_value);
-      cout << endl;
    }
 
    ret.big_value = num;
@@ -377,7 +371,8 @@ void multiply_by_2 (bigint & value) {
 }
 
 void divide_by_2 (bigint & value) {
-   value.big_value = do_bigadd(value.big_value, value.big_value);
+   value.big_value = bigint((value.to_long()/2)).big_value;
+   // value.big_value = do_bigadd(value.big_value, value.big_value);
 }
 
 
@@ -387,9 +382,10 @@ bigint::quot_rem divide (const bigint& left, const bigint& right) {
    static unumber zero = 0;
    if (right == 0) throw domain_error ("bigint::divide");
    bigint divisor = right;
-   bigint quotient = bigint('0');
+   bigint quotient = bigint(0);
    bigint rem = left;
-   bigint power_of_2 = bigint('1');
+   bigint power_of_2 = bigint(1);
+
    while (abs_less (divisor, rem)) {
       multiply_by_2 (divisor);
       multiply_by_2 (power_of_2);
@@ -448,7 +444,6 @@ bool operator< (const bigint& left, const bigint& right) {
 
 ostream& operator<< (ostream& out, const bigint& that) {
    // out << that.big_value;
-   // cout << that.big_value.size();
    if(that.negative) out << '-';
    for(auto x = that.big_value.rbegin();
     x != that.big_value.rend(); x++) {
