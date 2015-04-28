@@ -20,7 +20,7 @@ bigint::bigint (long that) : negative(false){
    stringstream s_val;
    s_val << that;
    val = s_val.str();
-   for(auto & c : val) {
+   for(int i = 0; i < s_val.str().length(); i++) {
       big_value.push_back(val.back());
       val.pop_back();
    }
@@ -53,7 +53,6 @@ bigint::bigvalue_t do_bigadd (const bigint::bigvalue_t& left,
    int carry = 0;
    bool left_bigger = left.size() > right.size();
    bool right_bigger = left.size() < right.size();
-   bool equal_size = !(left_bigger || right_bigger);
    bigint::bigvalue_t big_ret;
    auto lt = left.begin();
    auto rt = right.begin();
@@ -103,8 +102,8 @@ bigint::bigvalue_t do_bigadd (const bigint::bigvalue_t& left,
          ++rt;
       }
    }
-   else if(carry) {
-      big_ret.push_back('1');
+   if(carry) {
+      big_ret.push_back(carry+'0');
    }
    return big_ret;
 }
@@ -115,6 +114,10 @@ bigint::bigvalue_t do_bigsub (const bigint::bigvalue_t& left,
    if(right.size() > left.size()) {
       throw ydc_exn("do_bigsub : right val > left val\n");
    }
+
+   if(!right.size() || !left.size())
+      throw ydc_exn("zero size in do_bigsub\n");
+   cout << "Here #1" << endl;
    bool carry = false;
    bigint::bigvalue_t big_ret;
    auto lt = left.cbegin();
@@ -133,18 +136,21 @@ bigint::bigvalue_t do_bigsub (const bigint::bigvalue_t& left,
          ldig +=10;
          carry = true;
       }
+      cout << "Here #2" << endl;
 
       int res = ldig-rdig;
       big_ret.push_back(res+'0');
       ++lt; ++rt;
    }
 
+cout << "Here #3" << endl;
    while(lt != left.cend()) {
       int dig = *lt - '0';
       if(carry==true) {
          dig-=1;
          carry = false;
       }
+      cout << "Here #4" << endl;
 
       if(dig<0) {
          dig +=10;
@@ -156,8 +162,9 @@ bigint::bigvalue_t do_bigsub (const bigint::bigvalue_t& left,
    }
 
    // clear meaningless zeros
-   while(big_ret.back() == '0') big_ret.pop_back();
-
+   if(big_ret.size()) {
+      while(big_ret.back() == '0') big_ret.pop_back();
+   }
    return big_ret;
 }
 
@@ -170,7 +177,7 @@ bool do_bigless (const bigint::bigvalue_t& left,
    }
 
    // go through all digits and find which is smaller first
-   for(int it = left.size(); it >=0; --it) {
+   for(int it = left.size()-1; it >=0; --it) {
       // if the left digit is smaller return true (or false
       // if both are negative)
       if(left.at(it) < right.at(it)) return true;
@@ -188,12 +195,13 @@ bigint operator+ (const bigint& left, const bigint& right) {
    bool flip = left.negative && right.negative;
    bigint ret(0);
    if(left.negative && !right.negative) {
+      cout << "Here #16" << endl;
+
       if(do_bigless(left.big_value, right.big_value)) {
-         cout << "Case #1" << endl;
+         cout << "Here #17" << endl;
          ret.big_value = do_bigsub(right.big_value, left.big_value);
       }
       else {
-         cout << "Case #2" << endl;
          ret.big_value = do_bigsub(left.big_value, right.big_value);
          ret.negative = true;
       }
@@ -201,32 +209,54 @@ bigint operator+ (const bigint& left, const bigint& right) {
    }
    if(!left.negative && right.negative) {
       if(do_bigless(left.big_value, right.big_value)) {
-         cout << "Case #3" << endl;
          ret.big_value = do_bigsub(right.big_value, left.big_value);
          ret.negative = true;
       }
       else {
-         cout << "Case #4" << endl;
          ret.big_value = do_bigsub(left.big_value, right.big_value);
       }
       return ret;
    }
 
-cout << "Case #5" << endl;
    ret.big_value = do_bigadd(left.big_value, right.big_value);
 
    if(flip) ret.negative = true;
 
    return ret;
-
-   // return bigint("191");
-   // return left.big_value + right.big_value;
 }
 
+// left minus right!
 bigint operator- (const bigint& left, const bigint& right) {
+   // if they're both negative this flag is hot, meaning we just 
+   // flip the output we would get if they were both positive
+   bool flip = left.negative && !right.negative;
    bigint ret(0);
+   if(!left.negative && !right.negative) {
+      if(do_bigless(left.big_value, right.big_value)) {
+         ret.big_value = do_bigsub(right.big_value, left.big_value);
+         ret.negative = true;
+      }
+      else {
+         ret.big_value = do_bigsub(left.big_value, right.big_value);
+      }
+      return ret;
+   }
+   if(left.negative && right.negative) {
+      if(do_bigless(left.big_value, right.big_value)) {
+         ret.big_value = do_bigsub(right.big_value, left.big_value);
+      }
+      else {
+         ret.big_value = do_bigsub(left.big_value, right.big_value);
+         ret.negative = true;
+      }
+      return ret;
+   }
+
+   ret.big_value = do_bigadd(left.big_value, right.big_value);
+
+   if(flip) ret.negative = true;
+
    return ret;
-   // return left.big_value - right.big_value;
 }
 
 bigint bigint::operator+ (const bigint& right) {
@@ -236,11 +266,9 @@ bigint bigint::operator+ (const bigint& right) {
    bigint ret(0);
    if(this->negative && !right.negative) {
       if(do_bigless(this->big_value, right.big_value)) {
-         cout << "Case #1" << endl;
          ret.big_value = do_bigsub(right.big_value, this->big_value);
       }
       else {
-         cout << "Case #2" << endl;
          ret.big_value = do_bigsub(this->big_value, right.big_value);
          ret.negative = true;
       }
@@ -248,18 +276,15 @@ bigint bigint::operator+ (const bigint& right) {
    }
    if(!this->negative && right.negative) {
       if(do_bigless(this->big_value, right.big_value)) {
-         cout << "Case #3" << endl;
          ret.big_value = do_bigsub(right.big_value, this->big_value);
          ret.negative = true;
       }
       else {
-         cout << "Case #4" << endl;
          ret.big_value = do_bigsub(this->big_value, right.big_value);
       }
       return ret;
    }
 
-   cout << "Case #5" << endl;
    ret.big_value = do_bigadd(this->big_value, right.big_value);
 
    if(flip) ret.negative = true;
@@ -268,31 +293,52 @@ bigint bigint::operator+ (const bigint& right) {
 }
 
 bigint bigint::operator- (const bigint& right) {
+   // if they're both negative this flag is hot, meaning we just 
+   // flip the output we would get if they were both positive
+   bool flip = negative && !right.negative;
    bigint ret(0);
+   if(!negative && !right.negative) {
+      if(do_bigless(big_value, right.big_value)) {
+         ret.big_value = do_bigsub(right.big_value, big_value);
+         ret.negative = true;
+      }
+      else {
+         ret.big_value = do_bigsub(big_value, right.big_value);
+      }
+      return ret;
+   }
+   if(negative && right.negative) {
+      if(do_bigless(big_value, right.big_value)) {
+         ret.big_value = do_bigsub(right.big_value, big_value);
+      }
+      else {
+         ret.big_value = do_bigsub(big_value, right.big_value);
+         ret.negative = true;
+      }
+      return ret;
+   }
+
+   ret.big_value = do_bigadd(big_value, right.big_value);
+
+   if(flip) ret.negative = true;
+
    return ret;
-   // return -right.big_value;
 }
 
 long bigint::to_long() const {
-   if (*this <= bigint (numeric_limits<long>::min())
-    or *this > bigint (numeric_limits<long>::max()))
-               throw range_error ("bigint__to_long: out of range");
+   // if (*this <= bigint (numeric_limits<long>::min())
+    // or *this > bigint (numeric_limits<long>::max()))
+               // throw range_error ("bigint__to_long: out of range");
 
    // do_bigadd(bigint('0'), this);
    long ret = 0, i = 1;
    for(auto & x : big_value) {
       ret += i*(x-'0');
-      i++;
+      i*=10;
    }
 
    return this->negative ? -1*ret : ret; 
-   // return ret;
-   // return big_value;
 }
-
-// bool abs_less (const long& left, const long& right) {
-//    return left < right;
-// }
 
 bool abs_less (const bigint & left, const bigint & right) {
    return do_bigless(left.big_value, right.big_value);
@@ -302,9 +348,24 @@ bool abs_less (const bigint & left, const bigint & right) {
 // Multiplication algorithm.
 //
 bigint operator* (const bigint& left, const bigint& right) {
-   bigint ret_val('0');
-   return ret_val;
-   // return left.big_value * right.big_value;
+   bigint ret(0);
+   bigint::bigvalue_t num = {'0'};
+   num.reserve(right.big_value.size()*left.big_value.size());
+   int neg_count = 0;
+   if(left.negative) neg_count++;
+   if(right.negative) neg_count++;
+
+   if(neg_count % 2) ret.negative = true;
+
+   std::cout << left.to_long() << endl << endl;
+   for(int i = 0; i < left.to_long(); i++) {
+      for(auto x : vector<char>(num.rbegin(), num.rend())) cout << x;
+      num = do_bigadd(num, right.big_value);
+      cout << endl;
+   }
+
+   ret.big_value = num;
+   return ret;
 }
 
 //
@@ -312,11 +373,11 @@ bigint operator* (const bigint& left, const bigint& right) {
 //
 
 void multiply_by_2 (bigint & value) {
-   // value *= 2;
+   value.big_value = do_bigadd(value.big_value, value.big_value);
 }
 
 void divide_by_2 (bigint & value) {
-   // value /= 2;
+   value.big_value = do_bigadd(value.big_value, value.big_value);
 }
 
 
@@ -353,8 +414,12 @@ bigint operator% (const bigint& left, const bigint& right) {
 }
 
 bool operator== (const bigint& left, const bigint& right) {
-   return false;
-   // return left.big_value == right.big_value;
+   if(left.negative != right.negative)
+      return false;
+   if(left.big_value.size() != right.big_value.size()) 
+      return false;
+
+   return (left-right).to_long() == 0; 
 }
 
 bool operator< (const bigint& left, const bigint& right) {

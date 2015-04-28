@@ -27,10 +27,10 @@ class bigint {
       using quot_rem = pair<bigint,bigint>;
       using unumber = unsigned long;
       friend quot_rem divide (const bigint&, const bigint&);
-      friend void multiply_by_2 (unumber&);
-      friend void divide_by_2 (unumber&);
-      friend bigvalue_t do_bigadd (const bigvalue_t&, const bigvalue_t&);
-      friend bigvalue_t do_bigsub (const bigvalue_t&, const bigvalue_t&);
+      friend void multiply_by_2 (bigint &);
+      friend void divide_by_2 (bigint &);
+      friend bigvalue_t do_bigadd(const bigvalue_t&,const bigvalue_t&);
+      friend bigvalue_t do_bigsub(const bigvalue_t&,const bigvalue_t&);
       friend bool do_bigless (const bigvalue_t&, const bigvalue_t&);
       friend bool abs_less (const bigint & left, const bigint & right);
 
