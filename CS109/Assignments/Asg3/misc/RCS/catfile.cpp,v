@@ -1,0 +1,211 @@
+head	1.7;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.7
+date	2015.04.23.23.34.44;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2015.04.23.23.29.05;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2015.04.23.23.28.11;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2015.02.11.20.28.57;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2015.02.11.20.25.53;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2015.02.11.20.25.09;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2015.02.11.20.24.31;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@-
+@
+text
+@// $Id: catfile.cpp,v 1.6 2015-04-23 16:29:05-07 - - $
+
+//
+// NAME
+//    catfile - display files to stdout
+//
+// SYNOPSIS
+//    catfile [filename...]
+//
+// DESCRIPTION
+//    Display contents of files given on the command line.  If no
+//    files are specified, display stdin.  Interpret "-" as the 
+//    name of stdin.
+//
+
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include <libgen.h>
+
+const string cin_name = "-";
+
+void catfile (istream& infile, const string& filename) {
+   static string colons (32, ':');
+   cout << colons << endl << filename << endl << colons << endl;
+   for(;;) {
+      string line;
+      getline (infile, line);
+      if (infile.eof()) break;
+      cout << line << endl;
+   }
+}
+
+
+int main (int argc, char** argv) {
+   int status = 0;
+   string progname (basename (argv[0]));
+   vector<string> filenames (&argv[1], &argv[argc]);
+   if (filenames.size() == 0) filenames.push_back (cin_name);
+   for (const auto& filename: filenames) {
+      if (filename == cin_name) catfile (cin, filename);
+      else {
+         ifstream infile (filename);
+         if (infile.fail()) {
+            status = 1;
+            cerr << progname << ": " << filename << ": "
+                 << strerror (errno) << endl;
+         }else {
+            catfile (infile, filename);
+            infile.close();
+         }
+      }
+   }
+   return status;
+}
+
+//TEST// date >date.out
+//TEST// ls -bgoa date* catfile* | catfile - date.out >catfile.out
+//TEST// rm date.out
+//TEST// mkpspdf catfile.ps catfile.cpp* catfile.out
+
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.5 2015-04-23 16:28:11-07 - - $
+d25 5
+a29 1
+void catfile (istream& infile) {
+d38 1
+d42 13
+a54 15
+   vector<string> args (&argv[1], &argv[argc]);
+   if (args.size() == 0) catfile (cin);
+   else {
+      for (const auto& filename: args) {
+         if (filename == "-") catfile (cin);
+         else {
+            ifstream infile (filename);
+            if (infile.fail()) {
+               status = 1;
+               cerr << progname << ": " << filename << ": "
+                    << strerror (errno) << endl;
+            }else {
+               catfile (infile);
+               infile.close();
+            }
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.4 2015-02-11 12:28:57-08 - - $
+d59 1
+a59 1
+//TEST// ls -bgoa date* catfile* | catfile date >catfile.out
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.3 2015-02-11 12:25:53-08 - - $
+d57 6
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 14
+a14 1
+// $Id: catfile.cpp,v 1.2 2015-02-11 12:25:09-08 - - $
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.1 2015-02-11 12:24:31-08 - - $
+d4 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d6 1
+@

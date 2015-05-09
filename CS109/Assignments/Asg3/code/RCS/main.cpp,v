@@ -1,0 +1,228 @@
+head	1.8;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.8
+date	2015.04.29.02.23.13;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2015.02.03.23.39.46;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.07.09.18.50.34;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.30.02.20.19;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.04.25.01.14.51;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.04.25.01.02.55;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.07.31.00.09.20;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.07.30.22.46.04;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@-
+@
+text
+@// $Id: main.cpp,v 1.7 2015-02-03 15:39:46-08 - - $
+
+#include <cstdlib>
+#include <exception>
+#include <iostream>
+#include <string>
+#include <unistd.h>
+
+using namespace std;
+
+#include "listmap.h"
+#include "xpair.h"
+#include "util.h"
+
+using str_str_map = listmap<string,string>;
+using str_str_pair = str_str_map::value_type;
+
+void scan_options (int argc, char** argv) {
+   opterr = 0;
+   for (;;) {
+      int option = getopt (argc, argv, "@@:");
+      if (option == EOF) break;
+      switch (option) {
+         case '@@':
+            traceflags::setflags (optarg);
+            break;
+         default:
+            complain() << "-" << (char) optopt << ": invalid option"
+                       << endl;
+            break;
+      }
+   }
+}
+
+int main (int argc, char** argv) {
+   sys_info::set_execname (argv[0]);
+   scan_options (argc, argv);
+
+   str_str_map test;
+   for (char** argp = &argv[optind]; argp != &argv[argc]; ++argp) {
+      str_str_pair pair (*argp, to_string<int> (argp - argv));
+      cout << "Before insert: " << pair << endl;
+      test.insert (pair);
+   }
+
+   for (str_str_map::iterator itor = test.begin();
+        itor != test.end(); ++itor) {
+      cout << "During iteration: " << *itor << endl;
+   }
+
+   str_str_map::iterator itor = test.begin();
+   test.erase (itor);
+
+   cout << "EXIT_SUCCESS" << endl;
+   return EXIT_SUCCESS;
+}
+
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.6 2014-07-09 11:50:34-07 - - $
+a14 1
+using str_str_pair = xpair<const string,string>;
+d16 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.5 2014-05-29 19:20:19-07 - - $
+d40 2
+a41 2
+   for (int argi = 0; argi < argc; ++argi) {
+      str_str_pair pair (argv[argi], to_string<int> (argi));
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.4 2014-04-24 18:14:51-07 - - $
+d15 1
+a15 1
+using str_str_pair = xpair<string,string>;
+d52 1
+a52 1
+   itor.erase();
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.3 2014-04-24 18:02:55-07 - - $
+d15 2
+a16 2
+typedef xpair<string,string> str_str_pair;
+typedef listmap<string,string> str_str_map;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.2 2013-07-30 17:09:20-07 - - $
+d18 1
+a18 1
+void scan_options (int argc, char **argv) {
+d35 1
+a35 1
+int main (int argc, char **argv) {
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.1 2013-07-30 15:46:04-07 - - $
+d51 3
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.1 2013-02-12 14:51:41-08 - - $
+d15 3
+d39 1
+a39 1
+   listmap <string, string> test;
+d41 1
+a41 1
+      xpair <string, string> pair (argv[argi], to_string <int> (argi));
+d46 2
+a47 3
+   listmap <string, string>::iterator itor = test.begin();
+   listmap <string, string>::iterator end = test.end();
+   for (; itor != end; ++itor) {
+@

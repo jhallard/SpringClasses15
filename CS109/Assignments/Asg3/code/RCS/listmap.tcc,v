@@ -1,0 +1,437 @@
+head	1.7;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.7
+date	2015.04.29.02.22.02;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2015.04.15.21.31.19;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.07.09.18.50.34;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.07.02.00.03.40;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.06.28.00.49.07;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.06.28.00.39.08;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.04.25.01.02.55;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@-
+@
+text
+@// $Id: listmap.tcc,v 1.6 2015-04-15 14:31:19-07 - - $
+
+#include "listmap.h"
+#include "trace.h"
+
+//
+/////////////////////////////////////////////////////////////////
+// Operations on listmap::node.
+/////////////////////////////////////////////////////////////////
+//
+
+//
+// listmap::node::node (link*, link*, const value_type&)
+//
+template <typename Key, typename Value, class Less>
+listmap<Key,Value,Less>::node::node (node* next, node* prev,
+                                     const value_type& value):
+            link (next, prev), value (value) {
+}
+
+//
+/////////////////////////////////////////////////////////////////
+// Operations on listmap.
+/////////////////////////////////////////////////////////////////
+//
+
+//
+// listmap::~listmap()
+//
+template <typename Key, typename Value, class Less>
+listmap<Key,Value,Less>::~listmap() {
+   TRACE ('l', (void*) this);
+}
+
+
+//
+// iterator listmap::insert (const value_type&)
+//
+template <typename Key, typename Value, class Less>
+typename listmap<Key,Value,Less>::iterator
+listmap<Key,Value,Less>::insert (const value_type& pair) {
+   TRACE ('l', &pair << "->" << pair);
+   return iterator();
+}
+
+//
+// listmap::find(const key_type&)
+//
+template <typename Key, typename Value, class Less>
+typename listmap<Key,Value,Less>::iterator
+listmap<Key,Value,Less>::find (const key_type& that) const {
+   TRACE ('l', that);
+   return iterator();
+}
+
+//
+// iterator listmap::erase (iterator position)
+//
+template <typename Key, typename Value, class Less>
+typename listmap<Key,Value,Less>::iterator
+listmap<Key,Value,Less>::erase (iterator position) {
+   TRACE ('l', &*position);
+   return iterator();
+}
+
+
+//
+/////////////////////////////////////////////////////////////////
+// Operations on listmap::iterator.
+/////////////////////////////////////////////////////////////////
+//
+
+//
+// listmap::value_type& listmap::iterator::operator*()
+//
+template <typename Key, typename Value, class Less>
+typename listmap<Key,Value,Less>::value_type&
+listmap<Key,Value,Less>::iterator::operator*() {
+   TRACE ('l', where);
+   return where->value;
+}
+
+//
+// listmap::value_type* listmap::iterator::operator->()
+//
+template <typename Key, typename Value, class Less>
+typename listmap<Key,Value,Less>::value_type*
+listmap<Key,Value,Less>::iterator::operator->() {
+   TRACE ('l', where);
+   return &(where->value);
+}
+
+//
+// listmap::iterator& listmap::iterator::operator++()
+//
+template <typename Key, typename Value, class Less>
+typename listmap<Key,Value,Less>::iterator&
+listmap<Key,Value,Less>::iterator::operator++() {
+   TRACE ('l', where);
+   where = where->next;
+   return *this;
+}
+
+//
+// listmap::iterator& listmap::iterator::operator--()
+//
+template <typename Key, typename Value, class Less>
+typename listmap<Key,Value,Less>::iterator&
+listmap<Key,Value,Less>::iterator::operator--() {
+   TRACE ('l', where);
+   where = where->prev;
+   return *this;
+}
+
+
+//
+// bool listmap::iterator::operator== (const iterator&)
+//
+template <typename Key, typename Value, class Less>
+inline bool listmap<Key,Value,Less>::iterator::operator==
+            (const iterator& that) const {
+   return this->where == that.where;
+}
+
+//
+// bool listmap::iterator::operator!= (const iterator&)
+//
+template <typename Key, typename Value, class Less>
+inline bool listmap<Key,Value,Less>::iterator::operator!=
+            (const iterator& that) const {
+   return this->where != that.where;
+}
+
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.tcc,v 1.5 2014-07-09 11:50:34-07 - - $
+a20 1
+
+a34 26
+//
+// listmap::empty()
+//
+template <typename Key, typename Value, class Less>
+bool listmap<Key,Value,Less>::empty() const {
+   return anchor_.next == anchor_.prev;
+}
+
+//
+// listmap::iterator listmap::begin()
+//
+template <typename Key, typename Value, class Less>
+typename listmap<Key,Value,Less>::iterator
+listmap<Key,Value,Less>::begin() {
+   return iterator (anchor_.next);
+}
+
+//
+// listmap::iterator listmap::end()
+//
+template <typename Key, typename Value, class Less>
+typename listmap<Key,Value,Less>::iterator
+listmap<Key,Value,Less>::end() {
+   return iterator (anchor());
+}
+
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.tcc,v 1.4 2014-07-01 17:03:40-07 - - $
+d16 1
+a16 1
+listmap<Key,Value,Less>::node::node (link* next, link* prev,
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.tcc,v 1.3 2014-06-27 17:49:07-07 - - $
+d62 1
+d64 1
+a64 1
+// listmap::itereator listmape::erase (iterator position)
+d68 3
+a70 2
+listmap<Key,Value,Less>::erase (iterator position) {
+   return position;
+a72 2
+
+
+d74 1
+a74 1
+// void listmap::insert (const value_type&)
+d77 4
+a80 2
+void listmap<Key,Value,Less>::insert (const value_type& pair) {
+   TRACE ('l', &pair << "->" << pair);
+d84 1
+a84 1
+// listmap::find(const key_type&)
+d88 2
+a89 2
+listmap<Key,Value,Less>::find (const key_type& that) const {
+   TRACE ('l', that);
+a160 8
+//
+// void listmap::iterator::erase()
+//
+template <typename Key, typename Value, class Less>
+void listmap<Key,Value,Less>::iterator::erase() {
+   TRACE ('l', where);
+}
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.tcc,v 1.2 2014-06-27 17:39:08-07 - - $
+d62 10
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.tcc,v 1.1 2014-04-24 18:02:55-07 - - $
+d21 1
+d37 1
+a37 1
+// void listmap::insert (const value_type&)
+d40 2
+a41 2
+void listmap<Key,Value,Less>::insert (const value_type& pair) {
+   TRACE ('l', &pair << "->" << pair);
+d45 1
+a45 1
+// listmap::empty()
+d48 3
+a50 2
+bool listmap<Key,Value,Less>::empty() const {
+   return anchor_.next == anchor_.prev;
+d54 1
+a54 1
+// listmap::find(const key_type&)
+d58 2
+a59 3
+listmap<Key,Value,Less>::find (const key_type& that) const {
+   TRACE ('l', that);
+   return iterator();
+d62 1
+d64 1
+a64 1
+// listmap::iterator listmap::begin()
+d67 2
+a68 3
+typename listmap<Key,Value,Less>::iterator
+listmap<Key,Value,Less>::begin() {
+   return iterator (anchor_.next);
+d72 1
+a72 1
+// listmap::iterator listmap::end()
+d76 3
+a78 2
+listmap<Key,Value,Less>::end() {
+   return iterator (anchor());
+d81 1
+d130 1
+d132 1
+a132 1
+// bool listmap::iterator::operator!= (const iterator&)
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.cpp,v 1.3 2013-07-30 18:43:59-07 - - $
+d6 24
+d31 2
+a32 2
+listmap<Key,Value,Less>::node::node (const value_type& pair):
+            pair(pair), prev(NULL), next(NULL) {
+d35 3
+d39 2
+a40 6
+listmap<Key,Value,Less>::listmap (): head(NULL), tail (NULL) {
+}
+
+template <typename Key, typename Value, class Less>
+listmap<Key,Value,Less>::~listmap () {
+   TRACE ('l', (void*) this);
+d43 3
+d47 2
+a48 2
+void listmap<Key,Value,Less>::insert (const xpair<Key,Value>& pair) {
+   TRACE ('l', &pair << "->" << pair);
+d51 3
+d61 3
+d66 2
+a67 2
+listmap<Key,Value,Less>::begin () {
+   return iterator (this, head);
+d70 3
+d75 2
+a76 2
+listmap<Key,Value,Less>::end () {
+   return iterator (this, NULL);
+d79 5
+a83 4
+template <typename Key, typename Value, class Less>
+bool listmap<Key,Value,Less>::empty () const {
+   return head == NULL;
+}
+d85 3
+a87 1
+
+d89 4
+a92 3
+xpair<Key,Value>& listmap<Key,Value,Less>::iterator::operator* () {
+   TRACE ('l', where->pair);
+   return where->pair;
+d95 3
+d99 4
+a102 3
+xpair<Key,Value> *listmap<Key,Value,Less>::iterator::operator-> () {
+   TRACE ('l', where->pair);
+   return &(where->pair);
+d105 3
+d110 2
+a111 3
+listmap<Key,Value,Less>::iterator::operator++ () {
+   TRACE ('l', "First: " << map << ", " << where);
+   TRACE ('l', "Second: " << map->head << ", " << map->tail);
+d116 3
+d121 2
+a122 1
+listmap<Key,Value,Less>::iterator::operator-- () {
+d127 3
+d131 1
+a131 1
+bool listmap<Key,Value,Less>::iterator::operator==
+d136 3
+d140 3
+a142 2
+listmap<Key,Value,Less>::iterator::iterator (listmap *map,
+            node *where): map (map), where (where){
+d145 3
+d149 2
+a150 2
+void listmap<Key,Value,Less>::iterator::erase () {
+   TRACE ('l', "map = " << map << ", where = " << where << endl);
+@

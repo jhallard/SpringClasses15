@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting catfile.cpp
+catfile.cpp:
+     $Id: catfile.cpp,v 1.7 2015-04-23 16:34:44-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 catfile.cpp -o catfile -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f catfile.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished catfile.cpp

@@ -1,0 +1,364 @@
+head	1.11;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.11
+date	2015.04.29.02.22.02;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2015.04.15.21.31.19;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.07.09.18.50.34;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.07.02.00.03.40;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.06.28.00.39.08;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.30.02.20.19;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.04.25.01.17.33;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.04.25.01.02.55;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.07.31.01.43.59;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.07.31.00.09.20;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.07.30.22.46.04;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.11
+log
+@-
+@
+text
+@// $Id: listmap.h,v 1.10 2015-04-15 14:31:19-07 - - $
+
+#ifndef __LISTMAP_H__
+#define __LISTMAP_H__
+
+#include "xless.h"
+#include "xpair.h"
+
+template <typename Key, typename Value, class Less=xless<Key>>
+class listmap {
+   public:
+      using key_type = Key;
+      using mapped_type = Value;
+      using value_type = xpair<const key_type, mapped_type>;
+   private:
+      Less less;
+      struct node;
+      struct link {
+         node* next{};
+         node* prev{};
+         link (node* next, node* prev): next(next), prev(prev){}
+      };
+      struct node: link {
+         value_type value{};
+         node (node* next, node* prev, const value_type&);
+      };
+      node* anchor() { return static_cast<node*> (&anchor_); }
+      link anchor_ {anchor(), anchor()};
+   public:
+      class iterator;
+      listmap(){};
+      listmap (const listmap&);
+      listmap& operator= (const listmap&);
+      ~listmap();
+      iterator insert (const value_type&);
+      iterator find (const key_type&) const;
+      iterator erase (iterator position);
+      iterator begin() { return anchor()->next; }
+      iterator end() { return anchor(); }
+      bool empty() const { return begin() == end(); }
+};
+
+
+template <typename Key, typename Value, class Less=xless<Key>>
+class listmap<Key,Value,Less>::iterator {
+   private:
+      friend class listmap<Key,Value>;
+      listmap<Key,Value,Less>::node* where {nullptr};
+      iterator (node* where): where(where){};
+   public:
+      iterator(){}
+      value_type& operator*();
+      value_type* operator->();
+      iterator& operator++(); //++itor
+      iterator& operator--(); //--itor
+      void erase();
+      bool operator== (const iterator&) const;
+      bool operator!= (const iterator&) const;
+};
+
+#include "listmap.tcc"
+#endif
+
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.9 2014-07-09 11:50:34-07 - - $
+d38 3
+a40 3
+      iterator begin();
+      iterator end();
+      bool empty() const;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.8 2014-07-01 17:03:40-07 - - $
+d25 1
+a25 1
+         node (link* next, link* prev, const value_type&);
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.7 2014-06-27 17:39:08-07 - - $
+d14 1
+a14 1
+      using value_type = xpair<key_type,mapped_type>;
+d35 1
+a35 1
+      void insert (const value_type&);
+d37 1
+a39 1
+      iterator erase (iterator position);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.6 2014-05-29 19:20:19-07 - - $
+d39 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.5 2014-04-24 18:17:33-07 - - $
+d17 5
+a21 5
+      struct node {
+         value_type pair;
+         node* prev;
+         node* next;
+         node (const value_type&);
+d23 6
+a28 2
+      node* head;
+      node* tail;
+d31 1
+a31 1
+      listmap();
+d45 1
+d47 2
+a48 4
+   private:
+      iterator (listmap* map, node* where);
+      listmap<Key,Value,Less>* map;
+      node* where;
+d50 1
+a50 1
+      iterator(): map(NULL), where(NULL) {}
+d57 1
+a57 3
+      inline bool operator!= (const iterator& that) const {
+         return not (*this == that);
+      }
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.4 2014-04-24 18:02:55-07 - - $
+d12 3
+a14 3
+      typedef Key key_type;
+      typedef Value mapped_type;
+      typedef xpair<key_type,mapped_type> value_type;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.3 2013-07-30 18:43:59-07 - - $
+d38 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.2 2013-07-30 17:09:20-07 - - $
+d19 3
+a21 3
+         node *prev;
+         node *next;
+         node (const value_type &);
+d23 2
+a24 2
+      node *head;
+      node *tail;
+d28 2
+a29 2
+      listmap (const listmap &);
+      listmap &operator= (const listmap &);
+d31 2
+a32 2
+      void insert (const value_type &);
+      iterator find (const key_type &) const;
+d42 3
+a44 3
+      iterator (listmap *map, node *where);
+      listmap *map;
+      node *where;
+d47 4
+a50 4
+      value_type &operator*();
+      value_type *operator->();
+      iterator &operator++(); //++itor
+      iterator &operator--(); //--itor
+d52 2
+a53 2
+      bool operator== (const iterator &) const;
+      inline bool operator!= (const iterator &that) const {
+d58 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.1 2013-07-30 15:46:04-07 - - $
+d16 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: listmap.h,v 1.1 2013-02-12 14:51:41-08 - - $
+d6 1
+d9 1
+a9 1
+template <typename Key, typename value_t>
+d26 1
+a26 1
+      listmap ();
+d29 2
+a30 2
+      ~listmap ();
+      void insert (const mapped_type &);
+d32 3
+a34 3
+      iterator begin ();
+      iterator end ();
+      bool empty () const;
+d37 2
+a38 2
+template <typename Key, typename value_t>
+class listmap<Key,Value>::iterator {
+d45 6
+a50 4
+      mapxpair &operator* ();
+      mapxpair *operator-> ();
+      iterator &operator++ (); //++itor
+      iterator &operator-- (); //--itor
+d52 3
+a54 3
+      bool operator!= (const iterator &) const;
+      void erase ();
+      iterator ();
+@

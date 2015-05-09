@@ -1,0 +1,1037 @@
+head	1.42;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.42
+date	2014.04.24.21.10.53;	author -;	state -;
+branches;
+next	1.41;
+
+1.41
+date	2014.04.24.21.09.54;	author -;	state -;
+branches;
+next	1.40;
+
+1.40
+date	2014.04.24.21.07.15;	author -;	state -;
+branches;
+next	1.39;
+
+1.39
+date	2014.04.24.21.06.20;	author -;	state -;
+branches;
+next	1.38;
+
+1.38
+date	2014.04.24.21.05.53;	author -;	state -;
+branches;
+next	1.37;
+
+1.37
+date	2014.04.24.21.05.16;	author -;	state -;
+branches;
+next	1.36;
+
+1.36
+date	2014.04.24.21.04.45;	author -;	state -;
+branches;
+next	1.35;
+
+1.35
+date	2014.04.24.21.03.01;	author -;	state -;
+branches;
+next	1.34;
+
+1.34
+date	2014.04.24.21.02.06;	author -;	state -;
+branches;
+next	1.33;
+
+1.33
+date	2014.04.24.21.01.34;	author -;	state -;
+branches;
+next	1.32;
+
+1.32
+date	2014.04.24.20.59.52;	author -;	state -;
+branches;
+next	1.31;
+
+1.31
+date	2014.04.24.20.58.31;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2014.04.24.20.53.02;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2014.04.24.20.52.23;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2014.04.24.20.51.12;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2013.07.31.01.31.16;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2013.07.31.01.30.56;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2013.07.31.01.30.36;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2013.07.31.01.29.11;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2013.07.31.01.28.29;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2013.07.31.01.26.50;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2013.07.31.01.26.09;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2013.07.31.01.25.35;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2013.07.31.01.25.13;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2013.07.31.01.24.54;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2013.07.31.01.24.41;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2013.07.31.01.18.22;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2013.07.31.01.17.33;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2013.07.31.01.12.45;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2013.07.31.01.11.44;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2013.07.31.01.11.18;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2013.07.31.01.05.43;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2013.07.31.01.03.36;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2013.07.31.01.03.25;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2013.07.31.01.01.13;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2013.07.31.00.58.04;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2013.07.31.00.57.50;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2013.07.31.00.57.32;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2013.07.31.00.57.15;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2013.07.31.00.57.04;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2013.07.31.00.56.44;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2013.07.31.00.56.24;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.42
+log
+@-
+@
+text
+@// $Id: insertlist.cpp,v 1.41 2014-04-24 14:09:54-07 - - $
+
+//
+// List insertion algorithm.
+// Insert nodes into a singly-linked list using only operator<
+// to form comparisons.  Do not insert elements that already
+// exist.
+//
+
+#include <iostream>
+#include <stdexcept>
+#include <string>
+using namespace std;
+
+template <typename Type>
+struct xless {
+   bool operator() (const Type& left, const Type& right) const {
+      return left < right;
+   }
+};
+
+template <typename Type>
+struct xgreater {
+   bool operator() (const Type& left, const Type& right) const {
+      return left > right;
+   }
+};
+
+
+template <typename element, class Less=xless<element>>
+struct linked_list {
+   struct node {
+      element elt;
+      node* link;
+      node (const element& elt_, node* link_): elt(elt_), link(link_) {}
+   };
+   Less less;
+   node* head = nullptr;
+
+   linked_list(){} // Needed because default is suppressed.
+   linked_list (const linked_list&) = delete;
+   linked_list& operator= (const linked_list&) = delete;
+
+   void insert_ascending (const element& newelt) {
+      node** curr = &head;
+      while (*curr != nullptr and less ((*curr)->elt, newelt)) {
+         curr = &(*curr)->link;
+      }
+      if (*curr == nullptr or less (newelt, (*curr)->elt)) {
+         *curr = new node (newelt, *curr);
+      }
+   }
+
+   element& front() { return head->elt; }
+
+   void pop_front() {
+      if (head == nullptr) {
+         throw underflow_error ("linked_list<>::pop_front()");
+      }
+      node* old = head;
+      head = head->link;
+      delete old;
+   }
+};
+
+
+template <typename element, class Less=xless<element>>
+void process (int argc, char** argv, const string& label) {
+   linked_list<string,Less> list;
+   for (char** argp = &argv[1]; argp != &argv[argc]; ++argp) {
+      cout << label << ": Insert: " << *argp << endl;
+      list.insert_ascending (*argp);
+   }
+   while (list.head != nullptr) {
+      cout << label << ": Sorted: " << list.front() << endl;
+      list.pop_front();
+   }
+   cout << endl;
+}
+
+int main (int argc, char** argv) {
+   process<string> (argc, argv, "Default");
+   process<string,xgreater<string>> (argc, argv, "Greater");
+   return 0;
+}
+
+/*
+//TEST// alias grind='valgrind --leak-check=full --show-reachable=yes'
+//TEST// grind --log-file=insertlist.out.log \
+//TEST//       insertlist foo bar baz qux quux zxcvbnm asdfg qwerty \
+//TEST//       bar baz foo quux qwerty hello hello 1234567890 \
+//TEST//       >insertlist.out 2>&1
+//TEST// mkpspdf insertlist.ps insertlist.cpp* insertlist.out*
+*/
+@
+
+
+1.41
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.40 2014-04-24 14:07:15-07 - - $
+a73 1
+   cout << endl;
+d91 1
+a91 1
+//TEST//       bar baz foo quux qwerty hello hello hello 1234567890 \
+@
+
+
+1.40
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.39 2014-04-24 14:06:20-07 - - $
+d90 2
+a91 1
+//TEST// grind insertlist foo bar baz qux quux zxcvbnm asdfg qwerty \
+d93 1
+a93 1
+//TEST//       >insertlist.out1 2>insertlist.out2
+@
+
+
+1.39
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.38 2014-04-24 14:05:53-07 - - $
+d57 3
+a59 1
+      if (head == nullptr) throw underflow_error (__func__);
+@
+
+
+1.38
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.37 2014-04-24 14:05:16-07 - - $
+d40 1
+a40 1
+   linked_list() {}
+@
+
+
+1.37
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.35 2014-04-24 14:03:01-07 - - $
+d40 1
+@
+
+
+1.36
+log
+@-
+@
+text
+@d11 1
+d40 2
+a41 2
+   //linked_list (const linked_list&) = delete;
+   //linked_list& operator= (const linked_list&) = delete;
+@
+
+
+1.35
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.34 2014-04-24 14:02:06-07 - - $
+d39 2
+a40 2
+   linked_list (const linked_list&) = delete;
+   linked_list& operator= (const linked_list&) = delete;
+@
+
+
+1.34
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.33 2014-04-24 14:01:34-07 - - $
+d80 1
+a80 1
+   process<string,xgreater> (argc, argv, "Greater");
+@
+
+
+1.33
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.32 2014-04-24 13:59:52-07 - - $
+d39 1
+a39 1
+   linked_list (const linkded_list&) = delete;
+@
+
+
+1.32
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.31 2014-04-24 13:58:31-07 - - $
+d66 1
+a66 1
+   for (char** argp = argv; argp != argv + argc; ++argp) {
+d87 2
+a88 2
+//TEST//              bar baz foo quux qwerty \
+//TEST//              1234567890 >insertlist.out1 2>insertlist.out2
+@
+
+
+1.31
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.30 2014-04-24 13:53:02-07 - - $
+d21 1
+d23 1
+a23 1
+   bool operator() (const string& left, const string& right) const {
+d28 1
+@
+
+
+1.30
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.29 2014-04-24 13:52:23-07 - - $
+a11 1
+
+d21 1
+a21 1
+struct reverse {
+d35 1
+a35 1
+   node* head;
+d37 2
+a38 1
+   linked_list(): head(nullptr) {}
+d40 1
+a40 1
+   void insert (const element& newelt) {
+d53 1
+d66 1
+a66 1
+      list.insert (*argp);
+d78 1
+a78 1
+   process<string,reverse> (argc, argv, "Reverse");
+@
+
+
+1.29
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.28 2014-04-24 13:51:12-07 - - $
+a29 1
+   Less less;
+d35 1
+d37 1
+d39 1
+d49 1
+d51 1
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.27 2013-07-30 18:31:16-07 - - $
+d81 1
+a81 1
+//TEST//              1234567890 >insertlist.out 2>&1
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.26 2013-07-30 18:30:56-07 - - $
+d17 1
+a17 1
+   bool operator() (const Type &left, const Type &right) const {
+d23 1
+a23 1
+   bool operator() (const string &left, const string &right) const {
+d33 2
+a34 2
+      node *link;
+      node (const element &e, node *p): elt(e), link(p) {}
+d36 5
+a40 5
+   node *head;
+   linked_list(): head(NULL) {}
+   void insert (const element &newelt) {
+      node **curr = &head;
+      while (*curr != NULL && less ((*curr)->elt, newelt)) {
+d43 1
+a43 1
+      if (*curr == NULL || less (newelt, (*curr)->elt)) {
+d47 1
+a47 1
+   element &front() { return head->elt; }
+d49 1
+a49 1
+      node *old = head;
+d57 1
+a57 1
+void process (int argc, char **argv, const string &label) {
+d59 1
+a59 1
+   for (char **argp = argv; argp != argv + argc; ++argp) {
+d64 1
+a64 1
+   while (list.head != NULL) {
+d71 1
+a71 1
+int main (int argc, char **argv) {
+d78 2
+a79 2
+//TEST// valgrind --leak-check=full --show-reachable=yes \
+//TEST// ./insertlist foo bar baz qux quux zxcvbnm asdfg qwerty \
+d81 1
+a81 1
+//TEST//              1234567890 >insertlist.out1 2>insertlist.out2
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.25 2013-07-30 18:30:36-07 - - $
+d55 1
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.24 2013-07-30 18:29:11-07 - - $
+d67 1
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.23 2013-07-30 18:28:29-07 - - $
+d56 1
+a56 1
+void process (int argc, char **argv) {
+d59 1
+a59 1
+      cout << "Insert: " << *argp << endl;
+d64 1
+a64 1
+      cout << "Sorted: " << list.front() << endl;
+d70 2
+a71 2
+   process<string> (argc, argv);
+   process<string,reverse> (argc, argv);
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.22 2013-07-30 18:26:50-07 - - $
+d40 1
+a40 1
+      while (*curr != NULL && less (*curr)->elt, newelt)) {
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.21 2013-07-30 18:26:09-07 - - $
+d30 1
+d40 1
+a40 1
+      while (*curr != NULL && (*curr)->elt < newelt) {
+d43 1
+a43 1
+      if (*curr == NULL || newelt < (*curr)->elt) {
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.20 2013-07-30 18:25:35-07 - - $
+d22 1
+a22 1
+struct greater {
+d70 1
+a70 1
+   process<string,greater> (argc, argv);
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.19 2013-07-30 18:25:13-07 - - $
+d69 2
+a70 2
+   process (argc, argv);
+   process (argc, argv, greater());
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.18 2013-07-30 18:24:54-07 - - $
+d54 1
+a54 1
+template <typename element, class Less=xless<Type>>
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.17 2013-07-30 18:24:41-07 - - $
+d28 1
+a28 1
+template <typename element, class Less=xless<Type>>
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.16 2013-07-30 18:18:22-07 - - $
+d26 1
+a26 1
+}
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.15 2013-07-30 18:17:33-07 - - $
+d15 14
+a28 1
+template <typename element>
+d54 3
+a56 2
+int main (int argc, char **argv) {
+   linked_list<string> list;
+d66 5
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.14 2013-07-30 18:12:45-07 - - $
+d45 1
+a45 1
+      list.insert (element (*argp));
+d49 1
+a49 1
+      cout << "Sorted: " << list.front().str << endl;
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.13 2013-07-30 18:11:44-07 - - $
+d15 1
+a15 14
+#define nullptr NULL
+
+struct element {
+   string str;
+   element (const string &s): str(s) {};
+   bool operator< (const element &s) const { return str < s.str; }
+};
+
+struct node {
+   element elt;
+   node *link;
+   node (const element &e, node *p): elt(e), link(p) {}
+};
+
+d17 5
+d23 1
+a23 1
+   linked_list(): head(nullptr) {}
+d26 1
+a26 1
+      while (*curr != nullptr && (*curr)->elt < newelt) {
+d29 1
+a29 1
+      if (*curr == nullptr || newelt < (*curr)->elt) {
+d42 1
+a42 1
+   linked_list list;
+d48 1
+a48 1
+   while (list.head != nullptr) {
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.12 2013-07-30 18:11:18-07 - - $
+d67 2
+a68 2
+//TEST//              1234567890 >insertlist.out 2>&1
+//TEST// mkpspdf insertlist.ps insertlist.cpp* insertlist.out
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.11 2013-07-30 18:05:43-07 - - $
+d57 1
+a57 1
+      cout << "Sorted: " << list.front.str << endl;
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.10 2013-07-30 18:03:36-07 - - $
+d41 6
+d56 3
+a58 2
+   for (node *p = list.head; p != nullptr; p = p->link) {
+      cout << "Sorted: " << p->elt.str << endl;
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.9 2013-07-30 18:03:25-07 - - $
+d57 1
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.8 2013-07-30 18:01:13-07 - - $
+d15 2
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.7 2013-07-30 17:58:04-07 - - $
+d29 1
+a29 1
+   linked_list(): head(NULL) {}
+d32 1
+a32 1
+      while (*curr != NULL && (*curr)->elt < newelt) {
+d35 1
+a35 1
+      if (*curr == NULL || newelt < (*curr)->elt) {
+d47 2
+a48 1
+   for (node *p = list.head; p != NULL; p = p->link) {
+d55 3
+a57 2
+//TEST// insertlist foo bar baz qux quux zxcvbnm asdfg qwerty \
+//TEST//            1234567890 >insertlist.out 2>&1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.6 2013-07-30 17:57:50-07 - - $
+d53 5
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.5 2013-07-30 17:57:32-07 - - $
+d19 1
+a19 1
+}
+d25 1
+a25 1
+}
+d39 1
+a39 1
+}
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.4 2013-07-30 17:57:15-07 - - $
+d18 1
+a18 1
+   bool operator< (const element &s) { return str < s.str; }
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.3 2013-07-30 17:57:04-07 - - $
+d29 1
+a29 1
+   linked_list(): head(NULL);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.2 2013-07-30 17:56:44-07 - - $
+d29 1
+a29 1
+   list(): head(NULL);
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: insertlist.cpp,v 1.1 2013-07-30 17:56:24-07 - - $
+d18 1
+a18 1
+   bool operator< (const string &s) { return str < s.str; }
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d17 2
+a18 2
+   element (const string &s): value(s) {};
+   bool operator< (const string &s) { return value < s.value; }
+@

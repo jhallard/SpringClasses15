@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting testxless.cpp
+testxless.cpp:
+     $Id: testxless.cpp,v 1.22 2015-02-06 16:22:06-08 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 testxless.cpp -o testxless -lglut -lGLU -lGL -lX11 -lrt -lm
+rm -f testxless.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished testxless.cpp
