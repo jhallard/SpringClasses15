@@ -91,19 +91,30 @@ bool process_contents(string content, listmap<string, string> * map) {
    left = trim_ws(left);
    right = trim_ws(right);
 
-   // if there is a right half, it is a value to the key, so we need to
-   // insert or override a value in the map
-   if(right.length()) {
+   // key=value case
+   if(right.length() && left.length()) {
 
       // TODO - Lookup to see if left is already a key in the map before
       // we insert like this
       str_str_pair my_pair(left, right);
       map->insert(my_pair);
+      return true;
+   }
+   // key= case 
+   else if(left.length() && !right.length()) {
+      cout << "key= case, delete key from map" << endl;
+   }
+   // = value case
+   else if(!left.length() && right.length()) {
+      cout << "=value case, delete key from map" << endl;
    }
 
    return true;
 }
 
+
+// @TODO this function is broken, it removes all whitespace not
+// just trailing which is not what we wants
 string trim_ws(const string & str) {
 
    string ret = "";
