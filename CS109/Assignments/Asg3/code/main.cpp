@@ -16,6 +16,15 @@ using namespace std;
 using str_str_map = listmap<string,string>;
 using str_str_pair = str_str_map::value_type;
 
+// function pre-declarations
+bool process_contents(string, listmap<string, string> *);
+bool get_file_contents(string, listmap<string,string> *);
+string read_from_cin();
+void scan_options (int, char**);
+string trim_ws(const string &);
+
+
+// get the options from the argv array
 void scan_options (int argc, char** argv) {
    opterr = 0;
    for (;;) {
@@ -33,14 +42,18 @@ void scan_options (int argc, char** argv) {
    }
 }
 
+// takes a filename, inserts the contents of that filename into a
+// listmap class to keep track of all of the key/value pairs.
 bool get_file_contents(string fn, listmap<string,string> * map) {
   string line;
   ifstream myfile (fn);
+  int count = 1;
   if(myfile.is_open()) {
     while(getline(myfile,line)) {
-      std::cout << line << endl;
-      str_str_pair my_pair(line, line);
-      map->insert(my_pair);
+      std::cout << fn << endl << line <<  " " << count++ << endl;
+      if(!process_contents(line, map)) {
+         // throw error;
+      }
     }
     myfile.close();
     return true;
@@ -48,6 +61,57 @@ bool get_file_contents(string fn, listmap<string,string> * map) {
 
   return false;
 
+}
+
+// used to read from standard input when requested by the user.
+string read_from_cin() {
+
+   return "helpme";
+}
+
+// process a single input given as a string, either a line from a file
+// or from standard input. Edits (inserts and removes) from the given 
+// listmap appropriately.
+bool process_contents(string content, listmap<string, string> * map) {
+
+   content = trim_ws(content);
+   if(content.length() == 0) return true;
+
+   if(content[0] == '#') return true;
+
+   std::size_t found = content.find_first_of("=");
+
+   // if it isn't a comment and has no equals sign it's invalid.
+   if(found == string::npos) return false;
+
+   // get the left and right halves around the equals sign
+   string left = content.substr(0, found);
+   string right = content.substr(found, content.length());
+
+   left = trim_ws(left);
+   right = trim_ws(right);
+
+   // if there is a right half, it is a value to the key, so we need to
+   // insert or override a value in the map
+   if(right.length()) {
+
+      // TODO - Lookup to see if left is already a key in the map before
+      // we insert like this
+      str_str_pair my_pair(left, right);
+      map->insert(my_pair);
+   }
+
+   return true;
+}
+
+string trim_ws(const string & str) {
+
+   string ret = "";
+   for(auto c : str) {
+      if(c != ' ') {ret.push_back(c);}
+   }
+
+   return ret;
 }
 
 
@@ -67,11 +131,24 @@ int main (int argc, char** argv) {
          filenames[curr++] = *argp; 
       }
 
+      // go through all input and either read from a file or from cin
+      // depending on the input value
       for(int i = 0; i < curr; i++) {
-         get_file_contents(filenames[i], &main_map);
+         if(filenames[i] == "-") {
+            read_from_cin();
+         }
+         else {
+            get_file_contents(filenames[i], &main_map);
+         }
       }
 
       delete [] filenames;
+   }
+   else {
+      while(true) {
+         string input = read_from_cin();
+         // process input
+      }
    }
 
    // str_str_map test;
