@@ -81,9 +81,9 @@ listmap<Key,Value,Less>::erase (iterator position) {
    pos->next->prev = pos->prev;
    pos->prev->next = pos->next;
 
-   position.erase();
+   erase(position);
 
-   return iterator(ret->value);
+   return iterator(ret);
 }
 
 
