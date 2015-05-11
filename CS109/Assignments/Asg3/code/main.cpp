@@ -171,7 +171,10 @@ int main (int argc, char** argv) {
          // process input
       }
    }
-
+   
+   for(auto i = main_map.begin(); i != main_map.end(); ++i) {
+    cout << i->first << " " << i->second << endl;
+   }
    // str_str_map test;
    // for (char** argp = &argv[optind]; argp != &argv[argc]; ++argp) {
    //    str_str_pair pair (*argp, to_string<int> (argp - argv));
