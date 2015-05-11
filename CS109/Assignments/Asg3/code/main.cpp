@@ -70,20 +70,44 @@ string read_from_cin() {
    return ret;
 }
 
+void print_pair(str_str_pair pair) {
+   cout << pair.first << " = " << pair.second << endl;
+}
+
 // process a single input given as a string, either a line from a file
 // or from standard input. Edits (inserts and removes) from the given 
 // listmap appropriately.
 bool process_contents(string content, listmap<string, string> * map) {
 
-   //content = trim_ws(content);
+   content = trim_ws(content);
+
    if(content.length() == 0) return true;
 
    if(content[0] == '#') return true;
 
+   if(content[0] == '=') {
+      for(auto it = map->begin(); it != map->end(); ++it) {
+          print_pair(*it);
+      }
+   }
+
    std::size_t found = content.find_first_of("=");
 
-   // if it isn't a comment and has no equals sign it's invalid.
-   if(found == string::npos) return false;
+   // if it isn't a comment and has no equals sign it must be a key
+   // value which means we output the pair if found in the map.
+   if(found == string::npos) {
+      auto it = map->find(trim_ws(content)); 
+      // see if key already exists in map, if so delete pair
+      if(it != map->end()) {
+         print_pair(*it);
+      }
+      else {
+         cout << trim_ws(content) << ": key not found" << endl;
+      }
+
+      return true;
+   }
+
 
    // get the left and right halves around the equals sign
    string left = content.substr(0, found);
@@ -104,12 +128,16 @@ bool process_contents(string content, listmap<string, string> * map) {
 
       map->insert(my_pair);
 
-      cout << left << " = " << right << endl;
+      print_pair(my_pair);
       return true;
    }
    // key= case 
    else if(left.length() && !right.length()) {
-           
+ 
+      // see if key already exists in map, if so delete pair
+      if(map->find(left) != map->end()) {
+         map->erase(map->find(left));
+      }
       cout << "key= case, delete key from map" << endl;
 
    }
