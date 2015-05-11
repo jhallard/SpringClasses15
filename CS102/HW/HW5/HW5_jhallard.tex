@@ -1,91 +1,263 @@
-\documentclass[11pt]{article}
+
+% Programming/Coding Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing assignment content.
+%
+% This template uses a Perl script as an example snippet of code, most other
+% languages are also usable. Configure them in the "CODE INCLUSION 
+% CONFIGURATION" section.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%   PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
 \usepackage{fullpage,amsthm,amsfonts,amssymb,epsfig,amsmath}
-\usepackage{listings}
-\usepackage{color}
-\usepackage{graphicx}
 
-\definecolor{dkgreen}{rgb}{0,0.6,0}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82}
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
 
-\lstset{frame=tb,
-  language=Java,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle} % Top center head
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+\newcommand{\tab}{\hspace*{3em}}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%   CODE INCLUSION CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0} % This is the color used for comments
+\lstloadlanguages{Perl} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=Perl, % Use Perl in this example
+        frame=single, % Single frame around code
+        basicstyle=\small\ttfamily, % Use small true type font
+        keywordstyle=[1]\color{Blue}\bf, % Perl functions bold and blue
+        keywordstyle=[2]\color{Purple}, % Perl function arguments purple
+        keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+        identifierstyle=, % Nothing special about identifiers                                         
+        commentstyle=\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small, % Comments small dark green courier font
+        stringstyle=\color{Purple}, % Strings are purple
+        showstringspaces=false, % Don't put marks in string spaces
+        tabsize=5, % 5 spaces per tab
+        %
+        % Put standard Perl functions not included in the default language here
+        morekeywords={rand},
+        %
+        % Put Perl function parameters here
+        morekeywords=[2]{on, off, interp},
+        %
+        % Put user defined functions here
+        morekeywords=[3]{test},
+        %
+        morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+        numbers=left, % Line numbers on left
+        firstnumber=1, % Line numbers start with line 1
+        numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+        stepnumber=5 % Line numbers go in steps of 5
 }
+
+% Creates a new command to include a perl script, the first parameter is the filename of the script (without .pl), the second parameter is the caption
+\newcommand{\perlscript}[2]{
+\begin{itemize}
+\item[]\lstinputlisting[caption=#2,label=#1]{#1.pl}
+\end{itemize}
+}
+
+%----------------------------------------------------------------------------------------
+%   DOCUMENT STRUCTURE COMMANDS
+%   Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Problem \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%   NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Homework\ \#5} % Assignment title
+\newcommand{\hmwkDueDate}{Tuesday,\ May\ 12st,\ 2015} % Due date
+\newcommand{\hmwkClass}{CMPS\ 102} % Course/class
+\newcommand{\hmwkClassTime}{4:00pm} % Class/lecture time
+\newcommand{\hmwkClassInstructor}{Warmuth} % Teacher/lecturer
+\newcommand{\hmwkAuthorName}{John Allard \ 1437547
+} % Your name
+
+
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+%   USER SETTINGS
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+
+
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+\vspace{0.1in}\large{\textit{}}
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
 
 \begin{document}
 
-\noindent Abhishek Gupta
+\maketitle
 
-\vspace{2mm}
+%----------------------------------------------------------------------------------------
+%   TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
 
-\noindent CMPS 102
+%\setcounter{tocdepth}{1} % Uncomment this line if you don't want subsections listed in the ToC
 
-\vspace{2mm}
+% \tableofcontents
+\newpage
 
-\noindent Homework 5
 
-\vspace{2mm}
 
-\noindent 12 May 2015
 
-\vspace{2mm}
 
-\centerline{Homework 5}
+%----------------------------------------------------------------------------------------
+%   PROBLEM 1
+%----------------------------------------------------------------------------------------
 
-\vspace{2mm}
+% To have just one problem per page, simply put a \clearpage after each problem
 
-\noindent In all problems address the following:
-
-\textbf{a)} What subproblems are you solving?
-
-\textbf{b)} How are the subproblem related?
-
-\textbf{c)} Give a recurrence What is the precise meaning of the entries of the recurrence?
-
-\textbf{d)} What table are you filling in in what order?
-
-\textbf{e)} How is the table initialized?
-
-\textbf{f)} An arrow diagram for the recurrence
-
-\textbf{g)} Time bound with justification
-
-\vspace{2mm}
-
-\noindent \textbf{PROBLEM 0:}
-
-\vspace{2mm}
+\begin{homeworkProblem}
 
 \noindent A rabbit wants to go through a distance of n feet. It can either do a short hop of one foot or a long hop of three feet. Denote f(n) as the number of ways that the rabbit can go through a distance of n feet. 
 
-\noindent For instance, if n=5 we have the ways below:
+\noindent Give an O(n) algorithm to find f(n).
 
-1. short - short - short - short - short
+\begin{enumerate}
 
-2. long - short - short
+\item a.) For a given $n \geq 0$, $f(n)$ depends directly on $f(n-1)$ and $f(n-3)$. This is because the only ways to get to $n$ under the rules of our game are to either jump from $n-1$ or $n-3$. 
 
-3. short - long - short  
+\item b.) The subproblems are related additively, in that the solution to a problem of size $n$ is the sum of the solutions to problems of size $n-1$ and $n-3$. This is because, as stated above, these two subproblems are the only ones that can lead to a problem of size $n$. Combine that with the fact that $n-1$ and $n-3$ are always different numbers, than their solution values must be different (they are different locations so the paths taken to go them must be different from one another), so we can simply add the value of $f(n-1)$ and $f(n-3)$ to get $f(n)$.
 
-4. short - short - long
+\item c.) $ \forall n \geq 0$ : $ f(n) = f(n-1) + f(n-3)$ : $f(0) = 1$ \\ The base case might seem weird but it makes the recursion work. I could have also defined $f(1)$ and $f(3)$, but this way seemed easier. This recursion leads to an unbalanced tree, and to get solution to $f(n)$ you can simply count the leaves. Intuitively this corresponds to a unique path being traced back from $n$ to $0$, the starting point for the rabbit. At each subproblem, we have only two ways to go, trace ourselves back a single foot or a 3-foot step. Since these two values are unique, any paths that lead to them are also unique, and thus they should be added to get the value for the current subproblem. 
 
-\noindent Thus f(5)=4. Give an O(n) algorithm to find f(n).
+\item d.) Since this problem is one dimensionsal (over $n$), we only need an array of length $n$ to perform memoization. Everytime $f(n)$ is called, we see is the array index at position $n$ is empty, if so we perform our calculation by continuing the recursion and enter it into the table once we find the value, if it is not empty we simply extract the value from the array in constant time, bottoming out the recursion early. \\
 
-\vspace{6mm}
+\item e.) Two arrows would be pointing out from $n$ backwards along a single axis, one landing on $n-1$ and the other landing on $n-3$.
 
-\noindent \textbf{PROBLEM 1:} 
+\item f.) // Give proof of algorithms correctness and run-time here, shouldn't be too difficult.
+
+The algorithm is given below \\
+
+\begin{lstlisting}
+// M = memoization array of length n, starts empty
+// n > 0 is the f(n) value we are querying
+findpaths(n,M) :
+  M[0] = 0
+  for i in [1 ... n] // inclusive of ends
+    if i < 3 : // make sure we don't index negatives
+      M[i] = M[i-1]
+    else :
+      M[i] = M[i-1]+M[i-3]
+
+  return M[n] 
+\end{lstlisting}
+
+\end{enumerate}
+
+
+\end{homeworkProblem}
+
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+%   PROBLEM 2
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
 
 \vspace{2mm}
 
@@ -107,13 +279,13 @@ The goal in this question is to solve the following problem:
 
 \begin{lstlisting}
 The "heaviest-first" greedy algorithm 
-	Start with S equal to the empty set 
-	While some node remains in G 
-		Pick a node vi of maximum weight 
-		Add vi to S 
-		Delete vi and its neighbors from G 
-	Endwhile 
-	Return S
+  Start with S equal to the empty set 
+  While some node remains in G 
+    Pick a node vi of maximum weight 
+    Add vi to S 
+    Delete vi and its neighbors from G 
+  Endwhile 
+  Return S
 \end{lstlisting}
 
 \noindent \textbf{(b)} Give an example to show that the following algorithm also does not always find an independent set of maximum total weight.
@@ -125,7 +297,7 @@ Let S2 be the set of all vi where i is an even number
 
 \end{lstlisting}
 
-\includegraphics[scale=0.75]{1.png}
+\includegraphics[scale=0.75]{1.PNG}
 
 \vspace{2mm}
 
@@ -133,7 +305,16 @@ Let S2 be the set of all vi where i is an even number
 
 \vspace{6mm}
 
-\noindent \textbf{PROBLEM 2:} 
+\end{homeworkProblem}
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+%   PROBLEM 3
+%----------------------------------------------------------------------------------------
+\begin{homeworkProblem}
 
 \vspace{2mm}
 
@@ -164,10 +345,10 @@ Set w = v_1
 Set L = 0
 
 While there is an edge out of the node w 
-	Choose the edge (w, v_j) 
-		for which j is as small as possible 
-	Set w = v_j 	
-	Increase L by 1 
+  Choose the edge (w, v_j) 
+    for which j is as small as possible 
+  Set w = v_j   
+  Increase L by 1 
 end while 
 Return L as the length of the longest path
 
@@ -177,7 +358,7 @@ Return L as the length of the longest path
 
 In your example, say what the correct answer is and also what the algorithm above finds.
 
-\includegraphics[scale=1]{2.png}
+\includegraphics[scale=1]{2.PNG}
 
 \vspace{2mm}
 
@@ -185,7 +366,17 @@ In your example, say what the correct answer is and also what the algorithm abov
 
 \vspace{6mm}
 
-\noindent \textbf{PROBLEM 3:} 
+\end{homeworkProblem}
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+%   PROBLEM 4
+%----------------------------------------------------------------------------------------
+\begin{homeworkProblem}
+
 
 \vspace{2mm}
 
@@ -236,7 +427,19 @@ Give an efficient algorithm to find a partition of a set of words W into valid l
 
 \vspace{6mm}
 
-\noindent \textbf{PROBLEM 4:} 
+
+\end{homeworkProblem}
+
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+%   PROBLEM 5
+%----------------------------------------------------------------------------------------
+\begin{homeworkProblem}
+
 
 \vspace{2mm}
 
@@ -250,7 +453,7 @@ Give an algorithm to determine whether a given set of precincts is susceptible t
 
 \vspace{2mm}
 
-\includegraphics[scale=0.75]{3.png}
+\includegraphics[scale=0.75]{3.PNG}
 
 \vspace{2mm}
 
@@ -258,7 +461,19 @@ This set of precincts is susceptible since, if we grouped precincts 1 and 4 into
 
 \vspace{6mm}
 
-\noindent \textbf{PROBLEM 5: }
+
+\end{homeworkProblem}
+
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+%   PROBLEM 6
+%----------------------------------------------------------------------------------------
+\begin{homeworkProblem}
+
 
 \vspace{2mm}
 
@@ -273,5 +488,12 @@ In this problem, we consider the same setup, but want to optimize a different ob
 \vspace{2mm}
 
 \noindent \textbf{(b)} Assume that all deadlines $d_i$ and required times $t_i$ are integers. Give an algorithm to find an optimal solution. Your algorithm should run in time polynomial in the number of jobs $n$, and the maximum deadline $D = max_i d_i$. 
+
+
+\end{homeworkProblem}
+
+
+
+%----------------------------------------------------------------------------------------
 
 \end{document}
