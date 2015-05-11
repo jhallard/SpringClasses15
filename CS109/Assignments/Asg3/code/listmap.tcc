@@ -40,12 +40,40 @@ template <typename Key, typename Value, class Less>
 typename listmap<Key,Value,Less>::iterator
 listmap<Key,Value,Less>::insert (const value_type& pair) {
    TRACE ('l', &pair << "->" << pair);
-    
+  
+   // @TODO - This function is supposed to insert such that
+   // the list will always be sorted, but the first two 
+   // elements inserted always end up at the back. 
    node * new_n = new node(anchor()->next, anchor(), pair);
    if(find(pair.first) != end()) {
       erase(find(pair.first));
    }   
-   anchor()->next = new_n;
+   auto it = begin();
+   bool inserted = false;
+   while(it != end()) {
+      if(pair.first < it->first) {
+        auto ti = it.where;
+        if(ti->prev != nullptr) {
+          ti->prev->next = new_n;
+        }
+        new_n->next = ti;
+        new_n->prev = ti->prev;
+        ti->prev = new_n;
+        inserted = true;
+        break;
+      }
+      ++it;
+   }
+
+   if(!inserted) {
+    if(anchor()->next) {
+      anchor()->next->prev = new_n;
+     }
+     new_n->next = anchor()->next;
+     anchor()->next = new_n;
+     new_n->prev = anchor();
+   }
+
    return iterator(new_n);
 }
 
