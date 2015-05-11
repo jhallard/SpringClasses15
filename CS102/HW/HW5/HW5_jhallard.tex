@@ -235,7 +235,7 @@ The algorithm is given below \\
 findpaths(n,M) :
   M[0] = 0
   for i in [1 ... n] // inclusive of ends
-    if i < 3 : // make sure we don't index negatives
+    if i < 3 : // make sure we do not index negatives
       M[i] = M[i-1]
     else :
       M[i] = M[i-1]+M[i-3]

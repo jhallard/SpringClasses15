@@ -65,8 +65,9 @@ bool get_file_contents(string fn, listmap<string,string> * map) {
 
 // used to read from standard input when requested by the user.
 string read_from_cin() {
-
-   return "helpme";
+   string ret = "";
+   cin >> ret;
+   return ret;
 }
 
 // process a single input given as a string, either a line from a file
@@ -94,16 +95,23 @@ bool process_contents(string content, listmap<string, string> * map) {
    // key=value case
    if(right.length() && left.length()) {
 
-      // TODO - Lookup to see if left is already a key in the map before
-      // we insert like this
       str_str_pair my_pair(left, right);
+
+      // see if key already exists in map, if so delete pair
+      if(map->find(my_pair.first) != map->end()) {
+         map->erase(map->find(my_pair.first));
+      }
+
       map->insert(my_pair);
+
       cout << left << " = " << right << endl;
       return true;
    }
    // key= case 
    else if(left.length() && !right.length()) {
+           
       cout << "key= case, delete key from map" << endl;
+
    }
    // = value case
    else if(!left.length() && right.length()) {
@@ -121,7 +129,7 @@ string trim_ws(const string & str) {
    string ret = "";
    size_t first = str.find_first_not_of(" ");
    size_t last = str.find_last_not_of(" "); 
-   if(first == last == string::npos) {
+   if(first == string::npos && last == string::npos) {
         return str.substr(0, str.length());
    }
    else if(first == string::npos) {
@@ -156,7 +164,8 @@ int main (int argc, char** argv) {
       // depending on the input value
       for(int i = 0; i < curr; i++) {
          if(filenames[i] == "-") {
-            read_from_cin();
+            string in = read_from_cin();
+            process_contents(in, &main_map);
          }
          else {
             get_file_contents(filenames[i], &main_map);
@@ -173,7 +182,7 @@ int main (int argc, char** argv) {
    }
    
    for(auto i = main_map.begin(); i != main_map.end(); ++i) {
-    cout << i->first << " " << i->second << endl;
+   // cout << i->first << " " << i->second << endl;
    }
    // str_str_map test;
    // for (char** argp = &argv[optind]; argp != &argv[argc]; ++argp) {
