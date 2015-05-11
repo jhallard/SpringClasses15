@@ -288,6 +288,14 @@ The "heaviest-first" greedy algorithm
   Return S
 \end{lstlisting}
 
+\textbf{Answer} : \\
+
+An example of a graph which would prove the above algorithm incorrect would be :
+
+$$ 1--9--10--8--5 $$
+
+The correct nodes to choose are 9 and 8 for a score of 17, but the above algorithm chooses 10 first, deleted 8 and 9 (it's neighbors), then selects 5, then 1, for a score of 16. \\[.2in]
+
 \noindent \textbf{(b)} Give an example to show that the following algorithm also does not always find an independent set of maximum total weight.
 
 \begin{lstlisting}
@@ -296,6 +304,15 @@ Let S2 be the set of all vi where i is an even number
 (Note that S1 and S2 are both independent sets) Determine which of S1 or S2 has greater total weight, and return this one
 
 \end{lstlisting}
+
+
+\textbf{Answer} : \\
+
+An example of a graph which would prove the above algorithm incorrect would be :
+
+$$ 20--5--1--5--1--5--1--5--1--5 $$
+
+The optimal solution would choose $ 20,5,5,5,5 = 40 $. The algorithm would partition the graph into two sets, $20,1,1,1,1 = 24$ and $5,5,5,5,5 = 25$, thus it would choose the second set getting a score of 25. This is less than the optimal solution so this algorithm is not optimal in all cases. \\[.2in]
 
 \includegraphics[scale=0.75]{1.PNG}
 

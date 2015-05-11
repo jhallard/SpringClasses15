@@ -84,8 +84,10 @@ bool process_contents(string content, listmap<string, string> * map) {
    if(content.length() == 0) return true;
 
    if(content[0] == '#') return true;
-
-   if(content[0] == '=') {
+   
+   // @TODO - Sort the items in lexographic order before displaying
+   // to the user
+   if(content[0] == '=' && content.length() == 1) {
       for(auto it = map->begin(); it != map->end(); ++it) {
           print_pair(*it);
       }
@@ -138,12 +140,15 @@ bool process_contents(string content, listmap<string, string> * map) {
       if(map->find(left) != map->end()) {
          map->erase(map->find(left));
       }
-      cout << "key= case, delete key from map" << endl;
 
    }
    // = value case
    else if(!left.length() && right.length()) {
-      cout << "=value case, delete key from map" << endl;
+      for(auto it = map->begin(); it != map->end(); ++it) {
+        if(it->second == right) {
+           print_pair(*it);
+        }
+      }
    }
 
    return true;
@@ -179,7 +184,7 @@ int main (int argc, char** argv) {
    str_str_map main_map; // main listmap for the program
 
    // there are filenames to be read in
-   if(argc-optind+1 > 0) {
+   if(argc-optind > 0) {
 
       string * filenames = new string[argc-optind+1];
       int curr = 0;
@@ -205,29 +210,13 @@ int main (int argc, char** argv) {
    else {
       while(true) {
          string input = read_from_cin();
-         // process input
+         process_contents(input, &main_map);
       }
    }
    
    for(auto i = main_map.begin(); i != main_map.end(); ++i) {
    // cout << i->first << " " << i->second << endl;
    }
-   // str_str_map test;
-   // for (char** argp = &argv[optind]; argp != &argv[argc]; ++argp) {
-   //    str_str_pair pair (*argp, to_string<int> (argp - argv));
-   //    cout << "Before insert: " << pair << endl;
-   //    test.insert (pair);
-   // }
-
-   // for (str_str_map::iterator itor = test.begin();
-   //      itor != test.end(); ++itor) {
-   //    cout << "During iteration: " << *itor << endl;
-   // }
-
-   // str_str_map::iterator itor = test.begin();
-   // test.erase (itor);
-
-   // cout << "EXIT_SUCCESS" << endl;
 
    return EXIT_SUCCESS;
 }
