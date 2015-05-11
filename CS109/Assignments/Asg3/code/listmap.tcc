@@ -81,7 +81,7 @@ listmap<Key,Value,Less>::erase (iterator position) {
    pos->next->prev = pos->prev;
    pos->prev->next = pos->next;
 
-   erase(position);
+   position.erase();
 
    return iterator(ret);
 }
@@ -134,6 +134,18 @@ listmap<Key,Value,Less>::iterator::operator--() {
    where = where->prev;
    return *this;
 }
+
+
+
+//
+// listmap::iterator& listmap::iterator::operator--()
+//
+template <typename Key, typename Value, class Less>
+void listmap<Key,Value,Less>::iterator::erase() {
+   TRACE ('l', where);
+   delete where;
+}
+
 
 
 //

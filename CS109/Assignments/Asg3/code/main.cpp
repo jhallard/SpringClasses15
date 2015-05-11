@@ -50,7 +50,7 @@ bool get_file_contents(string fn, listmap<string,string> * map) {
   int count = 1;
   if(myfile.is_open()) {
     while(getline(myfile,line)) {
-      std::cout << fn << endl << line <<  " " << count++ << endl;
+      cout << fn << ": " << count++ << ": " << line << endl;
       if(!process_contents(line, map)) {
          // throw error;
       }
@@ -74,7 +74,7 @@ string read_from_cin() {
 // listmap appropriately.
 bool process_contents(string content, listmap<string, string> * map) {
 
-   content = trim_ws(content);
+   //content = trim_ws(content);
    if(content.length() == 0) return true;
 
    if(content[0] == '#') return true;
@@ -86,7 +86,7 @@ bool process_contents(string content, listmap<string, string> * map) {
 
    // get the left and right halves around the equals sign
    string left = content.substr(0, found);
-   string right = content.substr(found, content.length());
+   string right = content.substr(found+1, content.length());
 
    left = trim_ws(left);
    right = trim_ws(right);
@@ -98,6 +98,7 @@ bool process_contents(string content, listmap<string, string> * map) {
       // we insert like this
       str_str_pair my_pair(left, right);
       map->insert(my_pair);
+      cout << left << " = " << right << endl;
       return true;
    }
    // key= case 
@@ -118,11 +119,20 @@ bool process_contents(string content, listmap<string, string> * map) {
 string trim_ws(const string & str) {
 
    string ret = "";
-   for(auto c : str) {
-      if(c != ' ') {ret.push_back(c);}
+   size_t first = str.find_first_not_of(" ");
+   size_t last = str.find_last_not_of(" "); 
+   if(first == last == string::npos) {
+        return str.substr(0, str.length());
+   }
+   else if(first == string::npos) {
+        return  str.substr(0, last);
+   }
+   else if(last == string::npos) {
+      return str.substr(first, str.length());
    }
 
-   return ret;
+   return str.substr(first, (last-first+1));
+
 }
 
 
