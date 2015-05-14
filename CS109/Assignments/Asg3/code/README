@@ -1,0 +1,43 @@
+$Id: README,v 1.1 2013-06-18 17:32:08-07 - - $
+
+Author  - John Allard 
+ID      - 1437547
+CruzID  - jhallard
+Date    = May 9th 2015
+Program - keyvalue
+
+
+Description : This program keeps track of pairs of string
+values like a dictionary. It can insert, delete, expose,
+or overwrite values. Values are input from either standard
+input or from a series of input files, or both.
+key=value : key,value pair is inserted into the map, over-
+writing any pair with that key that previously existed.
+key= : deletes the key from the map.
+=value : shows all pairs with the given value
+= : show all pairs in the map
+# : comment line, ignored.
+
+
+Files :
+
+listmap.h - The declaration of the listmap class which acts
+as a dictionary for the string pairs
+listmap.tcc - declaration of the above class.
+
+util.h/cpp/tcc - utility functions that don't belong in any
+one class.
+
+main.cpp - main function and related helper functions,
+mainly deals with gathering input and parsing it.
+
+trace.cpp/h - debugging helper functions.
+
+xless - comparison operator to be used in the class.
+
+xpair - pair of strings that is used as the data being held
+in the listmap class.
+
+Makefile - builds the project.
+
+README - this file you are currently reading.

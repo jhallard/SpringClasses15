@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.4.28)  11 MAY 2015 04:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.4.28)  13 MAY 2015 18:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -359,35 +359,35 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 291--292
+Underfull \hbox (badness 10000) in paragraph at lines 293--294
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 297--298
+Underfull \hbox (badness 10000) in paragraph at lines 299--300
 
  []
 
 
-Overfull \hbox (183.65166pt too wide) in paragraph at lines 304--306
+Overfull \hbox (183.65166pt too wide) in paragraph at lines 306--308
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 309--310
+Underfull \hbox (badness 10000) in paragraph at lines 311--312
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 315--316
+Underfull \hbox (badness 10000) in paragraph at lines 317--318
 
  []
 
 <1.PNG, id=17, 622.57594pt x 109.1578pt>
 File: 1.PNG Graphic file (type png)
  <use 1.PNG>
-Package pdftex.def Info: 1.PNG used on input line 317.
+Package pdftex.def Info: 1.PNG used on input line 320.
 (pdftex.def)             Requested size: 466.9308pt x 81.86815pt.
 
 
@@ -397,16 +397,23 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [3]
+
+Package Fancyhdr Warning: \headheight is too small (0.0pt): 
+ Make it at least 12.0pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[4 <./1.PNG>]
 Missing character: There is no â in font cmr10!
 Missing character: There is no ˆ in font cmr10!
 Missing character: There is no ’ in font cmr10!
- <2.PNG, id=26, 475.7775pt x 121.95563pt>
+ <2.PNG, id=30, 475.7775pt x 121.95563pt>
 File: 2.PNG Graphic file (type png)
  <use 2.PNG>
-Package pdftex.def Info: 2.PNG used on input line 378.
+Package pdftex.def Info: 2.PNG used on input line 406.
 (pdftex.def)             Requested size: 475.77632pt x 121.9553pt.
 
-Overfull \hbox (6.02133pt too wide) in paragraph at lines 378--379
+Overfull \hbox (6.02133pt too wide) in paragraph at lines 406--407
 [][] 
  []
 
@@ -416,10 +423,15 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[4 <./1.PNG> <./2.PNG>]
+[5 <./2.PNG>]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ” in font cmr10!
+ <3.PNG, id=35, 440.39531pt x 133.24782pt>
+File: 3.PNG Graphic file (type png)
+ <use 3.PNG>
+Package pdftex.def Info: 3.PNG used on input line 501.
+(pdftex.def)             Requested size: 330.29567pt x 99.93561pt.
 
 
 Package Fancyhdr Warning: \headheight is too small (0.0pt): 
@@ -427,13 +439,7 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[5] <3.PNG, id=37, 440.39531pt x 133.24782pt>
-File: 3.PNG Graphic file (type png)
- <use 3.PNG>
-Package pdftex.def Info: 3.PNG used on input line 473.
-(pdftex.def)             Requested size: 330.29567pt x 99.93561pt.
-
-
+[6] 
 AED: lastpage setting LastPage
 
 Package Fancyhdr Warning: \headheight is too small (0.0pt): 
@@ -441,15 +447,15 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[6 <./3.PNG>] (./HW5_jhallard.aux) ) 
+[7 <./3.PNG>] (./HW5_jhallard.aux) ) 
 Here is how much of TeX's memory you used:
- 5365 strings out of 495020
- 74601 string characters out of 6181324
- 251228 words of memory out of 5000000
- 8476 multiletter control sequences out of 15000+600000
+ 5380 strings out of 495020
+ 74774 string characters out of 6181324
+ 252228 words of memory out of 5000000
+ 8491 multiletter control sequences out of 15000+600000
  13625 words of font info for 52 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,11n,43p,718b,1284s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,12n,43p,736b,1595s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dv
 ips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.
@@ -464,10 +470,10 @@ blic/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
 fonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti
 10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb>
-Output written on HW5_jhallard.pdf (6 pages, 228844 bytes).
+Output written on HW5_jhallard.pdf (7 pages, 233538 bytes).
 PDF statistics:
- 87 PDF objects out of 1000 (max. 8388607)
- 58 compressed objects within 1 object stream
+ 92 PDF objects out of 1000 (max. 8388607)
+ 62 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

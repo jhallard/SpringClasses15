@@ -1,5 +1,10 @@
 // $Id: main.cpp,v 1.8 2015-04-28 19:23:13-07 - - $
 
+// @author John Allard
+// @file main.cpp
+// @date May 9th 2015
+// @project Asg3 UCSC CMPS-109 
+
 #include <cstdlib>
 #include <exception>
 #include <iostream>
@@ -66,7 +71,8 @@ bool get_file_contents(string fn, listmap<string,string> * map) {
 // used to read from standard input when requested by the user.
 string read_from_cin() {
    string ret = "";
-   cin >> ret;
+   getline(cin, ret);
+   // cin.get(); // get return here
    return ret;
 }
 
@@ -91,6 +97,7 @@ bool process_contents(string content, listmap<string, string> * map) {
       for(auto it = map->begin(); it != map->end(); ++it) {
           print_pair(*it);
       }
+      return true;
    }
 
    std::size_t found = content.find_first_of("=");
@@ -98,13 +105,13 @@ bool process_contents(string content, listmap<string, string> * map) {
    // if it isn't a comment and has no equals sign it must be a key
    // value which means we output the pair if found in the map.
    if(found == string::npos) {
-      auto it = map->find(trim_ws(content)); 
-      // see if key already exists in map, if so delete pair
+      auto it = map->find(content); 
+      // see if key exists in map, if so show pair
       if(it != map->end()) {
          print_pair(*it);
       }
       else {
-         cout << trim_ws(content) << ": key not found" << endl;
+         cout << content  << ": key not found" << endl;
       }
 
       return true;
@@ -155,25 +162,15 @@ bool process_contents(string content, listmap<string, string> * map) {
 }
 
 
-// @TODO this function is broken, it removes all whitespace not
-// just trailing which is not what we wants
 string trim_ws(const string & str) {
+    const auto begin = str.find_first_not_of(" ");
+    if (begin == std::string::npos)
+        return ""; // no content
 
-   string ret = "";
-   size_t first = str.find_first_not_of(" ");
-   size_t last = str.find_last_not_of(" "); 
-   if(first == string::npos && last == string::npos) {
-        return str.substr(0, str.length());
-   }
-   else if(first == string::npos) {
-        return  str.substr(0, last);
-   }
-   else if(last == string::npos) {
-      return str.substr(first, str.length());
-   }
+    const auto end = str.find_last_not_of(" ");
+    const auto diff = end - begin + 1;
 
-   return str.substr(first, (last-first+1));
-
+    return str.substr(begin, diff);
 }
 
 
@@ -182,6 +179,7 @@ int main (int argc, char** argv) {
    scan_options (argc, argv);
 
    str_str_map main_map; // main listmap for the program
+   int cin_count = 1;
 
    // there are filenames to be read in
    if(argc-optind > 0) {
@@ -189,6 +187,7 @@ int main (int argc, char** argv) {
       string * filenames = new string[argc-optind+1];
       int curr = 0;
 
+      // put the filenames into their own array
       for (char** argp = &argv[optind]; argp != &argv[argc]; ++argp) {
          filenames[curr++] = *argp; 
       }
@@ -198,6 +197,10 @@ int main (int argc, char** argv) {
       for(int i = 0; i < curr; i++) {
          if(filenames[i] == "-") {
             string in = read_from_cin();
+            if(cin.eof()) {
+              return EXIT_SUCCESS;
+            }
+            cout << "-: " << cin_count++ << ": " << in << endl;
             process_contents(in, &main_map);
          }
          else {
@@ -210,6 +213,10 @@ int main (int argc, char** argv) {
    else {
       while(true) {
          string input = read_from_cin();
+         if(cin.eof()) {
+          return EXIT_SUCCESS;
+         }
+         cout << "-: " << cin_count++ << ": " << input << endl;
          process_contents(input, &main_map);
       }
    }

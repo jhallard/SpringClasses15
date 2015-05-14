@@ -219,13 +219,13 @@
 
 \item b.) The subproblems are related additively, in that the solution to a problem of size $n$ is the sum of the solutions to problems of size $n-1$ and $n-3$. This is because, as stated above, these two subproblems are the only ones that can lead to a problem of size $n$. Combine that with the fact that $n-1$ and $n-3$ are always different numbers, than their solution values must be different (they are different locations so the paths taken to go them must be different from one another), so we can simply add the value of $f(n-1)$ and $f(n-3)$ to get $f(n)$.
 
-\item c.) $ \forall n \geq 0$ : $ f(n) = f(n-1) + f(n-3)$ : $f(0) = 1$ \\ The base case might seem weird but it makes the recursion work. I could have also defined $f(1)$ and $f(3)$, but this way seemed easier. This recursion leads to an unbalanced tree, and to get solution to $f(n)$ you can simply count the leaves. Intuitively this corresponds to a unique path being traced back from $n$ to $0$, the starting point for the rabbit. At each subproblem, we have only two ways to go, trace ourselves back a single foot or a 3-foot step. Since these two values are unique, any paths that lead to them are also unique, and thus they should be added to get the value for the current subproblem. 
+\item c.) $ \forall n \geq 0$ : $ f(n) = f(n-1) + f(n-3)$ : $f(1) = f(2) = 1, f(3) = 2$ \\ Because we are starting at an integer and subtracting either 3 or 1 each iteration, we will always bottom out at one of these base cases. This recursion leads to an unbalanced tree, and to get solution to $f(n)$ you can simply count the leaves. Intuitively this corresponds to a unique path being traced back from $n$ to $0$, the starting point for the rabbit. At each subproblem, we have only two ways to go, trace ourselves back a single foot or a 3-foot step. Since these two values are unique, any paths that lead to them are also unique, and thus they should be added to get the value for the current subproblem. 
 
 \item d.) Since this problem is one dimensionsal (over $n$), we only need an array of length $n$ to perform memoization. Everytime $f(n)$ is called, we see is the array index at position $n$ is empty, if so we perform our calculation by continuing the recursion and enter it into the table once we find the value, if it is not empty we simply extract the value from the array in constant time, bottoming out the recursion early. \\
 
 \item e.) Two arrows would be pointing out from $n$ backwards along a single axis, one landing on $n-1$ and the other landing on $n-3$.
 
-\item f.) // Give proof of algorithms correctness and run-time here, shouldn't be too difficult.
+\item f.) The algorithm runs in time $O(n)$, with $n$ being the number of feet that we wish to see how many ways a rabbit can traverse. This is obvious from the algorithm, it consists of a single loop that runs $n-4$ times, doing constant work each iteration, and finally returning M[n] at the end, which is the value we are looking for. 
 
 The algorithm is given below \\
 
@@ -233,11 +233,13 @@ The algorithm is given below \\
 // M = memoization array of length n, starts empty
 // n > 0 is the f(n) value we are querying
 findpaths(n,M) :
-  M[0] = 0
-  for i in [1 ... n] // inclusive of ends
-    if i < 3 : // make sure we do not index negatives
+  M[1] = 1
+  M[2] = 1
+  M[3] = 2
+  for i in [4 ... n] // inclusive of ends
+    if i < 3  // make sure we do not index negatives
       M[i] = M[i-1]
-    else :
+    else 
       M[i] = M[i-1]+M[i-3]
 
   return M[n] 
@@ -314,6 +316,7 @@ $$ 20--5--1--5--1--5--1--5--1--5 $$
 
 The optimal solution would choose $ 20,5,5,5,5 = 40 $. The algorithm would partition the graph into two sets, $20,1,1,1,1 = 24$ and $5,5,5,5,5 = 25$, thus it would choose the second set getting a score of 25. This is less than the optimal solution so this algorithm is not optimal in all cases. \\[.2in]
 
+
 \includegraphics[scale=0.75]{1.PNG}
 
 \vspace{2mm}
@@ -321,6 +324,31 @@ The optimal solution would choose $ 20,5,5,5,5 = 40 $. The algorithm would parti
 \noindent \textbf{(c)}  Give an algorithm that takes an n-node path G with weights and returns an independent set of maximum total weight. The running time should be polynomial in n, independent of the values of the weights.
 
 \vspace{6mm}
+
+\begin{lstlisting}
+// G is an array of integers of length n, representing
+// the ordered nodes of the path. G[i] is the weight of that node.
+// returns an array containing the nodes in the largest
+// independent set
+find_set(G)
+  S = empty array // will contain the independent set
+  M = array[1 ... n] // n = length of G
+  M[0] = 0
+  for i in [1 ... n] // inclusive of ends
+    if G[i]+M[i-2] > M[i-1]
+      S.push_back(i) // push this (ith) node into our set
+      M[i] = G[i]+M[i-2]
+    else
+      M[i] = M[i-1] // else we just use the last node
+  return S
+\end{lstlisting}
+
+The subproblems that I'm solving are the ones involving the two previous nodes. At each node $i$, we can either take that node and not take its neighbor (by the rules of being independent set), or we can skip the current node and take its immediate neighbor. Thus we need to know which of these two subproblems results in a larger independent set in order to make the right choice. The subproblems are related in that if a node $i$ is in the largest independent set on a graph $G$, then neither of its neighbors can be in that set, so we don't have to consider those nodes. \\
+The recurrance is $ f(n) = max(v_i+f(n-2), f(n-1)) : f(0) = 0 $. \\
+We have an array to fill in as apposed to a table, this is because we are only working in a single variable, the iteration variable. We fill in the table from low to high index. The table is initialized with the 0th entry being set to zero, if there are no nodes to look at then we get no value from them. \\
+An arrow diagram would point from node $i$ to the two nodes preceding it. \\
+This algorithm is also linear on $n$, with it's running time being $O(n)$. This is just like the previous problem, even though our recurrance relation spaws many children, there are a large number of redundent calls being made. With memoization, we simply have to fill in the $n$ array values, starting from the first index and working our way up. On the way, we keep track of which items go into the final set by seeing which is the two options (M[n-1] or G[i]+M[i-2]) are larger, if it is the latter than we add node $i$ into the set. Because the algorithm iterates $n$ times and performs constant work each time, the running time is $O(n)$.
+
 
 \end{homeworkProblem}
 

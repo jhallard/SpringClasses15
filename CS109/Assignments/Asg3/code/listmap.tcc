@@ -1,5 +1,11 @@
 // $Id: listmap.tcc,v 1.7 2015-04-28 19:22:02-07 - - $
 
+// @author John Allard
+// @file listmap.tcc
+// @date May 9th 2015
+// @project Asg3 UCSC CMPS-109 
+
+
 #include "listmap.h"
 #include "trace.h"
 
@@ -30,6 +36,12 @@ listmap<Key,Value,Less>::node::node (node* next, node* prev,
 template <typename Key, typename Value, class Less>
 listmap<Key,Value,Less>::~listmap() {
    TRACE ('l', (void*) this);
+
+   for(auto it = begin(); it != end();) {
+     auto tbd = it;
+     ++it;
+     erase(tbd);
+   }
 }
 
 
@@ -66,12 +78,13 @@ listmap<Key,Value,Less>::insert (const value_type& pair) {
    }
 
    if(!inserted) {
-    if(anchor()->next) {
-      anchor()->next->prev = new_n;
+
+    if(anchor()->prev) {
+      anchor()->prev->next = new_n;
      }
-     new_n->next = anchor()->next;
-     anchor()->next = new_n;
-     new_n->prev = anchor();
+     new_n->prev = anchor()->prev;
+     anchor()->prev = new_n;
+     new_n->next = anchor();
    }
 
    return iterator(new_n);
