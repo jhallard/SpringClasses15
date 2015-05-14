@@ -148,7 +148,7 @@
 %----------------------------------------------------------------------------------------
 
 \newcommand{\hmwkTitle}{Homework\ \#5} % Assignment title
-\newcommand{\hmwkDueDate}{Tuesday,\ May\ 12st,\ 2015} % Due date
+\newcommand{\hmwkDueDate}{Tuesday,\ May\ 14th,\ 2015} % Due date
 \newcommand{\hmwkClass}{CMPS\ 102} % Course/class
 \newcommand{\hmwkClassTime}{4:00pm} % Class/lecture time
 \newcommand{\hmwkClassInstructor}{Warmuth} % Teacher/lecturer
@@ -213,39 +213,36 @@
 
 \noindent Give an O(n) algorithm to find f(n).
 
-\begin{enumerate}
 
-\item a.) For a given $n \geq 0$, $f(n)$ depends directly on $f(n-1)$ and $f(n-3)$. This is because the only ways to get to $n$ under the rules of our game are to either jump from $n-1$ or $n-3$. 
+ a.) For a given $n \geq 0$, $f(n)$ depends directly on $f(n-1)$ and $f(n-3)$. This is because the only ways to get to $n$ under the rules of our game are to either jump from $n-1$ or $n-3$.  \\
 
-\item b.) The subproblems are related additively, in that the solution to a problem of size $n$ is the sum of the solutions to problems of size $n-1$ and $n-3$. This is because, as stated above, these two subproblems are the only ones that can lead to a problem of size $n$. Combine that with the fact that $n-1$ and $n-3$ are always different numbers, than their solution values must be different (they are different locations so the paths taken to go them must be different from one another), so we can simply add the value of $f(n-1)$ and $f(n-3)$ to get $f(n)$.
+b.) The subproblems are related additively, in that the solution to a problem of size $n$ is the sum of the solutions to problems of size $n-1$ and $n-3$. This is because, as stated above, these two subproblems are the only ones that can lead to a problem of size $n$. Combine that with the fact that $n-1$ and $n-3$ are always different numbers, than their solution values must be different (they are different locations so the paths taken to go them must be different from one another), so we can simply add the value of $f(n-1)$ and $f(n-3)$ to get $f(n)$. \\
 
-\item c.) $ \forall n \geq 0$ : $ f(n) = f(n-1) + f(n-3)$ : $f(1) = f(2) = 1, f(3) = 2$ \\ Because we are starting at an integer and subtracting either 3 or 1 each iteration, we will always bottom out at one of these base cases. This recursion leads to an unbalanced tree, and to get solution to $f(n)$ you can simply count the leaves. Intuitively this corresponds to a unique path being traced back from $n$ to $0$, the starting point for the rabbit. At each subproblem, we have only two ways to go, trace ourselves back a single foot or a 3-foot step. Since these two values are unique, any paths that lead to them are also unique, and thus they should be added to get the value for the current subproblem. 
+ c.) $ \forall n \geq 0$ : $ f(n) = f(n-1) + f(n-3)$ : $f(1) = f(2) = 1, f(3) = 2$ \\ Because we are starting at an integer and subtracting either 3 or 1 each iteration, we will always bottom out at one of these base cases. This recursion leads to an unbalanced tree, and to get solution to $f(n)$ you can simply count the leaves. Intuitively this corresponds to a unique path being traced back from $n$ to $0$, the starting point for the rabbit. At each subproblem, we have only two ways to go, trace ourselves back a single foot or a 3-foot step. Since these two values are unique, any paths that lead to them are also unique, and thus they should be added to get the value for the current subproblem.  \\
 
-\item d.) Since this problem is one dimensionsal (over $n$), we only need an array of length $n$ to perform memoization. Everytime $f(n)$ is called, we see is the array index at position $n$ is empty, if so we perform our calculation by continuing the recursion and enter it into the table once we find the value, if it is not empty we simply extract the value from the array in constant time, bottoming out the recursion early. \\
+ d.) Since this problem is one dimensionsal (over $n$), we only need an array of length $n$ to perform memoization. Everytime $f(n)$ is called, we see is the array index at position $n$ is empty, if so we perform our calculation by continuing the recursion and enter it into the table once we find the value, if it is not empty we simply extract the value from the array in constant time, bottoming out the recursion early. \\
 
-\item e.) Two arrows would be pointing out from $n$ backwards along a single axis, one landing on $n-1$ and the other landing on $n-3$.
+e.) Two arrows would be pointing out from $n$ backwards along a single axis, one landing on $n-1$ and the other landing on $n-3$. \\
 
-\item f.) The algorithm runs in time $O(n)$, with $n$ being the number of feet that we wish to see how many ways a rabbit can traverse. This is obvious from the algorithm, it consists of a single loop that runs $n-4$ times, doing constant work each iteration, and finally returning M[n] at the end, which is the value we are looking for. 
+ f.) The algorithm runs in time $O(n)$, with $n$ being the number of feet that we wish to see how many ways a rabbit can traverse. This is obvious from the algorithm, it consists of a single loop that runs $n-4$ times, doing constant work each iteration, and finally returning M[n] at the end, which is the value we are looking for.  \\
 
 The algorithm is given below \\
 
 \begin{lstlisting}
-// M = memoization array of length n, starts empty
-// n > 0 is the f(n) value we are querying
+# M = memoization array of length n, starts empty
+# n > 0 is the f(n) value we are querying
 findpaths(n,M) :
   M[1] = 1
   M[2] = 1
   M[3] = 2
-  for i in [4 ... n] // inclusive of ends
-    if i < 3  // make sure we do not index negatives
+  for i in [4 to n] # inclusive of ends
+    if i < 3  # make sure we do not index negatives
       M[i] = M[i-1]
     else 
       M[i] = M[i-1]+M[i-3]
 
   return M[n] 
 \end{lstlisting}
-
-\end{enumerate}
 
 
 \end{homeworkProblem}
@@ -326,20 +323,20 @@ The optimal solution would choose $ 20,5,5,5,5 = 40 $. The algorithm would parti
 \vspace{6mm}
 
 \begin{lstlisting}
-// G is an array of integers of length n, representing
-// the ordered nodes of the path. G[i] is the weight of that node.
-// returns an array containing the nodes in the largest
-// independent set
+# G is an array of integers of length n, representing
+# the ordered nodes of the path. G[i] is the weight of that node.
+# returns an array containing the nodes in the largest
+# independent set
 find_set(G)
-  S = empty array // will contain the independent set
-  M = array[1 ... n] // n = length of G
+  S = empty array # will contain the independent set
+  M = array[0 to n] # n = length of G
   M[0] = 0
-  for i in [1 ... n] // inclusive of ends
+  for i in [1 to n] # inclusive of ends
     if G[i]+M[i-2] > M[i-1]
-      S.push_back(i) // push this (ith) node into our set
+      S.push_back(i) # push this (ith) node into our set
       M[i] = G[i]+M[i-2]
     else
-      M[i] = M[i-1] // else we just use the last node
+      M[i] = M[i-1] # else we just use the last node
   return S
 \end{lstlisting}
 
@@ -401,15 +398,55 @@ Return L as the length of the longest path
 
 \vspace{2mm}
 
-In your example, say what the correct answer is and also what the algorithm above finds.
+In your example, say what the correct answer is and also what the algorithm above finds. \\[.2in]
+
+\textbf{Answer :} 
+This algorithm is too greedy, so all we need to do is trick it into picking a very close neighbor originally, and set it up so this neighbor only leads to a very short path between it and $v_n$. An example is given gelow.
+
+\includegraphics[scale=1]{graph1.png}
+
+In the above graph, all edges are going left to right, my software wouldn't draw curved arrows so I just used lines. The algorithm given would start at $v_1$, and select the edge to $v_2$, since that is the closest vertex which is reachable directly. It will then be forced to take the single edge from $v_2$ to $v_5$, which finishes the algorithm with a score of 2. The optimal solution however would be to go from $v_1$ to $v_3$, $v_3$ to $v_4$, then $v_4$ to $v_5$, for a score of 3. \\[.2in]
+
 
 \includegraphics[scale=1]{2.PNG}
 
 \vspace{2mm}
 
-\noindent \textbf{(b)} Give an efficient algorithm that takes an ordered graph G and returns  the length of the longest path that begins at $v_1$ and ends at $v_n$.(Again, the length of a path is the number of edges in the path.)
+\noindent \textbf{(b)} Give an efficient algorithm that takes an ordered graph G and returns  the length of the longest path that begins at $v_1$ and ends at $v_n$.(Again, the length of a path is the number of edges in the path.) \\
+
+\textbf{Answer :} This one took me a while to think about, because I was confused on what to concentrate on, the vertices or the edges. I ended up coming up with following notation : $$ E_i = \{ e_{i1} e_{i2} \ldots e_{ip} \} $$ the set of all edges that end at vertex $i$ ($i$ is the target). Each edge $e_{ik} \in E_i$ has a source labeled $e_{ik}.s$. \\
+
+The sub-problems that we are worried about solving is finding the maximum length path from vertex 1 to any vertex that comes before the current vertex and has an edge connecting it to the current vertex. Thus for a given vertex $n$ with edge set $E_n$, we need to find the lengths of the longest path from the start vertex to all vertices that are the source of an edge in $E_n$. \\
+The subproblems are related in that if we know the length of the longest path from the start to a vertex that is before the current one and connected to the current one, then the length of the longest path could be 1 + the length of the longest path to that vertex. To find the true longest path, we take the max of the longest paths to every previous vertex and add one. \\
+The recurrance is $ f(i) = 1+max(f(k) : k = e.s $ $ \forall e $ $ \in E_i) $ and $f(1) = 0$. This says that we look at the longest path for all vertices before and adjascent to the current vertex, and add one to the max of these values. The base case is on the first vertex, there is no where to go so the longest path $f(1)=0$. \\
+We once again only have an array to fill in as opposed to a table, because this problem only needs to memoize what is the best path for each of the $n$ vertices. The recursion states that the $n$th problem depends on all problems $i$ such that there is an edge $(i, n)$, so there would be arrows pointing backwards towards all adjascent vertices. The table is filled in algorithmically left to right, starting by filling in the first index with 0 and moving up, using the recurrance and the edge lists to fill in the individual sub-problems.  \\
+
+My algorithm goes through all vertices, starting at the beginning, and fills in the memoization array using the recurrance defined above. One issue is that since this is a directed graph, natural graph representations don't know which edges point in to which vertices, only what points out. This means that for each iteration of the loop $i$, we have to go through each vertex $k < i$ and check if there is an edge $(k,i)$, one that points to the current vertex. If so we add the value of the max length for that vertex $k$ to a list, which we end up taking the max value from. This guarentees that we find the longest path to the current vertex, which must be 1 plus the maximum of the longest paths to all precending, adjascent vertices. \\
+
+Note that this problem didn't ask to find the longest path, just the length, which simplifies the algorithm slighly by lessening the book-keeping.
 
 \vspace{6mm}
+
+\begin{lstlisting}
+# G = adj. matrix representation of graph on n vertices [1 to n].
+# G[i][k] = 1 if an edge from vertex i to vertex k, 0 otherwise
+# returns an integer that gives the longest path length
+find_longest_path(G)
+  M = array[1 to n] # will hold max length vals for all sub-problems
+  V = empty max heap # will hold temp. values for max function
+  M[1] = 0
+  for i in [1 to n] # inclusive of ends
+    for j in [1 to i-1] # only go to current vertex, not passed
+      if(G[j][i] == 1) #if edges from j to i
+        V.insert(M[j]) # add the length value to the heap, note that because
+                          # j < i, M[j] is defined.
+    M[i] = 1 + max(V) # set length 1 + max length of all adjascent, preceding vertices
+    V.empty() # clear the list for the next iteration
+
+  return M[n]
+\end{lstlisting}
+
+The running time for this problem is $O(n^2logm)$, where $m$ is the maximum number of incoming edges from preceding vertices that a given vertex has in a specific graph. This is because for each incoming edge, we have to perform a heap insertion of the M value for that source vertex, which is logarithmic in the size of the heap. Note that $m$ is always bounded above by $n$, so this could be replaced by $O(n^2log(n))$ for a looser bound. The $n^2$ term comes from the faux double for loop, the outer one runs $n$ times and the inner one runs a variable number of times bounded by $n$.
 
 \end{homeworkProblem}
 
