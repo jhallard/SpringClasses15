@@ -509,7 +509,47 @@ Give an efficient algorithm to find a partition of a set of words W into valid l
 
 \vspace{6mm}
 
+\textbf{Answer :} \\
+The sub-problems in this case are how the preceding groupings of words line-up given the line that you wish to put the current word on. In other words, if on the current word $w_i$ you decide to start a new line, whether or not this is optimal depends on if this newline disrupts the optimal solution of the preceding words. \\
+The subproblems are related in that if we know how the various groupings of the preceding words are scored, we can see how we should best rearrange the lines to add in the current word by taking a min. over all possible previous word combinations. \\
+To start, define Opt(i) to be the cost of the optimal way of arrange words $w_1$ through $w_i$, aka the minimized square slack over the first $i$ words.\\
+The recurrence is then : $$ Opt(0) = 0 \text{ and }Opt(i) = \text{min}_{1\leq t \leq i}(Opt(t-1) + S[t][i]) $$ S[t][i] refers to a table entry that contains the slack associated with arranging words $t$ through $i$ into a single line. Notice that we take the minimum over all possible line arrangements of the preceding words to find which one to add the current word to. \\
+I use two closely related tables to solve this problem. If there are $n$ words to be pretty-printed, the first table of values $T$ will be of size $n \times n$. The $T$[k][j] index will represent the number of characters by placing the words going from $w_k$ to $w_j$ on a single line. I then define a table $S$[i][j] of equal size the components of which are $ S_{ij} = (L - T_{ik})^2$ if $ T_{ik} \leq L $ and $\infty $ otherwise, this table represents the slack associated with grouping words $i$ through $j$ into a line. Finally, I also need an array Opt[j] which contains the total score associated with the optimal arrangement of the first $j$ words. By total score I mean the sum of the squared slacks of the lines used to arrange the first $j$ words. \\
 
+The algorithm is given below, it relies on the \verb.generate_table. subroutine which is defined below that. Instead of taking in a list of words in their entirety, it's easier to just get a list of integers representing the word length. Thus the algorithm is given a vector of word lengths (integers greater than zero), and a maximum line length L. The function will return a list of indices representing the words that are at the start of each line. Knowing these words is enough to define the entire structure of the document. Also note that even though the recurrance says we need to take the minimum over all sized groupings of words from 1 to $i$, we really only need to look backwards from $i-1$ until we find a sequence which is longer than L, we can stop because going further back (making a longer sequence of words) will only result in a sequence which also doesn't fit on a line. P is an array that, in index $i$ stores the first word on the last line of the optimal arrangement for words 1 to $i$. At the end of the algorithm, we will parse this array to get the final array of words that start each line by starting at $P_n$ and working our way backwards.
+
+\begin{lstlisting}
+# W = vector of n word lengths [w1 to wn]
+# L = max line length (> 0)
+pretty_print(W, L)
+S = generate_table(W, L)
+n = W.size() # number of words is our iteration count
+Opt = empty array[1 to n]
+P = empty array[1 to n] 
+Opt[1] = 0
+for i in 1 to n
+  Opt[i+1] = integer::max # equiv. of infinity
+  t = i
+  Temp = Opt[t] + S[t, i]
+  while t > 1 and Temp < integer::max # look backwards at larger sets of words
+    Temp = Opt[t-1] + S[t-1, i] # recurrence
+    if Temp < Opt[i+1]
+      Opt[i+1] = Temp
+      P[i] = k # k is best choice for words 1 to i
+
+# extract the true starting words from the P array
+ret = empty list
+i = n
+ret.insert(P[--i])
+while i > 0
+  ret.insert(P[i])
+  i -= P[i] # get the best solution for all words before P[i]
+
+return ret
+
+\end{lstlisting}
+
+\newpage
 \end{homeworkProblem}
 
 
