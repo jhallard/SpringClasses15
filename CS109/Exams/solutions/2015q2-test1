@@ -1,0 +1,119 @@
+$Id: 2015q1-test1,v 1.1 2015-04-21 17:44:58-07 - - $
+Answers to 2015q1-test1, page 1
+
+________________________________________________________________________
+Question 1(a). [1]
+
+for (const auto& e: v) cout << e << endl;
+
+________________________________________________________________________
+Question 1(b). [1]
+
+for (auto i = v.cbegin(); i != v.cend(); ++i) cout << *i << endl;
+
+________________________________________________________________________
+Question 2. [2]
+
+template <typename Iterator>
+double sum (Iterator begin, Iterator end) {
+   double s = 0;
+   while (begin != end) s += *begin++;
+   return s;
+}
+
+________________________________________________________________________
+Question 3. [2]
+
+ostream& operator<< (ostream& out, bool b) {
+   return out << (b ? "true" : "false");
+}
+
+________________________________________________________________________
+Question 4. [2]
+
+using mathfn = double (*) (double);
+unordered_map<string,mathfn> functions;
+
+________________________________________________________________________
+Question 5. [2]
+
+vector<double> v;
+double d;
+while (cin >> d) v.push_back (d);
+
+
+Answers to 2015q1-test1, page 2
+
+________________________________________________________________________
+Question 6. [1]
+
+public:
+   complex (double d = 0, double i = 0): real(d), imag(i) {}
+
+________________________________________________________________________
+Question 7. [2]
+
+struct name {
+   bool operator< (const name& that) {
+      if (last < that.last) return true;
+      if (that.last < last) return false;
+      return first < that.first;
+   }
+
+________________________________________________________________________
+Question 8(a). [4]
+
+class iterator {
+   iterator (T* i): curr (i) {}
+   T& operator*() { return *curr; }
+   iterator& operator++() { ++curr; return *this; }
+   bool operator!= (const iterator& that) { return curr != that.curr; }
+}
+
+________________________________________________________________________
+Question 8(b). [1]
+
+struct vec {
+   iterator begin { return iterator (&data[0]); }
+   iterator end { return iterator (&data[N]); }
+}
+
+________________________________________________________________________
+Question 9. [2]
+
+template <typename Iterator>
+Iterator smallest (Iterator begin, Iterator end) {
+   Iterator small = begin;
+   for (; begin != end; ++begin) {
+      if (*begin < *small) small = begin;
+   }
+   return small;
+}
+
+
+Answers to 2015q1-test1, page 3
+
+ 1.    (B) return *this;
+
+ 2.    (C) shared_ptr<T>
+
+ 3.    (B) &a[10]
+
+ 4.    (A) deque
+
+ 5.    (C) map
+
+ 6.    (B) &s == &t
+
+ 7.    (C) foo (foo&&);
+
+ 8.    (C) foo operator++ (foo&, int);
+
+ 9.    (D) using namespace std;
+
+10.    (C) explicit
+
+11.    (A) ++i
+
+12.    (D) operator<<
+

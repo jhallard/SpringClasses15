@@ -1,0 +1,200 @@
+$Id: 2013q1-test3,v 1.3 2013-03-21 14:23:42-07 - - $
+Answers to 2013q2-test2, page 1
+
+________________________________________________________________________
+Question 1. [5]
+
+template <typename iterator, typename container, typename binpred>
+void merge (const iterator &b1, const iterator &e1,
+            const iterator &b2, const iterator &e2,
+            container &c, binpred &less) {
+   while (b1 != e1 && b2 != e2) {
+      if (less (*b1, *b2)) c.push_back (*b1++);
+                      else c.push_back (*b2++);
+   }
+   while (b1 != e1) c.push_back (*b1++);
+   while (b2 != e2) c.push_back (*b2++);
+}
+
+________________________________________________________________________
+Question 2. [5]
+
+template <typename value>
+class stack {
+   private:
+      vector<value> vec;
+   public:
+      void pop() {vec.pop_back();}
+      void push (const value &t) {vec.push_back(t);}
+      value top() {return vec.back();}
+      bool empty(); {return vec.empty();}
+}
+
+
+Answers to 2013q2-test1, page 2
+
+________________________________________________________________________
+Question 3.
+
+template <typename T>
+void swap (T &a, T &b) {
+   T t = a;
+   a = b;
+   b = t;
+}
+
+________________________________________________________________________
+Question 4(a).
+
+class dateclient {
+   public static void main (String[] args) throws IOException {
+      Socket socket = new Socket ("localhost", 10000);
+      Scanner in = new Scanner (socket.getInputStream());
+      out.println (in.nextLine());
+   }
+}
+
+________________________________________________________________________
+Question 4(b).
+
+class dateserver {
+   public static void main (String[] args) throws IOException {
+      ServerSocket socket = new ServerSocket (10000);
+      for (;;) {
+         Socket client = socket.accept();
+         PrintWriter out = new PrintWriter (client.getOutputStream());
+         out.println (new Date());
+         out.flush();
+         client.close();
+      }
+   }
+}
+
+________________________________________________________________________
+Question 5.
+
+template <typename iterator, typename predicate>
+iterator find (const iterator &begin, const iterator &end,
+               predicate pred) {
+   iterator itor = begin;
+   while (itor != end && ! pred (*itor)) ++itor;
+   return itor;
+}
+
+
+Answers to 2013q2-test1, page 3
+
+________________________________________________________________________
+Question 6.
+
+int main (int argc, char **argv) {
+   vector<string> args;
+   for (char **i = &argv+1; i != argv+argc; ++i)
+      args.push_back (*i);
+   // or a few dozen other equivalent answers
+
+________________________________________________________________________
+Question 7(a).
+
+box &operator= (const box&);
+~operator();
+// non-line version ok too.
+
+________________________________________________________________________
+Question 7(b).
+
+box &box::operator= (const box &) {
+   if (this == &that) return *this;
+   delete[] data;
+   size = that.size;
+   data = new int[that.size];
+   for (int i = 0; i < size; ++i) data[i] = that.data[i];
+   return *this;
+}
+
+________________________________________________________________________
+Question 7(c).
+
+box::~box() {
+   delete[] data;
+}
+
+________________________________________________________________________
+Question 8.
+
+template <typename iterator>
+double average (const iterator &begin, const iterator &end) {
+   double sum = 0.0; int count = 0;
+   for (iterator i = begin; i != end; ++i) {
+      sum += *i; ++count;
+   }
+   return sum / count;
+}
+// Note: no need to check for zerodivide, since this uses double
+// division.  Zerodivide produces +Infinity, -Infinity, or NaN.
+
+________________________________________________________________________
+Question 9.
+
+template <typename value>
+ostream &operator (ostream &out, vector<value> v) {
+   if (v.size()) > 0) {
+      auto i = v.begin();
+      out << *i;
+      while (++i != v.end()) cout << " " << *i;
+   }
+   return out;
+}
+
+
+Answers to 2013q2-test1, page 4
+
+ 1.    (B) &v[0]
+
+ 2.    (C) --i
+
+ 3.    (D) (x) unsigned;  (y) a>>3
+
+ 4.    (D) foo operator++ (int);
+
+ 5.    (B) pointer
+
+ 6.    (B) JFrame
+
+ 7.    (C) cyclic graph
+
+ 8.    (D) red-black tree
+
+ 9.    (D) std::vector
+
+10.    (A) catch (exn &e)
+
+11.    (D) Simula
+
+
+
+Answers to 2013q2-test1, page 5
+
+ 1.    (C) race
+
+ 2.    (A) can not be instantiated
+
+ 3.    (C) upper left
+
+ 4.    (A) lower left
+
+ 5.    (A) Runnable
+
+ 6.    (C) Declare it as public but instead of implementing it, mark it
+        as = delete.
+
+ 7.    (A) operator()
+
+ 8.    (A) auto
+
+ 9.    (B) ${GPP} -c $<
+
+10.    (C) cout<<**i;
+
+11.    (B) the copy constructor
+

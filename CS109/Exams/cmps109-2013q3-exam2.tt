@@ -1,0 +1,204 @@
+CMPS-109 · Advanced Programming · Summer 2013 · Test #2    page 1 of 1
+$Id: cmps109-2013q3-exam2.mm,v 1.29 2013-07-25 17:45:04-07 - - $
+
+.PS
+examboxes(3)
+.PE
+
+No books;  No calculator;  No computer;  No email;  No internet;  No
+notes;  No phone.  Neatness counts!  Do your scratch work elsewhere
+and enter only your final answer into the spaces provided.
+
+.EQ
+delim $$
+tdefine suchthat "{type relation |}"
+.EN
+
+ 1. If we are writing a mathematical calculator application and want
+    to store functions like sqrt, sin, cos, etc.  in a map, write two
+    typedefs:  Define mathfn to be a pointer to any function with a
+    double argument which returns a double result.  Define mathmap to
+    be a map whose keys are strings and whose values are mathfns.
+    [1pt]
+
+ 2. Write a function sum that takes a vector<int> and returns the sum
+    of all the integers in the vector.  [1pt]
+
+ 3. Assume we have the declaration map<string,size_t> freq;  which has
+    words found in a document as keys and the counts of the number of
+    times each word appears.  Write a function which will print out
+    the 100 most frequently-used words in descending order of
+    frequency.  If any words appear with the same frequency, print
+    them in lexicographical order.  This is done in several steps.
+
+     (a) Write two typedefs, defining a wordmap as the type given
+         above, and a wordpair as the type of the value_type of that
+         map.  [1pt]
+
+     (b) Write a function called precedes which takes two wordpair
+         values by constant reference and returns true if the first
+         one should precede the second.  If the counts are different,
+         the larger count precedes.  If the counts are the same, the
+         lexicographically least word precedes.  [2pt]
+
+     (c) Write the function printmap, which returns void, whose
+         argument is map of the type described above.
+          (i) Declare a vector capable of holding all map elements.
+              Use an iterator to copy all of the elements of the map
+              into a vector.  [2pt]
+         (ii) Sort the vector using the sort function, whose arguments
+              are a beginning iterator, an ending iterator, and a
+              function which returns true when its first argument
+              should precede its second.  Example:  sort(b,e,f) will
+              sort the range [b,e) using the function f as a
+              comparator.  [1pt]
+         (iii) Print out the first 100 elements of the vector, or all
+              the vector if there are fewer than 100 elements.  Each
+              line of output is a field of width 10 with the count,
+              then a space, then the word.  The manipulator setw(10)
+              will set the next field to be printed using 10
+              characters.  Example:  cout<<setw(10)<<n works like
+              printf("%10d",n).  [2pt]
+
+ 4. Define the class shape.  Define circle and rectangle which inherit
+    from shape.  Code all methods inline.
+
+     (a) Define the class shape, as a base class for the others,
+         giving its methods the appropriate protection classification,
+         and making them pure virtual as appropriate.  Make sure
+         objects can not be copied.  Code all methods inline.  [2pt]
+
+     (b) Define the class circle, inheriting from shape.  It has a
+         field radius.  Its explicit constructor takes one argument
+         with a default value of 0.  It has a method area, which
+         returns its area , and a method boundary, which returns its
+         circumference.  The math library in C++ defines M_PI with the
+         appropriate value.  Reminder (for those who failed algebra):
+         $ A = pi r sup 2 $ and $ C = 2 pi r $.  Code all methods
+         inline.  [2pt]
+
+     (c) Define the class rectangle, with fields width and height.
+         Its explicit constructor takes two arguments, width and
+         height, in that order.  Both have default values of 0.  It
+         also has the methods area and boundary.  Code all methods
+         inline.  [2pt]
+
+ 5. Write a function to merge two vectors of integers into a single
+    vector of integers, which is then returned.  Assume both input
+    vectors are sorted into increasing order and make sure the output
+    vector is sorted in the same way.  Use iterators.  Scan both
+    vectors, copying elements to the output vector, until all elements
+    of one vector is exhausted.  Then write two loops following that
+    which will copy the remainder of the unscanned elements to the
+    output vector.  [4pt]
+
+    vector<int> merge (const vector<int> v1, const vector<int> v2) {
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer.  Wrong answers are worth negative points.  [12pt]
+
++--------------------------+------+------+------------+
+|number of                 |      |× 1 = |      $= a$ |
+|correct answers           |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× ½ = |      $= b$ |
+|wrong answers             |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× 0 = |  0         |
+|missing answers           |      |      |            |
++--------------------------+------+------+------------+
+|column total              |   12 |      |      $= c$ |
+|$ c = max ( a - b , 0 ) $ |      |      |            |
++--------------------------+------+------+------------+
+
+ 1. Suppose we have the declarations
+    vector<shared_ptr<string>> vec;
+    auto i = vec.cbegin();
+    What statement will print a string in the vector?
+    (A) cout << i;
+    (B) cout << *i;
+    (C) cout << **i;
+    (D) cout << ***i;
+
+ 2. If we wish to put pointers to nodes in several containers, where a
+    node may be pointed at from several containers, the safest way to
+    do this is to use what kind of container elements?
+    (A) auto_ptr<node>
+    (B) node*
+    (C) shared_ptr<node>
+    (D) unique_ptr<node>
+
+ 3. A protected field of class foo in C++ may be used in:
+    (A) class foo and all classes in the same namespace as foo.
+    (B) class foo and all of its subclases.
+    (C) class foo and all of its superclasses.
+    (D) class foo and any class that names foo as a friend.
+
+ 4. By default, members of a class are __(x)__, and members of a
+    struct are __(y)__.
+    (A) (x) = private and (y) = private
+    (B) (x) = private and (y) = public
+    (C) (x) = public and (y) = private
+    (D) (x) = public and (y) = public
+
+ 5. What is the signature of a move constructor for class foo?
+    (A) foo (const foo &&);
+    (B) foo (const foo &);
+    (C) foo (foo &&);
+    (D) foo (foo &);
+
+ 6. Given the following definitions, which statement will compile
+    without error, and will not lose information?
+    class B {};
+    class D: public B {};
+    B *b; D *d;
+    (A) *b = *d;
+    (B) *d = *b;
+    (C) b = d;
+    (D) d = b;
+
+ 7. What statement will create one vector with 10 elements in it?
+    (A) new vector->int (10)
+    (B) new vector::int [10]
+    (C) new vector<int> (10)
+    (D) new vector<int> [10]
+
+ 8. If i is an integer, and p is a pointer or direct-access iterator,
+    which of the following is illegal?
+    (A) i + i
+    (B) i + p
+    (C) p + i
+    (D) p + p
+
+ 9. In a Makefile, what symbol is used to fill in the blank?
+    %.o : %.cpp
+            ${COMPILECPP} -c __
+    (A) $$
+    (B) $<
+    (C) $?
+    (D) $@
+
+10. If a class has any virtual functions, then what else must be
+    declared virtual?
+    (A) all constructors
+    (B) all non-constant fields
+    (C) all other function members
+    (D) the destructor
+
+11. If we have a function foo f() whose last statement returns a
+    locally constructed foo object, and it is called from the
+    statement h = f(), what member of foo is used at the return
+    statement?
+    (A) foo &operator= (const foo &);
+    (B) foo &operator= (foo &&);
+    (C) foo (const foo &);
+    (D) foo (foo &&);
+
+12. What do the following statements do?
+    x = 3, 14; y = (3, 14);
+    (A) x = 14; y = 14;
+    (B) x = 14; y = 3;
+    (C) x = 3; y = 14;
+    (D) x = 3; y = 3;
+

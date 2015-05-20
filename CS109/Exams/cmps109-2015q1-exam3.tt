@@ -1,0 +1,342 @@
+CMPS-109 · Advanced Programming · Winter 2015 · Final Exam      1 of 1
+$Id: cmps109-2015q1-exam3.mm,v 1.89 2015-03-06 19:41:05-08 - - $
+
+.PS
+examboxes(5)
+.PE
+
+Code only in C++11.  No books;  No calculator;  No computer;  No
+email;  No internet;  No notes;  No phone.  Neatness counts!  Do your
+scratch work elsewhere and enter only your final answer into the
+spaces provided.
+
+.EQ
+delim $$
+define suchthat "{type relation |}"
+.EN
+
+1. Write the prototypes as they would appear inside the class foo
+   declarations for the four implicitly generated members in C++98,
+   and for the two others that appeared only in C++11.  [2pt]
+
+   +------------------------------------+-------------------------------------+
+   |class foo { // both C++98 and C++11 | class foo { // C++11 but not C++98  |
+   |public:                             | public:                             |
+   |                                    |                                     |
+   |                                    |                                     |
+   |                                    |                                     |
+   |                                    |                                     |
+   |};                                  | };                                  |
+   +------------------------------------+-------------------------------------+
+
+2. Write the function blue_triangle, which has no parameters, which
+   will draw a blue triangle with vertices at $ ( 0 , 0 ) $, $ ( 4 , 0
+   ) $, and $ ( 4 , 4 ) $.  [3pt]
+
+3. Define the template function copy.  It has two template arguments,
+   both forward iterator types.  It has four function arguments:
+   begin and end iterators bounding an input sequence, followed by
+   begin and end iterators bounding an output sequence.  It copies the
+   input sequence to the output sequence.  Assume that the output
+   sequence is large enough.  [2pt]
+
+4. Write a function zipwith.  It has two template parameters:  an
+   arbitrary element type, and a binary function type.  It has three
+   actual parameters:  two vectors of the element type, passed in by
+   constant reference, and a pointer to a binary function.  Its result
+   is a vector of the element type.  Elements of the argument types
+   are combined pairwise with the binary function to produce the
+   output function.  Throw a domain_error if the vectors have
+   different lengths.  For example,
+      vector<int> v1{1,2,3}, v2{4,5,6}, v3;
+      v3 = zipwith (v1, v2, plus<int>());
+   will set v3 to {5,7,9}.  [3pt]
+
+5. Define the template class queue as it might appear in a header
+   file.  All functions must be declared inline inside the class
+   definition.  All of the implicitly generated members are acceptable
+   and therefore do not need to be declared.  It has a single private
+   member of type deque, on which the queue is implemented.  Define
+   the following public members with appropriate signatures:  clear,
+   size, empty, push_back, pop_front, and front.  Each of them simply
+   uses the equivalent deque operation.  [4pt]
+
+6. Define three classes:
+    (a) The base class is shape.  It has a single protected
+        constructor of no arguments, and two parameterless abstract
+        functions circumference and area which return a double.  For
+        the mathematically challenged, remember that $ A = pi r sup 2
+        $ and $ C = 2 pi r $.  The header <cmath> defines the constant
+        M_PI.  [2pt]
+
+    (b) Class circle inherits from shape and has a private field
+        radius.  It has one constructor which takes a radius argument
+        and overrides circumference and area.  [2pt]
+
+    (c) Class square inherits from shape and has a private field
+        length, which is the length of one edge.  It overrides
+        circumference and area.  [2pt]
+
+7. Write a function differentiate which performs symbolic
+   differentiation on a polynomial.  For example,
+
+                                 .EQ
+             d over dx  ~ a x sup 3 + b x sup 2 + c x + d
+                ~ ~ ~ = ~ ~ ~ 3 a x sup 2 + 2 b x + c
+                                 .EN
+
+   In other words, for each term in the sum of the form $ k x sup n $,
+   the resulting derivative term is $ k n x sup { n - 1 } $.
+   Represent the polynomial as using polynomial = vector<double>;,
+   with the exponent as the subscript and the coefficient as the
+   value.  So, for example, $ v = 5 x sup 3 + 9 x sup 2 + 8 x + 10 $
+   and its derivative $ d = 15 x sup 2 + 18 x + 8 $ are represented as
+   polynomial v {10, 8, 9, 5};  and polynomial d {8, 18, 15};,
+   respectively.  [3pt]
+
+   polynomial differentiate (const polynomial& p) {
+
+8. Finish the function which will draw a blue circle with radius 1,
+   centered at coördinates $ ( 0 , 0 ) $.  using OpenGL.  When
+   stepping around the circle it uses angle $ Delta = 2 pi / 32 $.
+   [3pt]
+
+   void draw_circle() {
+      constexpr double delta = 2 * M_PI / 32;
+      glBegin (GL_POLYGON);
+
+      glEnd();
+   }
+
+9. Define a template function print, which takes a pair of iterators
+   and an ostream and prints all elements within the range, preceded
+   by an open brace ({) and followed by a close brace (}) with each
+   element separated by commas.  For example, print (v.begin(), v.
+   end(), cout);  might print {3,4,5}.  [2pt]
+
+10. Given the structure shown here, representing an expression tree
+   where interior nodes are operators and leaf nodes are variables,
+   finish the function print which will print out the entire tree in
+   reverse Polish notation (a postorder traversal).  [2pt]
+                                                   |
+   struct tree {                                   | struct interior: public tree {
+      virtual void print (ostream& out) = 0;       |    char oper;
+   };                                              |    tree* left;
+   struct leaf: public tree {                      |    tree* right;
+      char var;                                    |    virtual void print (ostream& out) override {
+      virtual void print (ostream& out) override { |
+                                                   |
+                                                   |
+      }                                            |    }
+   };                                              | };
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer.  Wrong answers are worth negative points.  [12pt]
+
++--------------------------+------+------+------------+
+|number of                 |      |× 1 = |      $= a$ |
+|correct answers           |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× ½ = |      $= b$ |
+|wrong answers             |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× 0 = |  0         |
+|missing answers           |      |      |            |
++--------------------------+------+------+------------+
+|column total              |   12 |      |      $= c$ |
+|$ c = max ( a - b , 0 ) $ |      |      |            |
++--------------------------+------+------+------------+
+
+ 1. In the listmap project, if there are $n$ integers in a
+    listmap<int>, how many pointers in the data structure?
+    (A) $n$
+    (B) $n + 1$
+    (C) $2 n$
+    (D) $2 n + 1$
+
+ 2. If a server is already running, what system call is used by the
+    client to gain access to a server's socket?
+    (A) accept(2)
+    (B) bind(2)
+    (C) connect(2)
+    (D) listen(2)
+
+ 3. Which of the following is an IPv4 internet address?
+    (A) 127.0.1
+    (B) 2607:f8b0:4010:801::1010
+    (C) 74.125.239.50
+    (D) 740.625.239.50
+
+ 4. Using the OpenGL coordinate system from the project, the point $(
+    0 , 0 )$ is shown at the center.  Where is the point $( +1 , +1
+    )$?
+    (A) upper left
+    (B) upper right
+    (C) lower right
+    (D) lower left
+
+ 5. If operator[] were implemented for std::list, what would be its
+    speed?
+    (A) $ O ( 1 ) $
+    (B) $ O ( log sub 2 n ) $
+    (C) $ O ( n ) $
+    (D) $ O ( n log sub 2 n ) $
+
+ 6. If two or more threads access the same variable without any locks,
+    what happens?
+    (A) deadlock
+    (B) race condition
+    (C) runtime error
+    (D) segmentation fault
+
+ 7. What is:  foo x();
+    (A) x is a foo variable initialized by the empty initializer list.
+    (B) x is a function with no arguments which returns a foo.
+    (C) x is a variable of type foo initialized by the default ctor.
+    (D) x is a variable of type foo initialized to 0 by default.
+
+ 8. Which is a correct catch statement?
+    (A) catch (domain_error  error)
+    (B) catch (domain_error& error)
+    (C) catch (domain_error* error)
+    (D) catch (domain_error~ error)
+
+ 9. Which is based on an array of pointers to fixed sized blocks,
+    where these blocks are never moved during expansion?
+    (A) deque
+    (B) list
+    (C) map
+    (D) vector
+
+10. Given vector<int> v;, which will produce the address of the first
+    element of v?
+    (A) int* a = &*v.begin();
+    (B) int* b = &v.begin();
+    (C) int* c = *&v.begin();
+    (D) int* d = *v.begin();
+
+11. Given class foo { ~foo(); };, what is the proper way to define the
+    destructor outside the class?
+    (A) foo::!foo(){}
+    (B) foo::~foo(){}
+    (C) foo~::foo(){}
+    (D) ~foo::foo(){}
+
+12. A foo is an arbitrarily large object, and f does not intend to
+    modify it.  Which declaration is most correct?
+    (A) void f (const foo);
+    (B) void f (foo&);
+    (C) void f (foo);
+    (D) void f (const foo&);
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer.  Wrong answers are worth negative points.  [12pt]
+
++--------------------------+------+------+------------+
+|number of                 |      |× 1 = |      $= a$ |
+|correct answers           |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× ½ = |      $= b$ |
+|wrong answers             |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× 0 = |  0         |
+|missing answers           |      |      |            |
++--------------------------+------+------+------------+
+|column total              |   12 |      |      $= c$ |
+|$ c = max ( a - b , 0 ) $ |      |      |            |
++--------------------------+------+------+------------+
+
+ 1. For char** argv, what expression would be equivalent to argv.
+    end(), if char** were the name of a class?
+    (A) &argv[0]
+    (B) &argv[1]
+    (C) &argv[argc-1]
+    (D) &argv[argc]
+
+ 2. After the following statement, what is the correct way to free the
+    memory pointed at by p?
+    foo *p = new foo[n];
+    (A) delete* p;
+    (B) delete[] p;
+    (C) delete~ p;
+    (D) delete p;
+
+ 3. After the following system call, how many useful bits of
+    information are in the variable status?
+    pid_t child = waitpid (-1,&status,WNOHANG);
+    (A)  8
+    (B) 16
+    (C) 24
+    (D) 32
+
+ 4. In order to prohibit a constructor from being used in an automatic
+    conversion, what keyword is used?
+    (A) delete
+    (B) explicit
+    (C) override
+    (D) virtual
+
+ 5. An attempt to define which of the following as a binary operator
+    will always result in a compile-time error?
+    (A) operator()
+    (B) operator*
+    (C) operator->
+    (D) operator[]
+
+ 6. Which of the following works for a collection that supports only a
+    forward iterator?  If more than one is correct, choose the most
+    efficient.
+    (A) for (auto i = c.begin();
+             i != c.end(); ++i) f(*i);
+    (B) for (auto i = c.begin();
+             i != c.end(); i++) f(*i);
+    (C) for (auto i = c.begin();
+             i < c.end(); ++i) f(*i);
+    (D) for (auto i = c.begin();
+             i < c.end(); i++) f(*i);
+
+ 7. Which of the following is a class defined in C++98 which is
+    deprecated in C++11, for some arbitrary type T?
+    (A) T*
+    (B) auto_ptr<T>
+    (C) shared_ptr<T>
+    (D) unique_ptr<T>
+
+ 8. What is the amortized time complexity of
+    map<int,int>::insert?
+    (A) $ O ( 1 ) $
+    (B) $ O ( log n ) $
+    (C) $ O ( n ) $
+    (D) $ O ( n log n ) $
+
+ 9. What is the amortized time complexity of
+    unordered_map<int,int>::insert?
+    (A) $ O ( 1 ) $
+    (B) $ O ( log n ) $
+    (C) $ O ( n ) $
+    (D) $ O ( n log n ) $
+
+10. An iterator is based on the half-open interval $ [ a , b ) $.
+    This is the set:
+    (A) $ left { x suchthat a < x < b right } $
+    (B) $ left { x suchthat a < x <= b right } $
+    (C) $ left { x suchthat a <= x < b right } $
+    (D) $ left { x suchthat a <= x <= b right } $
+
+11. Templates in C++ implement what kind of polymorphism?
+    (A) ad hoc conversion
+    (B) ad hoc overloading
+    (C) universal inclusion
+    (D) universal parametric
+
+12. Given the following declarations, which statement will print a
+    string?
+    vector<string*> v;
+    auto& i = v.begin();
+    (A) cout << i;
+    (B) cout << *i;
+    (C) cout << **i;
+    (D) cout << ***i;
+

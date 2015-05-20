@@ -1,0 +1,305 @@
+CMPS-109 · Advanced Programming · Spring 2014 · Final Exam      1 of 1
+$Id: cmps109-2014q2-exam3.mm,v 1.46 2014-05-29 17:20:21-07 - - $
+
+.PS
+examboxes(5)
+.PE
+
+No books;  No calculator;  No computer;  No email;  No internet;  No
+notes;  No phone.  Neatness counts!  Do your scratch work elsewhere
+and enter only your final answer into the spaces provided.
+
+.EQ
+delim $$
+tdefine suchthat "{type relation |}"
+.EN
+
+  1. Write the template function find which takes a key and a pair of
+     forward iterators and returns the iterator which indicates the
+     first item in the container that is == to the key.  [2pt]
+
+     template <typename Keytype, typename Itertype>
+     Itertype find (Itertype begin, Itertype end, const Keytype& key) {
+
+  2. Write the template function find which takes a pair of forward
+     iterators and a predicate and which returns the iterator
+     indicating the first item in the container for which the
+     predicate is true.  Hint:  the predicate takes a const Keytype&
+     and returns a bool.  [2pt]
+
+     template <typename Keytype, typename Itertype>
+     Itertype find (Itertype begin, Itertype end, bool (*pred) (const Keytype& key) {
+
+  3. Write the function circle in OpenGL, which draws a circle with
+     the center at the coordinates $ ( x , y ) $ given to it.  The
+     radius and color are also given.  [3pt]
+
+     void draw_circle (float xcenter, float ycenter, float radius, const GLubyte* color) {
+        glBegin (GL_POLYGON);
+
+  4. Assuming the sockets library from project 5, and assuming that a
+     date server exists that sends a single message back to the client
+     then quits, write a function date_client, which when called from
+     main, will contact the server for the date and print it.  [3pt]
+
+     void date_client (string host, in_port_t port) {
+
+  5. In the multiprecision project, it was necessary to add two
+     vectors of digits, each digit being represented in a byte.  Write
+     a function which takes to such vectors (signs are ignored here,
+     only absolute values are used) and adds them together.  [4pt]
+
+     typedef unsigned char byte;
+     typedef vector<byte> unumber;
+     unumber absadd (const unumber& u1, const unumber& u2) {
+
+  6. Define an object-oriented hierarchy as shown in the three parts
+     described here.  Show all code as it would appear in a header
+     file so that no implementation file is needed.  All classes have
+     the virtual functions area and circumference as well as suitable
+     constructors.  Make sure the constructors can not be used in
+     implicit conversions.
+
+      (a) Class shape is the base class with abstract functions, and a
+          suitably protected constructor.  [2pt]
+
+      (b) Class circle1 has a single radius field which is initialized
+          by the constructor.  [2pt]
+
+      (c) Class square has a single edge field (the length of one
+          edge) initialized by the constructor and also the two other
+          functions.  [2pt]
+
+  7. Referring to the question on the previous page, write a function
+     that will take a pair of iterators pointing into a container, and
+     print two numbers:  the sum of the areas and the sum of the
+     circumferences.  [3pt]
+
+     typedef vector<shared_ptr<shape>>::const_iterator vec_iterator;
+     void print_data (vec_iterator begin, vec_iterator end) {
+
+  8. Define a template class queue with a single typename parameter T.
+     Show only what should be in queue.h, not anything from queue.cpp,
+     except for when an inline is explicitly requred.
+      (i) Declare the private node which contains a T and a link to
+          the next node in the list.  [1pt]
+     (ii) Declare the head and tail pointers to be automatically
+          initiallized to the null pointer.  [1pt]
+     (iii) Disable the copy constructor and copy operator=.  [1pt]
+     (iv) Declare a front function which is a constant function
+          returning a constant reference to the data in the first
+          node.  [1pt]
+      (v) Declare a non-constant front function which returns a non-
+          constant reference to the data in the first node.  [1pt]
+     (vi) Declare pop_front in the way consistent with other
+          containers.  Do not show the implementation.  [1pt]
+     (vii) Declare push_back.  Do not show the implementation.  [1pt]
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer, which count negative points.  [12pt]
+
++--------------------------+-----+-----+-----------+
+|number of                 |     |×1 = |     $= a$ |
+|correct answers           |     |     |           |
++--------------------------+-----+-----+-----------+
+|number of                 |     |×½ = |     $= b$ |
+|wrong answers             |     |     |           |
++--------------------------+-----+-----+-----------+
+|number of                 |     |×0 = |    0      |
+|missing answers           |     |     |           |
++--------------------------+-----+-----+-----------+
+|column total              |  12 |     |     $= c$ |
+|$ c = max ( a - b , 0 ) $ |     |     |           |
++--------------------------+-----+-----+-----------+
+
+  1. A process which stays in the background doing nothing until it
+     accepts a request from a client is called a:
+     (A) daemon
+     (B) vampire
+     (C) werewolf
+     (D) zombie
+
+  2. The value of a constexpr identifier is computed at:
+     (A) compile time.
+     (B) link time.
+     (C) program load time.
+     (D) funcation call time.
+
+  3. Which of the following makes use of the least amount of heap
+     space?
+     (A) deque<T>
+     (B) list<T>
+     (C) map<T>
+     (D) vector<T>
+
+  4. Two processes communicate via a socket, but each does only
+     writing to the socket, never reading.  This results in a:
+     (A) deadlock
+     (B) livelock
+     (C) memory leak
+     (D) race condition
+
+  5. The declaration int x;  inside a function results in x being
+     allocated in what memory segment?
+     (A) data
+     (B) heap
+     (C) stack
+     (D) text
+
+  6. To prevent a constructor from being used implicitly in a
+     conversion operation, precede its declaration by what keyword?
+     (A) const
+     (B) explicit
+     (C) inline
+     (D) private
+
+  7. If an object is to be used as if it were a function, it must have
+     what operator defined?
+     (A) operator()
+     (B) operator*
+     (C) operator->
+     (D) operator[]
+
+  8. If i is an iterator pointing into a map, then the value
+     associated with a given key is accessed via:
+     (A) i->first
+     (B) i->second
+     (C) i.first
+     (D) i.second
+
+  9. What are the maximum and minimum values of the exit status value
+     returned by a program?
+     (A) $-1$ for error and $0$ for success.
+     (B) $-128$ to $127$.
+     (C) $0$ to $255$.
+     (D) $0$ to $65535$.
+
+ 10. In a client/server application, the client indicates a need to
+     talk to a server via what system call?
+     (A) accept(2)
+     (B) bind(2)
+     (C) connect(2)
+     (D) socket(2)
+
+ 11. What is a possible way to implement map in C++ so that
+     performance is acceptable?
+     (A) double-ended queue
+     (B) hash table
+     (C) linear linked list
+     (D) red-black tree
+
+ 12. What class performs storage management by reference counting?
+     (A) auto_ptr<T>
+     (B) counted_ptr<T>
+     (C) shared_ptr<T>
+     (D) unique_ptr<T>
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer, which count negative points.  [12pt]
+
++--------------------------+-----+-----+-----------+
+|number of                 |     |×1 = |     $= a$ |
+|correct answers           |     |     |           |
++--------------------------+-----+-----+-----------+
+|number of                 |     |×½ = |     $= b$ |
+|wrong answers             |     |     |           |
++--------------------------+-----+-----+-----------+
+|number of                 |     |×0 = |    0      |
+|missing answers           |     |     |           |
++--------------------------+-----+-----+-----------+
+|column total              |  12 |     |     $= c$ |
+|$ c = max ( a - b , 0 ) $ |     |     |           |
++--------------------------+-----+-----+-----------+
+
+  1. After a process exits but before its parent waits for it, it is
+     a:
+     (A) daemon
+     (B) vampire
+     (C) werewolf
+     (D) zombie
+
+  2. In OpenGL without transformations on a 2D plane, the $x$-axis
+     increases __-ward and the $y$-axis increases __-ward.
+     (A) $x$ leftward and $y$ downward.
+     (B) $x$ leftward and $y$ upward.
+     (C) $x$ rightward, and $y$ downward.
+     (D) $x$ rightward, and $y$ upward.
+
+  3. To register an interrupt handler, such as, for example, to catch
+     a SIGINT without having the program crash, what function is used?
+     (A) accept(2)
+     (B) listen(2)
+     (C) sigaction(2)
+     (D) socket(2)
+
+  4. When a runtime_exception is caught, how is the specific message
+     found?
+     (A) e.getMessage()
+     (B) e.strerror()
+     (C) e.to_string()
+     (D) e.what()
+
+  5. Which of the following will be flagged (the compiler issues a
+     warning) as a narrowing conversion?
+     (A) int a (4.8);
+     (B) int a = 4.8;
+     (C) int a = {int(4.8)};
+     (D) int a {4.8};
+
+  6. If we have a class T and a variable T x;, Then normally we would
+     expect operator<< that allows cout<<x;  to be:
+     (A) a member of class T.
+     (B) a member of class ostream.
+     (C) a virtual function dispatched on x.
+     (D) not a member of any class.
+
+  7. For class T, in order to ensure that there is no copy constructor
+     for itself nor for any derived classes, it should be declared as:
+     (A) T (const T&) = 0;
+     (B) T (const T&) = delete;
+     (C) T (const T&) = void;
+     (D) T (const T&) {}
+
+  8. What would one expect to be the first non-comment line in foo.h?
+     (A) #define __FOO_H__
+     (B) #ifdef __FOO_H__
+     (C) #ifndef __FOO_H__
+     (D) #include "foo.h"
+
+  9. Which of the following will generate a compile time error
+     message?
+     (A) "a" + "b"
+     (B) "a" + string("b")
+     (C) string("a") + "b"
+     (D) string("a") + string("b")
+
+ 10. Which system call when executed by a server causes it to block
+     until another process tries to connect to it or until an
+     interrupt occurs?
+     (A) accept(2)
+     (B) listen(2)
+     (C) sigaction(2)
+     (D) socket(2)
+
+ 11. What is the preferred way of referring to the null pointer in
+     C++11?
+     (A) 0
+     (B) NULL
+     (C) null
+     (D) nullptr
+
+ 12. A move constructor for class T would be declared as:
+     (A) T (T&&);
+     (B) T (T**);
+     (C) T (const T&);
+     (D) T (const T*);
+
+____________________
+
+1. For the mathematically challenged:  $ A = pi r sup 2 $ and $ C =  2
+   pi r $.
+   And  <cmath> defines M_PI:  # define M_PI 3.14159265358979323846 /*
+   pi */
+

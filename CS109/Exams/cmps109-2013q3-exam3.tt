@@ -1,0 +1,307 @@
+CMPS-109 · Advanced Programming · Summer 2013 · Final Exam page 1 of 1
+$Id: cmps109-2013q3-exam3.mm,v 1.173 2013-08-28 18:11:33-07 - - $
+
+.PS
+examboxes(4)
+.PE
+
+No books;  No calculator;  No computer;  No email;  No internet;  No
+notes;  No phone.  Neatness counts!  Do your scratch work elsewhere
+and enter only your final answer into the spaces provided.  This test
+is shorter than the usual final exam because summer session does not
+have an exam week.  The time limit is 100 minutes, rather than the
+usual 180 minutes given in the other quarters.
+
+.EQ
+delim $$
+tdefine suchthat "{type relation |}"
+.EN
+
+ 1. Write a complete program (everything that needs to be placed in
+    the source file) in C++ to print the message ``Hello, World!''.
+    [1pt]
+
+ 2. Write a template function to reverse a sequence, given a pair of
+    bidirectional iterators.  Its template argument is any iterator
+    type and its two function arguments are a begin and end iterator.
+    Assume the iterators have operator++, operator--, unary operator*,
+    and operator!=.  The iterators are passed by value, so you may
+    modify them.  Use the STL function whose prototype is template
+    <class T> void swap (T& a, T& b);  [2pt]
+
+ 3. Write a template function to print out a sequence, given a pair of
+    forward iterators.  Assume an appropriate operator<<, and print
+    one space between each element, but not on the front or end.
+    [2pt]
+
+ 4. Define a template function called swap which exchanges two
+    variables passed in by non-constant reference.  (Hint:  see
+    above.)  Use mover, not copier, operations.  [2pt]
+
+ 5. Define a template function copy.  Its first template argument is
+    an input iterator from which copying is done.  Its second template
+    argument is an output iterator.  Its first two function arguments
+    are begin and end iterators describing the input sequence.  Its
+    third function argument is a begin iterator pointing at the output
+    sequence.  It is assumed that there is enough space in the output
+    container.  [3pt]
+
+ 6. Define a struct accumulator which acts as a function object to
+    accumulate the sum of a sequence of ints.  For example, after the
+    declaration accumulator acc, the call for_each(v.begin(),v.
+    end(),acc) will cause the sum of all elements in v to be in acc.
+    sum.  The function for_each applies the function to each element
+    in the range.  [1pt]
+
+ 7. Provide a partial interface and implementation of class complex.
+    Each object has a real and an imaginary field of type double.
+    Show only the following three function members:
+     (i) Show one constructor which takes zero, one or two arguments,
+         and may be used to implicitly convert a double to a complex.
+         The constructor has two arguments, both of which default to
+         0.
+    (ii) Show operator<<, which may be used to print a complex number.
+         It prints a left parenthesis, followed by the real part,
+         followed by a comma, followed by the imaginary part, followed
+         by a right parenthesis.
+    (iii) Show binary operator+, which is a member, which adds two
+         complex numbers using the formula $ ( a , b ) + ( c , d ) = (
+         a + c , b + d ) $.
+    Given the description above, answer the following questions:
+
+     (a) Based on that description and showing only what is asked,
+         what would go in the header file complex.h?  Make sure
+         members have correct protection.  Show how to declare the
+         data fields given above.  Do not put anything in the header
+         file that can go into the implementation file.  [2pt]
+
+     (b) Show what would go in the implementation file complex.cpp:
+
+          (i) For the constructor described above.  [1pt]
+
+         (ii) For operator+.  [1pt]
+
+         (iii) For operator<<.  [1pt]
+
+ 8. Write a program in Java.  Define a class say whose constructor
+    argument is a string, and which, when run as a thread, prints that
+    string to the standard output then quits.  Write a main program
+    which starts up that class as a thread twice, once with the
+    argument ``Hello'', and once with the argument ``World''.
+
+     (a) Show the code for class say.  [2pt]
+
+     (b) Show the code for the main function .  [2pt]
+
+The following table contains examples of various kinds of
+polymorphism.  For each one, identify the classification as universal
+or ad hoc.  Also identify the specific kind as one of conversion,
+inheritance, overloading, or generic.  [2pt]
+
++--------------------------------------------+
+|class foo { virtual void f(); }             |
+|class bar: public foo { virtual void f(); } |
++--------------------------------------------+
+|template <typename T>                       |
+|class c { void f (T&); }                    |
++--------------------------------------------+
+|void f (int x);                             |
+|void f (double x);                          |
++--------------------------------------------+
+|void f (double x);                          |
+|f (6);                                      |
++--------------------------------------------+
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer.  Wrong answers are worth negative points.  [10pt]
+
++--------------------------+------+------+------------+
+|number of                 |      |× 1 = |      $= a$ |
+|correct answers           |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× ½ = |      $= b$ |
+|wrong answers             |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× 0 = |  0         |
+|missing answers           |      |      |            |
++--------------------------+------+------+------------+
+|column total              |   10 |      |      $= c$ |
+|$ c = max ( a - b , 0 ) $ |      |      |            |
++--------------------------+------+------+------------+
+
+ 1. The acronym RAII means:
+    (A) Random Access Inhibits Implementation
+    (B) Reading An Iterator Incrementally
+    (C) Resource Acquisition Is Initialization
+    (D) Restoring Allocators Initially Inverted
+
+ 2. Reference counting for storage management fails with what kind of
+    data structure?
+    (A) binary tree
+    (B) cyclic graph
+    (C) hash table
+    (D) linked list
+
+ 3. Even though all run in $ O ( n ) $ time, given the following loop:
+    for (i=v.begin(); i!=v.end(); *i++=0);
+    For which declaration of v will the code run fastest?
+    (A) list<int> v;
+    (B) map<int,int> v;
+    (C) unordered_map<int,int> v;
+    (D) vector<int> v;
+
+ 4. Which statement causes the pointer p to become dangling?
+    (A) delete p;
+    (B) free p;
+    (C) malloc p;
+    (D) new p;
+
+ 5. What keyword introduces a function that is selected at run-time
+    and dynamically dispatched based on a pointer?
+    (A) friend
+    (B) static
+    (C) template
+    (D) virtual
+
+ 6. If a virtual function in a base class has the same signature as
+    one in a derived class, we say that the function in the derived
+    class __ the one in the base class.
+    (A) overflows
+    (B) overloads
+    (C) overrides
+    (D) overwrites
+
+ 7. In the bigint project, multiplying an $m$-digit number by an
+    $n$-digit number should take how long?
+    (A) $ O ( m + n ) $
+    (B) $ O ( m 10 sup n ) $
+    (C) $ O ( m log n ) $
+    (D) $ O ( m n ) $
+
+ 8. A non-static variable declared inside a function is bound to a
+    particular address at:
+    (A) compile time.
+    (B) link time.
+    (C) program load time.
+    (D) the time the function is called.
+
+ 9. In class vector<T>, which operator necessarily returns a T*?
+    (A) operator*
+    (B) operator++
+    (C) operator->
+    (D) operator[]
+
+10. A thread that sits in the background waiting for another thread to
+    make a request of it, then which performs the request, then waits
+    again, is called a __ thread.
+    (A) daemon
+    (B) vampire
+    (C) werewolf
+    (D) zombie
+
+Write out the _____ prototypes of all members of class foo as they
+would appear in a header file without implementations.  [2pt]
+
++------------------------------+
+|class foo {                   |
+|                              |
+|                              |
+|                              |
+|                              |
+|                              |
+|                              |
+|                              |
+|                              |
+|                              |
+|};                            |
++------------------------------+
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer.  Wrong answers are worth negative points.  [10pt]
+
++--------------------------+------+------+------------+
+|number of                 |      |× 1 = |      $= a$ |
+|correct answers           |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× ½ = |      $= b$ |
+|wrong answers             |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× 0 = |  0         |
+|missing answers           |      |      |            |
++--------------------------+------+------+------------+
+|column total              |   10 |      |      $= c$ |
+|$ c = max ( a - b , 0 ) $ |      |      |            |
++--------------------------+------+------+------------+
+
+ 1. For some vector v, what is the same as v.begin()?
+    (A)  v[0]
+    (B) !v[0]
+    (C) &v[0]
+    (D) *v[0]
+
+ 2. For class foo, what should the parameter list look like for the
+    non-member declaration
+    ostream& operator<< (__);
+    (A) const ostream&, const foo&
+    (B) const ostream&, foo&
+    (C) ostream&, const foo&
+    (D) ostream&, foo&
+
+ 3. In a systems programming application, where we need to make an
+    unsigned integer from a pointer, what cast would be used?
+    (A) const_cast
+    (B) dynamic_cast
+    (C) reinterpret_cast
+    (D) static_cast
+
+ 4. A virtual function table exists as a __(x)__ table for each
+    __(y)__ in a program.
+    (A) (x) = dynamic; (y) = class
+    (B) (x) = dynamic; (y) = object
+    (C) (x) = static; (y) = class
+    (D) (x) = static; (y) = object
+
+ 5. A Java class that implements Runnable must have a method named:
+    (A) run
+    (B) start
+    (C) synchronized
+    (D) wait
+
+ 6. A web server written in Java, having opened a ServerSocket, allows
+    a client to connect by calling what method?
+    (A) accept
+    (B) getInputStream
+    (C) start
+    (D) wait
+
+ 7. If two or more threads access the same variable without
+    synchronization, what results?
+    (A) deadlock
+    (B) livelock
+    (C) race condition
+    (D) segmentation fault
+
+ 8. In this picture of a page, in which corner is the Postscript page
+    coordinate (0,0)?
+    (A) upper left
+    (B) upper right
+    (C) lower left
+    (D) lower right
+
+ 9. An abstract class in C++:
+    (A) can not be instantiated.
+    (B) can not be used like a Java interface.
+    (C) has no virtual functions.
+    (D) must be a derived class.
+
+10. vector<T>::push_back has an amortized time complexity of:
+    (A) $ O ( 1  ) $
+    (B) $ O ( log sub 2 n  ) $
+    (C) $ O ( n  ) $
+    (D) $ O ( n log sub 2 n  ) $
+
+                                                       +-----+
+The following refers to which of Shakespeare's plays?  2BORD4+
+

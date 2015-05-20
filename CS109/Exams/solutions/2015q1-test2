@@ -1,0 +1,125 @@
+$Id: 2015q1-test2,v 1.1 2015-02-20 17:18:24-08 - - $
+Answers to 2015q1-test1, page 1
+
+________________________________________________________________________
+Question 1.
+
+for (auto i = c.begin(); i != c.end(); ++i) f (*i);
+
+________________________________________________________________________
+Question 2.
+
+template <typename First, typename Second>
+ostream& operator<< (ostream& out, const pair<First,Second>& p) {
+   out << "{" << p.first << "," << p.second << "}";
+   return out;
+}
+
+________________________________________________________________________
+Question 3(a).
+
+using mathfn = double (*) (double);
+using fnmap = unordered_map<string,mathfn>;
+
+________________________________________________________________________
+Question 3(b).
+
+double evalfn (const fnmap& fm, const string& name, double val) {
+   auto f = fm.find (name);
+   if (f == fm.end()) return numeric_limits<double>::quiet_NaN();
+   return (f->second) (val);
+}
+
+________________________________________________________________________
+Question 4.
+
+bool lenless (const string& a, const string& b) {
+   if (a.size() < b.size()) return true;
+   if (a.size() > b.size()) return false;
+   return a < b;
+}
+
+________________________________________________________________________
+Question 5.
+
+template <typename Itor, typename Key>
+Itor find (Itor begin, Itor end, Key key) {
+   while (begin != end and *begin != key) ++begin;
+   return begin;
+}
+
+
+Answers to 2015q1-test1, page 2
+
+________________________________________________________________________
+Question 6.
+
+template <typename Itor1, typename Itor2, typename Container>
+void zip (Itor1 b1, Itor1 e1, Itor2 b2, Itor2 e2, Container& out) {
+   while (b1 != e1 and b2 != e2) {
+      auto p = make_pair (*b1++, *b2++);
+      out.push_back (p);
+   }
+   if (b1 != e1 or b2 != e2) throw length_error ("zip");
+}
+
+________________________________________________________________________
+Question 7.
+
+template <typename Itor, typename Function>
+bool monotonic (Itor begin, Itor end, Function fn) {
+   if (begin == end) return true;
+   for (;;) {
+      auto prev = begin++;
+      if (begin == end) break;
+      if (not (*prev < *begin)) return false;
+   }
+   return true;
+}
+
+________________________________________________________________________
+Question 8(a).
+
+struct iterator {
+   int* curr;
+   iterator (int* c): curr(c) {}
+   bool operator!= (iterator b) { return curr != b.curr; }
+   iterator& operator++() { ++curr; return *this; }
+   int& operator*() { return *curr; }
+};
+
+________________________________________________________________________
+Question 8(b).
+
+struct ivec {
+   iterator begin() { return &data[0]; } // or data
+   iterator end() { return &data[size]; } // or data+size
+};
+
+
+Answers to 2015q1-test1, page 3
+
+ 1.    (D) foo& operator= (foo&&);
+
+ 2.    (C) reinterpret_cast
+
+ 3.    (A) std::deque
+
+ 4.    (B) cout<<*vs.begin()
+
+ 5.    (D) f = b;
+
+ 6.    (D) i[n]
+
+ 7.    (A) operator()
+
+ 8.    (A) pointer
+
+ 9.    (B) protected
+
+10.    (B) [x] = private, [y] = public.
+
+11.    (A) $<
+
+12.    (A) virtual void show() = 0;
+

@@ -1,0 +1,298 @@
+CMPS-109 · Advanced Programming · Winter 2013 · Final Exam page 1 of 1
+$Id: cmps109-2013q1-exam3.mm,v 1.32 2013-03-12 18:21:45-07 - - $
+
+.PS
+examboxes(5)
+.PE
+
+No books;  No calculator;  No computer;  No email;  No internet;  No
+notes;  No phone.  Neatness counts!  Do your scratch work elsewhere
+and enter only your final answer into the spaces provided.
+
+.EQ
+delim $$
+.EN
+
+ 1. C++:  Define a template function which will merge two ranges into
+    a single container.  [5pt]
+     (a) It has three template parameters:  a forward iterator, a
+         container, and a binary predicate.
+     (b) It has six actual parameters:  two iterators indicating one
+         range, two iterators indicating another range, a container
+         into which the ranges are to be merged, and a binary
+         predicate returning a boolean which computes a less-than
+         function.
+     (c) Assume the output container has a push_back method.
+     (d) Example call:  merge (c1.begin(), c1.end(), c2.begin(),
+         c2.end(), vec, less);
+         will assume the c1 range is already sorted into order given
+         by the less function, as is the c2 range.  The two ranges
+         will then be copied in sorted order into the output container
+         vec.  From inside merge, the call less(a,b) will be true if a
+         is considered less than b.
+
+ 2. C++:  Define a template class stack with all methods defined
+    inline.  [5pt]
+     (a) It uses a private vector field to hold the stack.
+     (b) None of the four default members are declared, since the
+         automatic defaults are acceptable.
+     (c) pop removes but does not return the top of the stack.
+     (d) push pushes a new element onto the stack.
+     (e) top returns the top of the stack but does not modify the
+         stack.
+     (f) empty tells whether the stack is empty or not.
+
+ 3. C++:  Write a template function swap that will exchange the values
+    of any two variables.  Example:  swap(a,b);  should exchange the
+    values of a and b if the type of those variables has a copy
+    constructor and an operator=.  [2pt]
+
+ 4. Java:  Write a client/server application that shares the current
+    date and time.  Assume, but do not code, any necessary import
+    statements.
+
+     (a) Class date_client connects to port 10000 of localhost, reads
+         one line, prints it, then exits.  [2pt]
+
+         class date_client {
+            public static void main (String[] args) throws IOException {
+
+     (b) Class date_server creates a server socket on port 10000, then
+         goes into an infinite loop waiting for clients.  Whenever a
+         client connects, it replies by sending the current date,
+         after which it disconnects the client and waits for the next
+         client.  Create a new Date() object each time a date is
+         needed and use its toString method.  [3pt]
+
+         class date_server {
+            public static void main (String[] args) throws IOException {
+
+ 5. C++:  Define a template function called find.  Its first template
+    argument is a forward iterator, and its second template argument
+    is a predicate of one argument.  The function itself has three
+    arguments, the first and second being a pair of iterators that
+    bound the search space, and the third being a function of one
+    argument which returns a boolean value.  Return the first
+    occurrence in the range for which the predicate is true, and if
+    not found, return the end iterator.  Example call:  find (c.
+    begin(), c.end(), ispositive);  [3pt]
+
+ 6. C++:  Write a loop that will copy program arguments (but not the
+    program name) into the vector.  [1pt]
+
+    int main (int argc, char **argv) {
+       vector<string> args;
+
+ 7. C++:  Consider the trivial class shown here.
+
+     (a) Write the prototypes for the operator= and the destructor
+         that would otherwise be provided by default.  [1pt]
+
+         struct box {
+            size_t size;
+            int *data;
+
+     (b) Implement operator= for this class.  It needs to copy the
+         data instead of sharing it with the source object.  Code it
+         as it would appear in the implementation (.cpp) file.  [3pt]
+
+     (c) Implement the destructor as it would appear in the
+         implementation file.  [1pt]
+
+ 8. C++:  Finish the function, which returns the average value in the
+    range.  [2pt]
+
+    template <typename iterator>
+    double average (const iterator &begin, const iterator &end) {
+
+ 9. C++:  Define operator<< which can print all of the elements of a
+    vector of any type, assuming that the constituent elements already
+    have an appropriate operator<< defined.  The operator prints all
+    of the elements with a single space between successive elements.
+    [2pt]
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer.  Wrong answers are worth negative points.  [11pt]
+
++--------------------------+------+------+------------+
+|number of                 |      |× 1 = |      $= a$ |
+|correct answers           |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× ½ = |      $= b$ |
+|wrong answers             |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× 0 = |  0         |
+|missing answers           |      |      |            |
++--------------------------+------+------+------------+
+|column total              |   11 |      |      $= c$ |
+|$ c = max ( a - b , 0 ) $ |      |      |            |
++--------------------------+------+------+------------+
+
+ 1. If v is a vector, then v.begin() is the same as:
+    (A) v[0]
+    (B) &v[0]
+    (C) *v[0]
+    (D) ~v[0]
+
+ 2. Which of the following operators does a bidirectional iterator
+    have that a forward iterator does not have?
+    (A) *i
+    (B) ++i
+    (C) --i
+    (D) i->f
+
+ 3. For an integer a, if a is __(x)__ then a/8 is equivalent to
+    __(y)__.
+    (A) (x) signed;  (y) a<<3
+    (B) (x) signed;  (y) a>>3
+    (C) (x) unsigned;  (y) a<<3
+    (D) (x) unsigned;  (y) a>>3
+
+ 4. What is the declaration of the postfix operator ++ which is a
+    member of class foo?
+    (A) foo &operator++ ();
+    (B) foo &operator++ (foo &);
+    (C) foo operator++ (foo &, int);
+    (D) foo operator++ (int);
+
+ 5. Which of the following instance fields will most strongly suggest
+    that a default operator= is inappropriate for a class?
+    (A) inline object
+    (B) pointer
+    (C) primitive
+    (D) reference
+
+ 6. The outermost container in a Java GUI is a
+    (A) JArea
+    (B) JFrame
+    (C) JGrid
+    (D) JPanel
+
+ 7. Storage management by reference counting fails on what kind of
+    data structure?
+    (A) acyclic graph
+    (B) binary tree
+    (C) cyclic graph
+    (D) hash table
+
+ 8. The std::map data structures is a:
+    (A) directed acyclic graph
+    (B) hash table
+    (C) linear linked list
+    (D) red-black tree
+
+ 9. Which data structure uses a contiguous block of heap memory?
+    (A) std::deque
+    (B) std::list
+    (C) std::map
+    (D) std::vector
+
+10. If the exception exn is thrown, what is the proper way to catch
+    it?
+    (A) catch (exn &e)
+    (B) catch (exn *e)
+    (C) catch (exn ~e)
+    (D) catch (exn e)
+
+11. The first language to use concepts such as class and virtual was:
+    (A) Algol
+    (B) Fortran
+    (C) Lisp
+    (D) Simula
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer.  Wrong answers are worth negative points.  [11pt]
+
++--------------------------+------+------+------------+
+|number of                 |      |× 1 = |      $= a$ |
+|correct answers           |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× ½ = |      $= b$ |
+|wrong answers             |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× 0 = |  0         |
+|missing answers           |      |      |            |
++--------------------------+------+------+------------+
+|column total              |   11 |      |      $= c$ |
+|$ c = max ( a - b , 0 ) $ |      |      |            |
++--------------------------+------+------+------------+
+
+ 1. When two threads update the same variable without synchronization,
+    leading to unpredictable results, this is called a __ condition.
+    (A) daemon
+    (B) deadlock
+    (C) race
+    (D) spinlock
+
+ 2. An abstract class:
+    (A) can not be instantiated
+    (B) can not specify an interface
+    (C) has no virtual functions
+    (D) must be derived from a base class
+
+ 3. The Java GUI considers the coordinate $ ( 0 , 0 ) $ to be at what
+    part of the screen?
+    (A) lower left
+    (B) lower right
+    (C) upper left
+    (D) upper right
+
+ 4. The Postscript coordinate system considers $ ( 0 , 0 ) $ to be at
+    what part of the page?
+    (A) lower left
+    (B) lower right
+    (C) upper left
+    (D) upper right
+
+ 5. What is an interface that requires implementation of the metnod
+    run?
+    (A) Runnable
+    (B) Synchronized
+    (C) Thread
+    (D) Throwable
+
+ 6. In C++11, if an implicitly generated member should be suppressed
+    as inappropriate for the class, what should be done?
+    (A) Declare it as private and not implement it.
+    (B) Declare it as public and throw a logic_error exception if it
+        is called.
+    (C) Declare it as public but instead of implementing it, mark it
+        as = delete.
+    (D) Declare it but put an assert(false) statement in the body.
+
+ 7. Which operator may be declared with any number of arguments,
+    depending on the semantics of the operator?
+    (A) operator()
+    (B) operator++
+    (C) operator<>
+    (D) operator[]
+
+ 8. A keyword in C++11 that has a radically different meaning from
+    what it has in ANSI C is:
+    (A) auto
+    (B) struct
+    (C) typedef
+    (D) volatile
+
+ 9. Following the Makefile dependency %.o : %.cpp an appropriate
+    compilation command would be:
+    (A) ${GPP} %.cpp
+    (B) ${GPP} -c $<
+    (C) ${GPP} -c $@
+    (D) ${GPP} -o $<
+
+10. Given the declaration of i, what will print out a string?
+       vector<string*>::iterator i;
+    (A) cout<<i;
+    (B) cout<<*i;
+    (C) cout<<**i;
+    (D) cout<<***i;
+
+11. Following foo x;  the statement foo y = x;  is a call to:
+    (A) assignment operator=
+    (B) the copy constructor
+    (C) the default constructor
+    (D) the destructor
+

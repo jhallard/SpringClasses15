@@ -1,0 +1,182 @@
+CMPS-109 · Advanced Programming · Winter 2015 · Test #1         1 of 1
+$Id: cmps109-2015q1-exam1.mm,v 1.48 2015-01-27 16:45:19-08 - - $
+
+.PS
+examboxes(3)
+.PE
+
+Code only in C++11.  No books;  No calculator;  No computer;  No
+email;  No internet;  No notes;  No phone.  Neatness counts!  Do your
+scratch work elsewhere and enter only your final answer into the
+spaces provided.
+
+.EQ
+delim $$
+.EN
+
+1. Write a complete program.  Print the message ``Hello, World!'' to
+   cout if no command line arguments are given, and return an exit
+   status of 0.  If arguments are given, print the message ``Usage:
+   hello'' to cerr, and return an exit status of 1.  [2pt]
+
+2. Show what should be in the header file queue.h.  The elements of
+   the queue are strings.  The representation of the queue uses the
+   STL data structure deque.  The operations available to the user of
+   a queue are push_back, pop_front, front, and empty.  Also,
+   operator<< is a friend.  Types and references are to be consistent
+   with the STL standards.  [3pt]
+
+3. Define operator<< as mentioned above so that it prints out a queue
+   with the elements in sequence from front to back with a single
+   space between elements, but no space in front of the first or after
+   the last element.  [2pt]
+
+4. Assuming the bigint project dealt only with unsigned numbers, but
+   using the same representation, finish coding the following
+   function.  [3pt]
+
+   using bigint = vector<unsigned char>;
+   ostream& operator<< (ostream& out, const bigint& big) {
+
+5. Write the function filter.  It takes a pair of iterators into a
+   vector and a predicate which determines which of the elements are
+   good.  It pushes all good elements onto the back of a list in the
+   same order they appear in the vector.  Ungood elements are ignored.
+   [2pt]
+
+   using iter = vector<string>::const_iterator;
+   using isgood = bool (*) (const string&);
+   list<string> filter (iter begin, iter end, isgood p) {
+
+6. Inheritance.
+    (a) Define a class base with an abstract virtual function called
+        value that returns a size_t.  [1pt]
+    (b) Define a class zero, derived from base, which overrides that
+        virtual function, so that it always returns the value 0.
+        [1pt]
+    (c) Define a class str, derived from base, with a private string
+        field and whose value function returns the size of the string.
+        Do not show any members except those explicitly mentioned
+        here.  [2pt]
+
+7. Define the function reverse which reverses elements in a linear
+   data structure.  Assume the template argument Iter is a
+   bidirectional iterator, i.e., one for which both operator++ and
+   operator-- are provided.  [2pt]
+
+   template <typename Iter>
+   void reverse (Iter begin, Iter end) {
+
+8. Define the function canonicalize which takes a vector of digits, as
+   in the assignment, and removes all high-order zeros.  If all digits
+   are zeros, the vector should be emptied.  [2pt]
+
+   using bigint = vector<unsigned char>;
+   void canonicalize (bigint& big) {
+
+Multiple choice.  To the left of each question, write the letter that
+indicates your answer.  Write Z if you don't want to risk a wrong
+answer.  Wrong answers are worth negative points.  [12pt]
+
++--------------------------+------+------+------------+
+|number of                 |      |× 1 = |      $= a$ |
+|correct answers           |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× ½ = |      $= b$ |
+|wrong answers             |      |      |            |
++--------------------------+------+------+------------+
+|number of                 |      |× 0 = |  0         |
+|missing answers           |      |      |            |
++--------------------------+------+------+------------+
+|column total              |   12 |      |      $= c$ |
+|$ c = max ( a - b , 0 ) $ |      |      |            |
++--------------------------+------+------+------------+
+
+ 1. Which of the following programming errors will definitely crash a
+    program?
+    (A) allowing memory leak
+    (B) an out-of-bounds subscript to a vector
+    (C) dereferencing a null pointer
+    (D) using uninitialized variables
+
+ 2. Given string s;  string t;  which will compare two strings
+    lexicographically?
+    (A) &s < &t
+    (B) *s < *t
+    (C) s < t
+    (D) strcmp (s, t) < 0
+
+ 3. What is used to initialize a vector from the command line
+    arguments, but not the program name?
+    (A) vector<string>
+        vs (&argv[0], argv[argc - 1]);
+    (B) vector<string>
+        vs (&argv[0], argv[argc]);
+    (C) vector<string>
+        vs (&argv[1], argv[argc - 1]);
+    (D) vector<string>
+        vs (&argv[1], argv[argc]);
+
+ 4. What will define vs as a typename meaning the same as
+    vector<string>?
+    (A) typedef vector<string> = vs;
+    (B) typedef vs = vector<string>;
+    (C) using vector<string> = vs;
+    (D) using vs = vector<string>;
+
+ 5. In order to avoid explicitly qualifying library entities, what
+    statement should follow the usual includes?
+    (A) import namespace standard;
+    (B) include namespace std;
+    (C) using namespace standard;
+    (D) using namespace std;
+
+ 6. After the declaration int& p = i;  which statement will change the
+    value of i?
+    (A) &p = i;
+    (B) *p = i;
+    (C) p = &i;
+    (D) p = i;
+
+ 7. What is the preferred way to refer to a pointer that does not
+    point at any object?
+    (A) 0
+    (B) NULL
+    (C) null
+    (D) nullptr
+
+ 8. Which of the following STL classes manages memory via reference
+    counting?
+    (A) auto_ptr
+    (B) shared_ptr
+    (C) smart_ptr
+    (D) unique_ptr
+
+ 9. Which of the following forms of polymorphism should be used in C++
+    to replace union in C?
+    (A) conversion
+    (B) inheritance
+    (C) overloading
+    (D) templates
+
+10. Which of the following operators can almost never by a member
+    function?
+    (A) operator++
+    (B) operator->
+    (C) operator<<
+    (D) operator==
+
+11. Which of the following containers has the least heap space
+    overhead?
+    (A) deque
+    (B) list
+    (C) map
+    (D) vector
+
+12. Which data structure is most likely as an implementation of the
+    STL map?
+    (A) array of pointers
+    (B) double-ended queue
+    (C) hash table
+    (D) red-black tree
+

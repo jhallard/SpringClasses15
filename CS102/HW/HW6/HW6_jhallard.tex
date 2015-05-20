@@ -211,8 +211,8 @@
 Determine the longest common subsequence of $x=(1,0,0,1,0,1,0,1)$ and $y=(0,1,0,1,1,0,1,1,0)$ Build the table $C(i,j)$ of the dynamic programming algorithm for these two strings, where $C(i,j)$ denotes the length of the longest common subsequence between $x_1 x_2 ... x_i$ and $y_1 y_2 ... y_j$. Also produce the table of "arrows" that lets you recover the solution.
 
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} \hline
-  &   &  1 &  0 &  0 &  1 &  0 &  1 &  0 &  1 \\ \hline
+\begin{tabular}{|c||c|c|c|c|c|c|c|c|c|} \hline
+  &   &  1 &  0 &  0 &  1 &  0 &  1 &  0 &  1 \\ \hline \hline
   & 0 &  0 &  0 &  0 &  0 &  0 &  0 &  0 &  0 \\ \hline
 0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline 
 1 & 0 & 1 & 1 & 1 & 2 & 2 & 2 & 2 & 2 \\ \hline
@@ -227,8 +227,8 @@ Determine the longest common subsequence of $x=(1,0,0,1,0,1,0,1)$ and $y=(0,1,0,
 \end{center}
 
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} \hline
-  &   &  1 &  0 &  0 &  1 &  0 &  1 &  0 &  1 \\ \hline
+\begin{tabular}{|c||c|c|c|c|c|c|c|c|c|} \hline
+  &   &  1 &  0 &  0 &  1 &  0 &  1 &  0 &  1 \\ \hline \hline
   & 0 &  0 &  0 &  0 &  0 &  0 &  0 &  0 &  0 \\ \hline
 0 & \textbf{0} & l & d & d & l & d & l & d & l \\ \hline 
 1 & 0 & \textbf{d} & \textbf{l} & l & d & l & d & l & d \\ \hline
@@ -264,28 +264,46 @@ Longest common subsequence : 101101 (one of many, also 100110 and 100111)
 Hint: The values in your table should be Boolean, not numeric.
 
 \textbf{Answer : } \\
-The algorithm to solve this problem will depend on 2 variables, the indices of the characters in X and Y. We can calculate the index of the character we're comparing for the current iteration in Z by adding the indices of the current characters we're looking at it and X and Y. \textbf{Give justification for doing this}
-\begin{lstlisting}
-# M = memoization array of length n, starts empty
-# n > 0 is the f(n) value we are querying
-findpaths(n,M) :
-  M[1] = 1
-  M[2] = 1
-  M[3] = 2
-  for i in [4 to n] # inclusive of ends
-    if i < 3  # make sure we do not index negatives
-      M[i] = M[i-1]
-    else 
-      M[i] = M[i-1]+M[i-3]
+The algorithm to solve this problem will depend on 2 variables, the indices of the characters in $X$ and $Y$. We can calculate the index of the character we're comparing for the current iteration in $Z$ by adding the indices of the current characters we're looking at it and $X$ and $Y$ and subtracting one. \\ 
+The subproblems are as follows : If the current problem is on the strings $X[1:i]$, $Y[1:j]$, $Z[1:k] k = i+j-1$, the subproblems consist of seeing if the strings $Z[1:k-1], X[1:i-1], Y[1:j]$ or $Z[1:k-1], X[1:i], Y[1:j-1]$ are shuffles of one another. Given the answer to these subproblems, we can find the solution to the current-length strings by seeing if the character $Z_k$ can be made by taking either $X_i$ or $Y_j$ and combining it with the answers to the 2 subproblems. This will be made specific below. \\
+The table in this case is boolean (as was suggested in the hint), with dimensions $m \times n$ The bool in table entry $(i,j)$ represents if the either of the characters $X_i$ or $Y_j$ can be used to make the character $Z_k : k = i+j-1$. The arrows for this table either go right or left, depending on which string has the character that matches the character in $Z$. If $Z_k$ is matches by a character on the $x$ axis, we travel left, if it is matches by a character on the $y$ axis we go up, and if they both match we can go either way. \\
 
-  return M[n] 
+The formal recurrance relation is as follows : Given strings $X$ of length $m$, $Y$ of length $n$, and $Z$ of length $n+m$, $S(p, q) : (m,n) \geq (p,q) \geq (0,0) $ takes the indices of two characters in $X$ and $Y$ and returns a boolean value. $S$ is defined as :
+$$ S(p, q) = [(Z_k === X_p \text{ AND } S(p-1, q)) \text{ OR } (Z_k == Y_q \text{ AND } S(p, q-1)) ] $$
+
+We also have the base cases that if $p$ or $q$ becomes $0$, we simply check other non-zero index. If they're both zero we return true. \\
+
+This says that at index $k = p+q$, we either match the character $X_p$ and recurse on $Z$ with one less character, $X$ with one less character, and $Y$ as it is, or we do the same except with $Y$. 
+
+The algorithm doesn't actually need to build the algoritmh
+% To build the table with the algorithm, we work our way up from entry $(1,1)$. If we match a character on the horizontal axis, we travel right, if we match a character on the vertical axis, we travel down. We continue until we evaluate thee entry $(m,n)$, because this is the case where we are looking at the last letter in $Z$ which is at index $k= m+n$.
+
+\begin{lstlisting}
+# X, Y, Z = strings of len (m, n, m+n-1)
+# @args - p, q are the X, Y indices we are currently querying.
+checkShuffle(M, X, Y, Z) :
+  p = 1
+  q = 1
+  # note the short-circuit AND evalutation to avoid indexing out of X or Y
+  while (p+q) < (m+n) :
+    k = p+q-1
+    if p <= m AND Z[k] == X[p] :
+      p = p+1
+    else if q <= n AND Z[k] == Y[q] :
+      q = q+1
+    else :
+      return false
+
+  return true
 \end{lstlisting}
+
+The running time for this algorithm is linear in $m$ and $n$, which means it is linear in the size of $Z$. If this was the strictly harder version of this problem where a matching character in $Z$ and count for both a match in $X$ and $Y$ is a strictly harder problem and wouldn't be able to be solved so easily. Notice the algorithm doesn't even need to fill in the table, it can find a path through it without needing to fill in the entire thing. This is because once it finds the character $X_p$ cannot match at position $Z_k$, it knows that no character $X_{p+n} : n > 0$ can be placed in the spot either without violating the ordering of $X$. The algorithm runs a single for-loop from iteration number 1 to iteration $k$, increasing by one each time. If it runs into a wall it returns false right away.
 
 \end{homeworkProblem}
 
 
 
-
+\newpage
 
 %----------------------------------------------------------------------------------------
 %   PROBLEM 3
@@ -313,7 +331,7 @@ Give an algorithm that figures out the set of moves that will move the checker f
 \end{homeworkProblem}
 
 
-
+\newpage
 
 
 %----------------------------------------------------------------------------------------
