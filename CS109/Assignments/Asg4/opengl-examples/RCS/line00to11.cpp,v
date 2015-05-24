@@ -1,0 +1,259 @@
+head	1.12;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.12
+date	2015.03.06.21.40.40;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2015.03.06.21.39.53;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2015.03.06.21.39.15;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2015.03.06.21.39.00;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2015.03.06.21.36.10;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2015.03.06.21.35.41;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2015.03.06.21.35.14;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2015.03.06.21.34.00;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2015.03.06.21.33.49;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2015.03.06.21.31.43;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2015.03.06.21.31.35;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2015.03.06.21.31.22;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.12
+log
+@-
+@
+text
+@// $Id: line00to11.cpp,v 1.11 2015-03-06 13:39:53-08 - - $
+
+// Draw line from (0,0) to (1,1).
+
+#include <GL/freeglut.h>
+#include <libgen.h>
+
+void display() {
+   glClearColor (0, 0, 1, 0);
+   glClear (GL_COLOR_BUFFER_BIT);
+   glLineWidth (5);
+   glBegin (GL_LINE_LOOP);
+   glColor3ub (0xFF, 0, 0);
+   glVertex2f (0, 0);
+   glVertex2f (1, 1);
+   glEnd();
+   glutSwapBuffers();
+}
+
+int main (int argc, char** argv) {
+   glutInit (&argc, argv);
+   glutCreateWindow (basename (argv[0]));
+   glutDisplayFunc (display);
+   glutMainLoop();
+   return 0;
+}
+
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.10 2015-03-06 13:39:15-08 - - $
+d13 1
+a13 1
+   glColor3ub (1, 0, 0);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.9 2015-03-06 13:39:00-08 - - $
+d10 1
+d12 1
+a13 1
+   glBegin (GL_LINE_LOOP);
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.8 2015-03-06 13:36:10-08 - - $
+d9 1
+a9 1
+   glClearColor (0, 0, 1, 1);
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.7 2015-03-06 13:35:41-08 - - $
+d9 1
+a9 1
+   glClearColor (0.25, 0.25, 1.0, 0.0);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.6 2015-03-06 13:35:14-08 - - $
+d9 2
+a10 2
+   glClearColor (0.25, 0.25, 1.0, 1.0);
+   glLineWidth (4);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.5 2015-03-06 13:34:00-08 - - $
+d9 1
+a9 1
+   glClearColor (0.0, 0.0, 1.0, 1.0);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.4 2015-03-06 13:33:49-08 - - $
+d9 1
+a9 1
+   glClearColor (0, 0, 1, 0);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.3 2015-03-06 13:31:43-08 - - $
+d11 1
+a11 1
+   glColor3u (1, 0, 0);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.2 2015-03-06 13:31:35-08 - - $
+d9 3
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.1 2015-03-06 13:31:22-08 - - $
+d18 1
+a18 1
+   glutCreateWindow (basename (argv[0]);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d6 1
+a6 1
+#include <libgten.h>
+@

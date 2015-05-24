@@ -1,0 +1,499 @@
+head	1.11;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.11
+date	2014.05.15.23.42.55;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.09.03.47.45;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.09.01.32.56;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.09.01.24.38;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.09.01.23.23;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.09.01.07.04;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.08.23.29.02;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.08.23.22.43;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.08.05.28.44;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.07.03.19.36;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.03.01.39.21;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.11
+log
+@-
+@
+text
+@// $Id: graphics.cpp,v 1.10 2014-05-08 20:47:45-07 - - $
+
+#include <iostream>
+using namespace std;
+
+#include <GL/freeglut.h>
+
+#include "graphics.h"
+#include "util.h"
+
+int window::width = 640; // in pixels
+int window::height = 480; // in pixels
+vector<object> window::objects;
+size_t window::selected_obj = 0;
+mouse window::mus;
+
+// Executed when window system signals to shut down.
+void window::close() {
+   DEBUGF ('g', sys_info::execname() << ": exit ("
+           << sys_info::exit_status() << ")");
+   exit (sys_info::exit_status());
+}
+
+// Executed when mouse enters or leaves window.
+void window::entry (int mouse_entered) {
+   DEBUGF ('g', "mouse_entered=" << mouse_entered);
+   window::mus.entered = mouse_entered;
+   if (window::mus.entered == GLUT_ENTERED) {
+      DEBUGF ('g', sys_info::execname() << ": width=" << window::width
+           << ", height=" << window::height);
+   }
+   glutPostRedisplay();
+}
+
+// Called to display the objects in the window.
+void window::display() {
+   glClear (GL_COLOR_BUFFER_BIT);
+   for (auto& object: window::objects) object.draw();
+   mus.draw();
+   glutSwapBuffers();
+}
+
+// Called when window is opened and when resized.
+void window::reshape (int width, int height) {
+   DEBUGF ('g', "width=" << width << ", height=" << height);
+   window::width = width;
+   window::height = height;
+   glMatrixMode (GL_PROJECTION);
+   glLoadIdentity();
+   gluOrtho2D (0, window::width, 0, window::height);
+   glMatrixMode (GL_MODELVIEW);
+   glViewport (0, 0, window::width, window::height);
+   glClearColor (0.25, 0.25, 0.25, 1.0);
+   glutPostRedisplay();
+}
+
+
+// Executed when a regular keyboard key is pressed.
+enum {BS=8, TAB=9, ESC=27, SPACE=32, DEL=127};
+void window::keyboard (GLubyte key, int x, int y) {
+   DEBUGF ('g', "key=" << (unsigned)key << ", x=" << x << ", y=" << y);
+   window::mus.set (x, y);
+   switch (key) {
+      case 'Q': case 'q': case ESC:
+         window::close();
+         break;
+      case 'H': case 'h':
+         //move_selected_object (
+         break;
+      case 'J': case 'j':
+         //move_selected_object (
+         break;
+      case 'K': case 'k':
+         //move_selected_object (
+         break;
+      case 'L': case 'l':
+         //move_selected_object (
+         break;
+      case 'N': case 'n': case SPACE: case TAB:
+         break;
+      case 'P': case 'p': case BS:
+         break;
+      case '0'...'9':
+         //select_object (key - '0');
+         break;
+      default:
+         cerr << (unsigned)key << ": invalid keystroke" << endl;
+         break;
+   }
+   glutPostRedisplay();
+}
+
+
+// Executed when a special function key is pressed.
+void window::special (int key, int x, int y) {
+   DEBUGF ('g', "key=" << key << ", x=" << x << ", y=" << y);
+   window::mus.set (x, y);
+   switch (key) {
+      case GLUT_KEY_LEFT: //move_selected_object (-1, 0); break;
+      case GLUT_KEY_DOWN: //move_selected_object (0, -1); break;
+      case GLUT_KEY_UP: //move_selected_object (0, +1); break;
+      case GLUT_KEY_RIGHT: //move_selected_object (+1, 0); break;
+      case GLUT_KEY_F1: //select_object (1); break;
+      case GLUT_KEY_F2: //select_object (2); break;
+      case GLUT_KEY_F3: //select_object (3); break;
+      case GLUT_KEY_F4: //select_object (4); break;
+      case GLUT_KEY_F5: //select_object (5); break;
+      case GLUT_KEY_F6: //select_object (6); break;
+      case GLUT_KEY_F7: //select_object (7); break;
+      case GLUT_KEY_F8: //select_object (8); break;
+      case GLUT_KEY_F9: //select_object (9); break;
+      case GLUT_KEY_F10: //select_object (10); break;
+      case GLUT_KEY_F11: //select_object (11); break;
+      case GLUT_KEY_F12: //select_object (12); break;
+      default:
+         cerr << (unsigned)key << ": invalid function key" << endl;
+         break;
+   }
+   glutPostRedisplay();
+}
+
+
+void window::motion (int x, int y) {
+   DEBUGF ('g', "x=" << x << ", y=" << y);
+   window::mus.set (x, y);
+   glutPostRedisplay();
+}
+
+void window::passivemotion (int x, int y) {
+   DEBUGF ('g', "x=" << x << ", y=" << y);
+   window::mus.set (x, y);
+   glutPostRedisplay();
+}
+
+void window::mousefn (int button, int state, int x, int y) {
+   DEBUGF ('g', "button=" << button << ", state=" << state
+           << ", x=" << x << ", y=" << y);
+   window::mus.state (button, state);
+   window::mus.set (x, y);
+   glutPostRedisplay();
+}
+
+void window::main () {
+   static int argc = 0;
+   glutInit (&argc, nullptr);
+   glutInitDisplayMode (GLUT_RGBA | GLUT_DOUBLE);
+   glutInitWindowSize (window::width, window::height);
+   glutInitWindowPosition (128, 128);
+   glutCreateWindow (sys_info::execname().c_str());
+   glutCloseFunc (window::close);
+   glutEntryFunc (window::entry);
+   glutDisplayFunc (window::display);
+   glutReshapeFunc (window::reshape);
+   glutKeyboardFunc (window::keyboard);
+   glutSpecialFunc (window::special);
+   glutMotionFunc (window::motion);
+   glutPassiveMotionFunc (window::passivemotion);
+   glutMouseFunc (window::mousefn);
+   DEBUGF ('g', "Calling glutMainLoop()");
+   glutMainLoop();
+}
+
+
+void mouse::state (int button, int state) {
+   switch (button) {
+      case GLUT_LEFT_BUTTON: left_state = state; break;
+      case GLUT_MIDDLE_BUTTON: middle_state = state; break;
+      case GLUT_RIGHT_BUTTON: right_state = state; break;
+   }
+}
+
+void mouse::draw() {
+   static rgbcolor color ("green");
+   ostringstream text;
+   text << "(" << xpos << "," << window::height - ypos << ")";
+   if (left_state == GLUT_DOWN) text << "L"; 
+   if (middle_state == GLUT_DOWN) text << "M"; 
+   if (right_state == GLUT_DOWN) text << "R"; 
+   if (entered == GLUT_ENTERED) {
+      void* font = GLUT_BITMAP_HELVETICA_18;
+      glColor3ubv (color.ubvec);
+      glRasterPos2i (10, 10);
+      glutBitmapString (font, (GLubyte*) text.str().c_str());
+   }
+}
+
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: graphics.cpp,v 1.9 2014-05-08 18:32:56-07 - - $
+d29 2
+a30 2
+      cout << sys_info::execname() << ": width=" << window::width
+           << ", height=" << window::height << endl;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: graphics.cpp,v 1.8 2014-05-08 18:24:38-07 - - $
+d15 1
+a15 1
+mouse_state window::mouse;
+d27 2
+a28 2
+   window::mouse.entered (mouse_entered);
+   if (window::mouse.entered() == GLUT_ENTERED) {
+d39 1
+a39 1
+   mouse.draw();
+d62 1
+a62 1
+   window::mouse.set (x, y);
+d97 1
+a97 1
+   window::mouse.set (x, y);
+d125 1
+a125 1
+   window::mouse.set (x, y);
+d131 1
+a131 1
+   window::mouse.set (x, y);
+d138 2
+a139 2
+   window::mouse.state (button, state);
+   window::mouse.set (x, y);
+d164 1
+a164 1
+void mouse_state::state (int button, int state) {
+d172 1
+a172 1
+void mouse_state::draw() {
+d175 1
+a175 1
+   text << "(" << xpos << "," << window::size().second - ypos << ")";
+d179 1
+a179 1
+   if (entered() == GLUT_ENTERED) {
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: graphics.cpp,v 1.7 2014-05-08 18:23:23-07 - - $
+d57 1
+d93 1
+d122 1
+d148 1
+d163 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: graphics.cpp,v 1.6 2014-05-08 18:07:04-07 - - $
+d177 1
+a177 1
+      glRasterPos2i (4, 4);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: graphics.cpp,v 1.5 2014-05-08 16:29:02-07 - - $
+d11 2
+a12 2
+int window::width = 640;               // in pixels
+int window::height = 480;              // in pixels
+d14 1
+a14 1
+size_t window::seledted_obj = 0;
+d27 2
+a28 2
+   window::mouse_entered = mouse_entered;
+   if (window::mouse_entered == GLUT_ENTERED) {
+d39 1
+d121 1
+d127 1
+d133 2
+d170 1
+a170 1
+   text << "(" << xpos << "," << window::height - ypos << ")";
+d174 1
+a174 1
+   if (entered == GLUT_ENTERED) {
+d177 1
+a177 1
+      glRasterPos2i (2, 2);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: graphics.cpp,v 1.4 2014-05-08 16:22:43-07 - - $
+d13 3
+a15 1
+int window::mouse_entered = GLUT_LEFT; // GLUT_LEFT xor GLUT_ENTERED
+d19 2
+a20 2
+   cout << sys_info::execname() << ": exit ("
+        << sys_info::exit_status() << ")" << endl;
+d24 1
+a24 1
+// Executed when mouse enters or leaves window::
+d26 1
+d32 1
+d35 103
+a137 1
+void window::main() {
+d143 8
+a150 8
+   //glutDisplayFunc (display);
+   //glutReshapeFunc (reshape);
+   //glutKeyboardFunc (keyboard);
+   //glutMouseFunc (mouse);
+   //glutMotionFunc (motion);
+   //glutPassiveMotionFunc (passivemotion);
+   //glutTimerFunc (frequency, timer, 1);
+   //init();
+d154 23
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 6
+a6 1
+// $Id: graphics.cpp,v 1.3 2014-05-07 22:28:44-07 - - $
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: graphics.cpp,v 1.2 2014-05-06 20:19:36-07 - - $
+d11 1
+a11 1
+void close_window() {
+d18 1
+a18 1
+void entry_window (int mouse_entered) {
+d26 1
+a26 1
+void run_glutMainLoop() {
+d30 2
+a31 2
+   glutCloseFunc (close_window);
+   glutEntryFunc (entry_window);
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: graphics.cpp,v 1.1 2014-05-02 18:39:21-07 - - $
+d6 3
+a8 3
+int window::width = 640;
+int window::height = 480;
+int window::mouse_entered = GLUT_LEFT;
+d17 1
+a17 1
+// Executed when mouse enters or leaves window.
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d10 7
+a25 7
+// Executed when window system signals to shut down.
+void close_window() {
+   cout << sys_info::execname() << ": exit ("
+        << sys_info::exit_status() << ")" << endl;
+   exit (sys_info::exit_status());
+}
+
+@

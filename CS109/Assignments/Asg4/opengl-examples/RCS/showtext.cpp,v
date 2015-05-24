@@ -1,0 +1,733 @@
+head	1.29;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.29
+date	2015.02.20.03.39.51;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2015.02.20.03.38.38;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2015.02.20.03.36.29;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2015.02.20.03.36.08;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2015.02.20.03.28.25;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2015.02.20.03.25.33;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2015.02.20.03.23.04;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2015.02.20.03.22.23;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2015.02.20.03.20.51;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2015.02.20.03.20.32;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2015.02.20.03.20.25;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2015.02.20.03.20.16;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2015.02.20.03.08.55;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2015.02.20.03.08.13;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2015.02.20.03.07.38;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2015.02.20.03.01.05;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2015.02.20.02.59.00;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2015.02.20.02.58.47;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2015.02.20.02.57.37;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2015.02.20.02.55.36;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2015.02.20.02.55.11;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2015.02.20.02.51.16;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2015.02.20.02.50.42;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2015.02.20.02.50.22;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2015.02.20.02.50.08;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2015.02.20.02.49.52;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2015.02.20.02.49.45;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2015.02.20.02.49.37;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2015.02.20.02.49.26;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.29
+log
+@-
+@
+text
+@// $Id: showtext.cpp,v 1.28 2015-02-19 19:38:38-08 - - $
+
+// Display text using OpenGL.
+// Text is from argv.
+
+#include <iostream>
+#include <string>
+#include <unordered_map>
+using namespace std;
+
+#include <GL/freeglut.h>
+#include <libgen.h>
+#include <unistd.h>
+
+unordered_map<string,void*> font_map {
+   {"f13", GLUT_BITMAP_8_BY_13       },
+   {"f15", GLUT_BITMAP_9_BY_15       },
+   {"h10", GLUT_BITMAP_HELVETICA_10  },
+   {"h12", GLUT_BITMAP_HELVETICA_12  },
+   {"h18", GLUT_BITMAP_HELVETICA_18  },
+   {"t10", GLUT_BITMAP_TIMES_ROMAN_10},
+   {"t24", GLUT_BITMAP_TIMES_ROMAN_24},
+};
+
+char* progname = nullptr;
+const GLubyte GREEN[] = {0, 255, 0};
+struct {
+   int width {640};
+   int height {128};
+   void* font = GLUT_BITMAP_TIMES_ROMAN_24;
+   string text = "NO TEXT";
+} window;
+
+void init_message (int argc, char**argv) {
+   for (;;) {
+      int opt = getopt (argc, argv, "f:h:t:");
+      if (opt == EOF) break;
+      string font_code = static_cast<char> (opt) + string (optarg);
+      cout << progname << ": font = " << font_code << endl;
+      const auto& entry = font_map.find (font_code);
+      if (entry != font_map.end()) window.font = entry->second;
+   }
+   if (optind == argc) return;
+   window.text = argv[optind];
+   for (char** arg = &argv[optind + 1]; arg < &argv[argc]; ++arg) {
+      (window.text += " ") += *arg;
+   }
+   cout << progname << ": " << window.text << endl;
+}
+
+
+void display() {
+   glClearColor (0.2, 0.2, 0.2, 1.0);
+   glClear (GL_COLOR_BUFFER_BIT);
+   auto text = reinterpret_cast<const GLubyte*> (window.text.c_str());
+   size_t width = glutBitmapLength (window.font, text);
+   size_t height = glutBitmapHeight (window.font);
+   glColor3ubv (GREEN);
+   float xpos = window.width / 2.0 - width / 2.0;
+   float ypos = window.height / 2.0 - height / 2.0;
+   glRasterPos2f (xpos, ypos);
+   glutBitmapString (window.font, text);
+   glutSwapBuffers();
+}
+
+void reshape (int width, int height) {
+   window.width = width;
+   window.height = height;
+   glMatrixMode (GL_PROJECTION);
+   glLoadIdentity();
+   gluOrtho2D (0, window.width, 0, window.height);
+   glMatrixMode (GL_MODELVIEW);
+   glViewport (0, 0, window.width, window.height);
+   glutPostRedisplay();
+}
+
+int main (int argc, char** argv) {
+   progname = basename (argv[0]);
+   glutInit (&argc, argv);
+   glutInitWindowSize (window.width, window.height);
+   glutCreateWindow (progname);
+   glutDisplayFunc (display);
+   glutReshapeFunc (reshape);
+   init_message (argc, argv);
+   glutMainLoop();
+   return 0;
+}
+
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.27 2015-02-19 19:36:29-08 - - $
+d45 1
+a45 1
+   for (char** arg = &argv[optind]; arg < &argv[argc]; ++arg) {
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.26 2015-02-19 19:36:08-08 - - $
+d34 18
+a76 20
+void init_message (int argc, char**argv) {
+   if (optind == argc) return;
+   window.text = argv[optind];
+   for (char** arg = &argv[optind]; arg < &argv[argc]; ++arg) {
+      (window.text += " ") += *arg;
+   }
+   cout << progname << ": " << window.text << endl;
+}
+
+void scan_options (int argc, char** argv) {
+   for (;;) {
+      int opt = getopt (argc, argv, "f:h:t:");
+      if (opt == EOF) break;
+      string font_code = static_cast<char> (opt) + string (optarg);
+      cout << progname << ": font = " << font_code << endl;
+      const auto& entry = font_map.find (font_code);
+      if (entry != font_map.end()) window.font = entry->second;
+   }
+}
+
+a78 1
+   scan_options (argc, argv);
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.25 2015-02-19 19:28:25-08 - - $
+d37 1
+a37 1
+   auto text = reinterpret_cast<const GLubyte*> (message.c_str());
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.24 2015-02-19 19:25:33-08 - - $
+a25 1
+string message;
+d31 1
+a33 4
+const GLubyte* glustring (const string& str) {
+   return reinterpret_cast<const GLubyte*> (str.c_str());
+}
+
+d37 2
+a38 1
+   size_t width = glutBitmapLength (window.font, glustring (message));
+d44 1
+a44 1
+   glutBitmapString (window.font, glustring (message));
+d61 5
+a65 3
+   message = argv[optind];
+   for (int i = optind + 1; i < argc; ++i) (message += " ") += argv[i];
+   cout << progname << ": " << message << endl;
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.23 2015-02-19 19:23:04-08 - - $
+d25 1
+d66 1
+d74 1
+d81 1
+d85 1
+a85 1
+   glutCreateWindow (basename (argv[0]));
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.22 2015-02-19 19:22:23-08 - - $
+d30 1
+a30 1
+   void* font = GLUT_BITMAP_HELVETICA_12;
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.21 2015-02-19 19:20:51-08 - - $
+d73 1
+a73 1
+      if (entry != font_map.end()) font = entry->second;
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.20 2015-02-19 19:20:32-08 - - $
+a24 1
+void* font = GLUT_BITMAP_HELVETICA_12;
+d30 1
+d40 2
+a41 3
+   void* font = GLUT_BITMAP_TIMES_ROMAN_10;
+   size_t width = glutBitmapLength (font, glustring (message));
+   size_t height = glutBitmapHeight (font);
+d46 1
+a46 1
+   glutBitmapString (font, glustring (message));
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.19 2015-02-19 19:20:25-08 - - $
+d74 1
+a74 1
+      if (entry != font_map.end()) font = entry.second;
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.18 2015-02-19 19:20:16-08 - - $
+d74 1
+a74 1
+      if (entry != fond_map.end()) font = entry.second;
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.17 2015-02-19 19:08:55-08 - - $
+d23 1
+a23 1
+}
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.16 2015-02-19 19:08:13-08 - - $
+d8 1
+d13 1
+d15 12
+a26 1
+string text_message;
+d41 1
+a41 1
+   size_t width = glutBitmapLength (font, glustring (text_message));
+d47 1
+a47 1
+   glutBitmapString (font, glustring (text_message));
+d62 14
+a75 5
+void init_text_message (int argc, char**argv) {
+   if (argc == 1) return;
+   text_message = argv[1];
+   for (int i = 2; i < argc; ++i) (text_message += " ") += argv[i];
+   cout << argv[0] << ": " << text_message << endl;
+d79 1
+d85 1
+a85 1
+   init_text_message (argc, argv);
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.15 2015-02-19 19:07:38-08 - - $
+d53 1
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.14 2015-02-19 19:01:05-08 - - $
+d25 1
+a25 1
+   glClearColor (0.2, 0.2, 0.2);
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.13 2015-02-19 18:59:00-08 - - $
+d13 1
+a13 1
+string text;
+d25 2
+d28 1
+a28 1
+   size_t width = glutBitmapLength (font, (GLubyte*) text.c_str());
+d34 2
+a35 1
+   glutBitmapString (font, glustring (text));
+d49 6
+d58 1
+a58 3
+   text = basename (argv[0]);
+   glutCreateWindow (text.c_str());
+   for (int i = 1; i < argc; ++i) (text += " ") += argv[i];
+d61 1
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.12 2015-02-19 18:58:47-08 - - $
+d15 4
+a18 2
+constexpr size_t window_width = 640;
+constexpr size_t window_height = 480;
+d29 2
+a30 2
+   float xpos = window_width / 2.0 - width / 2.0;
+   float ypos = window_height / 2.0 - height / 2.0;
+d35 11
+d48 1
+a48 1
+   glutInitWindowSize (window_width, window_height);
+d53 1
+d57 1
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.11 2015-02-19 18:57:37-08 - - $
+d19 1
+a19 1
+   return static_cast<const GLubyte*> (str.c_str());
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.10 2015-02-19 18:55:36-08 - - $
+d37 1
+a37 1
+   glutCreateWindow (glustring (text));
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.8 2015-02-19 18:51:16-08 - - $
+d18 4
+d30 1
+a30 1
+   glutBitmapString (font, static_cast<const GLubyte*> (text.c_str()));
+d37 1
+a37 1
+   glutCreateWindow (static_cast<const GLubyte*> (text.c_str()));
+@
+
+
+1.9
+log
+@-
+@
+text
+@d26 1
+a26 1
+   glutBitmapString (font, text.c_str());
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.7 2015-02-19 18:50:42-08 - - $
+d33 1
+a33 1
+   glutCreateWindow (static_cast<GLubyte*> (text.c_str()));
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.6 2015-02-19 18:50:22-08 - - $
+d33 1
+a33 1
+   glutCreateWindow (text.c_str());
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.5 2015-02-19 18:50:08-08 - - $
+d33 1
+a33 1
+   glutCreateWindow (text);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.4 2015-02-19 18:49:52-08 - - $
+d11 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.3 2015-02-19 18:49:45-08 - - $
+d25 1
+a25 1
+   gluBitmapString (font, text.c_str());
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.2 2015-02-19 18:49:37-08 - - $
+d25 1
+a25 1
+   gluBitmapString (font, text.c_str();
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: showtext.cpp,v 1.1 2015-02-19 18:49:26-08 - - $
+d23 1
+a23 1
+   flaot ypos = window_height / 2.0 - height / 2.0;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d10 1
+a10 1
+#include <GL/freeglut>
+@

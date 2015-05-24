@@ -1,0 +1,21 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting teapot.cpp
+teapot.cpp:
+     $Id: teapot.cpp,v 1.7 2014-05-09 16:55:06-07 - - $
+g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11 teapot.cpp -o teapot -lm
+/var/tmp/0/ccNcYAZD.o: In function `display()':
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:14: undefined reference to `glClear'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:17: undefined reference to `glutSolidTeapot'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:18: undefined reference to `glutWireTeapot'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:21: undefined reference to `glFlush'
+/var/tmp/0/ccNcYAZD.o: In function `mouse(int, int, int, int)':
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:31: undefined reference to `glutPostRedisplay'
+/var/tmp/0/ccNcYAZD.o: In function `main':
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:37: undefined reference to `glutInit'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:40: undefined reference to `glutInitWindowSize'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:41: undefined reference to `glutInitWindowPosition'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:42: undefined reference to `glutInitDisplayMode'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:45: undefined reference to `glutCreateWindow'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:46: undefined reference to `glutDisplayFunc'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:47: undefined reference to `glutMouseFunc'
+/afs/cats.ucsc.edu/courses/cmps109-wm/Assignments/asg4-oop-inheritance/opengl-examples/teapot.cpp:50: undefined reference to `glutMainLoop'
+collect2: error: ld returned 1 exit status

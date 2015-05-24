@@ -1,0 +1,138 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.4
+date	2014.05.08.04.11.31;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.08.04.09.16;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.08.04.09.05;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.08.04.08.53;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@#include <string>
+using namespace std;
+string a[] = {
+[  0]= string("NUL"),
+[  1]= string("SOH"),
+[  2]= string("STX"),
+[  3]= string("ETX"),
+[  4]= string("EOT"),
+[  5]= string("ENQ"),
+[  6]= string("ACK"),
+[  7]= string("BEL"),
+[  8]= string("BS"),
+[  9]= string("HT"),
+[ 10]= string("LF"),
+[ 11]= string("VT"),
+[ 12]= string("FF"),
+[ 13]= string("CR"),
+[ 14]= string("SO"),
+[ 15]= string("SI"),
+[ 16]= string("DLE"),
+[ 17]= string("DC1"),
+[ 18]= string("DC2"),
+[ 19]= string("DC3"),
+[ 20]= string("DC4"),
+[ 21]= string("NAK"),
+[ 22]= string("SYN"),
+[ 23]= string("ETB"),
+[ 24]= string("CAN"),
+[ 25]= string("EM"),
+[ 26]= string("SUB"),
+[ 27]= string("ESC"),
+[ 28]= string("FS"),
+[ 29]= string("GS"),
+[ 30]= string("RS"),
+[ 31]= string("US"),
+[127]= string("DEL"),
+};
+@
+
+
+1.3
+log
+@-
+@
+text
+@d4 33
+a36 33
+[  0]= "NUL",
+[  1]= "SOH",
+[  2]= "STX",
+[  3]= "ETX",
+[  4]= "EOT",
+[  5]= "ENQ",
+[  6]= "ACK",
+[  7]= "BEL",
+[  8]= "BS",
+[  9]= "HT",
+[ 10]= "LF",
+[ 11]= "VT",
+[ 12]= "FF",
+[ 13]= "CR",
+[ 14]= "SO",
+[ 15]= "SI",
+[ 16]= "DLE",
+[ 17]= "DC1",
+[ 18]= "DC2",
+[ 19]= "DC3",
+[ 20]= "DC4",
+[ 21]= "NAK",
+[ 22]= "SYN",
+[ 23]= "ETB",
+[ 24]= "CAN",
+[ 25]= "EM",
+[ 26]= "SUB",
+[ 27]= "ESC",
+[ 28]= "FS",
+[ 29]= "GS",
+[ 30]= "RS",
+[ 31]= "US",
+[127]= "DEL",
+@
+
+
+1.2
+log
+@-
+@
+text
+@d2 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d35 1
+a35 1
+[127]= "DEL,
+@

@@ -1,0 +1,666 @@
+head	1.30;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.30
+date	2015.03.06.22.34.38;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2015.03.06.22.34.05;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2015.03.06.22.33.45;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2015.03.06.22.33.10;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2015.03.06.22.32.44;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2015.03.06.22.32.12;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2015.03.06.22.31.49;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2015.03.06.22.29.48;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2015.03.06.22.29.14;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2015.03.06.22.25.25;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2015.03.06.22.25.04;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2015.03.06.22.24.18;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2015.03.06.22.23.53;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2015.03.06.22.23.02;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2015.03.06.22.22.01;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2015.03.06.22.21.12;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2015.03.06.22.19.34;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2015.03.06.22.19.23;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2015.03.06.22.18.43;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2015.03.06.22.18.20;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2015.03.06.22.17.52;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2015.03.06.22.13.02;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2015.03.06.22.12.33;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2015.03.06.22.12.26;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2015.03.06.22.11.16;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2015.03.06.22.10.29;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2015.03.06.22.09.53;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2015.03.06.22.09.46;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2015.03.06.22.06.53;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2015.03.06.22.06.28;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.30
+log
+@-
+@
+text
+@// $Id: coordinates.cpp,v 1.29 2015-03-06 14:34:05-08 - - $
+
+// Draw line from (0,0) to (1,1).
+
+#include <iostream>
+using namespace std;
+
+#include <GL/freeglut.h>
+#include <libgen.h>
+
+struct {
+   size_t width = 256;
+   size_t height = 256;
+} window;
+
+void show (const char* ctext, GLfloat xpos, GLfloat ypos) {
+   const GLubyte* utext = (GLubyte*) ctext;
+   void* font = GLUT_BITMAP_HELVETICA_12;
+   GLfloat xadjust = glutBitmapLength (font, utext);
+   GLfloat yadjust = glutBitmapHeight (font);
+   GLfloat xdelta = xadjust / window.width;
+   GLfloat ydelta = yadjust / window.height;
+   glRasterPos2f (xpos * 0.8 - xdelta, ypos * 0.8 - ydelta);
+   glutBitmapString (font, utext);
+}
+
+void display() {
+   glClearColor (0.25, 0.25, .0, 0);
+   glClear (GL_COLOR_BUFFER_BIT);
+   glColor3ub (0x00, 0xFF, 0x00);
+   show ("(0,0)", 0, 0);
+   show ("(+1,+1)", +1, +1);
+   show ("(-1,+1)", -1, +1);
+   show ("(+1,-1)", +1, -1);
+   show ("(-1,-1)", -1, -1);
+   glutSwapBuffers();
+}
+
+int main (int argc, char** argv) {
+   glutInit (&argc, argv);
+   glutInitWindowSize (window.width, window.height);
+   glutInitWindowPosition (128, 128);
+   glutCreateWindow (basename (argv[0]));
+   glutDisplayFunc (display);
+   glutMainLoop();
+   return 0;
+}
+
+@
+
+
+1.29
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.28 2015-03-06 14:33:45-08 - - $
+d28 1
+a28 1
+   glClearColor (0.25, 0.25, 1.0, 0);
+d30 1
+a30 1
+   glColor3ub (0xFF, 0x00, 0x00);
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.27 2015-03-06 14:33:10-08 - - $
+d30 1
+a30 1
+   glColor3ub (0x00, 0xFF, 0x00);
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.26 2015-03-06 14:32:44-08 - - $
+d30 1
+a30 1
+   glColor3ub (0xFF, 0xFF, 0x00);
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.25 2015-03-06 14:32:12-08 - - $
+d28 1
+a28 1
+   glClearColor (0.5, 0.5, 1.0, 0);
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.24 2015-03-06 14:31:49-08 - - $
+d28 1
+a28 1
+   glClearColor (0.5, 0.5, 0.0, 0);
+d30 1
+a30 1
+   glColor3ub (0x00, 0x00, 0xFF);
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.23 2015-03-06 14:29:48-08 - - $
+d28 1
+a28 1
+   glClearColor (0.5, 0.0, 0.5, 0);
+d30 1
+a30 1
+   glColor3ub (0x00, 0xFF, 0x00);
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.22 2015-03-06 14:29:14-08 - - $
+d28 1
+a28 1
+   glClearColor (0.25, 0.25, 0.25, 0);
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.21 2015-03-06 14:25:25-08 - - $
+d19 2
+a20 2
+   GLfloat xadjust = glutBitmapLength (font, utext) / 2.0;
+   GLfloat yadjust = glutBitmapHeight (font) / 2.0;
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.20 2015-03-06 14:25:04-08 - - $
+d19 5
+a23 1
+   glRasterPos2f (xpos * 0.8, ypos * 0.8);
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.19 2015-03-06 14:24:18-08 - - $
+d19 1
+a19 2
+   glRasterPos2f (xpos * 0.8 * window.width / 2.0,
+                  ypos * 0.8 * window.height / 2.0);
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.18 2015-03-06 14:23:53-08 - - $
+a18 6
+   GLfloat width = glutBitmapLength (font, utext);
+   GLfloat height = glutBitmapHeight (font);
+cout << width << "," << height << endl;
+cout << xpos * 0.8 * window.width / 2.0 << ","
+     << ypos * 0.8 * window.height / 2.0 << endl;
+
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.16 2015-03-06 14:22:01-08 - - $
+d35 4
+a38 4
+   //show ("(+1,+1)", +1, +1);
+   //show ("(-1,+1)", -1, +1);
+   //show ("(+1,-1)", +1, -1);
+   //show ("(-1,-1)", -1, -1);
+@
+
+
+1.17
+log
+@-
+@
+text
+@d22 1
+a22 1
+cout << xpos * 0.8 * window.width / 2.0 - width / 2 << ","
+d25 1
+a25 1
+   glRasterPos2f (xpos * 0.8 * window.width / 2.0 - width / 2,
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.15 2015-03-06 14:21:12-08 - - $
+d35 4
+a38 4
+   show ("(+1,+1)", +1, +1);
+   show ("(-1,+1)", -1, +1);
+   show ("(+1,-1)", +1, -1);
+   show ("(-1,-1)", -1, -1);
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.14 2015-03-06 14:19:34-08 - - $
+d22 3
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.13 2015-03-06 14:19:23-08 - - $
+d19 2
+a20 2
+   size_t width = glutBitmapLength (font, utext);
+   size_t height = glutBitmapHeight (font);
+d22 1
+a22 1
+   glRasterPos2f (xpos * 0.8 * window.width / 2.0,
+d42 1
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.12 2015-03-06 14:18:43-08 - - $
+d5 3
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.11 2015-03-06 14:18:20-08 - - $
+d18 1
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.10 2015-03-06 14:17:52-08 - - $
+d18 2
+a19 2
+   glRasterPos2f (xpos * 0.8 * window.width / 2.0 - width / 2.0,
+                  ypos * 0.8 * window.height / 2.0 - height / 2.0);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.9 2015-03-06 14:13:02-08 - - $
+d19 1
+a19 1
+                  ypos * 0.8 * window.height / 20.0 - height / 2.0);
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.8 2015-03-06 14:12:33-08 - - $
+d8 5
+d16 4
+a19 3
+   //size_t width = glutBitmapLength (font, utext);
+   //size_t height = glutBitmapHeight (font);
+   glRasterPos2f (xpos * 0.8, ypos * 0.8);
+d28 3
+a30 3
+   show ("(1,1)", 1, 1);
+   show ("(-1,1)", -1, 1);
+   show ("(1,-1)", 1, -1);
+d37 1
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.7 2015-03-06 14:12:26-08 - - $
+d10 1
+a10 1
+   void* font = GLUT_BITMAP_HELVETICA_10;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.6 2015-03-06 14:11:16-08 - - $
+d11 2
+a12 2
+   size_t width = glutBitmapLength (font, utext);
+   size_t height = glutBitmapHeight (font);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.5 2015-03-06 14:10:29-08 - - $
+d13 1
+a13 1
+   glRasterPos2f (xpos * 0.8 - width / 2.0, ypos * 0.8 - height / 2.0);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.4 2015-03-06 14:09:53-08 - - $
+d8 2
+a9 1
+void show (const GLubyte* text, GLfloat xpos, GLfloat ypos) {
+d11 1
+a11 1
+   size_t width = glutBitmapLength (font, text);
+d14 1
+a14 1
+   glutBitmapString (font, text);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.3 2015-03-06 14:09:46-08 - - $
+d8 1
+a8 1
+void show (const char* text, GLfloat xpos, GLfloat ypos) {
+d13 1
+a13 1
+   glutBitmapString (font, (GLubyte*) text);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.2 2015-03-06 14:06:53-08 - - $
+d11 1
+a11 1
+   size_t hight = glutBitmapHeight (font);
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: coordinates.cpp,v 1.1 2015-03-06 14:06:28-08 - - $
+d10 3
+a12 1
+   glRasterPos2f (xpos * 0.8, ypos * 0.8);
+d17 1
+a17 1
+   glClearColor (0, 0, 1, 0);
+d19 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: line00to11.cpp,v 1.12 2015-03-06 13:40:40-08 - - $
+d11 1
+a11 1
+   glutBitmapString (font, text);
+@

@@ -1,0 +1,105 @@
+head	1.4;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.4
+date	2014.05.08.05.06.27;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.08.05.05.48;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.08.05.05.27;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.08.05.03.49;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@-
+@
+text
+@// $Id: version.cpp,v 1.3 2014-05-07 22:05:48-07 - - $
+
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include <GL/freeglut.h>
+
+#define PRINT(X) print (#X, X)
+
+void print (string label, GLenum name) {
+   const GLubyte* value = glGetString (name);
+   cout << label << " = \"" << value << "\"" << endl;
+}
+
+int main (int argc, char** argv) {
+   vector<string> args (&argv[1], &argv[argc]);
+   PRINT (GL_EXTENSIONS);
+   PRINT (GL_RENDERER);
+   PRINT (GL_VENDOR);
+   PRINT (GL_VERSION);
+}
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: version.cpp,v 1.2 2014-05-07 22:05:27-07 - - $
+d19 2
+a21 1
+   PRINT (GL_RENDERER);
+a22 1
+   PRINT (GL_EXTENSIONS);
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: version.cpp,v 1.1 2014-05-07 22:03:49-07 - - $
+a10 1
+        cout << #X << " = " << glGetString (X) << endl;
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d10 1
+a10 1
+#define PRINT(X) \
+d13 5
+@

@@ -1,0 +1,783 @@
+head	1.32;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.32
+date	2014.05.09.05.00.26;	author -;	state -;
+branches;
+next	1.31;
+
+1.31
+date	2014.05.09.04.55.02;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2014.05.09.04.51.07;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2014.05.09.04.50.51;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2014.05.09.04.50.40;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2014.05.09.04.47.06;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2014.05.09.04.46.50;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2014.05.09.04.45.54;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2014.05.09.04.40.56;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.05.09.04.40.25;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.05.09.04.39.37;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.05.09.04.39.00;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.05.09.04.38.07;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.05.09.04.37.44;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.05.09.04.37.07;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.05.09.04.36.42;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.05.09.04.35.50;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.09.04.35.20;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.09.04.25.21;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.09.04.24.30;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.09.04.24.09;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.09.04.23.41;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.09.04.23.13;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.09.04.21.41;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.09.04.16.30;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.09.04.16.15;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.09.04.15.51;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.09.04.15.43;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.09.04.15.26;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.09.04.14.47;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.09.04.13.44;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.09.04.13.18;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.32
+log
+@-
+@
+text
+@// $Id: translate.cpp,v 1.31 2014-05-08 21:55:02-07 - - $
+
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
+using namespace std;
+
+#include <GL/freeglut.h>
+#include <libgen.h>
+
+struct {
+   string name;
+   int width;
+   int height;
+} window;
+
+struct rgbcolor {
+   union { 
+      GLubyte ubvec[3];
+      struct {
+         GLubyte red;
+         GLubyte green;
+         GLubyte blue;
+      };
+   };
+};
+const rgbcolor Red     {0xFF, 0x00, 0x00};
+const rgbcolor Green   {0x00, 0xFF, 0x00};
+const rgbcolor Blue    {0x00, 0x00, 0xFF};
+const rgbcolor Cyan    {0x00, 0xFF, 0xFF};
+const rgbcolor Magenta {0xFF, 0x00, 0xFF};
+const rgbcolor Yellow  {0xFF, 0xFF, 0x00};
+const rgbcolor White   {0xFF, 0xFF, 0xFF};
+const rgbcolor Black   {0x00, 0x00, 0x00};
+
+string to_string (const rgbcolor& color) {
+   ostringstream result; 
+   result << "0x" 
+          << hex << setiosflags (ios::uppercase) << setfill ('0')
+          << setw(2) << (unsigned) color.red
+          << setw(2) << (unsigned) color.green
+          << setw(2) << (unsigned) color.blue;
+   return result.str();
+}
+
+
+void draw_rectangle (const rgbcolor& color, const string& name,
+                     GLfloat xcenter, GLfloat ycenter) {
+   cout << __func__ << "(" << to_string (color) << ", "
+        << xcenter << ", " << ycenter << ")" << endl;
+   GLfloat delta_x = window.width / 8;
+   GLfloat delta_y = window.height / 4;
+   glPushMatrix();
+   glTranslatef (xcenter,  ycenter, 0);
+   glBegin (GL_POLYGON);
+   glColor3ubv (color.ubvec);
+   glVertex2f (-delta_x, -delta_y);
+   glVertex2f (+delta_x, -delta_y);
+   glVertex2f (+delta_x, +delta_y);
+   glVertex2f (-delta_x, +delta_y);
+   glEnd();
+   rgbcolor inverse = {(GLubyte) (0xFF - color.red),
+                       (GLubyte) (0xFF - color.green),
+                       (GLubyte) (0xFF - color.blue)};
+   glColor3ubv (inverse.ubvec);
+   void* font = GLUT_BITMAP_TIMES_ROMAN_24;
+   float xpos = - glutBitmapLength (font, (GLubyte*) name.c_str()) / 2;
+   float ypos = - glutBitmapHeight (font) / 2;
+   glRasterPos2f (xpos, ypos);
+   glutBitmapString (font, (GLubyte*) name.c_str());
+   glPopMatrix();
+   glutSwapBuffers();
+}
+
+void display() {
+   GLfloat width = window.width;
+   GLfloat height = window.height;
+   glClear (GL_COLOR_BUFFER_BIT);
+   draw_rectangle (Red    , "Red"    ,  width * 0.125, height * 0.75);
+   draw_rectangle (Green  , "Green"  ,  width * 0.375, height * 0.75);
+   draw_rectangle (Blue   , "Blue"   ,  width * 0.625, height * 0.75);
+   draw_rectangle (White  , "White"  ,  width * 0.875, height * 0.75);
+   draw_rectangle (Cyan   , "Cyan"   ,  width * 0.125, height * 0.25);
+   draw_rectangle (Magenta, "Magenta",  width * 0.375, height * 0.25);
+   draw_rectangle (Yellow , "Yellow" ,  width * 0.625, height * 0.25);
+   draw_rectangle (Black  , "Black"  ,  width * 0.875, height * 0.25);
+}
+
+
+void reshape (int width, int height) {
+   cout << __func__ << "(" << width << ", " << height << ")" << endl;
+   window.width = width;
+   window.height = height;
+   ostringstream title;
+   title << window.name << "(" << window.width << ","
+         << window.height << ")";
+   glutSetWindowTitle (title.str().c_str());
+   glutSetIconTitle (title.str().c_str());
+   glMatrixMode (GL_PROJECTION);
+   glLoadIdentity();
+   gluOrtho2D (0, window.width, 0, window.height);
+   glViewport (0, 0, window.width, window.height);
+   glClearColor (0.5, 0.5, 0.5, 1.0);
+}
+
+int main (int argc, char** argv) {
+   window.name = basename (argv[0]);
+   glutInit (&argc, argv);
+   glutInitWindowSize (480, 360);
+   glutCreateWindow (window.name.c_str());
+   glutDisplayFunc (display);
+   glutReshapeFunc (reshape);
+   glutMainLoop();
+   return 0;
+}
+@
+
+
+1.31
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.30 2014-05-08 21:51:07-07 - - $
+d47 1
+d90 1
+@
+
+
+1.30
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.29 2014-05-08 21:50:51-07 - - $
+d108 1
+a108 1
+   glutInitWindowSize (640, 480);
+@
+
+
+1.29
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.28 2014-05-08 21:50:40-07 - - $
+d93 1
+a93 1
+   sstream title;
+@
+
+
+1.28
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.27 2014-05-08 21:47:06-07 - - $
+d109 1
+a109 1
+   glutCreateWindow (window.name);
+@
+
+
+1.27
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.26 2014-05-08 21:46:50-07 - - $
+d12 6
+a46 5
+struct {
+   int width;
+   int height;
+} window;
+
+d93 5
+d106 1
+d109 1
+a109 1
+   glutCreateWindow (basename (argv[0]));
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.25 2014-05-08 21:45:54-07 - - $
+d65 1
+a65 1
+   void* font = GLUT_BITMAP_9_BY_15;
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.23 2014-05-08 21:40:25-07 - - $
+d65 1
+a65 1
+   void* font = GLUT_BITMAP_TIMES_ROMAN_24;
+@
+
+
+1.24
+log
+@-
+@
+text
+@d55 1
+a55 1
+   glColor3ubv ((GLubyte*) &color);
+d61 4
+a64 1
+   rgbcolor inverse = {~color.red, ~color.green, ~color.blue};
+d69 1
+a69 1
+   glutBitmapString (font, name.c_str());
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.22 2014-05-08 21:39:37-07 - - $
+d61 1
+a61 1
+   rgbcolor inverse (~color.red, ~color.green, ~color.blue);
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.20 2014-05-08 21:38:07-07 - - $
+d61 1
+a61 1
+   rgbcolor inverse {~color.red, ~color.green, ~color.blue};
+@
+
+
+1.21
+log
+@-
+@
+text
+@d14 1
+a14 1
+      uchar ubvec[3];
+d16 3
+a18 3
+         uchar red;
+         uchar green;
+         uchar blue;
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.19 2014-05-08 21:37:44-07 - - $
+d12 10
+a21 1
+struct rgbcolor { GLubyte red; GLubyte green; GLubyte blue; };
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.18 2014-05-08 21:37:07-07 - - $
+d46 1
+a46 1
+   glColor3ubv (&color);
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.17 2014-05-08 21:36:42-07 - - $
+d44 1
+a44 1
+   glTranslatef (xcenter, "xcenter",  ycenter, 0);
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.16 2014-05-08 21:35:50-07 - - $
+d37 1
+a37 1
+void draw_rectangle (const rgbcolor& color, const string& name);
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.15 2014-05-08 21:35:20-07 - - $
+d57 1
+a57 1
+   //glutBitmapString (font, name.c_str());
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.14 2014-05-08 21:25:21-07 - - $
+d26 3
+a28 3
+          << setw(2) << (unsigned) color[0]
+          << setw(2) << (unsigned) color[1] 
+          << setw(2) << (unsigned) color[2]; 
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.13 2014-05-08 21:24:30-07 - - $
+d12 9
+a20 8
+const GLubyte Red    [] {0xFF, 0x00, 0x00};
+const GLubyte Green  [] {0x00, 0xFF, 0x00};
+const GLubyte Blue   [] {0x00, 0x00, 0xFF};
+const GLubyte Cyan   [] {0x00, 0xFF, 0xFF};
+const GLubyte Magenta[] {0xFF, 0x00, 0xFF};
+const GLubyte Yellow [] {0xFF, 0xFF, 0x00};
+const GLubyte White  [] {0xFF, 0xFF, 0xFF};
+const GLubyte Black  [] {0x00, 0x00, 0x00};
+d22 1
+a22 1
+string to_string (const GLubyte* color) {
+d26 3
+a28 3
+          << setw(2) << static_cast<unsigned> (color[0])
+          << setw(2) << static_cast<unsigned> (color[1]) 
+          << setw(2) << static_cast<unsigned> (color[2]); 
+d37 1
+a37 1
+void draw_rectangle (const GLubyte* color,
+d44 1
+a44 1
+   glTranslatef (xcenter, ycenter, 0);
+d46 1
+a46 1
+   glColor3ubv (color);
+d52 6
+d63 2
+d66 8
+a73 8
+   draw_rectangle (Red    , window.width * 0.125, window.height * 0.75);
+   draw_rectangle (Green  , window.width * 0.375, window.height * 0.75);
+   draw_rectangle (Blue   , window.width * 0.625, window.height * 0.75);
+   draw_rectangle (White  , window.width * 0.875, window.height * 0.75);
+   draw_rectangle (Cyan   , window.width * 0.125, window.height * 0.25);
+   draw_rectangle (Magenta, window.width * 0.375, window.height * 0.25);
+   draw_rectangle (Yellow , window.width * 0.625, window.height * 0.25);
+   draw_rectangle (Black  , window.width * 0.875, window.height * 0.25);
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.12 2014-05-08 21:24:09-07 - - $
+d42 2
+a44 1
+   glTranslatef (xcenter, ycenter, 0);
+d51 1
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.11 2014-05-08 21:23:41-07 - - $
+d5 1
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.10 2014-05-08 21:23:13-07 - - $
+d24 3
+a26 3
+          << setw(2) << static_cast<unsigned> (red)
+          << setw(2) << static_cast<unsigned> (green) 
+          << setw(2) << static_cast<unsigned> (blue); 
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 6
+a6 1
+// $Id: translate.cpp,v 1.9 2014-05-08 21:21:41-07 - - $
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.8 2014-05-08 21:16:30-07 - - $
+d15 1
+a15 1
+operator string() {
+d32 1
+a32 1
+   cout << __func__ << "(" << color << ", "
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.7 2014-05-08 21:16:15-07 - - $
+d15 10
+d32 2
+d60 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.6 2014-05-08 21:15:51-07 - - $
+d32 1
+a32 1
+   glutSwapBuffer();
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.5 2014-05-08 21:15:43-07 - - $
+d32 1
+a32 1
+   glSwapBuffer();
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.4 2014-05-08 21:15:26-07 - - $
+d32 1
+a32 1
+   glSwapBuffers();
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.2 2014-05-08 21:13:44-07 - - $
+d32 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d20 4
+a23 3
+void draw_rectangle (const GLubyte* color, float xcenter, float ycenter) {
+   float delta_x = window.width / 8;
+   float delta_y = window.height / 4;
+d34 1
+a34 1
+int display() {
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: translate.cpp,v 1.1 2014-05-08 21:13:18-07 - - $
+d20 1
+a20 1
+void draw_rectangle (GLubyte* color, float xcenter, float ycenter) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d45 1
+a45 1
+int reshape (int width, int height) {
+d51 1
+a51 1
+   glViewPort (0, 0, window.width, window.height);
+@

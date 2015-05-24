@@ -1,0 +1,890 @@
+head	1.18;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.18
+date	2015.02.20.00.50.37;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2015.02.20.00.49.46;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2015.02.20.00.48.00;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.07.23.03.03.19;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.09.01.32.56;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.08.23.29.02;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.08.22.41.33;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.08.21.25.30;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.08.05.28.44;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.07.20.30.34;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.03.01.39.21;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.02.03.54.16;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.02.03.43.13;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.02.03.14.06;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.02.01.47.53;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.02.01.28.10;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.02.01.17.12;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.02.01.09.29;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.18
+log
+@-
+@
+text
+@// $Id: interp.cpp,v 1.17 2015-02-19 16:49:46-08 - - $
+
+#include <memory>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include <GL/freeglut.h>
+
+#include "debug.h"
+#include "interp.h"
+#include "shape.h"
+#include "util.h"
+
+unordered_map<string,interpreter::interpreterfn>
+interpreter::interp_map {
+   {"define" , &interpreter::do_define },
+   {"draw"   , &interpreter::do_draw   },
+};
+
+unordered_map<string,interpreter::factoryfn>
+interpreter::factory_map {
+   {"text"     , &interpreter::make_text     },
+   {"ellipse"  , &interpreter::make_ellipse  },
+   {"circle"   , &interpreter::make_circle   },
+   {"polygon"  , &interpreter::make_polygon  },
+   {"rectangle", &interpreter::make_rectangle},
+   {"square"   , &interpreter::make_square   },
+};
+
+interpreter::shape_map interpreter::objmap;
+
+interpreter::~interpreter() {
+   for (const auto& itor: objmap) {
+      cout << "objmap[" << itor.first << "] = "
+           << *itor.second << endl;
+   }
+}
+
+void interpreter::interpret (const parameters& params) {
+   DEBUGF ('i', params);
+   param begin = params.cbegin();
+   string command = *begin;
+   auto itor = interp_map.find (command);
+   if (itor == interp_map.end()) throw runtime_error ("syntax error");
+   interpreterfn func = itor->second;
+   func (++begin, params.cend());
+}
+
+void interpreter::do_define (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   string name = *begin;
+   objmap.emplace (name, make_shape (++begin, end));
+}
+
+
+void interpreter::do_draw (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   if (end - begin != 3) throw runtime_error ("syntax error");
+   string name = begin[0];
+   shape_map::const_iterator itor = objmap.find (name);
+   if (itor == objmap.end()) {
+      throw runtime_error (name + ": no such shape");
+   }
+   vertex where {from_string<GLfloat> (begin[1]),
+                 from_string<GLfloat> (begin[2])};
+   rgbcolor color {begin[3]};
+   itor->second->draw (where, color);
+}
+
+shape_ptr interpreter::make_shape (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   string type = *begin++;
+   auto itor = factory_map.find(type);
+   if (itor == factory_map.end()) {
+      throw runtime_error (type + ": no such shape");
+   }
+   factoryfn func = itor->second;
+   return func (begin, end);
+}
+
+shape_ptr interpreter::make_text (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   return make_shared<text> (nullptr, string());
+}
+
+shape_ptr interpreter::make_ellipse (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   return make_shared<ellipse> (GLfloat(), GLfloat());
+}
+
+shape_ptr interpreter::make_circle (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   return make_shared<circle> (GLfloat());
+}
+
+shape_ptr interpreter::make_polygon (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   return make_shared<polygon> (vertex_list());
+}
+
+shape_ptr interpreter::make_rectangle (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   return make_shared<rectangle> (GLfloat(), GLfloat());
+}
+
+shape_ptr interpreter::make_square (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   return make_shared<square> (GLfloat());
+}
+
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.16 2015-02-19 16:48:00-08 - - $
+d53 1
+a53 1
+   objmap.emplace ({name, make_shape (++begin, end)});
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.15 2014-07-22 20:03:19-07 - - $
+a2 1
+#include <map>
+d15 2
+a16 1
+map<string,interpreter::interpreterfn> interpreter::interp_map {
+d21 2
+a22 1
+map<string,interpreter::factoryfn> interpreter::factory_map {
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.14 2014-05-08 18:32:56-07 - - $
+d52 1
+a52 1
+   objmap.insert ({name, make_shape (++begin, end)});
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.13 2014-05-08 16:29:02-07 - - $
+d30 2
+d46 1
+a46 1
+   (this->*func) (++begin, params.cend());
+d78 1
+a78 1
+   return (this->*func) (begin, end);
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.12 2014-05-08 15:41:33-07 - - $
+d53 1
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.11 2014-05-08 14:25:30-07 - - $
+a2 1
+#include <vector>
+d6 2
+d9 1
+a9 1
+using namespace std;
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.10 2014-05-07 22:28:44-07 - - $
+d10 1
+a14 4
+#define WARNING_UNUSED_PARAMETER(X) \
+        cout << "WARNING_UNUSED_PARAMETER(" << #X << ")" << endl; \
+        (void) X;
+
+d47 1
+a47 1
+   DEBUGF ('i', "begin=" << begin << ", end=" << end);
+d53 1
+a53 1
+   DEBUGF ('i', "begin=" << begin << ", end=" << end);
+d67 1
+a67 1
+   DEBUGF ('f', "begin=" << begin << ", end=" << end);
+d78 1
+a78 1
+   DEBUGF ('f', "begin=" << begin << ", end=" << end);
+d83 1
+a83 1
+   DEBUGF ('f', "begin=" << begin << ", end=" << end);
+d88 1
+a88 1
+   DEBUGF ('f', "begin=" << begin << ", end=" << end);
+d93 1
+a93 1
+   DEBUGF ('f', "begin=" << begin << ", end=" << end);
+d98 1
+a98 1
+   DEBUGF ('f', "begin=" << begin << ", end=" << end);
+d103 1
+a103 1
+   DEBUGF ('f', "begin=" << begin << ", end=" << end);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.9 2014-05-07 13:30:34-07 - - $
+d39 2
+a40 2
+void interpreter::interpret (parameters& params) {
+   //TRACE ('i', params);
+d42 1
+a42 2
+   param end = params.cend();
+   string command = *begin++;
+d46 1
+a46 1
+   (this->*func) (begin, end);
+d49 2
+a50 2
+void interpreter::do_define (param& begin, param& end) {
+   //TRACE ('i', params);
+d55 2
+a56 2
+void interpreter::do_draw (param& begin, param& end) {
+   //TRACE ('i', params);
+d69 2
+a70 2
+shape_ptr interpreter::make_shape (param& begin, param& end) {
+   //TRACE ('f', command);
+d80 2
+a81 4
+shape_ptr interpreter::make_text (param& begin, param& end) {
+   //TRACE ('f', command);
+   WARNING_UNUSED_PARAMETER(begin);
+   WARNING_UNUSED_PARAMETER(end);
+d85 2
+a86 4
+shape_ptr interpreter::make_ellipse (param& begin, param& end) {
+   //TRACE ('f', command);
+   WARNING_UNUSED_PARAMETER(begin);
+   WARNING_UNUSED_PARAMETER(end);
+d90 2
+a91 4
+shape_ptr interpreter::make_circle (param& begin, param& end) {
+   //TRACE ('f', command);
+   WARNING_UNUSED_PARAMETER(begin);
+   WARNING_UNUSED_PARAMETER(end);
+d95 2
+a96 4
+shape_ptr interpreter::make_polygon (param& begin, param& end) {
+   //TRACE ('f', command);
+   WARNING_UNUSED_PARAMETER(begin);
+   WARNING_UNUSED_PARAMETER(end);
+d100 2
+a101 4
+shape_ptr interpreter::make_rectangle (param& begin, param& end) {
+   //TRACE ('f', command);
+   WARNING_UNUSED_PARAMETER(begin);
+   WARNING_UNUSED_PARAMETER(end);
+d105 2
+a106 4
+shape_ptr interpreter::make_square (param& begin, param& end) {
+   //TRACE ('f', command);
+   WARNING_UNUSED_PARAMETER(begin);
+   WARNING_UNUSED_PARAMETER(end);
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.8 2014-05-02 18:39:21-07 - - $
+a29 1
+   {"line"     , &interpreter::make_line     },
+d66 2
+a67 1
+   itor->second->draw (where);
+d92 1
+a92 1
+   return make_shared<ellipse> (GLfloat(), GLfloat(), GLfloat());
+d99 1
+a99 1
+   return make_shared<circle> (GLfloat(), GLfloat());
+d106 1
+a106 1
+   return make_shared<polygon> (vertex_list(), GLfloat());
+d113 1
+a113 1
+   return make_shared<rectangle> (GLfloat(), GLfloat(), GLfloat());
+d120 1
+a120 8
+   return make_shared<square> (GLfloat(), GLfloat());
+}
+
+shape_ptr interpreter::make_line (param& begin, param& end) {
+   //TRACE ('f', command);
+   WARNING_UNUSED_PARAMETER(begin);
+   WARNING_UNUSED_PARAMETER(end);
+   return make_shared<line> (GLfloat(), GLfloat());
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.7 2014-05-01 20:54:16-07 - - $
+d11 1
+a11 1
+#include "object.h"
+d54 1
+a54 1
+   objmap.insert ({name, make_object (++begin, end)});
+d61 1
+a61 1
+   object_map::const_iterator itor = objmap.find (name);
+d63 1
+a63 1
+      throw runtime_error (name + ": no such object");
+d70 1
+a70 1
+object_ptr interpreter::make_object (param& begin, param& end) {
+d75 1
+a75 1
+      throw runtime_error (type + ": no such object");
+d81 1
+a81 1
+object_ptr interpreter::make_text (param& begin, param& end) {
+d88 1
+a88 1
+object_ptr interpreter::make_ellipse (param& begin, param& end) {
+d95 1
+a95 1
+object_ptr interpreter::make_circle (param& begin, param& end) {
+d102 1
+a102 1
+object_ptr interpreter::make_polygon (param& begin, param& end) {
+d109 1
+a109 1
+object_ptr interpreter::make_rectangle (param& begin, param& end) {
+d116 1
+a116 1
+object_ptr interpreter::make_square (param& begin, param& end) {
+d123 1
+a123 1
+object_ptr interpreter::make_line (param& begin, param& end) {
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.6 2014-05-01 20:43:13-07 - - $
+d14 4
+d41 5
+a45 4
+   TRACE ('i', params);
+   param begin = params.begin();
+   string command = begin;
+   interp_map_t::const_iterator itor = interp_map.find (command);
+d48 1
+a48 1
+   (this->*func) (++begin, params.end());
+d52 3
+a54 3
+   TRACE ('i', params);
+   string name = shift (params);
+   objmap.insert (object_map::value_type (name, make_object (params)));
+d58 3
+a60 2
+   TRACE ('i', params);
+   string name = shift (params);
+d65 3
+a67 4
+   if (params.size() != 2) throw runtime_error ("syntax error");
+   vertex_list vertices {from_string<GLfloat> (params[0]),
+                         from_string<GLfloat> (params[1])};
+   itor->second->draw (vertices);
+d70 3
+a72 4
+object_ptr interpreter::make_object (parameters& command) {
+   TRACE ('f', command);
+   param begin = command.begin();
+   string type = *begin;
+d78 1
+a78 1
+   return (this->*func) (++begin, command.end());
+d81 5
+a85 3
+object_ptr interpreter::make_text (parameters& command) {
+   TRACE ('f', command);
+   return make_shared<text> ("", GLfloat(), string());
+d88 4
+a91 2
+object_ptr interpreter::make_ellipse (parameters& command) {
+   TRACE ('f', command);
+d95 4
+a98 2
+object_ptr interpreter::make_circle (parameters& command) {
+   TRACE ('f', command);
+d102 5
+a106 3
+object_ptr interpreter::make_polygon (parameters& command) {
+   TRACE ('f', command);
+   return make_shared<polygon> (coordlist(), GLfloat());
+d109 4
+a112 2
+object_ptr interpreter::make_rectangle (parameters& command) {
+   TRACE ('f', command);
+d116 4
+a119 2
+object_ptr interpreter::make_square (parameters& command) {
+   TRACE ('f', command);
+d123 4
+a126 2
+object_ptr interpreter::make_line (parameters& command) {
+   TRACE ('f', command);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.5 2014-05-01 20:14:06-07 - - $
+d14 1
+a14 1
+map<string,interpreterfn> interpreter::interp_map {
+a16 1
+   {"dump"   , &interpreter::do_dump   },
+d19 1
+a19 1
+map<string,factoryfn> interpreter::factory_map {
+a28 4
+interpreter::interpreter(const string& filename): objmap(),
+   infilename(filename) {
+}
+
+d30 3
+a32 3
+   if (traceflags::getflag ('i')) {
+      parameters dump {"dump"};
+      do_dump (dump);
+d36 1
+a36 1
+void interpreter::interpret (parameter& begin, parameter& end) {
+d38 2
+a39 1
+   string command = shift (params);
+d43 1
+a43 1
+   (this->*func) (params);
+d46 1
+a46 1
+void interpreter::do_define (parameter& begin, parameter& end) {
+d52 1
+a52 1
+void interpreter::do_draw (parameter& begin, parameter& end) {
+a64 9
+void interpreter::do_dump (parameter& begin, parameter& end) {
+   traceflags::setflags ("*");
+   TRACE ('*', params);
+   for (object_map::const_iterator itor = objmap.cbegin();
+        itor != objmap.cend(); ++itor) {
+      cout << itor->first << ": " << *itor->second << endl;
+   }
+}
+
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.4 2014-05-01 18:47:53-07 - - $
+d3 1
+a3 1
+#include <list>
+d14 1
+a14 1
+interpreter::interp_map_t interpreter::interp_map {
+d20 1
+a20 1
+interpreter::factory_map_t interpreter::factory_map {
+d41 1
+a41 8
+string shift (list<string>& words) {
+   if (words.size() == 0) throw runtime_error ("syntax error");
+   string front = words.front();
+   words.pop_front();
+   return front;
+}
+
+void interpreter::interpret (parameters& params) {
+d50 1
+a50 1
+void interpreter::do_define (parameters& params) {
+d56 1
+a56 1
+void interpreter::do_draw (parameters& params) {
+d69 1
+a69 1
+void interpreter::do_dump (parameters& params) {
+d80 2
+a81 1
+   string type = shift (command);
+d87 1
+a87 1
+   return (this->*func) (command);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.3 2014-05-01 18:28:10-07 - - $
+a16 1
+   {"newpage", &interpreter::do_newpage},
+d30 2
+a31 10
+interpreter::interpreter(const string& filename, ostream& outfile):
+   outfile(outfile),
+   pagenr(1),
+   objmap(),
+   infilename(filename),
+   page_xoffset (GLfloat(0.25).point_value()),
+   page_yoffset (GLfloat(0.25).point_value())
+{
+   prolog();
+   startpage();
+a34 2
+   endpage();
+   epilog();
+a69 5
+   degrees angle = degrees (0);
+   if (params.size() == 3) {
+      angle = degrees (from_string<double> (params.back()));
+      params.pop_back();
+   }
+d71 3
+a73 10
+   xycoords coords (GLfloat (from_string<double> (params.front())),
+                    GLfloat (from_string<double> (params.back())));
+   itor->second->draw (outfile, coords, angle);
+}
+
+void interpreter::do_newpage (parameters& params) {
+   if (params.size() != 0) throw runtime_error ("syntax error");
+   endpage();
+   ++pagenr;
+   startpage();
+d81 1
+a81 1
+      cerr << itor->first << ": " << *itor->second << endl;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.2 2014-05-01 18:17:12-07 - - $
+d36 2
+a37 2
+   page_xoffset (inches(0.25).point_value()),
+   page_yoffset (inches(0.25).point_value())
+d87 2
+a88 2
+   xycoords coords (inches (from_string<double> (params.front())),
+                    inches (from_string<double> (params.back())));
+a107 35
+void interpreter::prolog() {
+   outfile << "%!PS-Adobe-3.0" << endl;
+   outfile << "%%Creator: " << sys_info::get_execname() << endl;
+   outfile << "%%CreationDate: " << datestring() << endl;
+   outfile << "%%PageOrder: Ascend" << endl;
+   outfile << "%%Orientation: Portrait" << endl;
+   outfile << "%%SourceFile: " << infilename << endl;
+   outfile << "%%EndComments" << endl;
+}
+
+void interpreter::startpage() {
+   outfile << endl;
+   outfile << "%%Page: " << pagenr << " " << pagenr << endl;
+   outfile << page_xoffset << " " << page_yoffset
+           << " translate" << endl;
+   outfile << "/Courier findfont 10 scalefont setfont" << endl;
+   outfile << "0 0 moveto (" << infilename << ":"
+           << pagenr << ") show" << endl;
+
+}
+
+void interpreter::endpage() {
+   outfile << endl;
+   outfile << "showpage" << endl;
+   outfile << "grestoreall" << endl;
+}
+
+void interpreter::epilog() {
+   outfile << endl;
+   outfile << "%%Trailer" << endl;
+   outfile << "%%Pages: " << pagenr << endl;
+   outfile << "%%EOF" << endl;
+
+}
+
+d111 1
+a111 1
+   factory_map_t::const_iterator itor = factory_map.find(type);
+d121 1
+a121 1
+   return make_shared<text> ("", points(), string());
+d126 1
+a126 1
+   return make_shared<ellipse> (inches(), inches(), points());
+d131 1
+a131 1
+   return make_shared<circle> (inches(), points());
+d136 1
+a136 1
+   return make_shared<polygon> (coordlist(), points());
+d141 1
+a141 1
+   return make_shared<rectangle> (inches(), inches(), points());
+d146 1
+a146 1
+   return make_shared<square> (inches(), points());
+d151 1
+a151 1
+   return make_shared<line> (inches(), points());
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.1 2014-05-01 18:09:29-07 - - $
+d31 1
+a31 1
+interpreter::interpreter(const string &filename, ostream &outfile):
+d52 1
+a52 1
+string shift (list<string> &words) {
+d59 1
+a59 1
+void interpreter::interpret (parameters &params) {
+d68 1
+a68 1
+void interpreter::do_define (parameters &params) {
+d74 1
+a74 1
+void interpreter::do_draw (parameters &params) {
+d92 1
+a92 1
+void interpreter::do_newpage (parameters &params) {
+d99 1
+a99 1
+void interpreter::do_dump (parameters &params) {
+d143 1
+a143 1
+object_ptr interpreter::make_object (parameters &command) {
+d154 1
+a154 1
+object_ptr interpreter::make_text (parameters &command) {
+d159 1
+a159 1
+object_ptr interpreter::make_ellipse (parameters &command) {
+d164 1
+a164 1
+object_ptr interpreter::make_circle (parameters &command) {
+d169 1
+a169 1
+object_ptr interpreter::make_polygon (parameters &command) {
+d174 1
+a174 1
+object_ptr interpreter::make_rectangle (parameters &command) {
+d179 1
+a179 1
+object_ptr interpreter::make_square (parameters &command) {
+d184 1
+a184 1
+object_ptr interpreter::make_line (parameters &command) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: interp.cpp,v 1.59 2013-07-24 17:22:56-07 - - $
+a58 1
+
+a107 1
+
+a142 1
+
+@

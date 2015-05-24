@@ -1,0 +1,385 @@
+head	1.13;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.13
+date	2014.07.22.23.38.07;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.09.22.25.34;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.09.02.31.40;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.08.22.06.31;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.08.06.20.56;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.08.06.20.36;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.08.06.18.50;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.08.06.15.14;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.08.06.12.54;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.08.06.12.45;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.08.06.12.33;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.08.06.12.22;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.08.06.09.11;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.13
+log
+@-
+@
+text
+@// $Id: glclock.cpp,v 1.12 2014-05-09 15:25:34-07 - - $
+
+// Show a real-time analog clock.
+
+#include <cmath>
+#include <iostream>
+using namespace std;
+
+#include <GL/freeglut.h>
+#include <libgen.h>
+#include <time.h>
+
+int window_width = 128;
+int window_height = 128;
+string program_name;
+float radius = 0.9;
+
+struct calend {
+   time_t clock;
+   struct tm localtime;
+   char sdate[64];
+   char stime[64];
+   void set() {
+      clock = time (NULL);
+      localtime_r (&clock, &localtime);
+      strftime (sdate, sizeof sdate, "%a %b %e", &localtime);
+      strftime (stime, sizeof stime, "%T", &localtime);
+   }
+} calend;
+
+void show_time() {
+   void* font = GLUT_BITMAP_TIMES_ROMAN_10;
+   glRasterPos2f (-0.95, -0.95);
+   glutBitmapString (font, (GLubyte*) calend.sdate);
+   float timewidth = glutBitmapLength (font, (GLubyte*) calend.stime);
+   float timexpos = 0.95 - 2 * timewidth / window_width;
+   glRasterPos2f (timexpos, -.95);
+   glutBitmapString (font, (GLubyte*) calend.stime);
+}
+
+void draw_dots (int points, int count) {
+   glEnable (GL_POINT_SMOOTH);
+   glPointSize (points);
+   glBegin(GL_POINTS);
+   for (float theta = 0; theta < 2 * M_PI; theta += 2 * M_PI / count) {
+      float xdot = 0.9 * radius * cos (theta);
+      float ydot = 0.9 * radius * sin (theta);
+      glVertex2f (xdot, ydot);
+   }
+   glEnd();
+}
+
+
+void draw_hand (GLfloat width, GLfloat length, GLfloat clock) {
+   glEnable (GL_LINE_SMOOTH);
+   glEnable (GL_POLYGON_SMOOTH);
+   glPushMatrix();
+   glRotatef (-clock * 6, 0, 0, 1);
+   glColor3ub (0x2F, 0xFF, 0x2F);
+   glBegin (GL_POLYGON);
+   glVertex2f (-width / 2 * radius, 0);
+   glVertex2f (+width / 2 * radius, 0);
+   glVertex2f (+width / 8, length * radius);
+   glVertex2f (-width / 8, length * radius);
+   glEnd();
+   glPopMatrix();
+}
+
+void display() {
+   glClear (GL_COLOR_BUFFER_BIT);
+   glColor3ub (0x2F, 0xFF, 0x2F);
+   draw_dots (2, 60);
+   draw_dots (5, 12);
+   calend.set();
+   float second = calend.localtime.tm_sec;
+   float minute = calend.localtime.tm_min + second / 60;
+   float hour = calend.localtime.tm_hour + minute / 60;
+   draw_hand (0.2, 0.5, hour * 5);
+   draw_hand (0.1, 0.75, minute);
+   draw_hand (0.05, 0.95, second);
+   show_time();
+   glutSwapBuffers();
+}
+
+const float frequency = 500;
+void timer (int) {
+   glutTimerFunc (frequency, timer, 100);
+   glutPostRedisplay();
+}
+
+
+void reshape (int width, int height) {
+   cout << "reshape(width=" << width << ", height=" << height << endl;
+   window_width = width;
+   window_height = height;
+   glMatrixMode (GL_PROJECTION);
+   glLoadIdentity();
+   gluOrtho2D (-1, +1, -1, +1);
+   glMatrixMode (GL_MODELVIEW);
+   glHint (GL_POINT_SMOOTH_HINT, GL_NICEST);
+   glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+   glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+   radius = 0.9;
+   glViewport (0, 0, window_width, window_height);
+   float gray = 0x2Fp0 / 0xFFp0;
+   glClearColor (gray, gray, gray, 1.0);
+}
+
+int main (int argc, char** argv) {
+   program_name = basename (argv[0]);
+   glutInit (&argc, argv);
+   glutInitDisplayMode (GLUT_RGBA | GLUT_DOUBLE);
+   glutInitWindowSize (window_width, window_height);
+   glutCreateWindow (program_name.c_str());
+   glutDisplayFunc (display);
+   glutReshapeFunc (reshape);
+   glutTimerFunc (frequency, timer, 100);
+   glutMainLoop();
+   return 0;
+}
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 3
+a3 1
+// $Id: glclock.cpp,v 1.11 2014-05-08 19:31:40-07 - - $
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.10 2014-05-08 15:06:31-07 - - $
+d54 1
+d114 1
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.9 2014-05-07 23:20:56-07 - - $
+d51 1
+d88 1
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.8 2014-05-07 23:20:36-07 - - $
+a7 2
+#include <GL/gl.h>
+#include <GL/glut.h>
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.7 2014-05-07 23:18:50-07 - - $
+d33 1
+a33 1
+   glRasterPos2i (-0.95, -0.95);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.6 2014-05-07 23:15:14-07 - - $
+d33 1
+a33 1
+   glWindowPos2i (2, 2);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.5 2014-05-07 23:12:54-07 - - $
+d33 1
+a33 1
+   glRasterPos2f (-0.95, -0.95);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.4 2014-05-07 23:12:45-07 - - $
+a67 2
+   float gray = 0x2Fp0 / 0xFFp0;
+   glClearColor (gray, gray, gray, 1.0);
+d86 1
+a86 1
+   display();
+d102 2
+a103 1
+   display();
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.3 2014-05-07 23:12:33-07 - - $
+d97 1
+a97 1
+   glOrtho2D (-1, +1, -1, +1);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.2 2014-05-07 23:12:22-07 - - $
+d97 1
+a97 1
+   glOrtho (-1, +1, -1, +1);
+a114 1
+   init();
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.1 2014-05-07 23:09:11-07 - - $
+a103 1
+   init();
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: glclock.cpp,v 1.25 2014-05-07 23:07:45-07 - - $
+d68 2
+d91 4
+a94 1
+void init() {
+d97 1
+a97 2
+   float gray = 0x2Fp0 / 0xFFp0;
+   glClearColor (gray, gray, gray, 1.0);
+a101 6
+}
+
+void reshape (int width, int height) {
+   cout << "reshape(width=" << width << ", height=" << height << endl;
+   window_width = width;
+   window_height = height;
+@

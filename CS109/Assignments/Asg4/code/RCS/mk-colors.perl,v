@@ -1,0 +1,83 @@
+head	1.3;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.3
+date	2014.05.21.22.40.52;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.15.23.42.55;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.08.23.35.08;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@-
+@
+text
+@#!/usr/bin/perl
+# $Id: mk-colors.perl,v 1.2 2014-05-15 16:42:55-07 - - $
+use strict;
+use warnings;
+
+my %colors;
+my $file = "/usr/share/X11/rgb.txt";
+open RGB_TXT, "<$file" or die "$0: $file: $!";
+while (my $line = <RGB_TXT>) {
+   $line =~ m/^\s*(\d+)\s+(\d+)\s+(\d+)\s+(.*)/
+         or die "$0: invalid line: $line";
+   my ($red, $green, $blue, $name) = ($1, $2, $3, $4);
+   $name =~ s/\s+/-/g;
+   $colors{$name} = [$red, $green, $blue];
+}
+close RGB_TXT;
+
+print "// Data taken from source file $file\n";
+print "const unordered_map<string,rgbcolor> color_names = {\n";
+printf "   {%-24s, rgbcolor (%3d, %3d, %3d)},\n",
+                  "\"$_\"", @@{$colors{$_}}
+       for sort {lc $a cmp lc $b} keys %colors;
+print "};\n";
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: mk-colors.perl,v 1.1 2014-05-08 16:35:08-07 - - $
+d19 1
+a19 1
+print "const unordered_map<string,rgbcolor> colors = {\n";
+@
+
+
+1.1
+log
+@-
+@
+text
+@d2 1
+a2 1
+# $Id: mk-colortable.perl,v 1.1 2014-05-08 14:02:41-07 - - $
+d18 1
+@

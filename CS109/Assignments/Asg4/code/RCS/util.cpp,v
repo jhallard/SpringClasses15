@@ -1,0 +1,292 @@
+head	1.8;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.8
+date	2014.05.09.01.32.56;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.08.21.25.30;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.03.01.39.21;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.02.03.43.13;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.02.03.15.38;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.02.01.56.32;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.02.01.17.35;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.02.01.10.21;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@-
+@
+text
+@// $Id: util.cpp,v 1.7 2014-05-08 14:25:30-07 - - $
+
+#include <cerrno>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <typeinfo>
+using namespace std;
+
+#include "util.h"
+
+int sys_info::exit_status_ = EXIT_SUCCESS;
+string sys_info::execname_; // Must be initialized from main().
+
+void sys_info_error (const string& condition) {
+   throw logic_error ("main() has " + condition
+               + " called sys_info::execname()");
+}
+
+void sys_info::execname (const string& argv0) {
+   if (execname_.size() != 0) sys_info_error ("already");
+   int slashpos = argv0.find_last_of ('/') + 1;
+   execname_ = argv0.substr (slashpos);
+   cout << boolalpha;
+   cerr << boolalpha;
+   DEBUGF ('u', "execname = " << execname_);
+}
+
+const string& sys_info::execname() {
+   if (execname_.size() == 0) sys_info_error ("not yet");
+   return execname_;
+}
+
+void sys_info::exit_status (int status) {
+   if (execname_.size() == 0) sys_info_error ("not yet");
+   exit_status_ = status;
+}
+
+int sys_info::exit_status() {
+   if (execname_.size() == 0) sys_info_error ("not yet");
+   return exit_status_;
+}
+
+const string datestring() {
+   time_t clock = time (NULL);
+   struct tm* tm_ptr = localtime (&clock);
+   char timebuf[128];
+   strftime (timebuf, sizeof timebuf,
+             "%a %b %e %H:%M:%S %Z %Y", tm_ptr);
+   return timebuf;
+}
+
+
+vector<string> split (const string& line, const string& delimiters) {
+   vector<string> words;
+   int end = 0;
+   for (;;) {
+      size_t start = line.find_first_not_of (delimiters, end);
+      if (start == string::npos) break;
+      end = line.find_first_of (delimiters, start);
+      words.push_back (line.substr (start, end - start));
+   }
+   DEBUGF ('u', words);
+   return words;
+}
+
+ostream& complain() {
+   sys_info::exit_status (EXIT_FAILURE);
+   cerr << sys_info::execname() << ": ";
+   return cerr;
+}
+
+void syscall_error (const string& object) {
+   complain() << object << ": " << strerror (errno) << endl;
+}
+
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.cpp,v 1.6 2014-05-02 18:39:21-07 - - $
+d56 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.cpp,v 1.5 2014-05-01 20:43:13-07 - - $
+d29 1
+a29 1
+   TRACE ('u', "execname = " << execname_);
+d65 1
+a65 1
+   TRACE ('u', words);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.cpp,v 1.4 2014-05-01 20:15:38-07 - - $
+a10 1
+
+d15 2
+a16 2
+int sys_info::exit_status = EXIT_SUCCESS;
+string sys_info::execname; // Must be initialized from main().
+d20 1
+a20 1
+               + " called sys_info::set_execname()");
+d23 2
+a24 2
+void sys_info::set_execname (const string& argv0) {
+   if (execname.size() != 0) sys_info_error ("already");
+d26 1
+a26 1
+   execname = argv0.substr (slashpos);
+d29 1
+a29 1
+   TRACE ('u', "execname = " << execname);
+d32 3
+a34 3
+const string& sys_info::get_execname() {
+   if (execname.size() == 0) sys_info_error ("not yet");
+   return execname;
+d37 3
+a39 3
+void sys_info::set_exit_status (int status) {
+   if (execname.size() == 0) sys_info_error ("not yet");
+   exit_status = status;
+d42 3
+a44 3
+int sys_info::get_exit_status() {
+   if (execname.size() == 0) sys_info_error ("not yet");
+   return exit_status;
+d70 2
+a71 2
+   sys_info::set_exit_status (EXIT_FAILURE);
+   cerr << sys_info::get_execname() << ": ";
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.cpp,v 1.3 2014-05-01 18:56:32-07 - - $
+d57 2
+a58 2
+deque<string> split (const string& line, const string& delimiters) {
+   deque<string> words;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.cpp,v 1.2 2014-05-01 18:17:35-07 - - $
+d57 2
+a58 2
+list<string> split (const string& line, const string& delimiters) {
+   list<string> words;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.cpp,v 1.1 2014-05-01 18:10:21-07 - - $
+d19 1
+a19 1
+void sys_info_error (const string &condition) {
+d24 1
+a24 1
+void sys_info::set_execname (const string &argv0) {
+d33 1
+a33 1
+const string &sys_info::get_execname() {
+d50 1
+a50 1
+   struct tm *tm_ptr = localtime (&clock);
+d57 1
+a57 1
+list<string> split (const string &line, const string &delimiters) {
+d70 1
+a70 1
+ostream &complain() {
+d76 1
+a76 1
+void syscall_error (const string &object) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: util.cpp,v 1.23 2013-07-24 17:21:42-07 - - $
+a13 1
+#include "demangle.h"
+a56 1
+
+@

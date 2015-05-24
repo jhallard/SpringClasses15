@@ -1,0 +1,437 @@
+head	1.13;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.13
+date	2014.05.09.01.32.56;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.08.23.29.02;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.08.23.22.43;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.08.21.25.30;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.08.05.28.44;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.03.01.39.21;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.02.03.43.13;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.02.01.56.27;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.02.01.55.22;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.02.01.52.30;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.02.01.51.33;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.02.01.17.40;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.02.01.10.25;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.13
+log
+@-
+@
+text
+@// $Id: main.cpp,v 1.12 2014-05-08 16:29:02-07 - - $
+
+#include <fstream>
+#include <iostream>
+#include <unistd.h>
+#include <vector>
+using namespace std;
+
+#include "debug.h"
+#include "graphics.h"
+#include "interp.h"
+#include "util.h"
+
+//
+// Parse a file.  Read lines from input file, parse each line,
+// and interpret the command.
+//
+
+void parsefile (const string& infilename, istream& infile) {
+   interpreter::shape_map shapemap;
+   interpreter interp;
+   for (int linenr = 1;; ++linenr) {
+      try {
+         string line;
+         getline (infile, line);
+         if (infile.eof()) break;
+         if (line.size() == 0) continue;
+         for (;;) {
+            DEBUGF ('m', line);
+            int last = line.size() - 1;
+            if (line[last] != '\\') break;
+            line[last] = ' ';
+            string contin;
+            getline (infile, contin);
+            if (infile.eof()) break;
+            line += contin;
+         }
+         interpreter::parameters words = split (line, " \t");
+         if (words.size() == 0 or words.front()[0] == '#') continue;
+         DEBUGF ('m', words);
+         interp.interpret (words);
+      }catch (runtime_error error) {
+         complain() << infilename << ":" << linenr << ": "
+                    << error.what() << endl;
+      }
+   }
+   DEBUGF ('m', infilename << " EOF");
+}
+
+
+//
+// Scan the option -@@ and check for operands.
+//
+
+void scan_options (int argc, char** argv) {
+   opterr = 0;
+   for (;;) {
+      int option = getopt (argc, argv, "@@:w:h:");
+      if (option == EOF) break;
+      switch (option) {
+         case '@@':
+            debugflags::setflags (optarg);
+            break;
+         case 'w':
+            window::setwidth (stoi (optarg));
+            break;
+         case 'h':
+            window::setheight (stoi (optarg));
+            break;
+         default:
+            complain() << "-" << (char) optopt << ": invalid option"
+                       << endl;
+            break;
+      }
+   }
+}
+
+//
+// Main function.  Iterate over files if given, use cin if not.
+//
+int main (int argc, char** argv) {
+   sys_info::execname (argv[0]);
+   scan_options (argc, argv);
+   vector<string> args (&argv[optind], &argv[argc]);
+   if (args.size() == 0) {
+      parsefile ("-", cin);
+   }else if (args.size() > 1) {
+      cerr << "Usage: " << sys_info::execname() << "-@@flags"
+           << "[filename]" << endl;
+   }else {
+      const string infilename = args[0];
+      ifstream infile (infilename.c_str());
+      if (infile.fail()) {
+         syscall_error (infilename);
+      }else {
+         DEBUGF ('m', infilename << "(opened OK)");
+         parsefile (infilename, infile);
+         // fstream objects auto closed when destroyed
+      }
+   }
+   int status = sys_info::exit_status();
+   if (status != 0) return status;
+   window::main();
+   return 0;
+}
+
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.11 2014-05-08 16:22:43-07 - - $
+d50 1
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.10 2014-05-08 14:25:30-07 - - $
+d9 1
+a11 1
+#include "debug.h"
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.9 2014-05-07 22:28:44-07 - - $
+d64 1
+a64 1
+            window::width = stoi (optarg);
+d67 1
+a67 1
+            window::height = stoi (optarg);
+d102 1
+a102 1
+   run_glutMainLoop();
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.8 2014-05-02 18:39:21-07 - - $
+d11 1
+a11 1
+#include "trace.h"
+d29 1
+a29 1
+            TRACE ('m', line);
+d40 1
+a40 1
+         TRACE ('m', words);
+d47 1
+a47 1
+   TRACE ('m', infilename << " EOF");
+d61 1
+a61 1
+            traceflags::setflags (optarg);
+d95 1
+a95 1
+         TRACE ('m', infilename << "(opened OK)");
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.7 2014-05-01 20:43:13-07 - - $
+d20 1
+a20 1
+   interpreter::object_map objmap;
+d57 1
+a57 1
+      int option = getopt (argc, argv, "@@:");
+d63 6
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.6 2014-05-01 18:56:27-07 - - $
+d9 1
+d75 1
+a75 1
+   sys_info::set_execname (argv[0]);
+d77 2
+a78 1
+   if (optind == argc) {
+d80 3
+d84 5
+a88 7
+      for (int argi = optind; argi < argc; ++argi) {
+         const string infilename = argv[argi];
+         ifstream infile (infilename.c_str());
+         if (infile.fail()) {
+            syscall_error (infilename);
+            continue;
+         }
+d94 4
+a97 1
+   return sys_info::get_exit_status();
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.5 2014-05-01 18:55:22-07 - - $
+d6 1
+d20 1
+a20 1
+   interpreter interp (infilename);
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.4 2014-05-01 18:52:30-07 - - $
+d76 1
+a76 1
+      parsefile ("-", cin, cout);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.3 2014-05-01 18:51:33-07 - - $
+d17 1
+a17 2
+void parsefile (const string& infilename,
+                     istream& infile, ostream& outfile) {
+d19 1
+a19 1
+   interpreter interp (infilename, outfile);
+d85 2
+a86 8
+         const string outfilename = get_outfilename (infilename);
+         ofstream outfile (outfilename.c_str());
+         if (outfile.fail()) {
+            syscall_error (outfilename);
+            continue;
+         }
+         TRACE ('m', infilename << " => " << outfilename);
+         parsefile (infilename, infile, outfile);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.2 2014-05-01 18:17:40-07 - - $
+d5 1
+a5 1
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.1 2014-05-01 18:10:25-07 - - $
+d17 2
+a18 2
+void parsefile (const string &infilename,
+                     istream &infile, ostream &outfile) {
+a49 16
+// Strip off the dirname portion and the suffix and tack on .ps.
+//
+string get_outfilename (const string &infilename) {
+      string suffix = ".dr";
+      int slashpos = infilename.find_last_of ('/') + 1;
+      string outname = infilename.substr (slashpos);
+      int baselen = outname.size();
+      int suffixlen = suffix.size();
+      int difflen = baselen - suffixlen;
+      if (baselen > suffixlen and outname.substr (difflen) == suffix) {
+         outname = outname.substr (0, difflen);
+      }
+      return outname + ".ps";
+}
+
+//
+d53 1
+a53 1
+void scan_options (int argc, char **argv) {
+d73 1
+a73 1
+int main (int argc, char **argv) {
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: main.cpp,v 1.16 2013-07-18 20:42:36-07 - - $
+a48 1
+
+a85 1
+
+@

@@ -1,0 +1,798 @@
+head	1.24;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.24
+date	2014.05.13.01.51.37;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.05.13.01.48.37;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.05.13.01.48.03;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.05.13.01.40.13;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.05.13.01.39.14;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.05.13.01.38.28;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.05.13.01.36.37;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.05.13.01.36.15;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.05.13.01.36.01;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.13.01.32.07;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.13.01.31.42;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.13.01.08.36;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.13.01.07.48;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.13.01.05.48;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.13.01.04.29;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.13.00.48.28;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.12.22.38.26;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.12.22.37.32;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.12.22.36.05;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.12.22.35.51;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.12.20.49.24;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.12.20.48.31;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.12.20.23.40;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.12.20.22.10;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.24
+log
+@-
+@
+text
+@// $Id: mousedepth.cpp,v 1.9 2014-05-12 17:48:28-07 - - $
+
+#include <cmath>
+#include <iostream>
+using namespace std;
+
+#include <GL/freeglut.h>
+#include <libgen.h>
+
+struct {
+   string name;
+   int width {256};
+   int height {192};
+   int depth {64};
+   int left_state {GLUT_UP};
+} window;
+
+struct color {
+   GLubyte rgb[3];
+};
+const color red    {0xFF, 0x00, 0x00};
+const color yellow {0xFF, 0xFF, 0x00};
+const color green  {0x00, 0xFF, 0x00};
+
+struct object {
+   float xpos {0};
+   float ypos {0};
+   float zpos {0};
+   color rgb = green;
+   bool selected {false};
+   void draw() {
+      glPushMatrix();
+      glBegin (GL_POLYGON);
+      glColor3ubv (rgb.rgb);
+      float wid = window.width / 10;
+      float hgt = window.height / 10;
+      float delta = 2 * M_PI / 64;
+      for (float theta = 0; theta < 2 * M_PI; theta += delta) {
+         float x = wid * cos (theta) + xpos;
+         float y = hgt * sin (theta) + ypos;
+         glVertex3f (x, y, zpos);
+      }
+      glEnd();
+      glPopMatrix();
+   }
+} object;
+
+void display() {
+// cout << __func__ << "()" << endl;
+   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   object.draw();
+   glutSwapBuffers();
+}
+
+void reshape (int width, int height) {
+// cout << __func__ << "(" << width << "," << height << ")" << endl;
+   window.width = width;
+   window.height = height;
+   glMatrixMode (GL_PROJECTION);
+   glLoadIdentity();
+   glOrtho (0, window.width, 0, window.height, 0, window.depth);
+   glMatrixMode (GL_MODELVIEW);
+   glViewport (0, 0, window.width, window.height);
+   glClearColor (0.25, 0.25, 0.25, 1.0);
+   object.xpos = window.width / 2;
+   object.ypos = window.height / 2;
+   object.rgb = green;
+   glutPostRedisplay();
+}
+
+GLuint depth (int mouse_x, int mouse_y) {
+// cout << __func__ << "(" << mouse_x << "," << mouse_y << ")" << endl;
+   glEnable (GL_DEPTH_TEST);
+   GLfloat scale, bias, depth;
+   glGetFloatv (GL_DEPTH_SCALE, &scale);
+   glGetFloatv (GL_DEPTH_BIAS, &bias);
+   glReadPixels (mouse_x, window.height - mouse_y, 1, 1,
+                 GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+   GLuint intdepth = lrintf (depth * window.depth);
+// cout << "scale=" << scale
+//      << ", bias=" << bias
+//      << ", depth=" << depth
+//      << ", intdepth=" << intdepth << endl;
+   return intdepth;
+}
+
+void mouse (int button, int state, int mouse_x, int mouse_y) {
+   (void) mouse_x; (void) mouse_y;
+// cout << __func__ << "(" << button << "," << state << "," << mouse_x
+//      << "," << mouse_y << ")" << endl;
+   switch (button) {
+      case GLUT_LEFT:
+         window.left_state = state;
+         break;
+   }
+   glutPostRedisplay();
+}
+
+void motion (int mouse_x, int mouse_y) {
+   if (depth (mouse_x, mouse_y) != 0) object.rgb = green;
+   else {
+      object.rgb = red;
+      object.xpos = mouse_x;
+      object.ypos = window.height - mouse_y;
+   }
+   glutPostRedisplay();
+}
+
+void passivemotion (int mouse_x, int mouse_y) {
+   if (depth (mouse_x, mouse_y) != 0) object.rgb = green;
+                                 else object.rgb = yellow;
+   glutPostRedisplay();
+}
+
+int main (int argc, char** argv) {
+   window.name = basename (argv[0]);
+   glutInit (&argc, argv);
+   glutInitDisplayMode (GLUT_RGBA | GLUT_DOUBLE);
+   glutInitWindowSize (window.width, window.height);
+   glutCreateWindow (window.name.c_str());
+   glutDisplayFunc (display);
+   glutReshapeFunc (reshape);
+   glutMouseFunc (mouse);
+   glutMotionFunc (motion);
+   glutPassiveMotionFunc (passivemotion);
+   glutMainLoop();
+   return 0;
+}
+
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.22 2014-05-12 18:48:03-07 - - $
+a4 1
+#include <vector>
+a31 1
+      cout << xpos << " " << ypos << " " << zpos << endl;
+d46 1
+a46 3
+   object (float x, float y, float z): xpos(x), ypos(y), zpos(z) {}
+};
+vector<object> objects;
+d49 1
+d51 1
+a51 1
+   for (auto& obj: objects) obj.draw();
+d56 1
+d61 1
+a61 1
+   glOrtho (0, window.width, 0, window.height, -4, 0);
+d65 3
+a67 6
+   objects = vector<object> ({
+      {window.width * .25f, window.height * .25f, 0},
+      {window.width * .75f, window.height * .25f, 1},
+      {window.width * .25f, window.height * .75f, 2},
+      {window.width * .75f, window.height * .75f, 3},
+   });
+d72 1
+d80 4
+d89 2
+d100 5
+a104 7
+   for (auto& obj: objects) {
+      if (depth (mouse_x, mouse_y) != obj.zpos) obj.rgb = green;
+      else {
+         obj.rgb = red;
+         obj.xpos = mouse_x;
+         obj.ypos = window.height - mouse_y;
+      }
+d110 2
+a111 4
+   for (auto& obj: objects) {
+      if (depth (mouse_x, mouse_y) != obj.zpos) obj.rgb = green;
+                                           else obj.rgb = yellow;
+   }
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.21 2014-05-12 18:40:13-07 - - $
+d63 1
+a63 1
+   glOrtho (0, window.width, 0, window.height, -1, 500);
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.20 2014-05-12 18:39:14-07 - - $
+d63 1
+a63 1
+   glOrtho (0, window.width, 0, window.height, 0, window.depth);
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.19 2014-05-12 18:38:28-07 - - $
+d33 1
+a98 1
+cout<<obj.xpos<<" "<<obj.ypos<<" "<<obj.zpos<<endl;
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.18 2014-05-12 18:36:37-07 - - $
+d98 1
+a98 1
+cout<<obj.xpos<<obj.ypos<<obj.zpos<<endl;
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.17 2014-05-12 18:36:15-07 - - $
+d98 1
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.16 2014-05-12 18:36:01-07 - - $
+d67 4
+a70 4
+      {window.width * .25, window.height * .25, 0},
+      {window.width * .75, window.height * .25, 1},
+      {window.width * .25, window.height * .75, 2},
+      {window.width * .75, window.height * .75, 3},
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.14 2014-05-12 18:31:42-07 - - $
+d32 1
+a32 1
+   void draw (int zpos) {
+@
+
+
+1.15
+log
+@-
+@
+text
+@d29 1
+d32 1
+a32 1
+   void draw() {
+d47 1
+a47 1
+   object (float x, float y): xpos(x), ypos(y) {}
+d53 1
+a53 1
+   object.draw();
+d67 4
+a70 4
+      {window.width * .25, window.height * .25},
+      {window.width * .75, window.height * .25},
+      {window.width * .25, window.height * .75},
+      {window.width * .75, window.height * .75},
+d97 7
+a103 5
+   if (depth (mouse_x, mouse_y) != 0) object.rgb = green;
+   else {
+      object.rgb = red;
+      object.xpos = mouse_x;
+      object.ypos = window.height - mouse_y;
+d109 4
+a112 2
+   if (depth (mouse_x, mouse_y) != 0) object.rgb = green;
+                                 else object.rgb = yellow;
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.13 2014-05-12 18:08:36-07 - - $
+d5 1
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.9 2014-05-12 17:48:28-07 - - $
+a27 1
+   float zpos {0};
+d45 3
+a47 1
+} object;
+a49 1
+// cout << __func__ << "()" << endl;
+a55 1
+// cout << __func__ << "(" << width << "," << height << ")" << endl;
+d64 6
+a69 3
+   object.xpos = window.width / 2;
+   object.ypos = window.height / 2;
+   object.rgb = green;
+a73 1
+// cout << __func__ << "(" << mouse_x << "," << mouse_y << ")" << endl;
+a80 4
+// cout << "scale=" << scale
+//      << ", bias=" << bias
+//      << ", depth=" << depth
+//      << ", intdepth=" << intdepth << endl;
+a85 2
+// cout << __func__ << "(" << button << "," << state << "," << mouse_x
+//      << "," << mouse_y << ")" << endl;
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.11 2014-05-12 18:05:48-07 - - $
+a4 1
+#include <vector>
+d29 2
+a30 1
+   bool mousover {false};
+d34 1
+a34 7
+      glColor3ubv (green.rgb);
+      if (mouseover) {
+         switch left_state) {
+            case GLUT_DOWN: glColor3ubv (red.rgb);
+            case GLUT_UP:   glColor3ubv (yellow.rgb);
+         }
+      }
+d46 1
+a46 3
+};
+
+vector<object> objects;
+d51 1
+a51 1
+   for (auto& obj: objects) obj.draw();
+d65 3
+a67 2
+   objects.clear();
+   objects.emplace_back ({ 64, 48, 0, false});
+d72 1
+a72 1
+// cout << __func__ << "(" << mouse_x << "," << mouse_y 7< ")" << endl;
+d100 6
+d110 2
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.9 2014-05-12 17:48:28-07 - - $
+d74 1
+@
+
+
+1.10
+log
+@-
+@
+text
+@a73 4
+   objects.push_back ({window.width*.25, window.height*.25, 0, false});
+   objects.push_back ({window.width*.75, window.height*.25, 1, false});
+   objects.push_back ({window.width*.25, window.height*.75, 2, false});
+   objects.push_back ({window.width*.75, window.height*.75, 3, false});
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.11 2014-05-12 17:47:45-07 - - $
+d5 1
+d30 1
+a30 2
+   color rgb = green;
+   bool selected {false};
+d34 7
+a40 1
+      glColor3ubv (rgb.rgb);
+d52 3
+a54 1
+} object;
+d59 1
+a59 1
+   object.draw();
+d73 5
+a77 3
+   object.xpos = window.width / 2;
+   object.ypos = window.height / 2;
+   object.rgb = green;
+d82 1
+a82 1
+// cout << __func__ << "(" << mouse_x << "," << mouse_y << ")" << endl;
+a109 6
+   if (depth (mouse_x, mouse_y) != 0) object.rgb = green;
+   else {
+      object.rgb = red;
+      object.xpos = mouse_x;
+      object.ypos = window.height - mouse_y;
+   }
+a113 2
+   if (depth (mouse_x, mouse_y) != 0) object.rgb = green;
+                                 else object.rgb = yellow;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.7 2014-05-12 15:37:32-07 - - $
+d14 2
+d19 5
+a23 10
+   union {
+      GLubyte rgb[3];
+      struct {
+         GLubyte red, green, blue;
+      };
+   };
+}
+red    {0xFF, 0x00, 0x00},
+yellow {0xFF, 0xFF, 0x00},
+green  {0x00, 0xFF, 0x00};
+d25 1
+a25 1
+struct {
+d28 2
+a29 1
+   color rgb {green};
+d41 1
+a41 1
+         glVertex3f (x, y, 0);
+d49 2
+a50 2
+   cout << __func__ << "()" << endl;
+   glClear (GL_COLOR_BUFFER_BIT);
+d56 1
+a56 1
+   cout << __func__ << "(" << width << "," << height << ")" << endl;
+d61 1
+a61 1
+   glOrtho (0, window.width, 0, window.height, -1, +500);
+d71 16
+d88 7
+a94 8
+   cout << __func__ << "(" << button << "," << state << "," << mouse_x
+        << "," << mouse_y << ")" << endl;
+   if (state == GLUT_DOWN) {
+      glEnable (GL_DEPTH_TEST);
+      GLfloat depth;
+      glReadPixels (mouse_x, window.height - mouse_y, 1, 1,
+                    GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+      cout << "depth=" << depth << endl;
+d96 1
+d99 14
+a112 2
+void motion (int x, int y) {
+   cout << __func__ << "(" << x << "," << y << ")" << endl;
+d125 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.6 2014-05-12 15:36:05-07 - - $
+d20 1
+a20 1
+         GLubyte red{0}, green{0}, blue{0};
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.5 2014-05-12 15:35:51-07 - - $
+d17 6
+a22 1
+   GLubyte rgb[3];
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.4 2014-05-12 13:49:24-07 - - $
+d24 2
+a25 2
+   float xpos {0}
+   float ypos {0}
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.3 2014-05-12 13:48:31-07 - - $
+d24 4
+a27 3
+   float xpos;
+   float ypos;
+   color rgb;
+d68 10
+a77 3
+void mouse (int button, int state, int x, int y) {
+   cout << __func__ << "(" << button << "," << state << "," << x
+        << "," << y << ")" << endl;
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mousedepth.cpp,v 1.2 2014-05-12 13:23:40-07 - - $
+d72 2
+a73 3
+void motion (int button, int state, int x, int y) {
+   cout << __func__ << "(" << button << "," << state << "," << x
+        << "," << y << ")" << endl;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d3 1
+d7 1
+d17 1
+a17 1
+   GLubyte color[3];
+d26 16
+a41 1
+   color color;
+d47 1
+d63 1
+a63 1
+   object.color = green;
+d68 7
+d78 1
+a78 1
+   program_name = basename (argv[0]);
+d81 2
+a82 2
+   glutInitWindowSize (window_width, window_height);
+   glutCreateWindow (program_name.c_str());
+d85 2
+@
+
+
+1.1
+log
+@-
+@
+text
+@d3 5
+d43 3
+a45 3
+   object = {.xpos = window.width / 2,
+             .ypos = window.height / 2,
+             .color = green};
+@
