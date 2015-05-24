@@ -139,7 +139,6 @@ const unordered_map<string,rgbcolor> color_names = {
    {"DarkSlateGrey"         , rgbcolor ( 47,  79,  79)},
    {"DarkTurquoise"         , rgbcolor (  0, 206, 209)},
    {"DarkViolet"            , rgbcolor (148,   0, 211)},
-   {"DebianRed"             , rgbcolor (215,   7,  81)},
    {"deep-pink"             , rgbcolor (255,  20, 147)},
    {"deep-sky-blue"         , rgbcolor (  0, 191, 255)},
    {"DeepPink"              , rgbcolor (255,  20, 147)},
