@@ -33,6 +33,7 @@
 \usepackage{listings} % Required for insertion of code
 \usepackage{courier} % Required for the courier font
 \usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{multicol}
 \usepackage{fullpage,amsthm,amsfonts,amssymb,epsfig,amsmath}
 
 % Margins
@@ -216,8 +217,18 @@
 
 \textbf{Answer : }
 We will solve this problem using a directed graph over $m \times n$ vertices that are labeled according to their coordinates $(p,q)$ : $0 \leq p \leq m$ and $0 \leq q \leq n$. Edges are generated as follows :
-if letters $p$ and $q$ are the same, draw an edge from $V(p, q)$ to $V(p+1, q+1)$, aka a diagnol. If the letters are different, draw two edges from $V(p, q)$, one to $V(p+1, q)$ and the other to $V(p, q+1)$, aka down and right. The import part is this : edges that go diagnol are given a weight of 1, and edges that go right or down get a weight of 0. The longest path now doens't depend on the number of edges directly, but rather how many diagnol edges are along a path, since they contribute all of the weight.  \\
-Because all edges travel in either the positive x, positive y, or positive x and y directions, we know that this graph is acyclic. Because this graph is directed and acyclic, we can use a fast algorithm (compared to the NP-hard algorithm for the longest-path on a general-graph case) to find the longest path. To start, we have to find a topological sort of the graph. This can be done with a modifed version of DFS that pushes vertices onto a stack, at the very end that stack will contain the topological sort of G. Once we have this sort, we can find the longest path using the following algoprithm : \\
+if letters $p$ and $q$ are the same, draw an edge from $V(p, q)$ to $V(p+1, q+1)$, aka a diagonal. If the letters are different, draw two edges from $V(p, q)$, one to $V(p+1, q)$ and the other to $V(p, q+1)$, aka down and right. The import part is this : edges that go diagonal are given a weight of 1, and edges that go right or down get a weight of 0. The longest path now doens't depend on the number of edges directly, but rather how many diagonal edges are along a path, since they contribute all of the weight.  \\
+
+\begin{multicols}{2}
+\includegraphics[scale=0.7]{p1_graph.png} \\
+Graph of \texttt{0101} and \texttt{0110}.
+\columnbreak \\
+Because all edges travel in either the positive x, positive y, or positive x and y directions, we know that this graph is acyclic. Because this graph is directed and acyclic, we can use a realtively fast algorithm (compared to the NP-hard algorithm for the longest-path on a general-graph case) to find the longest path. The algorithm contains two parts, making the graph and retreiving the longest path. To find the longest path, we have to find a topological sort of the graph. \\
+This can be done with a modifed version of DFS that pushes vertices onto a stack, at the very end that stack will contain the topological sort of G. Once we have this sort, we can find the longest path using a simple algorithm. \\ 
+\end{multicols}
+
+Start by walking over all $m \times n$ vertices in the graph and generating edges. Each vertex can have at most two edges eminated from it, so each of the $m \times n$ operation are constant. Thus constructing the graph is $O(mn)$. Once the graph is constructed, DFS is run on it which runs in time $O(|V+E|)$, since $E \leq 2*|V|$, DFS runs in time $O(|V|) = O(mn)$. DFS gives us our topoligical sort, which leads to the last portion of our algorithm, retreiving the longest path. \\
+The algorithm in short walks along the topolical sort from the source vertex (which would be $V(0, 0)$ for the shortest-common-subsequence problem), and updates its neighbors whereever it can by adding its own weight-sum to the weight of the incident edges and setting the neighbors weight-sum to this value. 
 \end{homeworkProblem}
 
 
