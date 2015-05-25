@@ -35,6 +35,7 @@ void window::entry (int mouse_entered) {
 // Called to display the objects in the window.
 void window::display() {
    glClear (GL_COLOR_BUFFER_BIT);
+   cout << window::objects.size() << endl;
    for (auto& object: window::objects) object.draw();
    mus.draw();
    glutSwapBuffers();

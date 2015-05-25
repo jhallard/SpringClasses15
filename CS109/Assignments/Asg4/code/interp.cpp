@@ -107,6 +107,7 @@ shape_ptr interpreter::make_rectangle (param begin, param end) {
 
 shape_ptr interpreter::make_square (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<square> (GLfloat());
+   float val = atof(begin->c_str());
+   return make_shared<square> (GLfloat(val));
 }
 

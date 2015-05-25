@@ -56,7 +56,9 @@ polygon::polygon (const vertex_list& vertices): vertices(vertices) {
 }
 
 rectangle::rectangle (GLfloat width, GLfloat height):
-            polygon({}) {
+            polygon({
+            {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
+            {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) {
    DEBUGF ('c', this << "(" << width << "," << height << ")");
 }
 
@@ -74,6 +76,17 @@ void ellipse::draw (const vertex& center, const rgbcolor& color) const {
 
 void polygon::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
+   cout << "here\n";
+   
+   glBegin (GL_POLYGON);
+   rgbcolor new_c(color);
+   glColor3ubv (new_c.ubvec3());
+
+   for(auto vert : vertices) {
+      glVertex2f (vert.xpos-center.xpos,
+            vert.ypos-center.ypos);
+   }
+   glEnd();
 }
 
 void shape::show (ostream& out) const {
