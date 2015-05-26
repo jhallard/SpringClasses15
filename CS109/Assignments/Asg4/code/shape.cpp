@@ -95,8 +95,8 @@ void polygon::draw (const vertex& center, const rgbcolor& color) const {
    glColor3ubv (new_c.ubvec3());
 
    for(auto vert : vertices) {
-      glVertex2f (vert.xpos-center.xpos,
-            vert.ypos-center.ypos);
+      glVertex2f (vert.xpos+center.xpos,
+            vert.ypos+center.ypos);
    }
    glEnd();
 }

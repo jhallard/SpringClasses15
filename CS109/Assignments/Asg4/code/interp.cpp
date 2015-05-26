@@ -67,7 +67,7 @@ void interpreter::do_draw (param begin, param end) {
    rgbcolor color {begin[0]};
    object new_o(itor->second, where, color);
    window::push_back(new_o);
-   itor->second->draw (where, color);
+   // itor->second->draw (where, color);
 }
 
 shape_ptr interpreter::make_shape (param begin, param end) {
