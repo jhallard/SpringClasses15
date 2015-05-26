@@ -228,7 +228,7 @@ This can be done with a modifed version of DFS that pushes vertices onto a stack
 \end{multicols}
 
 Start by walking over all $m \times n$ vertices in the graph and generating edges. Each vertex can have at most two edges eminated from it, so each of the $m \times n$ operation are constant. Thus constructing the graph is $O(mn)$. Once the graph is constructed, DFS is run on it which runs in time $O(|V+E|)$, since $E \leq 2*|V|$, DFS runs in time $O(|V|) = O(mn)$. DFS gives us our topoligical sort, which leads to the last portion of our algorithm, retreiving the longest path. \\
-The algorithm in short walks along the topolical sort from the source vertex (which would be $V(0, 0)$ for the shortest-common-subsequence problem), and updates its neighbors whereever it can by adding its own weight-sum to the weight of the incident edges and setting the neighbors weight-sum to this value. 
+The algorithm in short walks along the topolical sort from the source vertex (which would be $V(0, 0)$ for the shortest-common-subsequence problem), and updates its neighbors where-ever it can by adding its own weight-sum to the weight of the incident edges and setting the neighbors weight-sum to this value. 
 \end{homeworkProblem}
 
 

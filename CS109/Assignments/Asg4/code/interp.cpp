@@ -66,7 +66,9 @@ void interpreter::do_draw (param begin, param end) {
    vertex where {from_string<GLfloat> (begin[2]),
                  from_string<GLfloat> (begin[3])};
    rgbcolor color {begin[0]};
-   itor->second->draw (where, color);
+   object new_o(itor->second, where, color);
+   window::push_back(new_o);
+   // itor->second->draw (where, color);
 }
 
 shape_ptr interpreter::make_shape (param begin, param end) {

@@ -18,6 +18,13 @@ class object {
       vertex center;
       rgbcolor color;
    public:
+      object(shared_ptr<shape> sh, vertex v, rgbcolor c) { 
+         pshape = sh;
+         center = v;
+         color = c;
+         // pshape = make_shared<shape>(sh);
+      } 
+      // center(v), color(c) {}
       // Default copiers, movers, dtor all OK.
       void draw() { pshape->draw (center, color); }
       void move (GLfloat delta_x, GLfloat delta_y) {
