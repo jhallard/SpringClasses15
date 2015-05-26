@@ -8,6 +8,8 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <cmath>
+
 using namespace std;
 
 #include "rgbcolor.h"

@@ -72,12 +72,24 @@ void text::draw (const vertex& center, const rgbcolor& color) const {
 
 void ellipse::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
+   rgbcolor new_c(color);
+   glBegin (GL_POLYGON);
+   glEnable (GL_LINE_SMOOTH);
+   glColor3ubv (new_c.ubvec3());
+   float x,y;
+   int t;
+   for(t = 0; t <= 360; t +=1)
+   {
+      x = center.xpos + dimension.xpos*sin(t);
+      y = center.ypos + dimension.ypos*cos(t);
+      glVertex2f(x,y);
+    }
+    glEnd();
 }
 
 void polygon::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
-   cout << "here\n";
-   
+
    glBegin (GL_POLYGON);
    rgbcolor new_c(color);
    glColor3ubv (new_c.ubvec3());

@@ -56,7 +56,6 @@ void interpreter::do_define (param begin, param end) {
 
 void interpreter::do_draw (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   // cout << end - begin  << endl;
    if (end - begin != 4) throw runtime_error ("syntax error");
    string name = begin[1];
    shape_map::const_iterator itor = objmap.find (name);
@@ -68,7 +67,7 @@ void interpreter::do_draw (param begin, param end) {
    rgbcolor color {begin[0]};
    object new_o(itor->second, where, color);
    window::push_back(new_o);
-   // itor->second->draw (where, color);
+   itor->second->draw (where, color);
 }
 
 shape_ptr interpreter::make_shape (param begin, param end) {
@@ -89,7 +88,10 @@ shape_ptr interpreter::make_text (param begin, param end) {
 
 shape_ptr interpreter::make_ellipse (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<ellipse> (GLfloat(), GLfloat());
+   float val = atof(begin->c_str());
+   ++begin;
+   float val2 = atof(begin->c_str());
+   return make_shared<ellipse> (GLfloat(val), GLfloat(val2));
 }
 
 shape_ptr interpreter::make_circle (param begin, param end) {
@@ -104,7 +106,10 @@ shape_ptr interpreter::make_polygon (param begin, param end) {
 
 shape_ptr interpreter::make_rectangle (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<rectangle> (GLfloat(), GLfloat());
+   float val = atof(begin->c_str());
+   ++begin;
+   float val2 = atof(begin->c_str());
+   return make_shared<rectangle> (GLfloat(val), GLfloat(val2));
 }
 
 shape_ptr interpreter::make_square (param begin, param end) {
