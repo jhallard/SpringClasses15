@@ -96,12 +96,22 @@ shape_ptr interpreter::make_ellipse (param begin, param end) {
 
 shape_ptr interpreter::make_circle (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<circle> (GLfloat());
+   return make_shared<circle> (GLfloat(atof(begin->c_str())));
 }
 
 shape_ptr interpreter::make_polygon (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<polygon> (vertex_list());
+
+   vertex_list list;
+   auto it = begin;
+   while(it != end) {
+      float val = atof(begin->c_str());
+      ++begin;
+      float val2 = atof(begin->c_str());
+      ++begin;
+      list.push_back(vertex(val, val2));
+   }
+   return make_shared<polygon> (list);
 }
 
 shape_ptr interpreter::make_rectangle (param begin, param end) {

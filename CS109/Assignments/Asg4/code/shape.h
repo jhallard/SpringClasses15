@@ -34,7 +34,13 @@ using namespace std;
 //
 
 class shape;
-struct vertex {GLfloat xpos; GLfloat ypos; };
+struct vertex {
+   GLfloat xpos; GLfloat ypos;
+   vertex() {}
+   vertex(float x, float y) {
+      xpos = x; ypos = y;
+   }
+};
 using vertex_list = vector<vertex>;
 using shape_ptr = shared_ptr<shape>; 
 
@@ -128,6 +134,22 @@ class square: public rectangle {
 class diamond: public polygon {
    public:
       diamond (const GLfloat width, const GLfloat height);
+};
+
+// class triangle
+class triangle: public polygon {
+   public:
+      triangle (vertex, vertex, vertex);
+};
+
+class isosceles: public triangle {
+   public:
+      isosceles (GLfloat w, GLfloat h);
+};
+
+class equilateral: public triangle {
+   public:
+      equilateral(GLfloat side);
 };
 
 ostream& operator<< (ostream& out, const shape&);
