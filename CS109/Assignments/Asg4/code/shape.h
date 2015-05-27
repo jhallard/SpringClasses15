@@ -136,21 +136,21 @@ class diamond: public polygon {
       diamond (const GLfloat width, const GLfloat height);
 };
 
-// // class triangle
-// class triangle: public polygon {
-//    public:
-//       triangle (vertex, vertex, vertex);
-// };
+// class triangle
+class triangle: public polygon {
+   public:
+      triangle (vertex, vertex, vertex);
+};
 
-// class isosceles: public triangle {
-//    public:
-//       isosceles (GLfloat w, GLfloat h);
-// };
+class isosceles: public triangle {
+   public:
+      isosceles (GLfloat w, GLfloat h);
+};
 
-// class equilateral: public triangle {
-//    public:
-//       equilateral(GLfloat side);
-// };
+class equilateral: public triangle {
+   public:
+      equilateral(GLfloat side);
+};
 
 ostream& operator<< (ostream& out, const shape&);
 

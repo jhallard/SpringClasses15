@@ -55,8 +55,7 @@ polygon::polygon (const vertex_list& vertices): vertices(vertices) {
    DEBUGF ('c', this);
 }
 
-rectangle::rectangle (GLfloat width, GLfloat height):
-            polygon({
+rectangle::rectangle (GLfloat width, GLfloat height): polygon({
             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
             {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) {
    DEBUGF ('c', this << "(" << width << "," << height << ")");
@@ -65,6 +64,27 @@ rectangle::rectangle (GLfloat width, GLfloat height):
 square::square (GLfloat width): rectangle (width, width) {
    DEBUGF ('c', this);
 }
+
+diamond::diamond (GLfloat width, GLfloat height) : polygon(
+                  {{-width/2.0, 0.0}, {0.0, height/2.0},
+                  {width/2.0, 0.0}, {0.0, -height/2.0}}) {
+   DEBUGF ('c', this << "(" << width << "," << height << ")");
+}
+
+triangle::triangle (vertex v1, vertex v2, vertex v3) : 
+                                 polygon({v1, v2, v3}) {
+   DEBUGF ('c', this << "(" << v1 << "," << v2 << "," << v3 << ")");
+}
+
+// isosceles::isosceles (GLfloat width, GLfloat height) : triangle({
+//    {0.0, height}, {-width/2.0, 0.0}, {width/2.0, 0.0}}) {
+//    DEBUGF ('c', this << "(" << width << "," << height << ")");
+// }
+
+// equilateral::equilateral (GLfloat side) : triangle({
+//    {0.0, 0.8660*side}, {-side/2.0, 0.0}, {side/2.0, 0.0} }) {
+//    DEBUGF ('c', this << "(" << width << "," << height << ")");
+// }
 
 void text::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");

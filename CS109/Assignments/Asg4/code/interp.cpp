@@ -26,6 +26,7 @@ interpreter::factory_map {
    {"polygon"  , &interpreter::make_polygon  },
    {"rectangle", &interpreter::make_rectangle},
    {"square"   , &interpreter::make_square   },
+   {"diamond"  , &interpreter::make_diamond },
 };
 
 interpreter::shape_map interpreter::objmap;
@@ -105,10 +106,10 @@ shape_ptr interpreter::make_polygon (param begin, param end) {
    vertex_list list;
    auto it = begin;
    while(it != end) {
-      float val = atof(begin->c_str());
-      ++begin;
-      float val2 = atof(begin->c_str());
-      ++begin;
+      float val = atof(it->c_str());
+      ++it;
+      float val2 = atof(it->c_str());
+      ++it;
       list.push_back(vertex(val, val2));
    }
    return make_shared<polygon> (list);
@@ -127,4 +128,12 @@ shape_ptr interpreter::make_square (param begin, param end) {
    float val = atof(begin->c_str());
    return make_shared<square> (GLfloat(val));
 }
+
+shape_ptr interpreter::make_diamond (param begin, param end) {
+   DEBUGF('f', range(begin, end));
+   float val = atof(begin->c_str());
+   ++begin;
+   float val2 = atof(begin->c_str());
+   return make_shared<diamond> (GLfloat(val), GLfloat(val2));
+} 
 
