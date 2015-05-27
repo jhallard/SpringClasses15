@@ -17,11 +17,13 @@ class object {
       shared_ptr<shape> pshape;
       vertex center;
       rgbcolor color;
-      float movex;
-      float movey;
+      float move_by;
+      rgbcolor border_color;
+      float border_width;
    public:
       object(shared_ptr<shape> sh, vertex v, rgbcolor c) : center(v),
-                color(c), movex(4.0), movey(4.0) { 
+                color(c), move_by(4.0), border_color("red"),
+                border_width(4.0) { 
          pshape = sh;
       } 
 
@@ -32,15 +34,23 @@ class object {
          center.ypos += delta_y;
       }
 
+      void set_move(float x) {
+         move_by = x;
+      }
+
       void move (const string & str) {
-         if(str == "up") 
-            center.ypos += movey;
-         else if(str == "down") 
-            center.ypos -= movey;
-         else if(str == "left") 
-            center.xpos -= movex;
-         else if(str == "right") 
-            center.xpos += movex;
+         if(str == "up") {
+            center.ypos += move_by;
+         }
+         else if(str == "down") {
+            center.ypos -= move_by;
+         }
+         else if(str == "left") {
+            center.xpos -= move_by;
+         }
+         else if(str == "right") {
+            center.xpos += move_by;
+         }
       }
 };
 
@@ -84,6 +94,15 @@ class window {
       static void setwidth (int width_) { width = width_; }
       static void setheight (int height_) { height = height_; }
       static void main();
+      static object & get_selected() {
+         return objects[selected_obj];
+      }
+      static object & get_back() {
+         return objects.back();
+      }
+      static int num_objects() {
+         return objects.size();
+      }
 };
 
 #endif

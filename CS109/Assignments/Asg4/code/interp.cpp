@@ -16,6 +16,8 @@ unordered_map<string,interpreter::interpreterfn>
 interpreter::interp_map {
    {"define" , &interpreter::do_define },
    {"draw"   , &interpreter::do_draw   },
+   {"moveby"   , &interpreter::do_moveby   },
+   {"border"   , &interpreter::do_border   },
 };
 
 unordered_map<string,interpreter::factoryfn>
@@ -58,6 +60,28 @@ void interpreter::do_define (param begin, param end) {
    objmap.emplace (name, make_shape (++begin, end));
 }
 
+void interpreter::do_moveby (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+
+   if(!window::num_objects()) {
+      throw runtime_error(
+         "No Objects Available for Selection");
+   }
+   object curr = window::get_back();
+   float x = atof(begin->c_str());
+   curr.set_move(x);
+}
+
+void interpreter::do_border (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+
+   if(!window::num_objects()) {
+      throw runtime_error(
+         "No Objects Available for Selection");
+   }
+   object curr = window::get_back();
+   float x = atof(begin->c_str());
+}
 
 void interpreter::do_draw (param begin, param end) {
    DEBUGF ('f', range (begin, end));

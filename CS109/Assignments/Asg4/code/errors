@@ -1,58 +1,7 @@
-g++ -g -O0 -Wall -Wextra -std=gnu++11 -c shape.cpp
-shape.cpp: In constructor ‘rectangle::rectangle(GLfloat, GLfloat)’:
-shape.cpp:91:20: warning: narrowing conversion of ‘(((double)(- width)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
-                    ^
-shape.cpp:91:33: warning: narrowing conversion of ‘(((double)(- height)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
-                                 ^
-shape.cpp:91:47: warning: narrowing conversion of ‘(((double)(- width)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
-                                               ^
-shape.cpp:91:59: warning: narrowing conversion of ‘(((double)height) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
-                                                           ^
-shape.cpp:92:19: warning: narrowing conversion of ‘(((double)width) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-             {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) 
-                   ^
-shape.cpp:92:31: warning: narrowing conversion of ‘(((double)height) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-             {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) 
-                               ^
-shape.cpp:92:44: warning: narrowing conversion of ‘(((double)width) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-             {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) 
-                                            ^
-shape.cpp:92:57: warning: narrowing conversion of ‘(((double)(- height)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-             {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) 
-                                                         ^
-shape.cpp: In constructor ‘diamond::diamond(GLfloat, GLfloat)’:
-shape.cpp:102:27: warning: narrowing conversion of ‘(((double)(- width)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-                   {{-width/2.0, 0.0}, {0.0, height/2.0},
-                           ^
-shape.cpp:102:51: warning: narrowing conversion of ‘(((double)height) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-                   {{-width/2.0, 0.0}, {0.0, height/2.0},
-                                                   ^
-shape.cpp:103:25: warning: narrowing conversion of ‘(((double)width) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-                   {width/2.0, 0.0}, {0.0, -height/2.0}}) {
-                         ^
-shape.cpp:103:50: warning: narrowing conversion of ‘(((double)(- height)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-                   {width/2.0, 0.0}, {0.0, -height/2.0}}) {
-                                                  ^
-shape.cpp: In constructor ‘isosceles::isosceles(GLfloat, GLfloat)’:
-shape.cpp:113:26: warning: narrowing conversion of ‘(((double)(- width)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-    {0.0, height}, {-width/2.0, 0.0}, {width/2.0, 0.0}) {
-                          ^
-shape.cpp:113:44: warning: narrowing conversion of ‘(((double)width) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-    {0.0, height}, {-width/2.0, 0.0}, {width/2.0, 0.0}) {
-                                            ^
-shape.cpp: In constructor ‘equilateral::equilateral(GLfloat)’:
-shape.cpp:118:16: warning: narrowing conversion of ‘(((double)side) * 8.6599999999999999e-1)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-    {0.0, 0.8660*side}, {-side/2.0, 0.0}, {side/2.0, 0.0} ) {
-                ^
-shape.cpp:118:30: warning: narrowing conversion of ‘(((double)(- side)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-    {0.0, 0.8660*side}, {-side/2.0, 0.0}, {side/2.0, 0.0} ) {
-                              ^
-shape.cpp:118:47: warning: narrowing conversion of ‘(((double)side) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
-    {0.0, 0.8660*side}, {-side/2.0, 0.0}, {side/2.0, 0.0} ) {
-                                               ^
+g++ -g -O0 -Wall -Wextra -std=gnu++11 -c graphics.cpp
+graphics.cpp: In static member function ‘static void window::keyboard(GLubyte, int, int)’:
+graphics.cpp:95:37: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+          if(key-'0' >= 0 && key-'0' < objects.size()) 
+                                     ^
 g++ -g -O0 -Wall -Wextra -std=gnu++11 -o gdraw debug.o graphics.o interp.o rgbcolor.o shape.o util.o main.o -lGL -lGLU -lglut -lm
 checksource debug.h graphics.h interp.h rgbcolor.h shape.h util.h util.tcc debug.cpp graphics.cpp interp.cpp rgbcolor.cpp shape.cpp util.cpp main.cpp Makefile README mk-colors.perl

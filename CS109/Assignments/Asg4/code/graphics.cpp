@@ -69,9 +69,11 @@ void window::keyboard (GLubyte key, int x, int y) {
          obj.move("left");
          break;
       case 'J': case 'j':
+      cout << "here\n";
          obj.move("down");
          break;
       case 'K': case 'k':
+      cout << "here\n";
          obj.move("up");
          break;
       case 'L': case 'l':
@@ -90,8 +92,8 @@ void window::keyboard (GLubyte key, int x, int y) {
             window::selected_obj--;
          break;
       case '0'...'9':
-         //select_object (key - '0');
-         window::selected_obj = key-'0';
+         if(key-'0' >= 0 && key-'0' < objects.size()) 
+            window::selected_obj = key-'0';
          break;
       default:
          cerr << (unsigned)key << ": invalid keystroke" << endl;
