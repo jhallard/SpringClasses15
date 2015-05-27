@@ -26,7 +26,11 @@ interpreter::factory_map {
    {"polygon"  , &interpreter::make_polygon  },
    {"rectangle", &interpreter::make_rectangle},
    {"square"   , &interpreter::make_square   },
-   {"diamond"  , &interpreter::make_diamond },
+   {"diamond"  , &interpreter::make_diamond  },
+   {"triangle"  , &interpreter::make_triangle },
+   {"isosceles"  , &interpreter::make_isosceles},
+   {"equilateral"  , &interpreter::make_equilateral},
+
 };
 
 interpreter::shape_map interpreter::objmap;
@@ -137,3 +141,33 @@ shape_ptr interpreter::make_diamond (param begin, param end) {
    return make_shared<diamond> (GLfloat(val), GLfloat(val2));
 } 
 
+shape_ptr interpreter::make_triangle (param begin, param end) {
+   DEBUGF('f', range(begin, end));
+   vertex_list list;
+   auto it = begin;
+   while(it != end) {
+      float val = atof(it->c_str());
+      ++it;
+      float val2 = atof(it->c_str());
+      ++it;
+      list.push_back(vertex(val, val2));
+   }
+   if(list.size() != 3) { 
+      throw runtime_error("Triangle needs three arguments");
+   }
+   return make_shared<triangle> (list[0], list[1], list[2]);
+} 
+
+shape_ptr interpreter::make_isosceles (param begin, param end) {
+   DEBUGF('f', range(begin, end));
+   float val = atof(begin->c_str());
+   ++begin;
+   float val2 = atof(begin->c_str());
+   return make_shared<isosceles> (GLfloat(val), GLfloat(val2));
+} 
+
+shape_ptr interpreter::make_equilateral (param begin, param end) {
+   DEBUGF('f', range(begin, end));
+   float val = atof(begin->c_str());
+   return make_shared<equilateral> (GLfloat(val));
+}

@@ -32,6 +32,26 @@ ostream& operator<< (ostream& out, const vertex& where) {
    return out;
 }
 
+
+vertex_list normalize_polygon(vertex_list v_list) {
+
+   float avx = 0.0, avy = 0.0;
+   for(auto v : v_list) {
+      avx += v.xpos;
+      avy += v.ypos;
+   }
+
+   avx = avx/((double)v_list.size());
+   avy = avy/((double)v_list.size());
+
+   vertex_list ret;
+   for( auto v : v_list) {
+      ret.push_back({v.xpos-avx, v.ypos-avy});
+   }
+
+   return ret;
+}
+
 shape::shape() {
    DEBUGF ('c', this);
 }
@@ -51,13 +71,15 @@ circle::circle (GLfloat diameter): ellipse (diameter, diameter) {
 }
 
 
-polygon::polygon (const vertex_list& vertices): vertices(vertices) {
+polygon::polygon (const vertex_list& vertices): vertices(
+   normalize_polygon(vertices) ) {
    DEBUGF ('c', this);
 }
 
-rectangle::rectangle (GLfloat width, GLfloat height): polygon({
+rectangle::rectangle (GLfloat width, GLfloat height): polygon(
+            normalize_polygon({
             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
-            {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) {
+            {width/2.0, height/2.0}, {width/2.0, -height/2.0}} )) {
    DEBUGF ('c', this << "(" << width << "," << height << ")");
 }
 
@@ -76,15 +98,15 @@ triangle::triangle (vertex v1, vertex v2, vertex v3) :
    DEBUGF ('c', this << "(" << v1 << "," << v2 << "," << v3 << ")");
 }
 
-// isosceles::isosceles (GLfloat width, GLfloat height) : triangle({
-//    {0.0, height}, {-width/2.0, 0.0}, {width/2.0, 0.0}}) {
-//    DEBUGF ('c', this << "(" << width << "," << height << ")");
-// }
+isosceles::isosceles (GLfloat width, GLfloat height) : triangle(
+   {0.0, height}, {-width/2.0, 0.0}, {width/2.0, 0.0}) {
+   DEBUGF ('c', this << "(" << width << "," << height << ")");
+}
 
-// equilateral::equilateral (GLfloat side) : triangle({
-//    {0.0, 0.8660*side}, {-side/2.0, 0.0}, {side/2.0, 0.0} }) {
-//    DEBUGF ('c', this << "(" << width << "," << height << ")");
-// }
+equilateral::equilateral (GLfloat side) : triangle(
+   {0.0, 0.8660*side}, {-side/2.0, 0.0}, {side/2.0, 0.0} ) {
+   DEBUGF ('c', this << "(" << side <<  ")");
+}
 
 void text::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
