@@ -119,6 +119,12 @@ equilateral::equilateral (GLfloat side) : triangle(
    DEBUGF ('c', this << "(" << side <<  ")");
 }
 
+right_triangle::right_triangle (GLfloat width, GLfloat height) :
+ triangle({0.0, 0.0}, {0.0, height}, {width, 0.0}) {
+   DEBUGF ('c', this << "(" << width << "," << height << ")");
+}
+
+
 void text::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
       rgbcolor new_c(color);
@@ -127,12 +133,36 @@ void text::draw (const vertex& center, const rgbcolor& color) const {
       glutBitmapString (glut_bitmap_font, (GLubyte*) textdata.c_str());
 }
 
+void text::border(vertex center, float width, rgbcolor color) const {
+   DEBUGF ('d', this << "(" << width << "," << color << ")");
+   // does nothing on purpose
+
+}
+
 void ellipse::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
    rgbcolor new_c(color);
    glBegin (GL_POLYGON);
    glEnable (GL_LINE_SMOOTH);
    glColor3ubv (new_c.ubvec3());
+   float x,y;
+   int t;
+   for(t = 0; t <= 360; t +=1)
+   {
+      x = center.xpos + dimension.xpos*sin(t);
+      y = center.ypos + dimension.ypos*cos(t);
+      glVertex2f(x,y);
+    }
+    glEnd();
+}
+
+void ellipse::border(vertex center, float width, rgbcolor color) const {
+   DEBUGF ('d', this << "(" << width << "," << color << ")");
+   rgbcolor new_c(color);
+   glLineWidth(width); 
+   glEnable (GL_LINE_SMOOTH);
+   glColor3ubv (new_c.ubvec3());
+   glBegin (GL_LINES);
    float x,y;
    int t;
    for(t = 0; t <= 360; t +=1)
@@ -155,6 +185,24 @@ void polygon::draw (const vertex& center, const rgbcolor& color) const {
       glVertex2f (vert.xpos+center.xpos,
             vert.ypos+center.ypos);
    }
+   glEnd();
+}
+
+void polygon::border(vertex center, float width, rgbcolor color) const {
+   glLineWidth(width); 
+   rgbcolor new_c(color);
+   glColor3ubv(new_c.ubvec3());
+   glBegin(GL_LINES);
+   for(int i = 0; i < vertices.size()-1; ++i) {
+      glVertex2f (vertices[i].xpos+center.xpos,
+            vertices[i].ypos+center.ypos);
+      glVertex2f (vertices[i+1].xpos+center.xpos,
+            vertices[i+1].ypos+center.ypos);
+   }
+   glVertex2f(vertices.back().xpos+center.xpos, 
+      vertices.back().ypos+center.ypos);
+   glVertex2f(vertices[0].xpos+center.xpos, 
+      vertices[0].ypos+center.ypos);
    glEnd();
 }
 

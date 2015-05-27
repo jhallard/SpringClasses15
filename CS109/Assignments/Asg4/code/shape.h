@@ -38,7 +38,10 @@ struct vertex {
    GLfloat xpos; GLfloat ypos;
    vertex() {}
    vertex(float x, float y) {
-      xpos = x; ypos = y;
+      xpos = (GLfloat)x; ypos = (GLfloat)y;
+   }
+   vertex(double x, double y) {
+      xpos = (GLfloat)x; ypos = (GLfloat)y;
    }
 };
 using vertex_list = vector<vertex>;
@@ -61,6 +64,8 @@ class shape {
       virtual ~shape() {}
       virtual void draw (const vertex&, const rgbcolor&) const = 0;
       virtual void show (ostream&) const;
+      virtual void border(vertex center, float width, rgbcolor color)
+       const = 0;
 };
 
 
@@ -84,6 +89,8 @@ class text: public shape {
       text (const string & font, const string &textdata);
       virtual void draw (const vertex&, const rgbcolor&) const override;
       virtual void show (ostream&) const override;
+      virtual void border(vertex center, float width, rgbcolor color)
+      const override;
 };
 
 //
@@ -97,6 +104,8 @@ class ellipse: public shape {
       ellipse (GLfloat width, GLfloat height);
       virtual void draw (const vertex&, const rgbcolor&) const override;
       virtual void show (ostream&) const override;
+      virtual void border(vertex center, float width, rgbcolor color)
+      const override;
 };
 
 class circle: public ellipse {
@@ -115,6 +124,8 @@ class polygon: public shape {
       polygon (const vertex_list& vertices);
       virtual void draw (const vertex&, const rgbcolor&) const override;
       virtual void show (ostream&) const override;
+      virtual void border(vertex center, float width, rgbcolor color)
+      const override;
 };
 
 
@@ -151,6 +162,11 @@ class isosceles: public triangle {
 class equilateral: public triangle {
    public:
       equilateral(GLfloat side);
+};
+
+class right_triangle: public triangle {
+   public:
+      right_triangle(GLfloat width, GLfloat height);
 };
 
 ostream& operator<< (ostream& out, const shape&);

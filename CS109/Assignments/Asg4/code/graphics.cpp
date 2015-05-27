@@ -14,6 +14,27 @@ vector<object> window::objects;
 size_t window::selected_obj = 0;
 mouse window::mus;
 
+
+void object::move (GLfloat delta_x, GLfloat delta_y) {
+   center.xpos += delta_x;
+   center.ypos += delta_y;
+   if(center.xpos >= window::get_width()) {
+      center.xpos = 0.0;
+   }
+   if(center.ypos >= window::get_height()) {
+      center.ypos = 0.0;
+   }
+
+   if(center.xpos < 0) {
+      center.xpos = window::get_width();
+   }
+   if(center.ypos < 0) {
+      center.ypos = window::get_height();
+   }
+
+}
+
+
 // Executed when window system signals to shut down.
 void window::close() {
    DEBUGF ('g', sys_info::execname() << ": exit ("
@@ -35,7 +56,10 @@ void window::entry (int mouse_entered) {
 // Called to display the objects in the window.
 void window::display() {
    glClear (GL_COLOR_BUFFER_BIT);
-   for (auto& object: window::objects) object.draw();
+   for(int i = 0; i < window::objects.size(); ++i) {
+      if(i == selected_obj) objects[selected_obj].draw_border();
+      objects[i].draw();
+   }
    mus.draw();
    glutSwapBuffers();
 }
@@ -43,8 +67,8 @@ void window::display() {
 // Called when window is opened and when resized.
 void window::reshape (int width, int height) {
    DEBUGF ('g', "width=" << width << ", height=" << height);
-   window::width = width;
-   window::height = height;
+   window::setwidth(width);
+   window::setheight(height);
    glMatrixMode (GL_PROJECTION);
    glLoadIdentity();
    gluOrtho2D (0, window::width, 0, window::height);
@@ -69,11 +93,9 @@ void window::keyboard (GLubyte key, int x, int y) {
          obj.move("left");
          break;
       case 'J': case 'j':
-      cout << "here\n";
          obj.move("down");
          break;
       case 'K': case 'k':
-      cout << "here\n";
          obj.move("up");
          break;
       case 'L': case 'l':

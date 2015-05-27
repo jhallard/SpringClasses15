@@ -32,6 +32,7 @@ interpreter::factory_map {
    {"triangle"  , &interpreter::make_triangle },
    {"isosceles"  , &interpreter::make_isosceles},
    {"equilateral"  , &interpreter::make_equilateral},
+   {"right_triangle"  , &interpreter::make_right_triangle},
 
 };
 
@@ -67,7 +68,7 @@ void interpreter::do_moveby (param begin, param end) {
       throw runtime_error(
          "No Objects Available for Selection");
    }
-   object curr = window::get_back();
+   object & curr = window::get_back();
    float x = atof(begin->c_str());
    curr.set_move(x);
 }
@@ -79,8 +80,10 @@ void interpreter::do_border (param begin, param end) {
       throw runtime_error(
          "No Objects Available for Selection");
    }
-   object curr = window::get_back();
-   float x = atof(begin->c_str());
+   object & curr = window::get_back();
+   rgbcolor color {begin[0]};
+   float x = atof(begin[1].c_str());
+   curr.set_border(x, color);
 }
 
 void interpreter::do_draw (param begin, param end) {
@@ -211,4 +214,12 @@ shape_ptr interpreter::make_equilateral (param begin, param end) {
    DEBUGF('f', range(begin, end));
    float val = atof(begin->c_str());
    return make_shared<equilateral> (GLfloat(val));
+}
+
+shape_ptr interpreter::make_right_triangle (param begin, param end) {
+   DEBUGF('f', range(begin, end));
+   float val = atof(begin->c_str());
+   ++begin;
+   float val2 = atof(begin->c_str());
+   return make_shared<right_triangle> (GLfloat(val), GLfloat(val2));
 }

@@ -1,1 +1,35 @@
-$Id: README,v 1.1 2014-05-01 20:14:06-07 - - $
+$Id: README,v 1.1 2013-06-18 17:32:08-07 - - $
+
+Author  - John Allard 
+ID      - 1437547
+CruzID  - jhallard
+Date    - May 26th 2015
+Program - gdraw
+
+
+Description : This program supplies a simple drawing 
+library for 2d shapes and text. It uses either user
+supplied input files or input straight from stdin to
+define and draw the objects. Once they are drawn, the
+user can move them around and manipulate them using the
+arrow keys.
+
+
+NOTE - I sure hope it works when you run it. On my home
+linux station everything works perfectly, but it would
+refuse to open up the window when run on the unix time
+share, although it would build just fine. I kept getting
+a swrast library not found error, not sure what that 
+means. 
+
+
+NOTE 2 - Note, I had to change the following line in 
+the makefile from 
+mk-colors.perl > colors.cppgen
+to
+./mk-colors.perl > colors.cppgen
+
+On my computer and the unix time share it wouldn't work
+unless I specifed that mk-colors was local to the 
+build directory. If it fails please try and change this
+back to see if it works for you.

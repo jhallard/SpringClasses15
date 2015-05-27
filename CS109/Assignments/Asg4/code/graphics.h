@@ -29,9 +29,18 @@ class object {
 
       // Default copiers, movers, dtor all OK.
       void draw() { pshape->draw (center, color); }
-      void move (GLfloat delta_x, GLfloat delta_y) {
-         center.xpos += delta_x;
-         center.ypos += delta_y;
+
+      void draw_border() { 
+         pshape->border(center, border_width, border_color);
+      }
+
+      void move (GLfloat delta_x, GLfloat delta_y);
+
+      void set_border(float width, rgbcolor color) {
+         if(width > 0.0) {
+            border_width = width;
+         }
+         border_color = color;
       }
 
       void set_move(float x) {
@@ -51,6 +60,7 @@ class object {
          else if(str == "right") {
             center.xpos += move_by;
          }
+         move(0, 0);
       }
 };
 
@@ -91,8 +101,8 @@ class window {
    public:
       static void push_back (const object& obj) {
                   objects.push_back (obj); }
-      static void setwidth (int width_) { width = width_; }
-      static void setheight (int height_) { height = height_; }
+      static void setwidth (int width_) {width = width_;}
+      static void setheight (int height_) {height = height_;}
       static void main();
       static object & get_selected() {
          return objects[selected_obj];
@@ -103,6 +113,8 @@ class window {
       static int num_objects() {
          return objects.size();
       }
+      static int get_width() { return width; }
+      static int get_height() { return height; }
 };
 
 #endif
