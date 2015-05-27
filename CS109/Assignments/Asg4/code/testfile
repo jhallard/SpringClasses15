@@ -1,0 +1,9 @@
+define one rectangle 200 100
+define two triangle 0 0 20 45 40 10
+define Text3 text Helvetica-10 This is a test of Helvetica-10.
+define four isosceles 40 60
+draw red one 100 40
+draw orange two 300 50
+draw purple Text3 400 50
+draw red four 200 250
+

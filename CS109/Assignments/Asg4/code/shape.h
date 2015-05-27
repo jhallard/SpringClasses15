@@ -81,6 +81,7 @@ class text: public shape {
       string textdata;
    public:
       text (void* glut_bitmap_font, const string& textdata);
+      text (const string & font, const string &textdata);
       virtual void draw (const vertex&, const rgbcolor&) const override;
       virtual void show (ostream&) const override;
 };

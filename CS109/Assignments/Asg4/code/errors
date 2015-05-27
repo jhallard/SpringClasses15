@@ -1,60 +1,58 @@
-g++ -g -O0 -Wall -Wextra -std=gnu++11 -c interp.cpp
-interp.cpp:30:20: error: ‘make_triangle’ is not a member of ‘interpreter’
-    {"triangle"  , &interpreter::make_triangle },
+g++ -g -O0 -Wall -Wextra -std=gnu++11 -c shape.cpp
+shape.cpp: In constructor ‘rectangle::rectangle(GLfloat, GLfloat)’:
+shape.cpp:91:20: warning: narrowing conversion of ‘(((double)(- width)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
                     ^
-interp.cpp:31:21: error: ‘make_isosceles’ is not a member of ‘interpreter’
-    {"isosceles"  , &interpreter::make_isosceles},
-                     ^
-interp.cpp:32:23: error: ‘make_equilateral’ is not a member of ‘interpreter’
-    {"equilateral"  , &interpreter::make_equilateral },
-                       ^
-interp.cpp:34:1: error: no matching function for call to ‘std::unordered_map<std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)>::unordered_map(<brace-enclosed initializer list>)’
- };
- ^
-interp.cpp:34:1: note: candidates are:
-In file included from /usr/include/c++/4.9/unordered_map:48:0,
-                 from interp.h:7,
-                 from interp.cpp:11:
-/usr/include/c++/4.9/bits/unordered_map.h:214:7: note: std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map(std::initializer_list<typename std::_Hashtable<_Key, std::pair<const _Key, _Tp>, _Alloc, std::__detail::_Select1st, _Pred, _Hash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<std::__not_<std::__and_<std::__is_fast_hash<_Hash>, std::__detail::__is_noexcept_hash<_Key, _Hash> > >::value, false, true> >::value_type>, std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::size_type, const hasher&, const key_equal&, const allocator_type&) [with _Key = std::basic_string<char>; _Tp = std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >); _Hash = std::hash<std::basic_string<char> >; _Pred = std::equal_to<std::basic_string<char> >; _Alloc = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >; typename std::_Hashtable<_Key, std::pair<const _Key, _Tp>, _Alloc, std::__detail::_Select1st, _Pred, _Hash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<std::__not_<std::__and_<std::__is_fast_hash<_Hash>, std::__detail::__is_noexcept_hash<_Key, _Hash> > >::value, false, true> >::value_type = std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)>; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::size_type = long unsigned int; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::hasher = std::hash<std::basic_string<char> >; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::key_equal = std::equal_to<std::basic_string<char> >; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::allocator_type = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >]
-       unordered_map(initializer_list<value_type> __l,
-       ^
-/usr/include/c++/4.9/bits/unordered_map.h:214:7: note:   candidate expects 5 arguments, 10 provided
-/usr/include/c++/4.9/bits/unordered_map.h:198:7: note: std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map(std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>&&, const allocator_type&) [with _Key = std::basic_string<char>; _Tp = std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >); _Hash = std::hash<std::basic_string<char> >; _Pred = std::equal_to<std::basic_string<char> >; _Alloc = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::allocator_type = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >]
-       unordered_map(unordered_map&& __umap,
-       ^
-/usr/include/c++/4.9/bits/unordered_map.h:198:7: note:   candidate expects 2 arguments, 10 provided
-/usr/include/c++/4.9/bits/unordered_map.h:188:7: note: std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>&, const allocator_type&) [with _Key = std::basic_string<char>; _Tp = std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >); _Hash = std::hash<std::basic_string<char> >; _Pred = std::equal_to<std::basic_string<char> >; _Alloc = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::allocator_type = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >]
-       unordered_map(const unordered_map& __umap,
-       ^
-/usr/include/c++/4.9/bits/unordered_map.h:188:7: note:   candidate expects 2 arguments, 10 provided
-/usr/include/c++/4.9/bits/unordered_map.h:179:7: note: std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map(const allocator_type&) [with _Key = std::basic_string<char>; _Tp = std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >); _Hash = std::hash<std::basic_string<char> >; _Pred = std::equal_to<std::basic_string<char> >; _Alloc = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::allocator_type = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >]
-       unordered_map(const allocator_type& __a)
-       ^
-/usr/include/c++/4.9/bits/unordered_map.h:179:7: note:   candidate expects 1 argument, 10 provided
-/usr/include/c++/4.9/bits/unordered_map.h:172:7: note: std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map(std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>&&) [with _Key = std::basic_string<char>; _Tp = std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >); _Hash = std::hash<std::basic_string<char> >; _Pred = std::equal_to<std::basic_string<char> >; _Alloc = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >]
-       unordered_map(unordered_map&&) = default;
-       ^
-/usr/include/c++/4.9/bits/unordered_map.h:172:7: note:   candidate expects 1 argument, 10 provided
-/usr/include/c++/4.9/bits/unordered_map.h:169:7: note: std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>&) [with _Key = std::basic_string<char>; _Tp = std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >); _Hash = std::hash<std::basic_string<char> >; _Pred = std::equal_to<std::basic_string<char> >; _Alloc = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >]
-       unordered_map(const unordered_map&) = default;
-       ^
-/usr/include/c++/4.9/bits/unordered_map.h:169:7: note:   candidate expects 1 argument, 10 provided
-/usr/include/c++/4.9/bits/unordered_map.h:160:2: note: template<class _InputIterator> std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map(_InputIterator, _InputIterator, std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::size_type, const hasher&, const key_equal&, const allocator_type&)
-  unordered_map(_InputIterator __f, _InputIterator __l,
-  ^
-/usr/include/c++/4.9/bits/unordered_map.h:160:2: note:   template argument deduction/substitution failed:
-interp.cpp:34:1: note:   cannot convert ‘{"circle", interpreter::make_circle}’ (type ‘<brace-enclosed initializer list>’) to type ‘std::unordered_map<std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)>::size_type {aka long unsigned int}’
- };
- ^
-In file included from /usr/include/c++/4.9/unordered_map:48:0,
-                 from interp.h:7,
-                 from interp.cpp:11:
-/usr/include/c++/4.9/bits/unordered_map.h:139:7: note: std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map(std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::size_type, const hasher&, const key_equal&, const allocator_type&) [with _Key = std::basic_string<char>; _Tp = std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >); _Hash = std::hash<std::basic_string<char> >; _Pred = std::equal_to<std::basic_string<char> >; _Alloc = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::size_type = long unsigned int; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::hasher = std::hash<std::basic_string<char> >; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::key_equal = std::equal_to<std::basic_string<char> >; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::allocator_type = std::allocator<std::pair<const std::basic_string<char>, std::shared_ptr<shape> (*)(__gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >, __gnu_cxx::__normal_iterator<const std::basic_string<char>*, std::vector<std::basic_string<char> > >)> >]
-       unordered_map(size_type __n = 10,
-       ^
-/usr/include/c++/4.9/bits/unordered_map.h:139:7: note:   candidate expects 4 arguments, 10 provided
-interp.cpp:144:61: error: no ‘shape_ptr interpreter::make_triangle(interpreter::param, interpreter::param)’ member function declared in class ‘interpreter’
- shape_ptr interpreter::make_triangle (param begin, param end) {
-                                                             ^
-Makefile:33: recipe for target 'interp.o' failed
-make: *** [interp.o] Error 1
+shape.cpp:91:33: warning: narrowing conversion of ‘(((double)(- height)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
+                                 ^
+shape.cpp:91:47: warning: narrowing conversion of ‘(((double)(- width)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
+                                               ^
+shape.cpp:91:59: warning: narrowing conversion of ‘(((double)height) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
+                                                           ^
+shape.cpp:92:19: warning: narrowing conversion of ‘(((double)width) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+             {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) 
+                   ^
+shape.cpp:92:31: warning: narrowing conversion of ‘(((double)height) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+             {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) 
+                               ^
+shape.cpp:92:44: warning: narrowing conversion of ‘(((double)width) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+             {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) 
+                                            ^
+shape.cpp:92:57: warning: narrowing conversion of ‘(((double)(- height)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+             {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) 
+                                                         ^
+shape.cpp: In constructor ‘diamond::diamond(GLfloat, GLfloat)’:
+shape.cpp:102:27: warning: narrowing conversion of ‘(((double)(- width)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+                   {{-width/2.0, 0.0}, {0.0, height/2.0},
+                           ^
+shape.cpp:102:51: warning: narrowing conversion of ‘(((double)height) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+                   {{-width/2.0, 0.0}, {0.0, height/2.0},
+                                                   ^
+shape.cpp:103:25: warning: narrowing conversion of ‘(((double)width) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+                   {width/2.0, 0.0}, {0.0, -height/2.0}}) {
+                         ^
+shape.cpp:103:50: warning: narrowing conversion of ‘(((double)(- height)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+                   {width/2.0, 0.0}, {0.0, -height/2.0}}) {
+                                                  ^
+shape.cpp: In constructor ‘isosceles::isosceles(GLfloat, GLfloat)’:
+shape.cpp:113:26: warning: narrowing conversion of ‘(((double)(- width)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+    {0.0, height}, {-width/2.0, 0.0}, {width/2.0, 0.0}) {
+                          ^
+shape.cpp:113:44: warning: narrowing conversion of ‘(((double)width) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+    {0.0, height}, {-width/2.0, 0.0}, {width/2.0, 0.0}) {
+                                            ^
+shape.cpp: In constructor ‘equilateral::equilateral(GLfloat)’:
+shape.cpp:118:16: warning: narrowing conversion of ‘(((double)side) * 8.6599999999999999e-1)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+    {0.0, 0.8660*side}, {-side/2.0, 0.0}, {side/2.0, 0.0} ) {
+                ^
+shape.cpp:118:30: warning: narrowing conversion of ‘(((double)(- side)) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+    {0.0, 0.8660*side}, {-side/2.0, 0.0}, {side/2.0, 0.0} ) {
+                              ^
+shape.cpp:118:47: warning: narrowing conversion of ‘(((double)side) / 2.0e+0)’ from ‘double’ to ‘float’ inside { } [-Wnarrowing]
+    {0.0, 0.8660*side}, {-side/2.0, 0.0}, {side/2.0, 0.0} ) {
+                                               ^
+g++ -g -O0 -Wall -Wextra -std=gnu++11 -o gdraw debug.o graphics.o interp.o rgbcolor.o shape.o util.o main.o -lGL -lGLU -lglut -lm
+checksource debug.h graphics.h interp.h rgbcolor.h shape.h util.h util.tcc debug.cpp graphics.cpp interp.cpp rgbcolor.cpp shape.cpp util.cpp main.cpp Makefile README mk-colors.perl

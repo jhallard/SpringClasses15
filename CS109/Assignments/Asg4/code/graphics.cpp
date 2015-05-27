@@ -60,28 +60,38 @@ enum {BS=8, TAB=9, ESC=27, SPACE=32, DEL=127};
 void window::keyboard (GLubyte key, int x, int y) {
    DEBUGF ('g', "key=" << (unsigned)key << ", x=" << x << ", y=" << y);
    window::mus.set (x, y);
+   auto & obj = window::objects[selected_obj];
    switch (key) {
       case 'Q': case 'q': case ESC:
          window::close();
          break;
       case 'H': case 'h':
-         //move_selected_object (
+         obj.move("left");
          break;
       case 'J': case 'j':
-         //move_selected_object (
+         obj.move("down");
          break;
       case 'K': case 'k':
-         //move_selected_object (
+         obj.move("up");
          break;
       case 'L': case 'l':
-         //move_selected_object (
+         obj.move("right");
          break;
       case 'N': case 'n': case SPACE: case TAB:
+         if(window::selected_obj == window::objects.size()-1)
+            window::selected_obj = 0;
+         else
+            window::selected_obj++;
          break;
       case 'P': case 'p': case BS:
+         if(window::selected_obj == 0)
+            window::selected_obj = window::objects.size()-1;
+         else
+            window::selected_obj--;
          break;
       case '0'...'9':
          //select_object (key - '0');
+         window::selected_obj = key-'0';
          break;
       default:
          cerr << (unsigned)key << ": invalid keystroke" << endl;

@@ -17,19 +17,30 @@ class object {
       shared_ptr<shape> pshape;
       vertex center;
       rgbcolor color;
+      float movex;
+      float movey;
    public:
-      object(shared_ptr<shape> sh, vertex v, rgbcolor c) { 
+      object(shared_ptr<shape> sh, vertex v, rgbcolor c) : center(v),
+                color(c), movex(4.0), movey(4.0) { 
          pshape = sh;
-         center = v;
-         color = c;
-         // pshape = make_shared<shape>(sh);
       } 
-      // center(v), color(c) {}
+
       // Default copiers, movers, dtor all OK.
       void draw() { pshape->draw (center, color); }
       void move (GLfloat delta_x, GLfloat delta_y) {
          center.xpos += delta_x;
          center.ypos += delta_y;
+      }
+
+      void move (const string & str) {
+         if(str == "up") 
+            center.ypos += movey;
+         else if(str == "down") 
+            center.ypos -= movey;
+         else if(str == "left") 
+            center.xpos -= movex;
+         else if(str == "right") 
+            center.xpos += movex;
       }
 };
 

@@ -61,6 +61,17 @@ text::text (void* glut_bitmap_font, const string& textdata):
    DEBUGF ('c', this);
 }
 
+text::text(const string & font, const string &textdata) {
+   auto itor = fontcode.find(font);
+   
+   if(itor == fontcode.end()) {
+      throw runtime_error("Invalid font code : " + font);
+   }
+   
+   glut_bitmap_font = itor->second;
+   this->textdata = textdata;
+}
+
 ellipse::ellipse (GLfloat width, GLfloat height):
 dimension ({width, height}) {
    DEBUGF ('c', this);
@@ -76,10 +87,10 @@ polygon::polygon (const vertex_list& vertices): vertices(
    DEBUGF ('c', this);
 }
 
-rectangle::rectangle (GLfloat width, GLfloat height): polygon(
-            normalize_polygon({
+rectangle::rectangle (GLfloat width, GLfloat height): polygon({
             {-width/2.0, -height/2.0}, {-width/2.0, height/2.0},
-            {width/2.0, height/2.0}, {width/2.0, -height/2.0}} )) {
+            {width/2.0, height/2.0}, {width/2.0, -height/2.0} }) 
+{
    DEBUGF ('c', this << "(" << width << "," << height << ")");
 }
 
@@ -110,6 +121,10 @@ equilateral::equilateral (GLfloat side) : triangle(
 
 void text::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
+      rgbcolor new_c(color);
+      glColor3ubv (new_c.ubvec);
+      glRasterPos2i (center.xpos, center.ypos);
+      glutBitmapString (glut_bitmap_font, (GLubyte*) textdata.c_str());
 }
 
 void ellipse::draw (const vertex& center, const rgbcolor& color) const {
