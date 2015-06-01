@@ -1,0 +1,71 @@
+
+NAME
+     gethostent,   gethostbyaddr,   gethostbyname,    sethostent,
+     endhostent - get network host entry
+
+SYNOPSIS
+     #include <sys/types.h>
+     #include <sys/socket.h>
+     #include <netdb.h>
+
+     struct hostent *gethostbyname(name)
+     char *name;
+
+     struct hostent *gethostbyaddr(addr, len, type)
+     char *addr;
+     int len, type;
+
+
+DESCRIPTION
+     gethostbyname and gethostbyaddr() each return a
+     pointer to an object with the following structure containing
+     the broken-out fields of a line in  the  network  host  data
+     base, /etc/hosts.  In the case of gethostbyaddr(), addr is a
+     pointer to the binary format address of length  len  (not  a
+     character string).
+
+      struct hostent {
+         char *h_name;  /* official name of host */
+         char **h_aliases;   /* alias list */
+         int  h_addrtype;    /* address type */
+         int  h_length; /* length of address */
+         char **h_addr_list; /* list of addresses from name server */
+      };
+
+     The members of this structure are:
+
+     h_name              Official name of the host.
+
+     h_aliases           A zero  terminated  array  of  alternate
+                         names for the host.
+
+     h_addrtype          The  type  of  address  being  returned;
+                         currently always AF_INET.
+
+     h_length            The length, in bytes, of the address.
+
+     h_addr_list         A pointer to a list of network addresses
+                         for  the named host.  Host addresses are
+                         returned in network byte order.
+
+
+     gethostbyname() and gethostbyaddr() sequentially search from
+     the beginning of the file until a matching host name or host
+     address is found, or until end-of-file is encountered.  Host
+     addresses are supplied in network order.
+
+FILES
+     /etc/hosts
+
+SEE ALSO
+     hosts(5), ypserv(8)
+
+DIAGNOSTICS
+     A NULL pointer is returned on end-of-file or error.
+
+BUGS
+     All information is contained in a static area so it must  be
+     copied if it is to be saved.  Only the Internet address for-
+     mat is currently understood.
+
+Sun Release 4.1   Last change: 7 September 1988                 2

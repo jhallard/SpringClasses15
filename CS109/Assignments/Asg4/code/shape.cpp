@@ -146,8 +146,8 @@ void ellipse::draw (const vertex& center, const rgbcolor& color) const {
    glEnable (GL_LINE_SMOOTH);
    glColor3ubv (new_c.ubvec3());
    float x,y;
-   int t;
-   for(t = 0; t <= 360; t +=1)
+   float t;
+   for(t = 0.0; t <= 360; t +=0.02)
    {
       x = center.xpos + dimension.xpos*sin(t);
       y = center.ypos + dimension.ypos*cos(t);
@@ -164,8 +164,8 @@ void ellipse::border(vertex center, float width, rgbcolor color) const {
    glColor3ubv (new_c.ubvec3());
    glBegin (GL_LINES);
    float x,y;
-   int t;
-   for(t = 0; t <= 360; t +=1)
+   float t;
+   for(t = 0.0; t <= 360; t +=0.02)
    {
       x = center.xpos + dimension.xpos*sin(t);
       y = center.ypos + dimension.ypos*cos(t);

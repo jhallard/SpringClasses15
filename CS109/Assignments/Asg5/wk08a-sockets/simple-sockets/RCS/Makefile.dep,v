@@ -1,0 +1,62 @@
+head	1.3;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.3
+date	2014.05.17.06.06.12;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.17.04.14.56;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.17.04.08.34;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@-
+@
+text
+@socket.o: socket.cpp socket.h socket_error.h
+client_socket.o: client_socket.cpp client_socket.h socket.h \
+ socket_error.h
+server_socket.o: server_socket.cpp server_socket.h socket.h \
+ socket_error.h
+simple_client.o: simple_client.cpp client_socket.h socket.h \
+ socket_error.h
+simple_server.o: simple_server.cpp server_socket.h socket.h \
+ socket_error.h
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+socket.o: socket.cpp socket.h
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 9
+@

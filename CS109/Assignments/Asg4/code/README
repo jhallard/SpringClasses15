@@ -32,4 +32,5 @@ to
 On my computer and the unix time share it wouldn't work
 unless I specifed that mk-colors was local to the 
 build directory. If it fails please try and change this
-back to see if it works for you.
+back to see if it works for you, or try to build from 
+the directory containing the source files.

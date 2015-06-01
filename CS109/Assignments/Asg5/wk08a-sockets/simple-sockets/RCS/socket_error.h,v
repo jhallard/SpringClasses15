@@ -1,0 +1,248 @@
+head	1.11;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.11
+date	2014.05.21.01.37.39;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.20.00.28.41;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.19.20.19.09;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.19.20.06.47;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.17.06.06.12;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.17.05.25.23;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.17.05.18.59;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.17.04.30.04;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.17.04.09.44;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.17.04.09.20;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.17.04.08.34;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.11
+log
+@-
+@
+text
+@// $Id: socket_error.h,v 1.11 2014-05-20 18:35:04-07 - - $
+
+#ifndef __SOCKETERROR_H__
+#define __SOCKETERROR_H__
+
+#include <cerrno>
+#include <cstring>
+#include <stdexcept>
+#include <string>
+using namespace std;
+
+class socket_error: public runtime_error {
+   public:
+      int socket_errno;
+      explicit socket_error (const string& what):
+               runtime_error(what + ": " + strerror (errno)),
+               socket_errno(errno) {}
+};
+
+class socket_h_error: public runtime_error {
+   public:
+      int socket_h_errno;
+      explicit socket_h_error (const string& what):
+               runtime_error(what + ": " + hstrerror (h_errno)),
+               socket_h_errno(h_errno) {}
+};
+
+#endif
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.9 2014-05-19 13:19:09-07 - - $
+a11 6
+#define SOCKET_TRACE(progname,error) { \
+           cout << progname << ": " << __FILE__ << "[" << __LINE__ \
+                << "]" << __func__ << "(): socket_error: " << endl \
+                << error.what() << endl; \
+        }
+
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.8 2014-05-19 13:06:47-07 - - $
+d26 8
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.7 2014-05-16 23:06:12-07 - - $
+d13 2
+a14 2
+           cout << progname << ": " << "[" << __LINE__ \
+                << "]" << __func__ << "(): socket_error " \
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.6 2014-05-16 22:25:23-07 - - $
+d20 4
+a23 1
+      explicit socket_error (const string& what): runtime_error(what){}
+a25 4
+inline void syserror (const string& function) {
+   throw socket_error (function + ": " + strerror (errno));
+}
+
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.5 2014-05-16 22:18:59-07 - - $
+d13 2
+a14 2
+           cout << progname << ": " << __FILE__ << "[" << __LINE__ \
+                << "]" << __func__ << "(): socket_error: " \
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.4 2014-05-16 21:30:04-07 - - $
+d14 2
+a15 2
+                << "] " << __func__ << "(): socket_error(" \
+                << error.what() << ")" << endl; \
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.3 2014-05-16 21:09:44-07 - - $
+d6 3
+a9 1
+#include <stdexcept>
+d23 4
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.2 2014-05-16 21:09:20-07 - - $
+d10 6
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.1 2014-05-16 21:08:34-07 - - $
+d12 1
+a12 1
+      explicit socket_error (const string& what): runtime_error(what);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket_error.h,v 1.1 2014-05-16 21:07:27-07 - - $
+d7 1
+@

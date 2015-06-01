@@ -1,0 +1,37 @@
+bash-1$ short_prompt
+bash-2$ telnet www2.ucsc.edu 80
+Trying 128.114.119.80...
+Connected to www2.ucsc.edu.
+Escape character is '^]'.
+GET /
+<html>
+<head>
+  <title>its-prod-www2-1.ucsc.edu</title>
+  <meta http-equiv="refresh" content="5; URL=http://www2.ucsc.edu/">
+</head>
+
+<body>
+  <h1>its-prod-www2-1.ucsc.edu</h1>
+
+  <p>
+  If you get this page, it is probably because your browser uses the older
+  HTTP/1.0 protocol, and that it does not transmit the requested hostname
+  in its host header. If your browser is fairly old, please upgrade as
+  most recent browsers will transmit the hostname correctly.
+  </p>
+
+  <p>
+  You are being redirected to the page listing all units on this web
+  server, and your web server should take you there in 5 seconds.
+  If it doesn't, please click on:
+  </p>
+
+  <p align="center">
+    <a href="http://www2.ucsc.edu/">http://www2.ucsc.edu/</a>
+  </p>
+</body>
+</html>
+Connection closed by foreign host.
+bash-3$ exit
+exit
+

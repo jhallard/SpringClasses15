@@ -1,0 +1,196 @@
+head	1.9;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.9
+date	2014.05.21.20.08.00;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.21.01.39.15;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.21.01.37.39;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.20.01.31.39;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.20.00.28.41;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.19.23.30.03;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.19.23.28.15;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.17.06.06.12;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.17.04.08.34;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@-
+@
+text
+@// $Id: client_socket.h,v 1.8 2014-05-20 18:39:15-07 - - $
+// Definition of the client_socket class.
+
+#ifndef __client_socket_H__
+#define __client_socket_H__
+
+#include <string>
+using namespace std;
+
+#include "socket.h"
+
+class client_socket : private socket {
+   public:
+      client_socket (string host, in_port_t port);
+      using socket::send;
+      using socket::recv;
+      using socket::set_non_blocking;
+      using socket::to_string;
+};
+
+#endif
+
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: client_socket.h,v 1.7 2014-05-20 18:37:39-07 - - $
+a17 1
+      using socket::is_valid;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: client_socket.h,v 1.7 2014-05-20 18:30:46-07 - - $
+d12 1
+a12 1
+class client_socket : public socket {
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: client_socket.h,v 1.5 2014-05-19 17:28:41-07 - - $
+d19 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: client_socket.h,v 1.4 2014-05-19 16:30:03-07 - - $
+a18 1
+      using socket::operator string;
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: client_socket.h,v 1.3 2014-05-19 16:28:15-07 - - $
+d19 1
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: client_socket.h,v 1.2 2014-05-16 23:06:12-07 - - $
+a18 1
+      using socket::operator string;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: client_socket.h,v 1.1 2014-05-16 21:08:34-07 - - $
+d14 1
+a14 2
+      client_socket (string host, int port);
+      virtual ~client_socket() {};
+d17 3
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: client_socket.h,v 1.1 2014-05-16 21:07:27-07 - - $
+d12 1
+a12 1
+class client_socket : private socket {
+d16 2
+a17 2
+      client_socket& operator<< (const string&);
+      client_socket& operator>> (string&);
+@

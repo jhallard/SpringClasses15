@@ -1,0 +1,1660 @@
+head	1.53;
+access;
+symbols;
+locks;
+comment	@.\" @;
+
+
+1.53
+date	2015.05.13.00.25.01;	author -;	state -;
+branches;
+next	1.52;
+
+1.52
+date	2015.05.13.00.23.42;	author -;	state -;
+branches;
+next	1.51;
+
+1.51
+date	2015.05.13.00.22.51;	author -;	state -;
+branches;
+next	1.50;
+
+1.50
+date	2015.02.26.23.41.33;	author -;	state -;
+branches;
+next	1.49;
+
+1.49
+date	2015.02.26.23.41.04;	author -;	state -;
+branches;
+next	1.48;
+
+1.48
+date	2014.07.25.19.15.22;	author -;	state -;
+branches;
+next	1.47;
+
+1.47
+date	2014.05.31.00.22.23;	author -;	state -;
+branches;
+next	1.46;
+
+1.46
+date	2014.05.28.00.32.10;	author -;	state -;
+branches;
+next	1.45;
+
+1.45
+date	2014.05.28.00.31.38;	author -;	state -;
+branches;
+next	1.44;
+
+1.44
+date	2014.05.28.00.26.12;	author -;	state -;
+branches;
+next	1.43;
+
+1.43
+date	2014.05.28.00.25.29;	author -;	state -;
+branches;
+next	1.42;
+
+1.42
+date	2014.05.27.23.27.03;	author -;	state -;
+branches;
+next	1.41;
+
+1.41
+date	2014.05.27.22.52.48;	author -;	state -;
+branches;
+next	1.40;
+
+1.40
+date	2014.05.27.22.34.13;	author -;	state -;
+branches;
+next	1.39;
+
+1.39
+date	2014.05.27.22.33.41;	author -;	state -;
+branches;
+next	1.38;
+
+1.38
+date	2014.05.27.19.40.48;	author -;	state -;
+branches;
+next	1.37;
+
+1.37
+date	2014.05.27.19.40.18;	author -;	state -;
+branches;
+next	1.36;
+
+1.36
+date	2014.05.24.05.48.12;	author -;	state -;
+branches;
+next	1.35;
+
+1.35
+date	2014.05.24.05.05.29;	author -;	state -;
+branches;
+next	1.34;
+
+1.34
+date	2014.05.24.02.57.16;	author -;	state -;
+branches;
+next	1.33;
+
+1.33
+date	2014.05.24.02.56.53;	author -;	state -;
+branches;
+next	1.32;
+
+1.32
+date	2014.05.24.02.50.01;	author -;	state -;
+branches;
+next	1.31;
+
+1.31
+date	2014.05.24.02.46.15;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2014.05.24.02.45.40;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2014.05.24.02.43.28;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2014.05.24.02.18.57;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2014.05.24.02.10.34;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2014.05.24.02.10.02;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2014.05.24.01.52.13;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2014.05.24.01.51.35;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.05.24.01.48.23;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.05.24.01.46.17;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.05.24.01.45.53;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.05.24.01.45.20;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.05.24.01.39.55;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.05.24.01.38.22;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.05.24.01.36.48;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.05.24.01.33.08;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.24.01.32.47;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.24.01.32.22;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.24.01.26.01;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.24.01.13.22;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.24.01.04.38;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.24.00.51.55;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.24.00.51.34;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.24.00.50.49;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.24.00.49.36;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.24.00.29.25;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.24.00.27.18;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.24.00.22.30;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.24.00.04.49;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.23.20.49.57;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.23.20.34.45;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.53
+log
+@-
+@
+text
+@.so Tmac.mm-etc
+.if t .Newcentury-fonts
+.INITR* \n[.F]
+.SIZE 12 14
+.TITLE CMPS-109 Spring\~2015 Program\~5 "Client/Server and Sockets"
+.RCS "$Id: asg5-client-server.mm,v 1.52 2015-05-12 17:23:42-07 - - $"
+.PWD
+.URL
+.EQ
+delim $$
+.EN
+.hw ac-cu-mu-la-ted
+.de COMMAND
+.   LI "\f[CB]\\$[1]\0\f[I]\\$[2]\f[R]" \\$[3]
+..  
+.de MESSAGE
+.   LI "\f[CB]\\$[1]\0\f[R]\\$[2]" \\$[3]
+..
+.H 1 "Overview"
+This project will implement a client/server application using
+sockets.
+A daemon 
+.=V ( cixd )
+listens on a socket for client connection requests.
+Each connection will cause the server to fork a child process 
+to serve the client.
+The daemon runs in an infinite loop listening.
+The server exits when the client disconnects.
+A client
+.=V ( cix )
+connects to a server and can send files, receive files,
+and get a summary listing of all files present.
+.P
+A socket is a two-way means of communication between processes,
+not necessarily running on the same host.
+An IPv4 host is know by a 4-octet sequence such as
+128.114.108.152,
+and a port is an unsigned 16-bit number (0 to 65535).
+Communication will be done via TCP/IP over IPv4 sockets.
+.H 1 "Programs"
+In this project,
+two main programs are to be written
+for the three parts of the project\(::
+the daemon and server,
+and the client.
+There will also be several library files written to be used
+by the programs.
+The general function is similar to
+.V= sftp (1).
+.MANPAGE=BVL
+.V=LI cixd
+Usage\(::
+\f[CB]cixd\f[P] \|[\f[I]port\f[P]]
+.P
+Creates a server socket and goes into an infinite loop\(::
+When it accepts a client socket,
+it uses
+.V= fork (2)
+to create a child process, 
+which functions as the server to communicate with the client.
+.P
+The daemon listens for connections on the given port,
+if specified.
+If not,
+the environment variable
+.V= CIX_SERVER_PORT
+is used to determine the port.
+There is no default port.
+.P
+The server is forked
+with an open socket communicating with the client.
+Its loop repeatedly reads commands and information from the
+client and acts on those commands,
+returning information back to the client.
+Its loop will be a receive followed by a send,
+responding to client requests.
+It exits when the client closes the socket.
+It does no terminal I/O except possibly for debugging purposes.
+.P
+.V=LI cix
+Usage\(::
+\f[CB]cix\f[P] \|[\f[I]host\f[P]] \|[\f[I]port\f[P]]
+.P
+The client interacts with the user.
+Commands are read from the terminal (or redirect),
+each of which is executed one at a time by communicating
+with the server.
+Results are then displayed at the terminal.
+.P
+The client connects to the given host, if specified.
+If not specified,
+the environment variable
+.V= CIX_SERVER_HOST
+is used as the host to connect to.
+If not specified,
+.V= localhost
+is used.
+It tries to connect to the given port,
+if specified.
+If not,
+the environment variable
+.V= CIX_SERVER_PORT
+is used to determine the port.
+There is no default port.
+.LE
+.H 1 "Interactive Commands"
+The 
+.V= cix-client
+responds to commands read from the standard output
+and writes output to the standard output and error and accesses files.
+In the syntax below,
+.V= "Courier Bold"
+are literal characters actually typed in, while
+.IR "Roman Italic"
+stands for appropriate substitutions.
+.MANPAGE=BVL
+.COMMAND exit
+Quit the program.
+An end of file marker or Control/D is equivalent.
+.COMMAND get filename
+Copy the file named
+.IR filename
+on the remote server and create or overwrite a file of the 
+same name in the current directory.
+.COMMAND help
+A summary of available commands is printed.
+.COMMAND ls
+Causes the remote server to execute the command
+.V= "ls -l"
+and prints the output to the user's terminal.
+.COMMAND put filename
+Copies a local file into the socket and causes the remote server to
+create that file in its directory.
+.COMMAND rm filename
+Causes the remote server to remove the file.
+.LE
+.H 1 "Protocol used by the \f[CB]cix*\f[P] programs"
+In order for the client and server to communicate,
+a protocol needs to be established.
+This means that each message needs to be framed in terms of a header
+and a payload.
+The header always consists of a
+.V= struct
+of size 64 bytes.
+All messages between client and server consist of these 64 bytes,
+possibly followed by a payload.
+For alignment purposes, the
+.V= nbytes
+field is first.
+Before filling in the fields, use
+.V= memset (3)
+to clear the struct.
+.DS
+.in +\n[Pi]n
+.ft CB
+enum cix_command {CIX_ERROR = 0, CIX_EXIT,
+                  CIX_GET, CIX_HELP, CIX_LS, CIX_PUT, CIX_RM,
+                  CIX_FILE, CIX_LSOUT, CIX_ACK, CIX_NAK};
+struct cix_header {
+   uint32_t cix_nbytes;
+   uint8_t cix_command;
+   char cix_filename[59];
+};
+.DE
+The purposes of the fields are as follows\(::
+.MANPAGE=BVL
+.V=LI "uint32_t cix_nbytes;"
+The number of bytes in the payload if there is any payload.
+Otherwise it must be zero (MBZ).
+This field is sent in network byte order and so must use the
+functions 
+.V= ntohl (3)
+and
+.V= htonl (3)
+when loading and storing data.
+.V=LI "uint8_t cix_command;"
+A single byte containing one of the
+.V= cix_command
+constants.
+.V=LI "char cix_filename[59];"
+The name of the file being transferred or removed.
+The filename may not have any slash
+.=V ( '/' )
+characters in it and must be null-terminated (with
+.V= '\[rs]0' ).
+All bytes following the null must also be null.
+Pathnames with slashes and filenames longer than 58 characters
+are prohibited.
+.LE
+.P
+Following are the meanings of each of the
+.V= cix_command
+values.
+.ds CTS (C\[->]S)
+.ds STC (S\[->]C)
+Each is either client to server \*[CTS] or
+server to client \*[STC], but never both.
+.MANPAGE=BVL
+.MESSAGE CIX_ERROR
+An error flag to indicate an invalid header.
+Used internally.
+.MESSAGE CIX_EXIT
+Internal to
+.V= cix-client ,
+not used in communication.
+.MESSAGE CIX_GET \*[CTS]
+Request a file from the server.
+The filename is used both remotely and locally.
+The payload length is 0.
+.MESSAGE CIX_HELP
+Internal to
+.V= cix-client ,
+not used in communication.
+.MESSAGE CIX_LS \*[CTS]
+Request file
+.=V ( ls )
+information.
+The payload length and filename are zeroed.
+.MESSAGE CIX_PUT \*[CTS]
+The length of the payload is the number of bytes in the file.
+The contents of the file immediately follow the header.
+The bytes of the payload are unstructured and may contain null bytes.
+Binary files are acceptable.
+.MESSAGE CIX_RM \*[CTS]
+Request to remove a file.
+The payload length is 0.
+.MESSAGE CIX_FILE \*[STC]
+Response to a
+.V= CIX_GET .
+The filename is the same as in the request and the payload length
+reflects the number of bytes in the file.
+The payload consists of the bytes of the file.
+.MESSAGE CIX_LSOUT \*[STC]
+Response to a
+.V= CIX_LS .
+The filename is zeroed and the payload length is the number of bytes
+sent in the payload.
+The payload is the output of the command
+.V= "ls -l" .
+.MESSAGE CIX_ACK \*[STC]
+Response to either a
+.V= CIX_PUT
+or a
+.V= CIX_RM 
+indicating that the request was successfully completed.
+.MESSAGE CIX_NAK \*[STC]
+Response to any request that fails.
+There is no payload.
+The filename field is the same as was in the original request.
+The payload field is set to the value of
+.V= errno
+in the server's attempt to preform a task.
+.LE
+.H 1 "Procedures"
+Each of the above commands requires procedures for accessing files,
+including reading files from disk and writing files to disk,
+as well as accessing directories.
+When any of the system calls fails in the server,
+the server immediately terminates the operation and sends
+the value of
+.V= errno
+back to the client in a 
+.V= CIX_NAK
+message.
+.ALX a ()
+.LI
+For the client or server to send a file it must first be read into
+a buffer.
+Binary files must be properly handled, 
+so protocols which assume text files won't work.
+To load a file from disk, use 
+.V= istream::read() ,
+collecting characters into a buffer.
+Read the entire file into a buffer then close it.
+After that,
+it may be sent down the socket.
+Alternatively,
+.V= stat (2)
+the file to see how large it is,
+and send the file down the socket piecemeal.
+.LI
+When receiving a file from the socket,
+Receive the header and determine the size of the file.
+Create an
+.V= ostream
+and use
+.V= ostream::write()
+to write the parts of the file as they are received from the socket.
+A C++ stream is closed
+when the variable goes out of scope,
+or you can call
+.V= close .
+.LI
+To delete a file for the
+.V= CIX_RM
+command, use
+.V= unlink (2)\(::
+.VTCODE* 1 "rc = unlink (filename);"
+.LI
+To execute the
+.V= CIX_LS
+command use
+.V= popen (2)
+and
+.V= pclose (2)
+to create a pipe stream from the
+.V= ls (1)
+command
+.VTCODE* 1 "FILE* pipe = popen (\[Dq]ls -l\[Dq], \[Dq]r\[Dq]);"
+Then read the characters from the pipe in the easiest way,
+probably by using 
+.V= fgets (3).
+Finally,
+.V= "pclose(pipe)" .
+Then send the output back the client in a 
+.V= CIX_LSOUT
+message.
+.LE
+.H 1 "Modules"
+There will need to be several modules in this suite of programs.
+Each of the programs, of course, will have its own source file
+with a main function in it.
+.P
+The
+.V= sockets
+module will be a useful inclusion into the program
+as its own module.
+.P
+There should also be a
+.V= cix_protocol
+module to implement the protocols and contain code for accessing
+files and sockets,
+since these will be used by both the client and the server.
+.H 1 "Use of ports"
+If your daemon listens on a port that has been bound by another
+process, you will get the message ``Address already in use''
+because only one process at any given time is allowed to listen
+on a particular process.
+To avoid this, choose a port number not being used by anyone
+else on the same server.
+.P
+.ne 4
+To avoid having to type in a port number every time you start
+your server, 
+put the following line in your
+.V= \&.bashrc
+or
+.V= \&.bash_profile
+file\(::
+.VTCODE* 1 "export CIX_CLIENT_PORT 60000"
+except that each person in class should use a different number.
+You should pick a dynamic or private port number from the
+range 49152 through 65535
+(0xC000 through 0xFFFF).
+.H 1 "Runaway Processes"
+Be careful in using
+.V= fork (2)
+so that you don't accidentally create a fork-bomb.
+The command
+.V= pkill (1)
+can be used to kill all processes matching a particular pattern.
+So the command
+.VTCODE* 1 "pkill cix"
+will kill all of your processes whose executables contain the string
+.=V `` cix ''.
+A really quick way to log out is to use
+.V= kill (1)\(::
+.VTCODE* 1 "kill -9 -1"
+.VTCODE* 1 "kill -s KILL -1"
+will send
+.V= SIGKILL
+to all of your processes,
+thus logging you out.
+.H 1 "What to Submit"
+Submit
+.V= Makefile
+which builds the three programs,
+all necessary C++ header and implementation files.
+And if doing pair programming, the
+.V= PARTNER
+file.
+When the grader uses the command
+.V= make
+in the submit directory,
+the three binaries should be built.
+.FINISH
+@
+
+
+1.52
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.51 2015-05-12 17:22:51-07 - - $"
+d53 1
+a53 1
+\f[CB]cix-daemon\f[P] \|[\f[I]port\f[P]]
+d59 2
+a60 5
+to create a child process then uses
+.V= execlp (3)
+to start the server, which communicates with the client.
+Its loop also waits for zombie children.
+It does no non-socket I/O except possibly for debugging purposes.
+@
+
+
+1.51
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.50 2015-02-26 15:41:33-08 - - $"
+d52 3
+a64 3
+Usage\(::
+\f[CB]cix-daemon\f[P] \|[\f[I]port\f[P]]
+.P
+d84 3
+a92 4
+.ne 3
+Usage\(::
+\f[CB]cix\f[P] \|[\f[I]host\f[P]] \|[\f[I]port\f[P]]
+.br
+@
+
+
+1.50
+log
+@-
+@
+text
+@d5 2
+a6 2
+.TITLE CMPS-109 Winter\~2015 Program\~4 "Client/Server and Sockets"
+.RCS "$Id: asg5-client-server.mm,v 1.49 2015-02-26 15:41:04-08 - - $"
+d23 1
+a23 1
+.=V ( cix-daemon )
+a25 1
+.=V ( cix-server )
+d30 1
+a30 1
+.=V ( cix-client )
+d42 1
+a42 1
+three main programs are to be written
+d44 1
+a44 2
+the daemon,
+the server,
+d51 1
+a51 1
+.V=LI cix-daemon
+d64 1
+a64 1
+.br
+d72 3
+a74 2
+.V=LI cix-server
+Is created with an open socket communicating with the client.
+d83 1
+a83 11
+Usage\(::
+\f[CB]cix-server\f[P] \|\f[I]filedes\f[P]
+.br
+When the daemon forks the server,
+one argument is given,
+namely the file descriptor that has been opened onto the client.
+This program is never run,
+except by being
+.V= exec(2)ed
+by the daemon.
+.V=LI cix-client
+d92 1
+a92 1
+\f[CB]cix-client\f[P] \|[\f[I]host\f[P]] \|[\f[I]port\f[P]]
+@
+
+
+1.49
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.48 2014-07-25 12:15:22-07 - - $"
+d56 3
+a58 3
+it
+.V= fork (2)s
+a child process then uses
+@
+
+
+1.48
+log
+@-
+@
+text
+@d5 2
+a6 2
+.TITLE CMPS-109 Summer\~2014 Program\~4 "Client/Server and Sockets"
+.RCS "$Id: asg5-client-server.mm,v 1.47 2014-05-30 17:22:23-07 - - $"
+@
+
+
+1.47
+log
+@-
+@
+text
+@d5 2
+a6 2
+.TITLE CMPS-109 Spring\~2014 Program\~4 "Client/Server and Sockets"
+.RCS "$Id: asg5-client-server.mm,v 1.46 2014-05-27 17:32:10-07 - - $"
+@
+
+
+1.46
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.45 2014-05-27 17:31:38-07 - - $"
+d327 1
+a327 3
+.V= fgets (3)
+and
+.V= string::append .
+@
+
+
+1.45
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.44 2014-05-27 17:26:12-07 - - $"
+d369 1
+a369 1
+You should pick a private port number from the
+@
+
+
+1.44
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.43 2014-05-27 17:25:29-07 - - $"
+d369 3
+@
+
+
+1.43
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.42 2014-05-27 16:27:03-07 - - $"
+d359 1
+@
+
+
+1.42
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.41 2014-05-27 15:52:48-07 - - $"
+d351 17
+@
+
+
+1.41
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.40 2014-05-27 15:34:13-07 - - $"
+d173 1
+a173 1
+                  CIX_FILE, CIX_LSOUT, CIS_ACK, CIS_NAK};
+d255 1
+a255 1
+.MESSAGE CIS_ACK \*[STC]
+d261 1
+a261 1
+.MESSAGE CIS_NAK \*[STC]
+d278 1
+a278 1
+.V= CIS_NAK
+@
+
+
+1.40
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.39 2014-05-27 15:33:41-07 - - $"
+d23 1
+a23 1
+.=V ( cixdaemon )
+d26 1
+a26 1
+.=V ( cixserver )
+d31 1
+a31 1
+.=V ( cixclient )
+d53 1
+a53 1
+.V=LI cixdaemon
+d65 1
+a65 1
+\f[CB]cixdaemon\f[P] \|[\f[I]port\f[P]]
+d74 1
+a74 1
+.V=LI cixserver
+d85 1
+a85 1
+\f[CB]cixserver\f[P] \|\f[I]filedes\f[P]
+d94 1
+a94 1
+.V=LI cixclient
+d103 1
+a103 1
+\f[CB]cixclient\f[P] \|[\f[I]host\f[P]] \|[\f[I]port\f[P]]
+d123 1
+a123 1
+.V= cixclient
+d219 1
+a219 1
+.V= cixclient ,
+d227 1
+a227 1
+.V= cixclient ,
+@
+
+
+1.39
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.38 2014-05-27 12:40:48-07 - - $"
+a40 3
+.P
+Also look over the contents of
+.V= cmps109-wm/Examples/sockets/ .
+@
+
+
+1.38
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.37 2014-05-27 12:40:18-07 - - $"
+d164 1
+a164 1
+ossibly followed by a payload.
+d250 1
+a250 1
+The payload is the file.
+d295 4
+d346 1
+a346 3
+module from the
+.V= Examples
+directory will be a useful inclusion into the program
+@
+
+
+1.37
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.36 2014-05-23 22:48:12-07 - - $"
+d104 1
+@
+
+
+1.36
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.35 2014-05-23 22:05:29-07 - - $"
+d66 11
+d86 11
+d102 20
+a121 1
+Results are then displayed at the therminal.
+@
+
+
+1.35
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.34 2014-05-23 19:57:16-07 - - $"
+d132 2
+a133 1
+enum cix_command {CIX_GET, CIX_LS, CIX_PUT, CIX_RM,
+d175 7
+d186 4
+@
+
+
+1.34
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.33 2014-05-23 19:56:53-07 - - $"
+d101 2
+@
+
+
+1.33
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.32 2014-05-23 19:50:01-07 - - $"
+d275 1
+a275 1
+Then send the accumulated output back the client in a 
+@
+
+
+1.32
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.31 2014-05-23 19:46:15-07 - - $"
+d12 1
+@
+
+
+1.31
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.30 2014-05-23 19:45:40-07 - - $"
+d269 3
+a271 2
+.V= fgets (3),
+and concatenate each chunk onto the end of the string.
+@
+
+
+1.30
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.29 2014-05-23 19:43:28-07 - - $"
+d272 1
+a272 1
+.V= "pclose (pipe);"
+@
+
+
+1.29
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.28 2014-05-23 19:18:57-07 - - $"
+d255 1
+a255 2
+.br
+.V= "rc = unlink (filename);"
+d266 1
+a266 1
+.V= "FILE* pipe = popen (\[Dq]ls -l\[Dq], \[Dq]r\[Dq]);"
+d269 4
+a272 5
+.V= fgetc (3),
+and concatenate each character onto the end of the string.
+.LI
+.V= "rc = pclose (pipe);"
+.LI
+@
+
+
+1.28
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.27 2014-05-23 19:10:34-07 - - $"
+d233 1
+a233 1
+.V= istream.read() ,
+d244 1
+a244 1
+.V= ostream.write()
+d266 2
+a267 5
+command \(::
+.ALX i () "" 0
+.LI
+.V= "FILE* pipe = popen ("ls -l", "r");"
+.LI
+@
+
+
+1.27
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.26 2014-05-23 19:10:02-07 - - $"
+d94 1
+a94 1
+An end of file marker or Control/D does the same thing.
+d232 4
+a235 24
+To load a file from disk\(::
+.ALX i () "" 0
+.LI
+Use
+.V= stat (2)
+to find the size of the file.
+.LI
+Allocate a character buffer large enough to hold the entier file.
+We will assume that no file is larger than memory.
+.LI
+Use the system call
+.V= open (2)
+to open the file\(::
+.br
+.V= "fd = open (filename, O_RDONLY);
+.LI
+Use
+.V= read (2)
+to slurp the entire file into memory in one call.
+.LI
+Then
+.V= close (2)
+the file.
+.LI
+a237 6
+.LE
+.br
+.ne 4
+.LI
+When receiving a file from the socket\(::
+.ALX i () "" 0
+d239 1
+d241 9
+a249 14
+.LI
+Allocate a buffer to receive the bytes of the payload.
+.LI
+Use
+.V= open (2)
+to create or overwrite the file\(::
+.br
+.V= "fd = open (filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+.LI
+Use
+.V= write (2)
+and then
+.V= close (2) .
+.LE
+@
+
+
+1.26
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.25 2014-05-23 18:52:13-07 - - $"
+d337 1
+a337 1
+.VTCODE* "pkill cix"
+d342 2
+a343 2
+.VTCODE* "kill -9 -1"
+.VTCODE* "kill -s KILL -1"
+@
+
+
+1.25
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.24 2014-05-23 18:51:35-07 - - $"
+d329 19
+@
+
+
+1.24
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.23 2014-05-23 18:48:23-07 - - $"
+d337 4
+@
+
+
+1.23
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.22 2014-05-23 18:46:17-07 - - $"
+d312 17
+a328 1
+.SP 100
+@
+
+
+1.22
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.21 2014-05-23 18:45:53-07 - - $"
+d245 2
+a246 1
+.VTCODE* 0 "fd = open (filename, O_RDONLY);
+d272 2
+a273 1
+.VTCODE* 0 "fd = open (filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+d285 2
+a286 1
+.VTCODE* 0 "rc = unlink (filename);"
+d299 1
+a299 1
+.VTCODE* 0 "FILE* pipe = popen ("ls -l", "r");"
+d306 1
+a306 1
+.VTCODE* 0 "rc = pclose (pipe);"
+@
+
+
+1.21
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.20 2014-05-23 18:45:20-07 - - $"
+d110 1
+a110 1
+.H 1 "Protocol used by the\f[CB]cix\f[P]* programs"
+@
+
+
+1.20
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.19 2014-05-23 18:39:55-07 - - $"
+d110 1
+a110 1
+.H 1 "Protocol used by \f[CB]cix\f[P]"
+@
+
+
+1.19
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.18 2014-05-23 18:38:22-07 - - $"
+d102 1
+a102 1
+.V= "ls -ago"
+d200 1
+a200 1
+.V= "ls -ago" .
+d245 1
+a245 1
+.VTCODE* 1 "fd = open (filename, O_RDONLY);
+d271 1
+a271 1
+.VTCODE* 1 "fd = open (filename, O_WRONLY|O_CREAT|O_TRUNC, 0777);
+d283 1
+a283 1
+.VTCODE* 1 "rc = unlink (filename);"
+d295 13
+@
+
+
+1.18
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.17 2014-05-23 18:36:48-07 - - $"
+d233 1
+a233 1
+.ALX i () "" 1
+d262 1
+a262 1
+.ALX i () "" 1
+d284 11
+@
+
+
+1.17
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.16 2014-05-23 18:33:08-07 - - $"
+d277 1
+@
+
+
+1.16
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.15 2014-05-23 18:32:47-07 - - $"
+d245 1
+a245 1
+.VTCODE* 1 "fd = open (pathname, O_RDONLY);
+d266 2
+d271 1
+a271 1
+.VTCODE* 1 "fd = open (pathname, O_WRONLY|O_CREAT|O_TRUNC, 0777);
+d277 6
+@
+
+
+1.15
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.14 2014-05-23 18:32:22-07 - - $"
+d259 1
+a259 1
+.ne 3
+@
+
+
+1.14
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.13 2014-05-23 18:26:01-07 - - $"
+d258 2
+@
+
+
+1.13
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.12 2014-05-23 18:13:22-07 - - $"
+d219 7
+d244 2
+a245 3
+to open the file with the
+.V= O_RDONLY
+flag.
+d254 1
+a254 1
+.LE
+d257 1
+d266 2
+a267 3
+to create a new file.
+use the flags
+.V= "(O_WRONLY | O_CREAT | O_TRUNC)"
+@
+
+
+1.12
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.11 2014-05-23 18:04:38-07 - - $"
+d16 1
+a16 1
+.   LI "\f[CB]\\$[1]\0\0\0\f[R]\\$[2]" \\$[3]
+d215 53
+@
+
+
+1.11
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.10 2014-05-23 17:51:55-07 - - $"
+d15 3
+a17 2
+/vi=li
+
+d162 1
+d166 4
+a169 1
+The following are messages sent from the client to the server\(::
+d171 1
+a171 1
+.V=LI CIX_GET
+d175 1
+a175 1
+.V=LI CIX_LS
+d180 1
+a180 1
+.V=LI CIX_PUT
+d185 1
+a185 1
+.V=LI CIX_RM
+d188 1
+a188 5
+.LE
+The following messages are sent from the server to the client
+in response to a client request\(::
+.MANPAGE=BVL
+.V=LI CIX_FILE
+d194 1
+a194 1
+.V=LI CIX_LSOUT
+d201 1
+a201 1
+.V=LI CIS_ACK
+d207 1
+a207 1
+.V=LI CIS_NAK
+@
+
+
+1.10
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.9 2014-05-23 17:51:34-07 - - $"
+d158 55
+@
+
+
+1.9
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.8 2014-05-23 17:50:49-07 - - $"
+d126 1
+a126 1
+.in +\n[Pi]
+@
+
+
+1.8
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.7 2014-05-23 17:49:36-07 - - $"
+d126 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.6 2014-05-23 17:29:25-07 - - $"
+d122 3
+d158 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.5 2014-05-23 17:27:18-07 - - $"
+d113 42
+a154 1
+and a payload or body.
+@
+
+
+1.5
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.4 2014-05-23 17:22:30-07 - - $"
+d12 5
+d91 1
+a91 1
+.VI=LI exit
+d94 1
+a94 1
+.VI=LI get filename
+d99 1
+a99 1
+.VI=LI ls
+d103 1
+a103 1
+.VI=LI put filename
+d106 1
+a106 1
+.VI=LI rm filename
+@
+
+
+1.4
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.3 2014-05-23 17:04:49-07 - - $"
+d80 5
+@
+
+
+1.3
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.2 2014-05-23 13:49:57-07 - - $"
+d80 24
+a103 1
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg5-client-server.mm,v 1.1 2014-05-23 13:34:45-07 - - $"
+d34 55
+@
+
+
+1.1
+log
+@-
+@
+text
+@d6 1
+a6 1
+.RCS "$Id: asg4-oop-inheritance.mm,v 1.53 2014-05-20 15:05:33-07 - - $"
+d15 8
+a22 7
+A server 
+.=V ( forumd )
+listens on a socket for any number of client connectsions.
+Each connection will cause the server to fork a child process to
+serve the client.
+The server runs in an infinite loop listening.
+The child process exits when the client disconnects.
+d24 1
+a24 1
+.=V ( forum )
+d26 1
+a26 1
+and get a summar listing of all files present.
+d33 1
+@

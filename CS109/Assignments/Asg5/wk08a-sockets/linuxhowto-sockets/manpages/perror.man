@@ -1,0 +1,45 @@
+
+PERROR(3)              C LIBRARY FUNCTIONS              PERROR(3)
+
+NAME
+     perror, errno - system error messages
+
+SYNOPSIS
+     void perror(s)
+     char *s;
+
+     #include <errno.h>
+
+     int sys_nerr;
+     char *sys_errlist[];
+     int errno;
+
+DESCRIPTION
+     perror() produces a short  error  message  on  the  standard
+     error describing the last error encountered during a call to
+     a system or library function.  If s is not  a  NULL  pointer
+     and does not point to a null string, the string it points to
+     is printed, followed by a colon, followed by a  space,  fol-
+     lowed  by  the message and a NEWLINE. If s is a NULL pointer
+     or points to a null string, just  the  message  is  printed,
+     followed  by  a  NEWLINE.  To  be  of most use, the argument
+     string should include the name of the program that  incurred
+     the  error.   The  error  number  is taken from the external
+     variable errno (see intro(2)),  which  is  set  when  errors
+     occur but not cleared when non-erroneous calls are made.
+
+     To simplify variant formatting of messages,  the  vector  of
+     message  strings  sys_errlist is provided; errno can be used
+     as an index in this table to get the message string  without
+     the  newline.   sys_nerr  is the number of messages provided
+     for in the table; it should be  checked  because  new  error
+     codes  may  be  added to the system before they are added to
+     the table.
+
+SEE ALSO
+     intro(2), psignal(3)
+
+Sun Release 4.1   Last change: 6 December 1988                  1
+
+
+

@@ -1,0 +1,669 @@
+head	1.23;
+access;
+symbols;
+locks;
+comment	@ * @;
+
+
+1.23
+date	2014.05.23.19.44.04;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.05.23.02.00.24;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.05.23.01.55.42;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.05.22.23.33.32;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.05.22.01.20.33;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.05.22.01.18.29;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.05.22.01.14.52;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.05.22.01.05.21;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.22.01.00.37;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.22.00.46.53;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.21.20.08.00;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.21.01.37.39;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.20.01.31.39;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.20.00.44.29;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.20.00.28.41;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.19.23.29.24;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.19.23.28.15;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.19.20.07.22;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.19.20.06.47;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.17.06.06.12;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.17.05.18.59;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.17.04.43.07;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.17.04.08.34;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.23
+log
+@-
+@
+text
+@// $Id: socket.h,v 1.22 2014-05-22 19:00:24-07 - - $
+
+#ifndef __SOCKET_H__
+#define __SOCKET_H__
+
+#include <cstring>
+#include <stdexcept>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <string>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+//
+// class base_socket:
+// mostly protected and not used by applications
+//
+
+class base_socket {
+   private:
+      static constexpr size_t MAXRECV = 0xFFFF;
+      static constexpr int CLOSED_FD = -1;
+      int socket_fd {CLOSED_FD};
+      sockaddr_in socket_addr;
+      base_socket (const base_socket&) = delete; // prevent copying
+      base_socket& operator= (const base_socket&) = delete;
+   protected:
+      base_socket(); // only derived classes may construct
+      ~base_socket();
+      void close();
+  
+      // Server initialization
+      void create();
+      void bind (const in_port_t port);
+      void listen() const;
+      void accept (base_socket&) const;
+  
+      // Client initialization
+      void connect (const string host, const in_port_t port);
+  
+   public:
+      // Data Transimission
+      ssize_t send (const string&);
+      ssize_t recv (string&);
+      void set_non_blocking (const bool);
+      friend string to_string (const base_socket& sock);
+      
+};
+
+
+//
+// class accepted_socket
+// used by server when a client connects
+//
+
+class accepted_socket: public base_socket {
+   public:
+      accepted_socket() {}
+};
+
+//
+// class client_socket
+// used by client application to connect to server
+//
+
+class client_socket: public base_socket {
+   public: 
+      client_socket (string host, in_port_t port);
+};
+
+//
+// class server_socket
+// single use class by server application
+//
+
+class server_socket: public base_socket {
+   public:
+      server_socket (in_port_t port);
+      void accept (accepted_socket& sock) {
+         base_socket::accept (sock);
+      }
+};
+
+
+//
+// class socket_error
+// base class for throwing socket errors
+//
+
+class socket_error: public runtime_error {
+   public:
+      explicit socket_error (const string& what): runtime_error(what){}
+};
+
+//
+// class socket_sys_error
+// subclass to record status of extern int errno variable
+//
+
+class socket_sys_error: public socket_error {
+   public:
+      int sys_errno;
+      explicit socket_sys_error (const string& what):
+               socket_error(what + ": " + strerror (errno)),
+               sys_errno(errno) {}
+};
+
+//
+// class socket_h_error
+// subclass to record status of extern int h_errno variable
+//
+
+class socket_h_error: public socket_error {
+   public:
+      int host_errno;
+      explicit socket_h_error (const string& what):
+               socket_error(what + ": " + hstrerror (h_errno)),
+               host_errno(h_errno) {}
+};
+
+
+//
+// class hostinfo
+// information about a host given hostname or IPv4 address
+//
+
+class hostinfo {
+   public:
+      const string hostname;
+      const vector<string> aliases;
+      const vector<in_addr> addresses;
+      hostinfo (); // localhost
+      hostinfo (hostent*);
+      hostinfo (const string& hostname);
+      hostinfo (const in_addr& ipv4_addr);
+      friend string to_string (const hostinfo&);
+};
+
+string localhost();
+string to_string (const in_addr& ipv4_addr);
+
+#endif
+
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.21 2014-05-22 18:55:42-07 - - $
+d127 1
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.20 2014-05-22 16:33:32-07 - - $
+d9 1
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.19 2014-05-21 18:20:33-07 - - $
+d126 20
+d147 1
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.18 2014-05-21 18:18:29-07 - - $
+d30 1
+a30 1
+      base_socket (const base_socket&) = delete;
+d33 1
+a33 1
+      base_socket();
+a54 2
+string to_string (const base_socket& sock);
+
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.17 2014-05-21 18:14:52-07 - - $
+d91 1
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.16 2014-05-21 18:05:21-07 - - $
+d19 4
+a22 1
+/////////////////////////////////////////////////////////////////
+a56 1
+/////////////////////////////////////////////////////////////////
+d58 4
+d68 4
+a71 1
+/////////////////////////////////////////////////////////////////
+d78 4
+a81 1
+/////////////////////////////////////////////////////////////////
+d91 4
+a94 1
+/////////////////////////////////////////////////////////////////
+d101 4
+a104 1
+/////////////////////////////////////////////////////////////////
+d114 4
+a117 1
+/////////////////////////////////////////////////////////////////
+a126 2
+/////////////////////////////////////////////////////////////////
+
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.15 2014-05-21 18:00:37-07 - - $
+d19 2
+d55 1
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.14 2014-05-21 17:46:53-07 - - $
+d71 3
+a73 1
+      void accept (accepted_socket& sock) { base_socket::accept (sock); }
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.13 2014-05-21 13:08:00-07 - - $
+d19 1
+a19 1
+class socket {
+d25 2
+a26 2
+      socket (const socket&) = delete;
+      socket& operator= (const socket&) = delete;
+d28 2
+a29 2
+      socket();
+      ~socket();
+d36 1
+a36 1
+      void accept (socket&) const;
+d46 1
+a46 1
+      string to_string() const;
+d50 2
+d54 1
+a54 1
+class accepted_socket: public socket {
+d61 1
+a61 1
+class client_socket: public socket {
+d68 1
+a68 1
+class server_socket: public socket {
+d71 1
+a71 1
+      void accept (accepted_socket& sock) { socket::accept (sock); }
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.12 2014-05-20 18:37:39-07 - - $
+d6 2
+d50 51
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.12 2014-05-20 18:12:07-07 - - $
+d19 3
+a21 3
+      static constexpr int MAXRECV = 0xFFFF;
+      static constexpr int CLOSED = -1;
+      int socket_fd {CLOSED};
+a43 1
+      int is_valid() const;
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.10 2014-05-19 17:44:29-07 - - $
+d45 1
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.9 2014-05-19 17:28:41-07 - - $
+a34 1
+      void getpeer (socket&) const;
+a44 1
+      operator string() const;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.8 2014-05-19 16:29:24-07 - - $
+d35 1
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.7 2014-05-19 16:28:15-07 - - $
+d45 1
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.6 2014-05-19 13:07:22-07 - - $
+a44 1
+      operator string() const;
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.5 2014-05-19 13:06:47-07 - - $
+d27 1
+a27 1
+      virtual ~socket();
+d44 3
+a46 1
+      pair<int,int> is_valid() const;
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.4 2014-05-16 23:06:12-07 - - $
+d37 1
+a37 1
+      void connect (const string host, const int in_port_t);
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.3 2014-05-16 22:18:59-07 - - $
+d19 3
+a21 1
+      int socket_fd;
+d28 1
+d32 1
+a32 1
+      void bind (const int port);
+d37 1
+a37 1
+      void connect (const string host, const int port);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.2 2014-05-16 21:43:07-07 - - $
+d21 3
+a23 1
+   public:
+d36 1
+d38 1
+a38 1
+      ssize_t send (const string);
+d41 1
+a41 1
+      bool is_valid() const { return socket_fd != -1; }
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.1 2014-05-16 21:08:34-07 - - $
+d26 4
+a29 4
+      bool create();
+      bool bind (const int port);
+      bool listen() const;
+      bool accept (socket&) const;
+d32 1
+a32 1
+      bool connect (const string host, const int port);
+d35 2
+a36 2
+      bool send (const string);
+      int recv (string&);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.h,v 1.2 2014-05-16 21:07:27-07 - - $
+a16 2
+
+
+d19 2
+a20 2
+      int m_sock;
+      sockaddr_in m_addr;
+d38 1
+a38 1
+      bool is_valid() const { return m_sock != -1; }
+a40 1
+
+@

@@ -35,6 +35,16 @@
 \usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
 \usepackage{multicol}
 \usepackage{fullpage,amsthm,amsfonts,amssymb,epsfig,amsmath}
+\usepackage{tikz}
+\usepackage{verbatim,array}
+\usepackage[active,tightpage]{preview}
+\usetikzlibrary{decorations.pathmorphing,shapes,positioning,calc,fit,arrows,arrows.meta}
+\setlength\PreviewBorder{5pt}
+
+\usepackage{scrextend}
+\newcommand{\tikzmark}[1]{%
+  \tikz[overlay,remember picture] \node(#1){};
+}
 
 % Margins
 \topmargin=-0.45in
@@ -241,45 +251,37 @@ The algorithm in short walks along the topolical sort from the source vertex (wh
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
- Suppose we are given three strings of characters $X = x_1 x_2 ... x_m$, $Y = y_1 y_2 ... y_n$, and $Z = z_1 z_2 ... z_m+n$. $Z$ is said to be a "shuffle" of $X$ and $Y$ if $Z$ can be formed by interspersing the characters from $X $and $Y$ in a way that maintains to left-to-right ordering of the characters from each string. For example the, cchocohilaptes is a shuffle of chocolate and chips,  but chocochilatspe is not. Devise a dynamic programming algorithm that takes as input $X$,$Y$,$Z$,$m$, and $n$, and determines whether or not $Z$ is a shuffle of $X$ and $Y$. Analyze the worst-case running time and space requirements of your algorithm.  \\
 
-Hint: The values in your table should be Boolean, not numeric.
-
-\textbf{Answer : } \\
-The algorithm to solve this problem will depend on 2 variables, the indices of the characters in $X$ and $Y$. We can calculate the index of the character we're comparing for the current iteration in $Z$ by adding the indices of the current characters we're looking at it and $X$ and $Y$ and subtracting one. \\ 
-The subproblems are as follows : If the current problem is on the strings $X[1:i]$, $Y[1:j]$, $Z[1:k] k = i+j-1$, the subproblems consist of seeing if the strings $Z[1:k-1], X[1:i-1], Y[1:j]$ or $Z[1:k-1], X[1:i], Y[1:j-1]$ are shuffles of one another. Given the answer to these subproblems, we can find the solution to the current-length strings by seeing if the character $Z_k$ can be made by taking either $X_i$ or $Y_j$ and combining it with the answers to the 2 subproblems. This will be made specific below. \\
-The table in this case is boolean (as was suggested in the hint), with dimensions $m \times n$ The bool in table entry $(i,j)$ represents if the either of the characters $X_i$ or $Y_j$ can be used to make the character $Z_k : k = i+j-1$. The arrows for this table either go right or left, depending on which string has the character that matches the character in $Z$. If $Z_k$ is matches by a character on the $x$ axis, we travel left, if it is matches by a character on the $y$ axis we go up, and if they both match we can go either way. \\
-
-The formal recurrance relation is as follows : Given strings $X$ of length $m$, $Y$ of length $n$, and $Z$ of length $n+m$, $S(p, q) : (m,n) \geq (p,q) \geq (0,0) $ takes the indices of two characters in $X$ and $Y$ and returns a boolean value. $S$ is defined as :
-$$ S(p, q) = [(Z_k === X_p \text{ AND } S(p-1, q)) \text{ OR } (Z_k == Y_q \text{ AND } S(p, q-1)) ] $$
-
-We also have the base cases that if $p$ or $q$ becomes $0$, we simply check other non-zero index. If they're both zero we return true. \\
-
-This says that at index $k = p+q$, we either match the character $X_p$ and recurse on $Z$ with one less character, $X$ with one less character, and $Y$ as it is, or we do the same except with $Y$. 
-
-The algorithm doesn't actually need to build the algoritmh
-% To build the table with the algorithm, we work our way up from entry $(1,1)$. If we match a character on the horizontal axis, we travel right, if we match a character on the vertical axis, we travel down. We continue until we evaluate thee entry $(m,n)$, because this is the case where we are looking at the last letter in $Z$ which is at index $k= m+n$.
-
-\begin{lstlisting}
-# X, Y, Z = strings of len (m, n, m+n-1)
-# @args - p, q are the X, Y indices we are currently querying.
-checkShuffle(M, X, Y, Z) :
-  p = 1
-  q = 1
-  # note the short-circuit AND evalutation to avoid indexing out of X or Y
-  while (p+q) < (m+n) :
-    k = p+q-1
-    if p <= m AND Z[k] == X[p] :
-      p = p+1
-    else if q <= n AND Z[k] == Y[q] :
-      q = q+1
-    else :
-      return false
-
-  return true
-\end{lstlisting}
-
-The running time for this algorithm is linear in $m$ and $n$, which means it is linear in the size of $Z$. If this was the strictly harder version of this problem where a matching character in $Z$ and count for both a match in $X$ and $Y$ is a strictly harder problem and wouldn't be able to be solved so easily. Notice the algorithm doesn't even need to fill in the table, it can find a path through it without needing to fill in the entire thing. This is because once it finds the character $X_p$ cannot match at position $Z_k$, it knows that no character $X_{p+n} : n > 0$ can be placed in the spot either without violating the ordering of $X$. The algorithm runs a single for-loop from iteration number 1 to iteration $k$, increasing by one each time. If it runs into a wall it returns false right away.
+\begin{center}
+\begin{tikzpicture}
+  \node[draw,circle] (s) {$s$};
+  \node[draw,circle] (b) [right=2cm of s] {$b$};
+  \node[draw,circle] (c) [right=2cm of b] {$c$};
+  \node[draw,circle] (t) [right=2cm of c] {$t$};
+  \node (m) at ($(b)!0.5!(c)$) {};
+  \node[draw,circle] (a) [above=1.73cm of m] {$a$};
+  \node[draw,circle] (d) [below=1.73cm of m] {$d$};
+  \draw[-latex] (s) -- (a) node [pos=.6, above left,draw] {6} node [pos=.4,above] {10};
+  \draw[-latex] (s) -- (b) node [pos=.5, above] {3} node [pos=.5, below, draw] {3};
+  \draw[-latex] (s) -- (d) node [pos=.4, below] {1} node [pos=.6, below left, draw] {1};
+  \draw[-latex] (a) -- (b) node [pos=.6, below] {1} node [pos=.4,below right, draw] {1};
+  \draw[-latex] (a) -- (c) node [pos=.5, right]{2};
+  \draw[-latex] (a) -- (t) node [pos=.4,above]{5} node [pos=.6,above right, draw]{5};
+  \draw[-latex] (b) -- (c) node [pos=.5,above]{6} node [pos=.5,below,draw] {5};
+  \draw[-latex] (c) -- (t) node [pos=.5,above]{5} node[pos=.5,below,draw]{5};
+  \draw[-latex] (d) -- (b) node [pos=.6,below left,draw] {1} node [pos=.5,right] {3};
+  \draw[-latex] (d) -- (c) node [pos=.5, right]{3};
+  \draw[-latex] (d) -- (t) node [pos=.5,below]{10};
+\end{tikzpicture}
+\end{center}
+\begin{enumerate}
+  \item What is the value of this flow? Is this a maximum $(s,t)$ flow in this graph? \\
+  \textbf{Answer : } The value for this flow is 10, as there is 10 units leaving the source and 10 units entering the drain. It is \textbf{not} a maximum
+  $(s,t)$ flow in this graph, I can find one that gives a flow of 11 by some clever redirection.\\
+  s
+  \item Find a minimum $s-t$ cut in the flow network pictured  in Figure 7.27[above], and also say what its capacity is. \\
+  \textbf{Answer : } The minimum cut that I found is between the two following sets of vertices : $(s, a, b)$ and $(d, c, t)$. If you count the edges going into $t$, you get an incoming flow of 5+2+6+1=14. When you add up the outgoing flows, you get 3. So the total flow between the two cuts is $14-3 =11$, which is the same as the maximum flow I discovered in part A of this problem.\\
+\end{enumerate}
 
 \end{homeworkProblem}
 
@@ -293,22 +295,17 @@ The running time for this algorithm is linear in $m$ and $n$, which means it is 
 \begin{homeworkProblem}
 
 \vspace{2mm}
+Decide whether you think the following statement is 
+true, give a short explanation. If it is false, give a counterexample.
+\begin{addmargin}[2em]{0em}
+\textit{%
+Let G be an arbitrary flow network, with a source s, a sink t, and a positive
+integer capacity $c_e$ on every edge e. If f is a maximum s-t flow in G, then f
+saturates every edge out of s with flow (i.e., for all edges e out of s, we have
+$f(e)=c_e$).}
+\end{addmargin}
 
-Suppose that you are given an n x n checkerboard and a
-checker. You must move the checker from the bottom edge of
-the board to the top edge of the board according to the
-following rule. At each step you may move the checker to one
-of three squares:
-
-\begin{enumerate} 
-  \item the square immediately above,
-  \item the square that is one up and one to the left (but only if the checker is not already in the leftmost column).
-  \item the square that is one up and one to the right (but only if the checker is not already the rightmost column).
-\end{enumerate}
-
-Each time you move form square x to square y, you receivep(x,y) dollars. Your are given p(x,y) for all pairs (x,y) for which a move from x to y is legal. Do not assume that p(x,y) is positive. \\
-Give an algorithm that figures out the set of moves that will move the checker from somewhere along the bottom edge to somewhere along the top edge while gathering as many dollars as possible. Your algorithm is free to pick any square along the bottom edge as a starting point and any square along the top edge as a destination in order to maximize the number of dollars gathering along the way. What is the running time of your algorithm?
-
+\textbf{Answer : } This statement is false, all I needed to do to confirm so was to look at a few examples from the textbook. If the above statement was true, it would vatly simplfiy the process of finding the maximum flow, as it would have to be equal to the sum of the capactities of the edges leaving the source $s$. A concrete counter-example is given below. \\
 
 \end{homeworkProblem}
 
@@ -321,16 +318,20 @@ Give an algorithm that figures out the set of moves that will move the checker f
 %----------------------------------------------------------------------------------------
 \begin{homeworkProblem}
 
-Extra Credit:
-Viterbi algorithm.We can use dynamic programming on a directed graph $G=(V,E)$for speech recognition. Each edge $(u,v)$ in $E$ is labeledwith a sound $s(u,v)$ from a finite set $S$ of sounds. Thelabeled graph is a formal model of a person speaking arestricted language. Each path in the graph starting from adistinguished vertex $v_0$ in $V$ corresponds to a possible sequence of sounds produced by the model. The label of a directed path is defined to be the concatenation of the labels of the edges on that path.
-
-a) Describe an efficient algorithm that, given an edge-labeled graph $G$ with distinguished vertex $v_0$ and a sequence $L = (s_1, s_2, ... , s_k)$ of characters from $S$, returns a path in $G$ that begins at $v_0$ and has L as its label, if any such path exists. Otherwise, the algorithm should return NO-SUCH PATH. Analyze the running time of your algorithm. \\
-
-Now, suppose that every edge $(u,v)$ in E has also been given an associated nonnegative probability p$(u,v)$ of traversing the edge $(u,v)$ from vertex $u$ and thus producing the corresponding sound. The sum of the probabilities of the edges leaving any vertex equals 1. The probability of a path is defined to be the product of the probabilities of its edges. We can view the probability of a path beginning at $v_0$ as the probability that a "random walk" beginning at $v_0$ will follow the specified path, where the choice of which edge to take at a vertex u is made probabilistically according to the probabilities of the available edges leaving u. \\
-
-b) Extend your answer to part a) so that if a path is returned, it is a most probable path staring at $v_0$ and having label $L$. Analyse the running time of your algorithm.
+Decide whether you think the following statement is true or false. If it is
+true, give a short explanation. If it is false, give a counterexample.
+\begin{addmargin}[2em]{0em}
+\textit{%
+Let G be an arbitrary flow network, with a source s, a sink t, and a positive
+integer capacity $c_e$ on every edge e; and let $(A,B)$ be a minimum s-t cut with
+respect to these capacities $\{c_e:e\in E\}$. Now suppose we add $1$ to every capacity;
+then $(A,B)$ is still a minimum s-t cut with respect to these new capacities
+$\{1+c_e:e\in E\}$.
+}
+\end{addmargin}
 
 \end{homeworkProblem}
+\newpage
 
 
 
@@ -340,17 +341,29 @@ b) Extend your answer to part a) so that if a path is returned, it is a most pro
 % %----------------------------------------------------------------------------------------
 % %   PROBLEM 5
 % %----------------------------------------------------------------------------------------
-% \begin{homeworkProblem}
+\begin{homeworkProblem}
 
 
-% \vspace{2mm}
+\vspace{2mm}
+Suppose you are given a direced graph $G=(V,E)$, with a positive integer
+capacity $c_e$ on each edge $e$,...
+a maximum $s-t$ flow in $G$, defined by a flow value $f_e$ on each edge
+\par Now, suppose we pick a specific edge $e^*\in E$ and reduce its capacity
+by 1 unit. Show how to find a maximum flow in the resulting capacitated
+graph in time $\mathcal{O}(m+n)$, where $m$ is the number of edges in $G$ and $n$ is the
+number of nodes.
+
+\textbf{Answer : } Well, to start, we know that if the chosen edge $e$ is not at capacity, then reducing its capacity by one will obviously not effect the max flow, as we didn't change any flow, just reduced the extra capacity of a single 'pipe'. Thus, if the edge isn't saturated, we don't have to do anything to find the max flow and thus we are done immediately. If, however, the given edge is not saturated : \\
+If a given edge is not saturated, and we lower its capacity by one, we will need to forward this effect through the system. So take the decreased flow, and extrapolate that change through the inputs and outputs of that edge that had its capacity reduced. Once the effects of this change have propogated, we an iteration of FF algorithm on the new graph.  FF will find an augmenting path and take it if it exists, which will find maximum-flow value for the new graph. \\
+
+Finding if $e$ is saturated can be done easily, propogating the effects of the reduction in capacity means we at most need to look at all $m$ edges in the graph at most. Finally, running a single iteration of the Ford-Fulkerson runs in time $O(m+n)$, thus the total running time of the algorithm is $O(m+n)$.  
+
+\vspace{6mm}
 
 
-% \vspace{6mm}
+\end{homeworkProblem}
 
-
-% \end{homeworkProblem}
-
+\newpage
 
 
 
@@ -359,14 +372,23 @@ b) Extend your answer to part a) so that if a path is returned, it is a most pro
 % %----------------------------------------------------------------------------------------
 % %   PROBLEM 6
 % %----------------------------------------------------------------------------------------
-% \begin{homeworkProblem}
+\begin{homeworkProblem}
 
 
-% \vspace{2mm}
+\vspace{2mm}
+Professor Adam has two children who, unfortunately, dislike each other. The problem
+is so severe that not only do they refuse to walk to school together, but in fact
+each one refuses to walk on any block that the other child has stepped on that day.
+The children have no problem with their paths crossing at a corner. Fortunately
+both the professor's house and the school are on corners, but beyond that he is not
+sure if it is going to be possible to send both of his children to the same school.
+The professor has a map of his town. Show how to formulate the problem of determining
+whether both his children can go to the same school as maximum-flow problem.s
 
+\textbf{Answer : } To start, the house of the professor represent the source node, as it is where the children leave from when they go to school. The sink node is the school, as it absorbs both students. We also know that the school and home are on street corners, which means there are at least two streets to leave the house from and at least 2 streets to arrive at the school from, which means at minimum we know those two nodes work. We then have to determine if we can find two seperate paths that both leave the home and meet up at the school, without ever crossing eachother along the way. To formalize it in terms of our problem, we let each street corner represent a vertex. Both children can be at the same vertex at the same time. The streets represent the edges of our graph, and each edge has a capactity of 1 because it can at most carry only one of the two children. Our task is then to see what the maximum-flow of this graph is. If it is 0 or 1, then both kids with be forced to take the same edge at some point, which means they will walk on the same street which doesn't work. Thus if maximum-flow is $\leq 1$ the boys can't go to the same school. If, however, the maximum flow is $\geq 2$, both students can go to school together since this means there are two paths with unique edges between the home (source) and the school (sink).
+\end{homeworkProblem}
 
-% \end{homeworkProblem}
-
+\newpage
 
 
 %----------------------------------------------------------------------------------------

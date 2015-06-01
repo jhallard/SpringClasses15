@@ -1,0 +1,149 @@
+\documentclass[11pt,dvipsnames]{article}
+
+\usepackage{fullpage,amssymb,amsmath,amsthm}
+\usepackage{color}
+\usepackage{url}
+\usepackage[all]{xy}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{subfigure}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+\usepackage{tikz}
+\usepackage{verbatim,array}
+\usepackage[active,tightpage]{preview}
+\usetikzlibrary{decorations.pathmorphing,shapes,positioning,calc,fit,arrows,arrows.meta}
+\setlength\PreviewBorder{5pt}
+
+\usepackage{scrextend}
+\newcommand{\tikzmark}[1]{%
+	\tikz[overlay,remember picture] \node(#1){};
+}
+
+\title{CMPS102: Homework \#7}
+\author{Sebastien Young}
+\date{May 26, 2015}
+
+\newcommand{\KT}[2]{Kleinberg \& Tardos, Ch. #1, \##2}
+\newcommand{\TODO}[1]{{\color{red} \Huge \textbf{TODO:} #1}}
+\newcommand{\alg}[1]{{\sc #1}}
+
+\theoremstyle{remark}
+\newtheorem*{claim}{Claim}
+
+\setcounter{secnumdepth}{1}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+\item Consider the longest common subsequence problem
+between two strings $x_1,...,x_n$ and $y_1,...,y_m$.
+Define a graph over the $n\times m$ grid (plus possibly some
+vertices around the edges) s.t. the longest common
+subsequence corresponds to the longest path in this graph.
+\begin{itemize}
+	\renewcommand\labelitemi{-}
+	\item Clearly describe the condition for the presence of an
+  edge between two vertices on the grid.
+	\item How should the edges be labeled?
+	\item How do you find the longest path?
+	\item Is this algorithm more efficient than the dynamic
+  programming algorithm
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\item \KT{7}{3}
+\begin{center}
+\begin{tikzpicture}
+	\node[draw,circle] (s) {$s$};
+	\node[draw,circle] (b) [right=2cm of s] {$b$};
+	\node[draw,circle] (c) [right=2cm of b] {$c$};
+	\node[draw,circle] (t) [right=2cm of c] {$t$};
+	\node (m) at ($(b)!0.5!(c)$) {};
+	\node[draw,circle] (a) [above=1.73cm of m] {$a$};
+	\node[draw,circle] (d) [below=1.73cm of m] {$d$};
+	\draw[-latex] (s) -- (a) node [pos=.6, above left,draw] {6} node [pos=.4,above] {10};
+	\draw[-latex] (s) -- (b) node [pos=.5, above] {3} node [pos=.5, below, draw] {3};
+	\draw[-latex] (s) -- (d) node [pos=.4, below] {1} node [pos=.6, below left, draw] {1};
+	\draw[-latex] (a) -- (b) node [pos=.6, below] {1} node [pos=.4,below right, draw] {1};
+	\draw[-latex] (a) -- (c) node [pos=.5, right]{2};
+	\draw[-latex] (a) -- (t) node [pos=.4,above]{5} node [pos=.6,above right, draw]{5};
+	\draw[-latex] (b) -- (c) node [pos=.5,above]{6} node [pos=.5,below,draw] {5};
+	\draw[-latex] (c) -- (t) node [pos=.5,above]{5} node[pos=.5,below,draw]{5};
+	\draw[-latex] (d) -- (b) node [pos=.6,below left,draw] {1} node [pos=.5,right] {3};
+	\draw[-latex] (d) -- (c) node [pos=.5, right]{3};
+	\draw[-latex] (d) -- (t) node [pos=.5,below]{10};
+\end{tikzpicture}
+\end{center}
+\begin{enumerate}
+	\item What is the value of this flow?
+Is this a maximum $(s,t)$ flow in this graph?
+	\item Find a minimum $s-t$ cut in the flow network pictured 
+in Figure 7.27[above], and also say what its capacity is.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\item \KT{7}{4}\\
+Decide whether you think the following statement is 
+true, give a short explanation. If it is false, give a counterexample.
+\begin{addmargin}[2em]{0em}
+\textit{%
+Let G be an arbitrary flow network, with a source s, a sink t, and a positive
+integer capacity $c_e$ on every edge e. If f is a maximum s-t flow in G, then f
+saturates every edge out of s with flow (i.e., for all edges e out of s, we have
+$f(e)=c_e$).}
+\end{addmargin}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\item \KT{7}{5}\\
+Decide whether you think the following statement is true or false. If it is
+true, give a short explanation. If it is false, give a counterexample.
+\begin{addmargin}[2em]{0em}
+\textit{%
+Let G be an arbitrary flow network, with a source s, a sink t, and a positive
+integer capacity $c_e$ on every edge e; and let $(A,B)$ be a minimum s-t cut with
+respect to these capacities $\{c_e:e\in E\}$. Now suppose we add $1$ to every capacity;
+then $(A,B)$ is still a minimum s-t cut with respect to these new capacities
+$\{1+c_e:e\in E\}$.
+}
+\end{addmargin}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\item \KT{7}{10}\\
+Suppose you are given a direced graph $G=(V,E)$, with a positive integer
+capacity $c_e$ on each edge $e$,...
+a maximum $s-t$ flow in $G$, defined by a flow value $f_e$ on each edge
+\par Now, suppose we pick a specific edge $e^*\in E$ and reduce its capacity
+by 1 unit. Show how to find a maximum flow in the resulting capacitated
+graph in time $\mathcal{O}(m+n)$, where $m$ is the number of edges in $G$ and $n$ is the
+number of nodes.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\item CRLS, Ch. 26.1, exercise 6\\
+Professor Adam has two children who, unfortunately, dislike each other. The problem
+is so severe that not only do they refuse to walk to school together, but in fact
+each one refuses to walk on any block that the other child has stepped on that day.
+The children have no problem with their paths crossing at a corner. Fortunately
+both the professor's house and the school are on corners, but beyond that he is not
+sure if it is going to be possible to send both of his children to the same school.
+The professor has a map of his town. Show how to formulate the problem of determining
+whether both his children can go to the same school as maximum-flow problem.
+\end{enumerate}
+\end{document}
