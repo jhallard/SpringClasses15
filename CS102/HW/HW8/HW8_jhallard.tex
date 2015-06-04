@@ -252,20 +252,26 @@ find_simple(P)
     Q.insert(q.reverse()) # put the new path in our set of simple paths
     # note a and s are emptied for the next iteration
   return Q
-
-
-
-  
 \end{lstlisting}
 
 a) Reason that the solution produces the correct maximum number of edge disjoint simple paths. \\
-\textbf{Answer : } In any flow network, the number maximum number of edge-disjoint paths is equal to the number of simple edge disjoint paths, this is because any non-simple edge disoint path can be made simple by removing any loops, and since we are just removing edges from the non-simple path, this process cannot turn an edge-disjoint path into one that is not edge-disjoint, we would have to add edges to the path to do such a thing. Since I am returning the same number of edge-disjoint paths that are given to my algorithm from the Ford-Fulkenson routine, I am returning the correct number of paths. Now I need to reason that the paths I return truly are simple. \\
-To see this, we turn to the algorithm. I take a given not-necessarily simple e.d. path, and walk along all of its vertices. During each walk along the vertices, I use a stack and a standard map that takes a vertex as an argument and tells of if it has already been entered into the map. I also use a stack that has the vertices encountered pushed onto it in the order they are seen, this keeps the most recently seen vertices at the top of the stack. The map is key for finding the cycles, if we come across a vertex that is already in the map, this means we have already seen it on our path and thus we have hit a cycle. If this is the case, we continually pop vertices off the top of the stack until we get to the vertex we have already seen. This removes the cycle from the path, at which point we continue processing the vertices. 
+\textbf{Answer : } In any flow network, the number maximum number of edge-disjoint paths is equal to the number of simple edge disjoint paths, 
+his is because any non-simple edge disoint path can be made simple by removing any loops, and since we are just removing edges from the non-simple path, this process cannot turn an edge-disjoint path into one that is not edge-disjoint, we would
+have to add edges to the path to do such a thing. Since I am returning the same number of edge-disjoint paths that are given to my algorithm from the Ford-Fulkenson routine, I am returning the correct number of paths. Now I need to reason
+that the paths I return truly are simple. \\
+To see this, we turn to the algorithm. I take a given not-necessarily simple e.d. path, and walk along all of its vertices. During each walk along
+the vertices, I use a stack and a standard map that takes a vertex as an argument and tells of if it has already been entered into the map. I also use a stack that has the vertices encountered pushed onto it in the order they are seen, this
+keeps the most recently seen vertices at the top of the stack. The map is key for finding the cycles, if we come across a vertex that is already in the map, this means we have already seen it on our path and thus we have hit a cycle. If this is
+the case, we continually pop vertices off the top of the stack until we get to the vertex we have already seen. This removes the cycle from the path, at which point we continue processing the vertices. \\
 
 b) What is the running time of your algorithm? \\
 
-\textbf{Answer : } My algorithm first needs to use the standard algorithm for finding edge-disjoint paths, which when using the Edmonds-Karp algorithm runs in time $O(VE^2)$. Once this is finished, my algorithm then proceeds. \\
-My algorithm consists of one main outer loop that iterates for as many times as there are paths in the graph, lets call this number $k$. Inside of this outer loop, we have an innter for-loop that has to iterate as many times as there are edges in the given path, which can be upper-bounded by $E$, the total number of edges in the graph.  Inserting and removing from both the stack and map can be done in constant time. Thus, composing the inner and outer-loops, my algorithm runs in time $O(kE)$. This is asymptotically less than the running time of the Ford-Fulkerson algorithm, so the total running time of the algorithms run together is still $O(VE^2)$.
+\textbf{Answer : } My algorithm first needs to use the standard algorithm for finding edge-disjoint paths, which when using the Edmonds-Karp 
+lgorithm runs in time $O(VE^2)$. Once this is finished, my algorithm then proceeds. \\
+My algorithm consists of one main outer loop that iterates for as many times as there are paths in the graph, lets call this number $k$. Inside
+of this outer loop, we have an innter for-loop that has to iterate as many times as there are edges in the given path, which can be upper-bounded by $E$, the total number of edges in the graph.  Inserting and removing from both the stack and map
+can be done in constant time. Thus, composing the inner and outer-loops, my algorithm runs in time $O(kE)$. This is asymptotically less than the running time of the Ford-Fulkerson algorithm, so the total running time of the algorithms run together
+is still $O(VE^2)$.
 \end{homeworkProblem}
 
 
@@ -275,8 +281,23 @@ My algorithm consists of one main outer loop that iterates for as many times as 
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
-In class we give a flow argument for showing that every $k$-regular bipartite graph has a perfect matching. In such graphs every women knows $k$ men and every man knows $k$ women. \\
-Give an alternate proof using Hall's Theorem: That is show that for $k$-regular graphs the following holds: For every subset $S$ of the women, $|N(S)| >= |S|$,  where $N(S)$ is the total set of men they know together.
+In class we give a flow argument for showing that every $k$-regular bipartite graph has a perfect matching. In such graphs every women knows $k$ men
+and every man knows $k$ women. \\
+Give an alternate proof using Hall's Theorem: That is show that for $k$-regular graphs the following holds: For every subset $S$ of the women,
+$|N(S)| >= |S|$,  where $N(S)$ is the total set of men they know together. \\[.15in]
+
+\textbf{Answer : } We are given $k$-regular bipartite graph with vertex set $V = L \cup R$ (left and right vertices, women on the left and men on
+the right) and edge set $E$. Note that $|L| = |R|$ necessarily otherwise no perfect matching could exist. I need to show that Hall's theorem holds, 
+aka that for every subset of vertices $S$ in either $L$ or $R$, if $|N(S)| \geq |S|$. If I show that this is true, then Hall's theorem says there must exist a perfect matching. \\
+
+To start, choose an arbitrary subset of women $S \subseteq L$. Let $E$ be the number of edges that leave this group,  and let $N(S)$ be the vertices
+in $R$ that are connected to $S$ via these edges. Because we are given a $k$-regular graph, each vertex $v \in V$ has $k \geq 1$ edges incident to it, 
+and no parallel edges are allowed, so each edge leaving a specific vertex $v$ must end at a  unique vertex (no two edges start and end at the same vertex).
+There are also no self-loop allowed. Thus $|E| \leq k \times |N(S)|$. Also note that $|S| = \frac{|E|}{k}$, because $E$ exactly consists of $k$ edges for
+ each of the vertices in $S$. Thus, if we divide both sides of the before-given inequality by $k$, we get :
+$$|E|/k \leq |N(S)|$$
+$$|S| \leq |N(S)|$$ 
+The last line is what we wished to show, completing the proof.
 
 \end{homeworkProblem}
 
@@ -289,10 +310,18 @@ Give an alternate proof using Hall's Theorem: That is show that for $k$-regular 
 %----------------------------------------------------------------------------------------
 \begin{homeworkProblem}
 
-KT 12, p420. \\
-Give a reason why your algorithm reduces the flow as much as possible. \\
+Consider the following problem. You are given a flow network with unit-
+capacity edges: It consists of a directed graph $G = (V , E)$, a source $s \in V$,
+and a sink $t \in V$; and $ce = 1$ for every $e \in E$. You are also given a parameter $k$.
+The goal is to delete $k$ edges so as to reduce the maximum $s-t$ flow in
+$G$ by as much as possible. In other words, you should find a set of edges
+$F \subseteq E$ so that $|F| = k$ and the maximum $s-t$ flow in $G' = (V , E − F)$ is as small
+as possible subject to this.
+Give a polynomial-time algorithm to solve this problem.
 
-Hint: Use Ford-Fulkerson to find a min cut. Somehow reduce the min cut.
+
+(Give a reason why your algorithm reduces the flow as much as possible. Hint: Use Ford-Fulkerson 
+to find a min cut. Somehow reduce the min cut.)
 \end{homeworkProblem}
 
 
