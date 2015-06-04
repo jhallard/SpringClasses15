@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.4.28)  3 JUN 2015 22:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.4.28)  4 JUN 2015 13:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -967,6 +967,52 @@ Missing character: There is no â in font cmr10!
 Missing character: There is no ˆ in font cmr10!
 Missing character: There is no ’ in font cmr10!
 
+Underfull \hbox (badness 10000) in paragraph at lines 326--327
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 328--329
+
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 337.
+
+
+Package xcolor Warning: Incompatible color definition on input line 339.
+
+
+Package xcolor Warning: Incompatible color definition on input line 342.
+
+
+Package xcolor Warning: Incompatible color definition on input line 342.
+
+
+Package xcolor Warning: Incompatible color definition on input line 343.
+
+
+Package xcolor Warning: Incompatible color definition on input line 344.
+
+
+Overfull \hbox (37.85017pt too wide) in paragraph at lines 344--345
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][] 
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 347.
+
+
+Package xcolor Warning: Incompatible color definition on input line 347.
+
+
+Package xcolor Warning: Incompatible color definition on input line 351.
+
+
+Package xcolor Warning: Incompatible color definition on input line 353.
+
 
 Package Fancyhdr Warning: \headheight is too small (0.0pt): 
  Make it at least 12.0pt.
@@ -998,13 +1044,13 @@ Package Fancyhdr Warning: \headheight is too small (0.0pt):
 AED: lastpage setting LastPage
 (./HW8_jhallard.aux) ) 
 Here is how much of TeX's memory you used:
- 19132 strings out of 495020
- 391907 string characters out of 6181324
+ 19147 strings out of 495020
+ 392065 string characters out of 6181324
  594110 words of memory out of 5000000
- 21935 multiletter control sequences out of 15000+600000
+ 21950 multiletter control sequences out of 15000+600000
  14016 words of font info for 53 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 55i,11n,71p,420b,1424s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,11n,71p,895b,1424s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.en
 c}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
@@ -1018,7 +1064,7 @@ fonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/sh
 are/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb>
-Output written on HW8_jhallard.pdf (7 pages, 152935 bytes).
+Output written on HW8_jhallard.pdf (7 pages, 157945 bytes).
 PDF statistics:
  84 PDF objects out of 1000 (max. 8388607)
  61 compressed objects within 1 object stream

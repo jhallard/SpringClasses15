@@ -322,6 +322,36 @@ Give a polynomial-time algorithm to solve this problem.
 
 (Give a reason why your algorithm reduces the flow as much as possible. Hint: Use Ford-Fulkerson 
 to find a min cut. Somehow reduce the min cut.)
+
+\textbf{Answer :}My algorithm will piggy-back on the typical Ford-Fulkerson algorithm. It will start by running the FF method, then looking at the final residual graph. With this graph, we find all vertices which are reachable from the source vertex $s$ using BFS. We find these vertices because any edges that travels from one of these vertices to a vertex not reachable from $s$ is an  edge that will be included in the minimum cut. At this point, we remove $k$ of these edges, which because this is a min-cut (which is equal to the max-flow), will reduce the max-flow by a value of $k$. This is true becauase the min-cut is a bottle-neck, there are no other means of directing current around these edges to get to the sink from the source, so every edge that is removed here will reduce the flow by the $1$, since each edge in this cut has a flow of one. \\
+
+\textbf{Algorithm : } \\
+
+Note, I am assuming I don't have to write out the BFS algorithm or the FF algorithm as we have already
+had to implement those for previous assignments or previous classes in the case of BFS
+\begin{lstlisting}
+
+# input : Flow network G with vertices G.V and edges G.E
+# k, the number of edges to remove
+# Output : Flow network G' such that the max-flow has been reduced as much as possible
+shrink_flow(G, k) :
+residual_graph = Ford_Fulkerson(G) # run FF and retreive the final residual graph
+V_p = BFS(residual_graph, G.s) # V_p is a list of vertices reachable from the source
+                               # vertex in the residual graph
+E_p = empty list # this will hold the min-cut edges
+for v in V_p : # cycle through all reachable vertices
+  for e in v.edges # cycle through all incident edges to the current vertex
+    if e.target not in V_p : # if the edge touches a vertex not reachable from source vertex s
+      E_p.insert(e)
+
+while k >= 0 : # while we haven't removed k edges
+  E_p.remove_front() # remove edge from min-cut edges
+
+G_p = Graph(V, E_p) # new graph with same vertices but k edges removed from min-cut
+return G_p
+\end{lstlisting}
+
+In a flow-network, the minimum-cut is equal to the maximum-flow. This means that every edge in the min-cut must be completely saturated with flow, and since each edge has a capacity of $1$, each flow on the edges in the min-cut must be 1. This means that by removing $k$ edges from the min-cut, we will necessarily have removed $k$ units of flow from the graph. Because we are only allowed to remove $k$ edges, and each edge has at most $1$ unit of flow going through it, this is the optimal solution, there is no way to remove more than $k$ units of flow.
 \end{homeworkProblem}
 
 
