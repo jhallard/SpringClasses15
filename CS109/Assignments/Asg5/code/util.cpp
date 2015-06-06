@@ -34,3 +34,18 @@ bool write_file(const string & fn, const string & data) {
    outfile.write(data.c_str(), data.size());
    outfile.close();
 }
+
+vector<string> split (const string& line, const string& delimiters) {
+   vector<string> words;
+   size_t end = 0;
+
+   // Loop over the string, splitting out words, and for each word
+   // thus found, append it to the output wordvec.
+   for (;;) {
+      size_t start = line.find_first_not_of (delimiters, end);
+      if (start == string::npos) break;
+      end = line.find_first_of (delimiters, start);
+      words.push_back (line.substr (start, end - start));
+   }
+   return words;
+}

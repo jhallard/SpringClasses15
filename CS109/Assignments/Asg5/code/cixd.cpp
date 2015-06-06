@@ -67,16 +67,35 @@ void reply_put (accepted_socket& client_sock, cix_header& header) {
 bool do_put(accepted_socket& client_sock, cix_header & header) {
    char buffer[header.nbytes+1];
 
-   log << "num bytes :: " << header.nbytes << endl;
-
    recv_packet (client_sock, buffer, header.nbytes);
 
    string data(buffer);
    string fn(header.filename);
 
-   log << "fn data :: " << data << endl;
-
    return write_file(fn, buffer);
+}
+
+void reply_get (accepted_socket& client_sock, cix_header& header) {
+   string data = "";
+   header.command = CIX_FILE;
+   // header.filename is same as was recieved by CIX_GET
+   string fn(header.filename);
+   try {
+      data = read_file(fn);
+      log << "file data :: " << data << endl;
+   } catch(exception & e) {
+      log << e.what() << endl;
+      return;
+   }
+
+   data.push_back('\0');
+   header.nbytes = data.size();
+
+   log << "sending header " << header << endl;
+   send_packet (client_sock, &header, sizeof header);
+
+   log << "sending contents of : " << fn << endl;
+   send_packet (client_sock, data.c_str(), data.size());
 }
 
 
@@ -99,7 +118,7 @@ void run_server (accepted_socket& client_sock) {
                // reply_ls (client_sock, header);
                break;
             case CIX_GET: 
-               // reply_ls (client_sock, header);
+               reply_get (client_sock, header);
                break;
             default:
                log << "invalid header from client" << endl;

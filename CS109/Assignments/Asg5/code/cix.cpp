@@ -27,20 +27,6 @@ unordered_map<string,cix_command> command_map {
    {"get" , CIX_GET },
 };
 
-vector<string> split (const string& line, const string& delimiters) {
-   vector<string> words;
-   size_t end = 0;
-
-   // Loop over the string, splitting out words, and for each word
-   // thus found, append it to the output wordvec.
-   for (;;) {
-      size_t start = line.find_first_not_of (delimiters, end);
-      if (start == string::npos) break;
-      end = line.find_first_of (delimiters, start);
-      words.push_back (line.substr (start, end - start));
-   }
-   return words;
-}
 
 void cix_help() {
    static vector<string> help = {
@@ -81,6 +67,34 @@ void cix_rm(client_socket& server, const string & fn) {
 void cix_get(client_socket& server, const string & fn) {
    // TODO: send filename to server, get ack and conf. that
    // file has been deleted.
+   cix_header header;
+   string data = "";
+
+   header.command = CIX_GET;
+   header.nbytes = 0;
+   if(fn.size() > 59) {
+      log << "Error : filename longer than 59 bytes" << endl;
+   }
+   for(int i = 0; i < fn.size(); i++) {
+      header.filename[i] = fn[i];
+   } 
+   header.filename[59] = '\0';
+
+   log << "sending header " << header << endl;
+   send_packet (server, &header, sizeof header);
+
+   recv_packet (server, &header, sizeof header);
+
+   char buffer[header.nbytes+1];
+
+   recv_packet (server, buffer, header.nbytes);
+
+   if(write_file(fn, buffer)) {
+      log << "file : " << fn << " : received from server" << endl;
+   }
+   else {
+      log << "file : " << fn << " : failed to receive" << endl;
+   }
 }
 
 void cix_put(client_socket& server, const string & fn) {
@@ -96,10 +110,10 @@ void cix_put(client_socket& server, const string & fn) {
    for(int i = 0; i < fn.size(); i++) {
       header.filename[i] = fn[i];
    } 
+   header.filename[59] = '\0';
 
    try {
       data = read_file(fn);
-      log << "file data :: " << data << endl;
    } catch(exception & e) {
       log << e.what() << endl;
       return;
