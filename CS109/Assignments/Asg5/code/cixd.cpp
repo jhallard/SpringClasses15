@@ -8,6 +8,8 @@ using namespace std;
 #include <libgen.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <fstream>
+#include <cstdio>
 
 #include "protocol.h"
 #include "logstream.h"
@@ -19,6 +21,7 @@ logstream log (cout);
 struct cix_exit: public exception {};
 
 bool do_put(accepted_socket& client_sock, cix_header&);
+bool do_rm(accepted_socket& client_sock, cix_header & header);
 
 void reply_ls (accepted_socket& client_sock, cix_header& header) {
    FILE* ls_pipe = popen ("ls -l", "r");
@@ -75,6 +78,28 @@ bool do_put(accepted_socket& client_sock, cix_header & header) {
    return write_file(fn, buffer);
 }
 
+void reply_rm (accepted_socket& client_sock, cix_header& header) {
+   if(do_rm(client_sock, header)) {
+      header.command = CIX_ACK;
+      header.nbytes = 0;
+      memset (header.filename, 0, FILENAME_SIZE);
+      log << "sending header " << header << endl;
+      send_packet (client_sock, &header, sizeof header);
+   }
+   else {
+      header.command = CIX_NAK;
+      header.nbytes = 0;
+      memset (header.filename, 0, FILENAME_SIZE);
+      log << "sending header " << header << endl;
+      send_packet (client_sock, &header, sizeof header);
+   }
+}
+
+bool do_rm(accepted_socket& client_sock, cix_header & header) {
+   return unlink(header.filename) >= 0;
+}
+
+
 void reply_get (accepted_socket& client_sock, cix_header& header) {
    string data = "";
    header.command = CIX_FILE;
@@ -82,13 +107,15 @@ void reply_get (accepted_socket& client_sock, cix_header& header) {
    string fn(header.filename);
    try {
       data = read_file(fn);
-      log << "file data :: " << data << endl;
    } catch(exception & e) {
       log << e.what() << endl;
+      header.command = CIX_NAK;
+      header.nbytes = 0;
+      send_packet (client_sock, &header, sizeof header);
       return;
    }
 
-   data.push_back('\0');
+   // data.push_back('\0');
    header.nbytes = data.size();
 
    log << "sending header " << header << endl;
@@ -115,7 +142,7 @@ void run_server (accepted_socket& client_sock) {
                reply_put (client_sock, header);
                break;
             case CIX_RM: 
-               // reply_ls (client_sock, header);
+               reply_rm (client_sock, header);
                break;
             case CIX_GET: 
                reply_get (client_sock, header);

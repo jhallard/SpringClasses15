@@ -62,6 +62,27 @@ void cix_ls (client_socket& server) {
 void cix_rm(client_socket& server, const string & fn) {
    // TODO: send filename to server, get ack and conf. that
    // file has been deleted.
+   cix_header header;
+   header.command = CIX_RM;
+   if(fn.size() > 59) {
+      log << "Error : filename longer than 59 bytes" << endl;
+   }
+   for(int i = 0; i < fn.size(); i++) {
+      header.filename[i] = fn[i];
+   } 
+   header.filename[59] = '\0';
+
+   log << "sending header " << header << endl;
+   send_packet (server, &header, sizeof header);
+   
+   recv_packet (server, &header, sizeof header);
+   log << "received header " << header << endl;
+   if (header.command != CIX_ACK) {
+      log << "send CIX_RM, did not receive CIX_ACK" << endl;
+      log << "server returned " << header << endl;
+   }else {
+      log << "file " << fn << " : deleted from server" << endl;
+   }
 }
 
 void cix_get(client_socket& server, const string & fn) {
@@ -84,6 +105,12 @@ void cix_get(client_socket& server, const string & fn) {
    send_packet (server, &header, sizeof header);
 
    recv_packet (server, &header, sizeof header);
+
+   if(header.command != CIX_FILE) {
+      log << "error : invalid response from server" << endl;
+      log << "file possible does not exist" << endl;
+      return;
+   }
 
    char buffer[header.nbytes+1];
 
@@ -119,7 +146,7 @@ void cix_put(client_socket& server, const string & fn) {
       return;
    }
 
-   data.push_back('\0');
+   // data.push_back('\0');
    header.nbytes = data.size();
 
    log << "sending header " << header << endl;
