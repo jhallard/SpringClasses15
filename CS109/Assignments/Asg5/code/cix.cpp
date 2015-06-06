@@ -13,6 +13,7 @@ using namespace std;
 #include "protocol.h"
 #include "logstream.h"
 #include "sockets.h"
+#include "util.h"
 
 logstream log (cout);
 struct cix_exit: public exception {};
@@ -21,7 +22,25 @@ unordered_map<string,cix_command> command_map {
    {"exit", CIX_EXIT},
    {"help", CIX_HELP},
    {"ls"  , CIX_LS  },
+   {"put" , CIX_PUT  },
+   {"rm"  , CIX_RM  },
+   {"get" , CIX_GET },
 };
+
+vector<string> split (const string& line, const string& delimiters) {
+   vector<string> words;
+   size_t end = 0;
+
+   // Loop over the string, splitting out words, and for each word
+   // thus found, append it to the output wordvec.
+   for (;;) {
+      size_t start = line.find_first_not_of (delimiters, end);
+      if (start == string::npos) break;
+      end = line.find_first_of (delimiters, start);
+      words.push_back (line.substr (start, end - start));
+   }
+   return words;
+}
 
 void cix_help() {
    static vector<string> help = {
@@ -54,6 +73,58 @@ void cix_ls (client_socket& server) {
    }
 }
 
+void cix_rm(client_socket& server, const string & fn) {
+   // TODO: send filename to server, get ack and conf. that
+   // file has been deleted.
+}
+
+void cix_get(client_socket& server, const string & fn) {
+   // TODO: send filename to server, get ack and conf. that
+   // file has been deleted.
+}
+
+void cix_put(client_socket& server, const string & fn) {
+   // TODO: send file to server
+   cix_header header;
+   string data = "";
+
+   header.command = CIX_PUT;
+
+   if(fn.size() > 59) {
+      log << "Error : filename longer than 59 bytes" << endl;
+   }
+   for(int i = 0; i < fn.size(); i++) {
+      header.filename[i] = fn[i];
+   } 
+
+   try {
+      data = read_file(fn);
+      log << "file data :: " << data << endl;
+   } catch(exception & e) {
+      log << e.what() << endl;
+      return;
+   }
+
+   data.push_back('\0');
+   header.nbytes = data.size();
+
+   log << "sending header " << header << endl;
+   send_packet (server, &header, sizeof header);
+
+   log << "sending contents of : " << fn << endl;
+   send_packet (server, data.c_str(), data.size());
+
+   recv_packet (server, &header, sizeof header);
+   log << "received header " << header << endl;
+
+   if(header.command == CIX_ACK) {
+      log << fn << " successfully transferred" << endl;
+   }
+   else {
+      log << fn << " failed to transfer" << endl;
+   }
+}
+
 
 void usage() {
    cerr << "Usage: " << log.execname() << " [host] [port]" << endl;
@@ -77,7 +148,9 @@ int main (int argc, char** argv) {
          getline (cin, line);
          if (cin.eof()) throw cix_exit();
          log << "command " << line << endl;
-         const auto& itor = command_map.find (line);
+
+         vector<string> words = split (line, " \t");
+         const auto& itor = command_map.find (words[0]);
          cix_command cmd = itor == command_map.end()
                          ? CIX_ERROR : itor->second;
          switch (cmd) {
@@ -89,6 +162,33 @@ int main (int argc, char** argv) {
                break;
             case CIX_LS:
                cix_ls (server);
+               break;
+            case CIX_PUT:
+               log << line << " : command detected" << endl;
+               // ensure fn argument is given
+               if(words.size() < 2) {
+                  log << "error : put : " << 
+                  "requires filename argument" << endl;
+               }
+               cix_put (server, words[1]);
+               break;
+            case CIX_GET:
+               log << line << " : command detected" << endl;
+               // ensure fn argument is given
+               if(words.size() < 2) {
+                  log << "error : get : " << 
+                  "requires filename argument" << endl;
+               }
+               cix_get (server, words[1]);
+               break;
+            case CIX_RM:
+               log << line << " : command detected" << endl;
+               // ensure fn argument is given
+               if(words.size() < 2) {
+                  log << "error : rm : " << 
+                  "requires filename argument" << endl;
+               }
+               cix_rm (server, words[1]);
                break;
             default:
                log << line << ": invalid command" << endl;

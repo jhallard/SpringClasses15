@@ -3,8 +3,8 @@
 GPP      = g++ -g -O0 -Wall -Wextra -std=gnu++11
 
 DEPFILE  = Makefile.dep
-HEADERS  = sockets.h protocol.h logstream.h
-CPPLIBS  = sockets.cpp protocol.cpp 
+HEADERS  = sockets.h protocol.h logstream.h util.h
+CPPLIBS  = sockets.cpp protocol.cpp util.cpp
 CPPSRCS  = ${CPPLIBS} cix.cpp cixd.cpp
 LIBOBJS  = ${CPPLIBS:.cpp=.o}
 CIXOBJS  = cix.o ${LIBOBJS}

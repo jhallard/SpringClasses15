@@ -13,8 +13,12 @@ using namespace std;
 #include "logstream.h"
 #include "sockets.h"
 
+#include "util.h"
+
 logstream log (cout);
 struct cix_exit: public exception {};
+
+bool do_put(accepted_socket& client_sock, cix_header&);
 
 void reply_ls (accepted_socket& client_sock, cix_header& header) {
    FILE* ls_pipe = popen ("ls -l", "r");
@@ -38,6 +42,41 @@ void reply_ls (accepted_socket& client_sock, cix_header& header) {
    send_packet (client_sock, &header, sizeof header);
    send_packet (client_sock, ls_output.c_str(), ls_output.size());
    log << "sent " << ls_output.size() << " bytes" << endl;
+   pclose(ls_pipe);
+}
+
+void reply_put (accepted_socket& client_sock, cix_header& header) {
+   if(do_put(client_sock, header)) {
+      header.command = CIX_ACK;
+      header.nbytes = 0;
+      memset (header.filename, 0, FILENAME_SIZE);
+      log << "sending header " << header << endl;
+      send_packet (client_sock, &header, sizeof header);
+      // send_packet (client_sock, ls_output.c_str(), ls_output.size());
+      // log << "sent " << 0 << " bytes" << endl;
+   }
+   else {
+      header.command = CIX_NAK;
+      header.nbytes = 0;
+      memset (header.filename, 0, FILENAME_SIZE);
+      log << "sending header " << header << endl;
+      send_packet (client_sock, &header, sizeof header);
+   }
+}
+
+bool do_put(accepted_socket& client_sock, cix_header & header) {
+   char buffer[header.nbytes+1];
+
+   log << "num bytes :: " << header.nbytes << endl;
+
+   recv_packet (client_sock, buffer, header.nbytes);
+
+   string data(buffer);
+   string fn(header.filename);
+
+   log << "fn data :: " << data << endl;
+
+   return write_file(fn, buffer);
 }
 
 
@@ -52,6 +91,15 @@ void run_server (accepted_socket& client_sock) {
          switch (header.command) {
             case CIX_LS: 
                reply_ls (client_sock, header);
+               break;
+            case CIX_PUT: 
+               reply_put (client_sock, header);
+               break;
+            case CIX_RM: 
+               // reply_ls (client_sock, header);
+               break;
+            case CIX_GET: 
+               // reply_ls (client_sock, header);
                break;
             default:
                log << "invalid header from client" << endl;

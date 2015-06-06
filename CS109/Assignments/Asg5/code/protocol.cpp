@@ -36,6 +36,7 @@ void send_packet (base_socket& socket,
 void recv_packet (base_socket& socket, void* buffer, size_t bufsize) {
    char* bufptr = static_cast<char*> (buffer);
    ssize_t ntorecv = bufsize;
+   if(!bufsize) return;
    do {
       ssize_t nbytes = socket.recv (bufptr, ntorecv);
       if (nbytes < 0) throw socket_sys_error (to_string (socket));
@@ -43,7 +44,8 @@ void recv_packet (base_socket& socket, void* buffer, size_t bufsize) {
                                            + " is closed");
       bufptr += nbytes;
       ntorecv -= nbytes;
-   }while (ntorecv > 0);
+   }
+   while (ntorecv > 0);
 }
 
 ostream& operator<< (ostream& out, const cix_header& header) {

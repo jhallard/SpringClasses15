@@ -351,11 +351,11 @@ G_p = Graph(V, E_p) # new graph with same vertices but k edges removed from min-
 return G_p
 \end{lstlisting}
 
-In a flow-network, the minimum-cut is equal to the maximum-flow. This means that every edge in the min-cut must be completely saturated with flow, and since each edge has a capacity of $1$, each flow on the edges in the min-cut must be 1. This means that by removing $k$ edges from the min-cut, we will necessarily have removed $k$ units of flow from the graph. Because we are only allowed to remove $k$ edges, and each edge has at most $1$ unit of flow going through it, this is the optimal solution, there is no way to remove more than $k$ units of flow.
+In a flow-network, the minimum-cut is equal to the maximum-flow. This means that every edge in the min-cut must be completely saturated with flow, and since each edge has a capacity of $1$, each flow on the edges in the min-cut must be 1. This means that by removing $k$ edges from the min-cut, we will necessarily have removed $k$ units of flow from the graph. Because we are only allowed to remove $k$ edges, and each edge has at most $1$ unit of flow going through it, this is the optimal solution, there is no way to remove more than $k$ units of flow. My algorithm uses the FF method, which can run in time $O(VE^2)$, it then uses BFS, which runs in time $O(V+E)$. It then runs a double for-loop, with the outer loop iterating over all reachable vertices from $s$, and the inner loop iterating over all edges that eminate from those vertices. Because a residual graph returned from FF must not contain an $s-t$ path (this is a termination condition for FF), the number of reachable vertices from $s$ is bounded above by $V-1$. The number of edges incident to these $V-1$ vertices is at most $E-1$, since we aren't able to reach vertex $t$ and there must exist at least one edge incident to vertex $t$. The inside of the inner-loop simply does a comparison and an insert into a list, which is constant time. Thus, by composing the two loops, the rest of my algorithm runs in time $O(|(V-1)||(E-1))$ = $O(VE)$. Combining the FF method, BFS, and the rest of my algorithm gives a running time of $O(VE^2) + O(V+E) + O(VE) = O(VE^2)$, which is indeed polynomial in the number of vertices and edges. \\
 \end{homeworkProblem}
 
 
-\newpage
+% \newpage
 
 
 %----------------------------------------------------------------------------------------
@@ -363,9 +363,53 @@ In a flow-network, the minimum-cut is equal to the maximum-flow. This means that
 %----------------------------------------------------------------------------------------
 \begin{homeworkProblem}
 
-KT 21, p427. \\ This uses bipartite matching.
+ You’re helping to organize a class on campus that has decided to give all
+its students wireless laptops for the semester. Thus there is a collection
+of n wireless laptops; there is also have a collection of $n$ wireless access
+points, to which a laptop can connect when it is in range.
+The laptops are currently scattered across campus; laptop $l$ is within
+range of a set $S_l$ of access points. We will assume that each laptop is within
+range of at least one access point (so the sets $S_l$ are nonempty); we will
+also assume that every access point p has at least one laptop within range
+of it.
+To make sure that all the wireless connectivity software is working
+correctly, you need to try having laptops make contact with access points
+in such a way that each laptop and each access point is involved in at
+least one connection. Thus we will say that a test set $T$ is a collection of
+ordered pairs of the form $(l, p)$, for a laptop $l$ and access point $p$, with
+the properties that
 
+\begin{enumerate}
+\item if $(l, p) \in T$, then $l$ is within range of $p$
+\item Each laptop appears in at least one ordered-pair in $T$.
+\item Each access point appears in at least one pair in $T$
+\end{enumerate}
 
+This way, by trying out all the connections specified by the pairs in $T$,
+we can be sure that each laptop and each access point have correctly
+functioning software.
+The problem is: Given the sets $S_l$ for each laptop (i.e., which laptops
+are within range of which access points), and a number $k$, decide whether
+there is a test set of size at most $k$.
+
+a.)  Give an example of an instance of this problem for which there is no
+test set of size n. (Recall that we assume each laptop is within range
+of at least one access point, and each access point p has at least one
+laptop within range of it.) \\
+Take $n = 3$, with the following properties :
+Laptop 1 is in range of access points 2 and 3. Laptop 2 is only in range of access point
+1, and laptop 3 is only in range of access point 1. All access points have a close laptop,
+and all laptops are within range of an access point. However, since laptops 2 and 3 can only 
+access point 1, the two pairs $(2, 1)$ and $(3, 1)$ must be in the test set. However, since each
+access point must also be tested, this means that the sets $(1, 2)$ and $(1, 3)$ must be included. This
+however leads to a test-set of size 4 while our number of laptops and access points ($n$) is 3.
+
+b.)  Give a polynomial-time algorithm that takes the input to an instance
+of this problem (including the parameter k) and decides whether
+there is a test set of size at most k. \\
+
+we have to turn this into a circulation problem (thanks for the hint). We start by labeleing all of the laptops
+as having supplies equal to the number of access points that are in range of the laptop. The 
 \end{homeworkProblem}
 \newpage
 
