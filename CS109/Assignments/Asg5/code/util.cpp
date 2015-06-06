@@ -31,8 +31,12 @@ string read_file(const string & fn) {
 
 bool write_file(const string & fn, const string & data) {
    std::ofstream outfile (fn.c_str() ,std::ofstream::binary);
+
+   if(!outfile) return false;
+
    outfile.write(data.c_str(), data.size());
    outfile.close();
+   return true;
 }
 
 vector<string> split (const string& line, const string& delimiters) {

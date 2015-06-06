@@ -67,14 +67,14 @@ void cix_rm(client_socket& server, const string & fn) {
    if(fn.size() > 59) {
       log << "Error : filename longer than 59 bytes" << endl;
    }
-   for(int i = 0; i < fn.size(); i++) {
+   for(uint i = 0; i < fn.size(); i++) {
       header.filename[i] = fn[i];
    } 
    header.filename[59] = '\0';
 
    log << "sending header " << header << endl;
    send_packet (server, &header, sizeof header);
-   
+
    recv_packet (server, &header, sizeof header);
    log << "received header " << header << endl;
    if (header.command != CIX_ACK) {
@@ -96,7 +96,7 @@ void cix_get(client_socket& server, const string & fn) {
    if(fn.size() > 59) {
       log << "Error : filename longer than 59 bytes" << endl;
    }
-   for(int i = 0; i < fn.size(); i++) {
+   for(uint i = 0; i < fn.size(); i++) {
       header.filename[i] = fn[i];
    } 
    header.filename[59] = '\0';
@@ -134,7 +134,7 @@ void cix_put(client_socket& server, const string & fn) {
    if(fn.size() > 59) {
       log << "Error : filename longer than 59 bytes" << endl;
    }
-   for(int i = 0; i < fn.size(); i++) {
+   for(uint i = 0; i < fn.size(); i++) {
       header.filename[i] = fn[i];
    } 
    header.filename[59] = '\0';

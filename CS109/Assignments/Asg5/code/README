@@ -1,0 +1,25 @@
+$Id: README,v 1.1 2013-06-18 17:32:08-07 - - $
+
+Author  - John Allard 
+ID      - 1437547
+CruzID  - jhallard
+Date    - June 4th 2015
+Program - cix/cixd
+
+
+Description : This project includes two programs, a client
+and a server. The project allows one to communicate 
+between the client and the server in a very specific
+manner, mostly involving the transfer, retreival, and
+deletion of files. The following functionality is
+available :
+
+put fn - put a file from the client to the server.
+get fn - get a file from the server to the client
+rm fn  - delete the given file from the server
+ls     - list the files in the server's directory.
+
+usage :
+
+cixd [port] # this is the server program
+cix [host] [port] # this is the client program
