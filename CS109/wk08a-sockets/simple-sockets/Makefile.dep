@@ -1,0 +1,3 @@
+sockets.o: sockets.cpp sockets.h
+client.o: client.cpp logstream.h sockets.h
+server.o: server.cpp logstream.h sockets.h

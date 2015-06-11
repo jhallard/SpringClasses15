@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting raceclick.cpp
+raceclick.cpp:
+     $Id: raceclick.cpp,v 1.16 2014-05-30 22:45:27-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 raceclick.cpp -o raceclick -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f raceclick.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished raceclick.cpp

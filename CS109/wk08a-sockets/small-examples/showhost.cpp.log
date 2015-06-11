@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting showhost.cpp
+showhost.cpp:
+     $Id: showhost.cpp,v 1.4 2014-05-20 19:51:15-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 showhost.cpp -o showhost -lglut -lGLU -lGL -lX11 -lm
+rm -f showhost.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished showhost.cpp

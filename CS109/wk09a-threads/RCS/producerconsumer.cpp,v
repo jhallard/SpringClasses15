@@ -1,0 +1,1277 @@
+head	1.44;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.44
+date	2014.05.31.05.31.31;	author -;	state -;
+branches;
+next	1.43;
+
+1.43
+date	2014.05.31.05.31.23;	author -;	state -;
+branches;
+next	1.42;
+
+1.42
+date	2014.05.31.05.31.06;	author -;	state -;
+branches;
+next	1.41;
+
+1.41
+date	2014.05.31.05.23.53;	author -;	state -;
+branches;
+next	1.40;
+
+1.40
+date	2014.05.31.05.22.17;	author -;	state -;
+branches;
+next	1.39;
+
+1.39
+date	2014.05.31.05.20.57;	author -;	state -;
+branches;
+next	1.38;
+
+1.38
+date	2014.05.31.05.20.34;	author -;	state -;
+branches;
+next	1.37;
+
+1.37
+date	2014.05.31.05.19.32;	author -;	state -;
+branches;
+next	1.36;
+
+1.36
+date	2014.05.31.05.13.16;	author -;	state -;
+branches;
+next	1.35;
+
+1.35
+date	2014.05.31.05.11.21;	author -;	state -;
+branches;
+next	1.34;
+
+1.34
+date	2014.05.31.05.11.04;	author -;	state -;
+branches;
+next	1.33;
+
+1.33
+date	2014.05.31.05.09.51;	author -;	state -;
+branches;
+next	1.32;
+
+1.32
+date	2014.05.31.05.06.43;	author -;	state -;
+branches;
+next	1.31;
+
+1.31
+date	2014.05.31.05.06.12;	author -;	state -;
+branches;
+next	1.30;
+
+1.30
+date	2014.05.31.05.05.49;	author -;	state -;
+branches;
+next	1.29;
+
+1.29
+date	2014.05.31.05.04.45;	author -;	state -;
+branches;
+next	1.28;
+
+1.28
+date	2014.05.31.05.04.15;	author -;	state -;
+branches;
+next	1.27;
+
+1.27
+date	2014.05.31.05.04.01;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2014.05.31.05.03.17;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2014.05.31.05.02.56;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2014.05.31.04.56.12;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.05.31.04.39.15;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.05.31.04.39.02;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.05.31.04.38.34;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.05.31.04.37.57;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.05.31.04.36.13;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.05.31.04.35.43;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.05.31.04.34.59;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.05.31.04.34.24;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.31.04.33.53;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.31.04.33.31;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.31.04.33.15;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.31.04.32.11;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.31.04.30.09;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.31.04.27.41;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.31.04.26.57;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.31.04.26.32;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.31.04.13.09;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.31.04.12.32;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.31.04.12.19;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.31.04.11.48;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.31.04.04.20;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.31.03.37.45;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.31.03.37.16;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.44
+log
+@-
+@
+text
+@// $Id: producerconsumer.cpp,v 1.43 2014-05-30 22:31:23-07 - - $
+
+// Producer/consumer problem using mutex and condition_variable.
+
+#include <array>
+#include <condition_variable>
+#include <iomanip>
+#include <cassert>
+#include <iostream>
+#include <mutex>
+#include <sstream>
+#include <string>
+#include <thread>
+#include <vector>
+using namespace std;
+
+#include <sys/time.h>
+
+//
+// class bounded_buffer
+// NOT synchronized.
+//
+
+template <typename T, size_t size>
+class bounded_buffer {
+   public:
+      using value_type = T;
+   private:
+      static constexpr ssize_t EMPTY = -1;
+      ssize_t head = EMPTY;
+      ssize_t tail = EMPTY;
+      array<T,size> items;
+   public:
+      // Six synthesizeable are all OK.
+      bool empty() const { return head == EMPTY; }
+      bool full() { return (tail + 1) % size == head; }
+      const value_type& front() const;
+      void pop();
+      void push (const value_type& val);
+};
+
+template <typename T, size_t size>
+const T& bounded_buffer<T,size>::front() const {
+   if (empty()) throw runtime_error ("bounded_buffer::front (empty)");
+   return items[head];
+}
+
+template <typename T, size_t size>
+void bounded_buffer<T,size>::pop() {
+   if (empty()) throw runtime_error ("bounded_buffer::pop (empty)");
+   if (head == tail) head = tail = EMPTY;
+                else head = (head + 1) % size;
+}
+
+template <typename T, size_t size>
+void bounded_buffer<T,size>::push (const value_type& val) {
+   if (full()) throw runtime_error ("bounded_buffer::push (full)");
+   if (empty()) head = tail = 0;
+           else tail = (tail + 1) % size;
+   items[tail] = val;
+}
+
+//
+// class synchronized_buffer
+// prevents concurrent access
+//
+
+template <typename T, size_t size>
+class synchronized_buffer {
+   public:
+      using value_type = T;
+   private:
+      bounded_buffer<T,size> buffer;
+      mutex lock;
+      condition_variable condvar;
+      bool ready {false};
+   public:
+      void put (const value_type& val);
+      value_type get();
+};
+
+template <typename T, size_t size>
+void synchronized_buffer<T,size>::put (const value_type& val) {
+   unique_lock<mutex> ulock (lock);
+   while (buffer.full()) condvar.wait (ulock);
+   buffer.push (val);
+   condvar.notify_all();
+}
+
+template <typename T, size_t size>
+T synchronized_buffer<T,size>::get() {
+   unique_lock<mutex> ulock (lock);
+   while (buffer.empty()) condvar.wait (ulock);
+   value_type result = buffer.front();
+   buffer.pop();
+   condvar.notify_all();
+   return result;
+}
+
+//
+// Timer.
+//
+class elapsed_time {
+   private:
+      struct timeval start;
+   public:
+      elapsed_time() { gettimeofday (&start, nullptr); }
+      string elapsed() {
+         struct timeval now;
+         gettimeofday (&now, nullptr);
+         double secs = (double) (now.tv_sec - start.tv_sec)
+                     + (double) (now.tv_usec - start.tv_usec) * 1e-6;
+         ostringstream result;
+         result << setw(7) << setprecision(3) << fixed << secs;
+         return result.str();
+      }
+} timer;
+
+//
+// Data counter.
+//
+
+class counter {
+   private:
+      ssize_t data_count {0};
+      ssize_t producer_count {0};
+      bool producer_started {false};
+      mutex lock;
+   public:
+      enum ADJUST {INCR = +1, NONE = 0, DECR = -1};
+      void adjust (ADJUST data, ADJUST producer = NONE);
+      bool end_of_data();
+      friend string to_string (const counter&);
+};
+
+void counter::adjust (ADJUST data, ADJUST producer) {
+   lock.lock();
+   assert ((data == NONE and producer != NONE)
+        or (data != NONE and producer == NONE));
+   if (producer == INCR) producer_started = true;
+   data_count += (ssize_t) data;
+   producer_count += (ssize_t) producer;
+   assert (data_count >= 0);
+   assert (producer_count >= 0);
+   lock.unlock();
+}
+
+bool counter::end_of_data() {
+   // Should be const, but then couldn't lock it.
+   lock.lock();
+   bool end = producer_started and producer_count == 0
+              and data_count == 0;
+   lock.unlock();
+   return end;
+}
+
+string to_string (const counter& ctr) {
+   return "[" + to_string (ctr.data_count) + ","
+          + to_string (ctr.producer_count) + "]"
+          + (ctr.producer_started ? "+" : "-");
+}
+
+//
+// Producer thread.
+//
+
+using buf_data = pair<string,size_t>;
+using synch_buffer = synchronized_buffer<buf_data,5>;
+string to_string (const buf_data& data) {
+   return "[\"" + data.first + "\"," + to_string (data.second) + "]";
+}
+
+struct printer {
+   mutex lock;
+   void print (const string& name, size_t id, const buf_data& data,
+               const counter* count) {
+      lock.lock();
+      cout << timer.elapsed() << " " << name << " " << id
+           << " " << to_string (data) << " ... " << to_string (*count)
+           << endl << flush;
+      lock.unlock();
+   }
+   void print (const string& name, const string &status) {
+      lock.lock();
+      cout << timer.elapsed() << " " << name << " " << status << endl;
+      lock.unlock();
+   }
+} print;
+
+void producer (size_t id, counter* count, synch_buffer* buffer,
+               const vector<string>* words) {
+   count->adjust (counter::NONE, counter::INCR);
+   print.print ("producer " + to_string (id), "starting");
+   for (const auto& word: *words) {
+      this_thread::sleep_for (chrono::milliseconds (id * 200));
+      buf_data data {word, id};
+      buffer->put (data);
+      count->adjust (counter::INCR);
+      print.print ("producer", id, data, count);
+   }
+   count->adjust (counter::NONE, counter::DECR);
+   print.print ("producer " + to_string (id), "finished");
+}
+
+void consumer (size_t id, counter* count, synch_buffer* buffer) {
+   print.print ("consumer " + to_string (id), "starting");
+   do {
+      this_thread::sleep_for (chrono::milliseconds (id * 400));
+      if (count->end_of_data()) break;
+      auto data = buffer->get();
+      count->adjust (counter::DECR);
+      print.print ("consumer", id, data, count);
+   }while (not count->end_of_data());
+   print.print ("consumer " + to_string (id), "finished");
+}
+
+//
+// Main.
+//
+
+int main() {
+   cout << boolalpha;
+   counter count;
+   print.print ("main " + to_string (count), "starting");
+   synch_buffer buffer;
+   vector<thread> vec;
+   vector<string> words {"Hello", "World", "foo", "bar", "baz", "qux"};
+   for (size_t i = 1; i <= 3; ++i) {
+      vec.push_back (thread (producer, i, &count, &buffer, &words));
+      vec.push_back (thread (consumer, i, &count, &buffer));
+   }
+   for (auto& t: vec) t.join();
+   print.print ("main " + to_string (count), "finished");
+   return 0;
+}
+
+@
+
+
+1.43
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.42 2014-05-30 22:31:06-07 - - $
+d170 1
+a170 1
+   return "[\"" + ata.first + "\"," + to_string (data.second) + "]";
+@
+
+
+1.42
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.41 2014-05-30 22:23:53-07 - - $
+d171 1
+a171 1
+};
+@
+
+
+1.41
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.40 2014-05-30 22:22:17-07 - - $
+d169 3
+d179 2
+a180 2
+           << " \"" << data.first << "\"," << data.second
+           << " ... " << to_string (*count) << endl << flush;
+d193 1
+a193 1
+   print.print ("producer" + to_string (id), "starting");
+d202 1
+a202 1
+   print.print ("producer" + to_string (id), "finished");
+d206 1
+a206 1
+   print.print ("consumer" + to_string (id), "starting");
+d214 1
+a214 1
+   print.print ("consumer" + to_string (id), "finished");
+d222 3
+a224 1
+   print.print ("main", "starting");
+d227 1
+a227 4
+   vector<string> words {"Hello", "World", "foo", "bar", "baz", "qux",
+                         "quux", "EOF"};
+   counter count;
+   cout << boolalpha;
+d233 1
+a233 1
+   print.print ("main", "finished");
+@
+
+
+1.40
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.39 2014-05-30 22:20:57-07 - - $
+a153 1
+   cout << __func__ << end << endl;
+d192 1
+a192 1
+      this_thread::sleep_for (chrono::milliseconds (id * 500));
+d226 1
+a226 1
+   for (size_t i = 1; i <= 4; ++i) {
+@
+
+
+1.39
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.38 2014-05-30 22:20:34-07 - - $
+d190 1
+a191 1
+   count->adjust (counter::NONE, counter::INCR);
+@
+
+
+1.38
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.37 2014-05-30 22:19:32-07 - - $
+d108 1
+a108 1
+      double elapsed() {
+@
+
+
+1.37
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.36 2014-05-30 22:13:16-07 - - $
+d115 1
+a115 1
+         return result;
+d183 1
+a183 1
+      cout << timer.elapsed << " " << name << " " << status << endl;
+@
+
+
+1.36
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.35 2014-05-30 22:11:21-07 - - $
+d111 6
+a116 3
+         return (double) (now.tv_sec - start.tv_sec)
+              + (double) (now.tv_usec - start.tv_usec) * 1e-6;
+   }
+d176 1
+a176 2
+      cout << name << " " << id << " "
+           << setw(7) << setprecision(3) << fixed << timer.elapsed()
+d181 5
+d190 1
+d200 1
+d204 1
+d212 1
+d220 1
+d232 1
+@
+
+
+1.35
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.34 2014-05-30 22:11:04-07 - - $
+d151 1
+d214 1
+@
+
+
+1.34
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.32 2014-05-30 22:06:43-07 - - $
+a134 1
+   cout << data << producer << endl;
+@
+
+
+1.33
+log
+@-
+@
+text
+@d136 2
+a137 2
+   assert (data == NONE and producer != NONE);
+   assert (data != NONE and producer == NONE);
+@
+
+
+1.32
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.31 2014-05-30 22:06:12-07 - - $
+d135 1
+@
+
+
+1.31
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.30 2014-05-30 22:05:49-07 - - $
+d196 1
+a196 1
+      if (count->count() == 0) break;
+d200 1
+a200 1
+   }until (count->end_of_data());
+@
+
+
+1.30
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.26 2014-05-30 22:03:17-07 - - $
+d155 3
+a157 3
+   return "[" + to_string (data_count) + ","
+          + to_string (producer_count) + "]"
+          + (producer_started ? "+" : "-");
+@
+
+
+1.29
+log
+@-
+@
+text
+@d129 1
+a129 1
+      bool end_of_data() const;
+d137 1
+a137 1
+   if (producer == INCR) producer_started == true;
+d145 2
+a146 1
+bool counter::end_of_data() const {
+@
+
+
+1.28
+log
+@-
+@
+text
+@d8 1
+d128 1
+a128 1
+      void adjust (ADJUST data, ADJUST producer = 0);
+@
+
+
+1.27
+log
+@-
+@
+text
+@a141 1
+   return *this;
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.25 2014-05-30 22:02:56-07 - - $
+d145 1
+a145 1
+bool end_of_data() const {
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.24 2014-05-30 21:56:12-07 - - $
+d181 1
+a181 1
+   counter->adjust (counter::NONE, counter::INCR);
+d186 1
+a186 1
+      counter->adjust (counter::INCR);
+d189 1
+a189 1
+   counter->adjust (counter::NONE, counter::DECR);
+d197 1
+a197 1
+      counter->adjust (counter::DECR);
+d199 1
+a199 1
+   }until (counter->end_of_data());
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.23 2014-05-30 21:39:15-07 - - $
+d128 2
+a129 3
+      bool end_of_data() const {
+         return producer_started and producer_count == 0
+                and data_count == 0;
+d145 14
+d174 1
+a174 1
+           << " ... " << count->count() << endl << flush;
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.22 2014-05-30 21:39:02-07 - - $
+d121 3
+a123 2
+      static constexpr ssize_t UNINIT = -1;
+      ssize_t count_ {UNINIT};
+d126 5
+a130 3
+      counter& operator++();
+      counter& operator--();
+      ssize_t count() const { return count_; }
+d133 1
+a133 1
+counter& counter::operator++() {
+d135 7
+a141 2
+   if (count_ == UNINIT) count_ = 0;
+   ++count_;
+a145 9
+counter& counter::operator--() {
+   lock.lock();
+   if (count_ > 0) {
+      --count_;
+      lock.unlock();
+   }
+   return *this;
+}
+
+d168 1
+d172 2
+a174 2
+      buffer->put (data);
+      ++*count;
+d176 1
+d180 1
+a180 1
+   for(;;) {
+d184 1
+a184 1
+      --*count;
+d186 1
+a186 1
+   }
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.21 2014-05-30 21:38:34-07 - - $
+a197 1
+   cout << count;
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.20 2014-05-30 21:37:57-07 - - $
+d127 1
+a127 1
+      ssize_t count() { return count_; }
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.17 2014-05-30 21:34:59-07 - - $
+d181 1
+a181 1
+      if (*count == 0) break;
+@
+
+
+1.19
+log
+@-
+@
+text
+@d122 1
+a122 1
+      ssize_t count {UNINIT};
+d127 1
+a127 1
+      operator ssize_t() { return count; }
+d132 2
+a133 2
+   if (count == UNINIT) count = 0;
+   ++count;
+d140 2
+a141 2
+   if (count > 0) {
+      --count;
+d162 1
+a162 1
+           << " ... " << (ssize_t)(*count) << endl << flush;
+@
+
+
+1.18
+log
+@-
+@
+text
+@d157 1
+a157 1
+               counter* count) {
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.16 2014-05-30 21:34:24-07 - - $
+d157 1
+a157 1
+               const counter* count) {
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.15 2014-05-30 21:33:53-07 - - $
+d162 1
+a162 1
+           << " ... " << (ssize_t)*count << endl << flush;
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.14 2014-05-30 21:33:31-07 - - $
+d162 1
+a162 1
+           << " ... " << *count << endl << flush;
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.13 2014-05-30 21:33:15-07 - - $
+d162 1
+a162 1
+           << " ... " << count << endl << flush;
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.12 2014-05-30 21:32:11-07 - - $
+d162 1
+a162 1
+           << " ... " << (ssize_t)count << endl << flush;
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.11 2014-05-30 21:30:09-07 - - $
+d198 1
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.8 2014-05-30 21:26:32-07 - - $
+d156 2
+a157 1
+   void print (const string& name, size_t id, const buf_data& data) {
+d162 1
+a162 1
+           << endl << flush;
+d172 1
+a172 1
+      print.print ("producer", id, data);
+d184 1
+a184 1
+      print.print ("consumer", id, data);
+@
+
+
+1.10
+log
+@-
+@
+text
+@d127 1
+a127 1
+      ssize_t operator*() { return count; }
+a183 1
+      if (data.first == "EOF") break;
+@
+
+
+1.9
+log
+@-
+@
+text
+@d138 1
+a138 1
+counter& counter::operator-- {
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.3 2014-05-30 21:04:20-07 - - $
+d121 1
+a121 1
+      static constexpr UNINIT = -1;
+@
+
+
+1.7
+log
+@-
+@
+text
+@d116 32
+d166 1
+a166 1
+void producer (size_t id, size_t* stop, synch_buffer* buffer,
+d173 1
+a174 1
+   --stop;
+d177 1
+a177 1
+void consumer (size_t id, size_t* stop, synch_buffer* buffer) {
+d180 1
+d182 1
+a194 1
+   size_t stop {0};
+d197 1
+d199 2
+a200 3
+      ++stop;
+      vec.push_back (thread (producer, i, &stop, &buffer, &words));
+//      vec.push_back (thread (consumer, i, &stop, &buffer));
+@
+
+
+1.6
+log
+@-
+@
+text
+@d134 1
+a134 1
+void producer (size_t id, synch_buffer* buffer, size_t *stop,
+d145 1
+a145 1
+void consumer (size_t id, synch_buffer* buffer, size_t *stop) {
+@
+
+
+1.5
+log
+@-
+@
+text
+@d166 1
+a166 1
+//      vec.push_back (thread (producer, i, &stop, &buffer, &words));
+@
+
+
+1.4
+log
+@-
+@
+text
+@d166 2
+a167 2
+      vec.push_back (thread (producer, i, &stop, &buffer, &words));
+      vec.push_back (thread (consumer, i, &stop, &buffer));
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: producerconsumer.cpp,v 1.1 2014-05-30 20:37:16-07 - - $
+d77 2
+a78 14
+      void put (const value_type& val) {
+         unique_lock<mutex> ulock (lock);
+         while (buffer.full()) condvar.wait (ulock);
+         buffer.push (val);
+         condvar.notify_all();
+      }
+      value_type get() {
+         unique_lock<mutex> ulock (lock);
+         while (buffer.empty()) condvar.wait (ulock);
+         value_type result = buffer.front();
+         buffer.pop();
+         condvar.notify_all();
+         return result;
+      }
+d81 18
+d134 1
+a134 1
+void producer (size_t id, synch_buffer* buffer,
+d142 1
+d145 1
+a145 1
+void consumer (size_t id, synch_buffer* buffer) {
+d161 1
+d165 3
+a167 2
+      vec.push_back (thread (producer, i, &buffer, &words));
+      vec.push_back (thread (consumer, i, &buffer));
+@
+
+
+1.2
+log
+@-
+@
+text
+@d7 1
+d11 1
+d13 1
+d31 1
+a31 1
+      array<T,size> items{};
+d34 1
+a34 1
+      bool empty() { return head == EMPTY; }
+d50 2
+a51 1
+   head = (head + 1) % size;
+d96 1
+a96 1
+class timer {
+d98 1
+a98 1
+      static struct timeval start;
+d100 1
+a100 1
+      timer() { gettimeofday (&start_time, nullptr); }
+d103 1
+a103 1
+         gettimeofday (now);
+d107 1
+a107 1
+} elapsed;
+d113 14
+a126 5
+void print (const string& name, size_t id, const string& word) {
+   cout << name << " " << id << " "
+        << setw(7) << setprecision(3) << fixed << timer.elapsed()
+        << " \"" << word << "\"" << endl;
+}
+d128 1
+a128 1
+void producer (size_t id, synchronized_buffer<string,5>* buffer,
+d130 5
+a134 4
+   for (const auto& word:words) {
+      sleep (3);
+      print ("producer", id, word);
+      buffer->put (word);
+d138 1
+a138 1
+void consumer (size_t id, synchronized_buffer<string,5>* buffer) {
+d140 4
+a143 3
+      string word = buffer->get();
+      print ("consumer", id, word);
+      if (word == "EOF") break;
+d152 1
+a152 1
+   synchronized_buffer<string,5> buffer;
+d155 4
+a158 4
+                         "quux", "END"};
+   for (int i = 0; i < 3; ++i) {
+      vec.push_back (thread (producer, i + 10, &buffer, &words));
+      vec.push_back (thread (producer, i + 20, &buffer));
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d120 1
+a120 1
+      buffer.put (word);
+d126 1
+a126 1
+      string word = buffer.get();
+@

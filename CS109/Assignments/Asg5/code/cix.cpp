@@ -64,6 +64,12 @@ void cix_rm(client_socket& server, const string & fn) {
    // file has been deleted.
    cix_header header;
    header.command = CIX_RM;
+   if(fn.find('/') != string::npos) {
+      log << "error " << fn << " : cannot contain slash (/)"
+      << endl;
+      return;
+   }
+
    if(fn.size() > 59) {
       log << "Error : filename longer than 59 bytes" << endl;
    }
@@ -93,6 +99,11 @@ void cix_get(client_socket& server, const string & fn) {
 
    header.command = CIX_GET;
    header.nbytes = 0;
+   if(fn.find('/') != string::npos) {
+      log << "error " << fn << " : cannot contain slash (/)"
+      << endl;
+      return;
+   }
    if(fn.size() > 59) {
       log << "Error : filename longer than 59 bytes" << endl;
    }
@@ -130,6 +141,12 @@ void cix_put(client_socket& server, const string & fn) {
    string data = "";
 
    header.command = CIX_PUT;
+
+   if(fn.find('/') != string::npos) {
+      log << "error " << fn << " : cannot contain slash (/)"
+      << endl;
+      return;
+   }
 
    if(fn.size() > 59) {
       log << "Error : filename longer than 59 bytes" << endl;
@@ -173,12 +190,18 @@ void usage() {
 }
 
 int main (int argc, char** argv) {
+   in_port_t port;
    log.execname (basename (argv[0]));
    log << "starting" << endl;
    vector<string> args (&argv[1], &argv[argc]);
    if (args.size() > 2) usage();
    string host = get_cix_server_host (args, 0);
-   in_port_t port = get_cix_server_port (args, 1);
+   if(args.size() < 2) {
+      port = get_cix_server_port (args, 0);
+   }
+   else {
+      port = get_cix_server_port (args, 1);
+   }
    log << to_string (hostinfo()) << endl;
    try {
       log << "connecting to " << host << " port " << port << endl;
@@ -205,8 +228,6 @@ int main (int argc, char** argv) {
                cix_ls (server);
                break;
             case CIX_PUT:
-               log << line << " : command detected" << endl;
-               // ensure fn argument is given
                if(words.size() < 2) {
                   log << "error : put : " << 
                   "requires filename argument" << endl;
@@ -214,8 +235,6 @@ int main (int argc, char** argv) {
                cix_put (server, words[1]);
                break;
             case CIX_GET:
-               log << line << " : command detected" << endl;
-               // ensure fn argument is given
                if(words.size() < 2) {
                   log << "error : get : " << 
                   "requires filename argument" << endl;
@@ -223,8 +242,6 @@ int main (int argc, char** argv) {
                cix_get (server, words[1]);
                break;
             case CIX_RM:
-               log << line << " : command detected" << endl;
-               // ensure fn argument is given
                if(words.size() < 2) {
                   log << "error : rm : " << 
                   "requires filename argument" << endl;

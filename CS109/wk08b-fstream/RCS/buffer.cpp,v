@@ -1,0 +1,278 @@
+head	1.11;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.11
+date	2014.05.30.20.36.53;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.30.20.36.09;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.30.20.35.20;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.30.20.34.52;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.30.20.34.28;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.30.20.34.09;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.30.20.29.20;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.30.20.29.05;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.30.20.28.46;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.30.20.28.28;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.30.20.27.47;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.11
+log
+@-
+@
+text
+@// $Id: buffer.cpp,v 1.1 2014-05-30 13:27:47-07 - - $
+
+//
+// Queue of buffers and file I/O.
+//
+
+#include <cassert>
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <queue>
+using namespace std;
+
+string execname;
+int exit_status {EXIT_SUCCESS};
+
+struct exec_error: public runtime_error {
+   exec_error (const string& message): runtime_error (message) {
+      assert (execname.size() > 0);
+   }
+};
+
+struct sys_errno: public exec_error {
+   sys_errno (const string& obj):
+              exec_error (execname + ": " + obj + ": "
+                          + strerror (errno)){}
+};
+
+void usage () {
+   throw exec_error ("Usage: " + execname + " infile outfile");
+}
+
+struct buffer {
+   static constexpr size_t MAX_BYTES = 0x100;
+   size_t nbytes {};
+   char bytes[MAX_BYTES] {};
+};
+using buffer_uptr = unique_ptr<buffer>;
+
+queue<buffer_uptr> readfile (const string& filename) {
+   queue<buffer_uptr> que;
+   ifstream infile {filename};
+   if (infile.fail()) throw sys_errno (filename);
+   while (not infile.eof()) {
+//      buffer_uptr uptr {new buffer()};
+//      infile.read (uptr->bytes, uptr->MAX_BYTES);
+//      uptr->nbytes = infile.gcount();
+//      que.push (std::move (uptr));
+   }
+//   return std::move (que);
+}
+
+void writefile (const string& filename, queue<buffer_uptr> que) {
+   ofstream outfile {filename};
+   if (outfile.fail()) throw sys_errno (filename);
+   while (not que.empty()) {
+//      buffer_uptr uptr = std::move (que.front());
+//      que.pop();
+//      outfile.write (uptr->bytes, uptr->nbytes);
+   }
+}
+
+int main (int argc, char** argv) {
+   execname = basename (argv[0]);
+   try {
+      if (argc != 3) usage();
+//      queue<buffer_uptr> que = readfile (argv[1]);
+//      writefile (argv[2], que);
+   }catch (exec_error& error) {
+      cerr << error.what() << endl;;
+      exit_status = EXIT_FAILURE;
+   }
+   return exit_status;
+}
+@
+
+
+1.10
+log
+@-
+@
+text
+@d51 1
+a51 1
+   return std::move (que);
+d68 2
+a69 2
+      queue<buffer_uptr> que = readfile (argv[1]);
+      writefile (argv[2], que);
+@
+
+
+1.9
+log
+@-
+@
+text
+@d51 1
+a51 1
+   return que;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d46 3
+a48 3
+      buffer_uptr uptr {new buffer()};
+      infile.read (uptr->bytes, uptr->MAX_BYTES);
+      uptr->nbytes = infile.gcount();
+d58 1
+a58 1
+      buffer_uptr uptr = std::move (que.front());
+d60 1
+a60 1
+      outfile.write (uptr->bytes, uptr->nbytes);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d49 1
+a49 1
+      que.push (std::move (uptr));
+d58 2
+a59 2
+//      buffer_uptr uptr = std::move (que.front());
+      que.pop();
+@
+
+
+1.6
+log
+@-
+@
+text
+@d46 1
+a46 1
+//      buffer_uptr uptr {new buffer()};
+@
+
+
+1.5
+log
+@-
+@
+text
+@d46 1
+a46 1
+      buffer_uptr uptr {new buffer()};
+d58 1
+a58 1
+      buffer_uptr uptr = std::move (que.front());
+@
+
+
+1.4
+log
+@-
+@
+text
+@d60 1
+a60 1
+      out.write (uptr->bytes, uptr->nbytes);
+@
+
+
+1.3
+log
+@-
+@
+text
+@d35 1
+a35 1
+   constexpr size_t MAX_BYTES = 0x100;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d8 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d21 1
+a21 1
+}
+@

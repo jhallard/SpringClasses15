@@ -1,0 +1,180 @@
+head	1.5;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.5
+date	2014.05.31.05.46.35;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.31.05.38.13;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.31.02.01.53;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.31.02.01.29;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.31.01.52.47;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@-
+@
+text
+@// $Id: mutexclick.cpp,v 1.4 2014-05-30 22:38:13-07 - - $
+
+// Hello to threads.
+
+#include <iostream>
+#include <mutex>
+#include <thread>
+#include <vector>
+using namespace std;
+
+constexpr size_t LOOPS = 1000000;
+
+class counter {
+   private:
+      size_t count {0};
+      mutex lock;
+   public:
+      counter& operator++() {
+         lock.lock();
+         ++count;
+         lock.unlock();
+         return *this;
+      }
+      friend ostream& operator<< (ostream&, const counter&);
+};
+
+ostream& operator<< (ostream& out, const counter& ctr) {
+   out << ctr.count;
+   return out;
+}
+
+void racer (size_t id, counter* count) {
+   cout << "racer " << id << " looping " << LOOPS << " times" << endl;
+   for (size_t i = 0; i < LOOPS; ++i) ++*count;
+   cout << "racer " << id << " finished counter " << *count << endl;
+}
+
+int main () {
+   counter count;
+   cout << "main starting" << endl;
+   vector<thread> vecthr;
+   for (size_t i = 0; i < 4; ++i) {
+      vecthr.push_back (thread (racer, i, &count));
+   }
+   for (auto& t: vecthr) t.join();
+   cout << "main finished counter " << count << endl;
+   return 0;
+}
+
+//TEST// alias TIME='/usr/bin/time -f "%E elapsed, %S kernel, %U user"'
+//TEST// for i in 1 2 3 4
+//TEST// do
+//TEST//    TIME mutexclick >mutexclick.out$i 2>&1
+//TEST// done
+//TEST// more mutexclick.out* >mutexclick.lis </dev/null
+//TEST// mkpspdf mutexclick.ps mutexclick.cpp* mutexclick.lis
+
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mutexclick.cpp,v 1.3 2014-05-30 19:01:53-07 - - $
+d50 5
+a54 1
+//TEST// for i in 1 2 3 4; do mutexclick >mutexclick.out$i; done
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: mutexclick.cpp,v 1.2 2014-05-30 19:01:29-07 - - $
+d42 1
+a42 1
+   for (size_t i = 0; i < 5; ++i) {
+d50 4
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: raceclick.cpp,v 1.3 2014-05-30 18:27:17-07 - - $
+d43 1
+a43 1
+      vecthr.push_back (thread (racer, i, &counter));
+@
+
+
+1.1
+log
+@-
+@
+text
+@d6 1
+d8 1
+d15 2
+a16 1
+      count {0};
+d18 2
+a19 1
+      operator++() {
+d21 1
+d26 2
+a27 1
+friend ostream& operator<< (ostream& out, const counter& ctr) {
+d32 1
+a32 1
+void racer (size_t id, size_t* counter) {
+d34 2
+a35 2
+   for (size_t i = 0; i < LOOPS; ++i) ++*counter;
+   cout << "racer " << id << " finished counter " << *counter << endl;
+d39 1
+a39 1
+   size_t counter {0};
+d41 6
+a46 5
+   thread t1 (racer, 1LU, &counter);
+   thread t2 (racer, 2LU, &counter);
+   t1.join();
+   t2.join();
+   cout << "main finished counter " << counter << endl;
+@

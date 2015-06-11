@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting ./vectorthreads.cpp
+./vectorthreads.cpp:
+     $Id: vectorthreads.cpp,v 1.7 2014-06-03 13:20:33-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 ./vectorthreads.cpp -o ./vectorthreads -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f ./vectorthreads.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished ./vectorthreads.cpp

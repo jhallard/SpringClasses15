@@ -1,0 +1,555 @@
+head	1.23;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.23
+date	2014.05.29.22.32.51;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.05.29.22.32.33;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.05.29.22.31.38;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.05.29.22.31.09;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.05.29.22.29.26;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.05.29.22.17.54;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.05.29.22.16.28;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.05.29.22.13.46;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.29.22.13.25;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.29.22.12.54;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.29.22.10.50;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.29.22.09.08;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.29.22.08.48;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.29.22.06.17;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.29.22.06.07;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.29.21.56.26;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.29.21.55.53;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.29.21.46.42;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.29.21.45.48;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.29.21.45.25;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.29.21.41.13;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.29.21.41.02;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.29.21.16.44;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.23
+log
+@-
+@
+text
+@// $Id: catfile.cpp,v 1.22 2014-05-29 15:32:33-07 - - $
+
+// NAME
+//    catfile - concatenate files and print
+//
+// SYNOPSIS
+//    cat [-aemntv] [filename...]
+//
+// DESCRIPTION
+//    Display files to stdout.  If no filenames are specified,
+//    read from stdin.  
+//
+// OPTIONS
+//    -a  same as -mntv
+//    -e  display $ at end of each line
+//    -m  display headings before files as in more(1)
+//    -n  display line numbers before each line
+//    -v  display all non-isgraph characters visibly
+
+#include <algorithm>
+#include <cstring>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <locale>
+#include <stdexcept>
+#include <string>
+#include <vector>
+using namespace std;
+
+#include <libgen.h>
+#include <unistd.h>
+
+
+struct {
+   string name {};
+   int status {EXIT_SUCCESS};
+} program;
+
+void error (const string& message) {
+   cerr << program.name << ": " << message << endl;
+   program.status = EXIT_FAILURE;
+}
+
+struct options {
+   bool e_endline {};
+   bool m_more {};
+   bool n_numbers {};
+   bool v_visible {};
+   vector<string> filenames;
+   locale olocale {"en_US.iso88591"};
+   options (int argc, char**argv) {
+      opterr = false;
+      for (;;) {
+         int opt = getopt (argc, argv, "aemntv");
+         if (opt == EOF) break;
+         switch (opt) {
+            case 'a': m_more = n_numbers = v_visible = true; break;
+            case 'e': e_endline = true; break;
+            case 'm': m_more = true; break;
+            case 'n': n_numbers = true; break;
+            case 'v': v_visible = true; break;
+            default:  error (string ("-") + static_cast<char> (optopt)
+                             + ": invalid option");
+                      break;
+         }
+      }
+      for_each (&argv[optind], &argv[argc],
+                [this] (const string& arg) {
+                   filenames.push_back (arg);
+                });
+      if (filenames.size() == 0) filenames.push_back ("-");
+   }
+};
+
+
+void copyfile (const string& filename, istream& input,
+               const options& opts) {
+   if (opts.m_more) {
+      string colons {"::::::::::::::::"};
+      cout << colons << endl << filename << endl << colons << endl;
+   }
+   for (int lcount = 1;; ++lcount) {
+      string line;
+      getline (input, line);
+      if (input.eof()) break;
+      if (opts.n_numbers) cout << setw(6) << lcount << "\t";
+      if (not opts.v_visible) cout << line;
+      else {
+         for (char byte: line) {
+            if (isprint (byte, opts.olocale)) cout << byte;
+            else if ((byte & 0x80) == 0) {
+               cout << "^" << static_cast<char> (byte ^ 0x40);
+            }else {
+               cout << "\\x" << setw(2) << hex << uppercase
+                    << static_cast<int> (byte & 0xFF);
+            }
+         }
+      }
+      if (opts.e_endline) cout << "$";
+      cout << endl;
+   }
+}
+
+int main (int argc, char** argv) {
+   program.name = basename (argv[0]);
+   options opts (argc, argv);
+   for (const auto& filename: opts.filenames) {
+      if (filename == "-") copyfile (filename, cin, opts);
+      else {
+         ifstream infile (filename);
+         if (not infile.fail()) copyfile (filename, infile, opts);
+         else error (filename + ": " + strerror (errno));
+      }
+   }
+   return program.status;
+}
+
+//TEST// ./catfile -a /error in.data 256 >catfile.out 2>&1
+//TEST// mkpspdf catfile.ps catfile.cpp* catfile.out
+
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.21 2014-05-29 15:31:38-07 - - $
+d76 1
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.20 2014-05-29 15:31:09-07 - - $
+d34 1
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.19 2014-05-29 15:29:26-07 - - $
+d117 1
+a117 1
+//TEST// error ./catfile -a in.data 256 >catfile.out 2>&1
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.18 2014-05-29 15:17:54-07 - - $
+d50 1
+a50 1
+   locale olocale {""};
+a105 1
+   cout << program.name << ": locale = " << opts.olocale.name() << endl;
+d117 1
+a117 1
+//TEST// ./catfile -a in.data /dev/null /error 256 >catfile.out 2>&1
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.14 2014-05-29 15:12:54-07 - - $
+d117 4
+@
+
+
+1.17
+log
+@-
+@
+text
+@d94 1
+a94 1
+                    << static_cast<unsigned int> (byte);
+@
+
+
+1.16
+log
+@-
+@
+text
+@d88 1
+a88 1
+         for (unsigned char byte: line) {
+d90 1
+a90 1
+            else if (byte < 0x80) {
+@
+
+
+1.15
+log
+@-
+@
+text
+@d50 1
+a50 1
+   locale olocale ("");
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.10 2014-05-29 15:06:17-07 - - $
+d50 1
+a50 1
+   locale locale ("");
+d89 1
+a89 1
+            if (isprint (byte, opts.locale)) cout << byte;
+d106 1
+a106 1
+   cout << program.name << ": locale = " << opts.locale.name() << endl;
+@
+
+
+1.13
+log
+@-
+@
+text
+@d50 1
+d89 1
+a89 1
+            if (isprint (byte, locale)) cout << byte;
+a104 2
+   locale locale {""};
+   cout << program.name << ": locale = " << locale.name() << endl;
+d106 1
+@
+
+
+1.12
+log
+@-
+@
+text
+@d88 1
+a88 1
+            if (isprint (byte)) cout << byte;
+@
+
+
+1.11
+log
+@-
+@
+text
+@a22 1
+#include <locale>
+d25 1
+d105 1
+a105 1
+   cout << program.name << ": locale = " << env_locale.name() << endl;
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.9 2014-05-29 15:06:07-07 - - $
+a21 1
+#include <cctype>
+d104 1
+a104 1
+   locale env_locale {""};
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.6 2014-05-29 14:46:42-07 - - $
+d22 1
+a22 1
+#include <ctype>
+@
+
+
+1.8
+log
+@-
+@
+text
+@d22 1
+d24 1
+d105 2
+@
+
+
+1.7
+log
+@-
+@
+text
+@d92 1
+a92 1
+                    << static_cast<unsigned> (byte);
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.4 2014-05-29 14:45:25-07 - - $
+d86 1
+a86 1
+         for (char byte: line) {
+d88 1
+a88 1
+            else if (byte & 0x7F) {
+@
+
+
+1.5
+log
+@-
+@
+text
+@d88 1
+a88 1
+            else if (byte < 0x80) {
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.3 2014-05-29 14:41:13-07 - - $
+d85 1
+a85 1
+      }else {
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: catfile.cpp,v 1.2 2014-05-29 14:41:02-07 - - $
+d84 12
+a95 1
+      cout << line;
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d23 1
+@
+
+
+1.1
+log
+@-
+@
+text
+@d20 3
+d29 1
+d64 5
+d72 17
+d91 11
+a101 1
+   
+@

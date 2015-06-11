@@ -1,0 +1,138 @@
+NAME
+     read - read input
+
+SYNOPSIS
+     int read(fd, buf, nbyte)
+     int fd;
+     char *buf;
+     int nbyte;
+
+
+DESCRIPTION
+     read() attempts to read nbyte bytes of data from the  object
+     referenced  by  the descriptor fd into the buffer pointed to
+     by buf.  
+
+     If nbyte is zero, read() takes  no  action  and  returns  0.
+
+     On objects capable of seeking, the read() starts at a  posi-
+     tion   given   by   the  pointer  associated  with  fd  (see
+     lseek(2V)).  Upon return from read(), the pointer is  incre-
+     mented by the number of bytes actually read.
+
+     Objects that are not capable of seeking, such as sockets, always 
+     read from the
+     current  position.  The value of the pointer associated with
+     such an object is undefined.
+
+     Upon successful completion, read() return  the
+     number of bytes actually read and placed in the buffer.  The
+     system guarantees to read the number of bytes  requested  if
+     the  descriptor references a normal file which has that many
+     bytes left before the EOF (end of file),  but  in  no  other
+     case.
+
+     If the process calling read() receives  a  signal
+     before  any  data  are  read,  the  system call is restarted
+     unless the process explicitly set the  signal  to  interrupt
+     the  call using sigvec() or sigaction() (see the discussions
+     of   SV_INTERRUPT   on   sigvec(2)   and   SA_INTERRUPT   on
+     sigaction(3V)).   If  read() is interrupted by a
+     signal after successfully reading some data, it returns  the
+     number of bytes read.
+
+     If nbyte is not zero and read() returns 0, then EOF has been
+     reached.  
+
+     o  If the object the descriptor is associated with is marked
+        for  4.2BSD-style  non-blocking  I/O  (with  the  FIONBIO
+        ioctl() request or a call to fcntl(2V) using the  FNDELAY
+        flag   from   <sys/file.h>  or  the  O_NDELAY  flag  from
+        <fcntl.h> in  the  4.2BSD  environment),  the  read  will
+        return -1 and errno will be set to EWOULDBLOCK.
+
+     o  If the descriptor  is  marked  for  System  V-style  non-
+        blocking  I/O  (using  fcntl()  with  the FNBIO flag from
+        <sys/file.h> or the O_NDELAY flag from <fcntl.h>  in  the
+        System  V  environment),  and does not refer to a stream,
+        the read will return 0.  Note: this is  indistinguishable
+        from EOF.
+
+     o  If the descriptor is marked for POSIX-style  non-blocking
+        I/O   (using   fcntl()  with  the  O_NONBLOCK  flag  from
+        <fcntl.h>) and refers to a stream, the read  will  return
+        -1 and errno will be set to EAGAIN.
+
+     o  If neither the descriptor nor the object it refers to are
+        marked  for  non-blocking  I/O, the read will block until
+        data is available to be  read  or  the  object  has  been
+        disconnected.   A  pipe  or  FIFO is disconnected when no
+        process has the object open for writing;  a  socket  that
+        was connected is disconnected when the connection is bro-
+        ken; a stream is disconnected  when  a  hangup  condition
+        occurs (for instance, when carrier drops on a terminal).
+
+     If the descriptor or the object is marked  for  non-blocking
+     I/O,  and  less data are available than are requested by the
+     read(), only the  data  that  are  available  are
+     returned,  and  the  count  indicates how many bytes of data
+     were actually read.
+
+     Upon successful completion,  read() marks  for
+     update the st_atime field of the file.
+
+RETURN VALUES
+     read() returns the number of bytes actually  read
+     on  success.   On  failure,  it returns -1 and set errno to
+     indicate the error.
+
+ERRORS
+     EAGAIN              The descriptor referred to a stream, was
+                         marked  for  System V-style non-blocking
+                         I/O, and no data were ready to be read.
+
+     EBADF               d is not a valid  file  descriptor  open
+                         for reading.
+
+     EBADMSG             The message waiting  to  be  read  on  a
+                         stream is not a data message.
+
+     EFAULT              buf points outside the allocated address
+                         space.
+
+     EINTR               The process performing  a  read  from  a
+                         slow device received a signal before any
+                         data arrived, and the signal was set  to
+                         interrupt the system call.
+
+     EINVAL              The stream  is  linked  below  a  multi-
+                         plexor.
+
+                         The pointer associated with fd was nega-
+                         tive.
+
+     EIO                 An I/O error occurred while reading from
+                         or writing to the file system.
+
+                         The calling process is in  a  background
+                         process  group and is attempting to read
+                         from its controlling  terminal  and  the
+                         process is ignoring or blocking SIGTTIN.
+
+                         The calling process is in  a  background
+                         process  group and is attempting to read
+                         from its controlling  terminal  and  the
+                         process is orphaned.
+
+     EISDIR              fd refers to a directory which is  on  a
+                         file system mounted using the NFS.
+
+     EWOULDBLOCK         The file  was  marked  for  4.2BSD-style
+                         non-blocking I/O, and no data were ready
+                         to be read.
+
+
+SEE ALSO
+     dup(2V),   fcntl(2V),   getmsg(2),    intro(2),    ioctl(2),
+     lseek(2V), open(2V), pipe(2V), select(2), socket(2), socket-
+     pair(2), streamio(4), termio(4)

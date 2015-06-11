@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting buffercp.cpp
+buffercp.cpp:
+     $Id: buffercp.cpp,v 1.5 2014-06-02 16:10:33-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 buffercp.cpp -o buffercp -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f buffercp.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished buffercp.cpp

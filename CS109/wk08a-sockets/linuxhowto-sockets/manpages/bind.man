@@ -1,0 +1,96 @@
+
+NAME
+     bind - bind a name to a socket
+
+SYNOPSIS
+     #include <sys/types.h>
+     #include <sys/socket.h>
+
+     int bind(s, name, namelen)
+     int s;
+     struct sockaddr *name;
+     int namelen;
+
+DESCRIPTION
+     bind() assigns a name to an unnamed socket.  When  a  socket
+     is created with socket(2) it exists in a name space (address
+     family) but has no name assigned.  bind() requests that  the
+     name pointed to by name be assigned to the socket.
+
+RETURN VALUES
+     bind() returns:
+
+     0    on success.
+
+     -1   on failure and sets errno to indicate the error.
+
+ERRORS
+     EACCES              The requested address is protected,  and
+                         the  current user has inadequate permis-
+                         sion to access it.
+
+     EADDRINUSE          The specified address is already in use.
+
+     EADDRNOTAVAIL       The specified address is  not  available
+                         from the local machine.
+
+     EBADF               s is not a valid descriptor.
+
+     EFAULT              The name parameter is  not  in  a  valid
+                         part of the user address space.
+
+     EINVAL              namelen is  not  the  size  of  a  valid
+                         address  for  the specified address fam-
+                         ily.
+
+                         The  socket  is  already  bound  to   an
+                         address.
+
+     ENOTSOCK            s is a descriptor  for  a  file,  not  a
+                         socket.
+
+     The following errors are specific to binding  names  in  the
+     UNIX domain:
+
+
+     EACCES              Search permission is denied for  a  com-
+                         ponent  of  the  path prefix of the path
+                         name in name.
+
+     EIO                 An I/O error occurred while  making  the
+                         directory entry or allocating the inode.
+
+     EISDIR              A null path name was specified.
+
+     ELOOP               Too many symbolic links were encountered
+                         in translating the path name in name.
+
+     ENAMETOOLONG        The length of the path argument  exceeds
+                         {PATH_MAX}.
+
+                         A  pathname  component  is  longer  than
+                         {NAME_MAX}   (see   sysconf(2V))   while
+                         {_POSIX_NO_TRUNC}  is  in  effect   (see
+                         pathconf(2V)).
+
+     ENOENT              A component of the path  prefix  of  the
+                         path name in name does not exist.
+
+     ENOTDIR             A component of the path  prefix  of  the
+                         path name in name is not a directory.
+
+     EROFS               The inode would reside  on  a  read-only
+                         file system.
+
+SEE ALSO
+     connect(2), getsockname(2), listen(2), socket(2), unlink(2V)
+
+NOTES
+     Binding a name in the UNIX domain creates a  socket  in  the
+     file system that must be deleted by the caller when it is no
+     longer needed (using unlink(2V),
+
+     The rules used in name binding  vary  between  communication
+     domains.   Consult  the  manual  entries  in  section  4 for
+     detailed information.
+

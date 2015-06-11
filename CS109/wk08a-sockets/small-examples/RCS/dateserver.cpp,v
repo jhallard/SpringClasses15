@@ -1,0 +1,410 @@
+head	1.15;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.15
+date	2014.05.24.03.10.08;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.23.20.26.36;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.23.20.26.25;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.23.04.59.20;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.23.01.09.32;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.23.00.58.17;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.23.00.57.39;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.23.00.56.24;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.23.00.53.04;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.23.00.50.25;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.23.00.44.06;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.23.00.43.01;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.23.00.42.31;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.23.00.34.48;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.23.00.34.23;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.15
+log
+@-
+@
+text
+@// $Id: dateserver.cpp,v 1.14 2014-05-23 13:26:36-07 - - $
+
+//
+//
+// NAME
+//    dateserver - accept connections and reply with current date
+//
+// SYNOPSIS
+//    dateserver [host] port
+//
+// DESCRIPTION
+//    If port and host are given, operates as a client and gets
+//    the date from the server.
+//    if only port is given, operates as a server in an infinite
+//    loop returning the date for each connection.
+//    Should probably use UDP instead of TCP, but it is easier
+//    if we avoid two different protocol discussions.
+//    The server also accepts a telnet connection.
+//
+
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <typeinfo>
+#include <vector>
+using namespace std;
+
+#include <libgen.h>
+#include <time.h>
+
+#include "../simple-sockets/sockets.h"
+
+string execname;
+int exit_status = EXIT_SUCCESS;
+
+template <typename Type>
+Type from_string (const string &str) {
+   stringstream stream;
+   stream << str;
+   Type result;
+   if (not (stream >> result and stream.eof())) {
+      throw domain_error (string (typeid (Type).name())
+            + " from_string (" + str + ")");
+   }
+   return result;
+}
+
+void usage() {
+   cerr << "Usage: " << execname << " [host] port" << endl;
+   exit_status = EXIT_FAILURE;
+}
+
+
+void date_client (vector<string> args) {
+   client_socket server (args[0], from_string<in_port_t> (args[1]));
+   for (;;) {
+      string buffer;
+      int nbytes = server.recv (buffer);
+      if (nbytes == 0) break;
+      cout << buffer;
+   }
+}
+
+void date_server (vector<string> args) {
+   server_socket listener (from_string<in_port_t> (args[0]));
+   for (;;) {
+      accepted_socket client;
+      listener.accept (client);
+      time_t now = time (NULL);
+      struct tm* localnow = localtime (&now);
+      char buffer[64];
+      size_t bufbytes = strftime (buffer, sizeof buffer,
+                        "%a %b %e %H:%M:%S %Z %Y\n", localnow);
+      for (char* bufp = buffer; bufbytes > 0; ){
+         int nbytes = client.send (bufp);
+         bufp += nbytes;
+         bufbytes -= nbytes;
+      }
+   }
+}
+
+int main (int argc, char** argv) {
+   execname = basename (argv[0]);
+   vector<string> args (&argv[1], &argv[argc]);
+   try {
+      switch (args.size()) {
+         case 1: date_server (args); break;
+         case 2: date_client (args); break;
+         default: usage(); break;
+      }
+   }catch (socket_error& error) {
+      cerr << execname << ": " << error.what() << endl;
+   }catch (domain_error& error) {
+      cerr << execname << ": " << error.what() << endl;
+   }
+   return exit_status;
+}
+
+// This is not the correct way do #include.  We should have
+// a Makefile to do this, but mkc and mkt assume standalone
+// programs.  But it's easier to have a standalone example
+// for such a simple program.
+#include "../simple-sockets/sockets.cpp"
+
+//TEST// mkpspdf dateserver.ps dateserver.cpp* dateserver.output
+
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.13 2014-05-23 13:26:25-07 - - $
+d93 3
+a95 1
+      cerr << execname << error.what() << endl;
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.12 2014-05-22 21:59:20-07 - - $
+d102 1
+a102 1
+#include "../simple-sockets/socket.cpp"
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.11 2014-05-22 18:09:32-07 - - $
+d32 1
+a32 1
+#include "../simple-sockets/socket.h"
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.10 2014-05-22 17:58:17-07 - - $
+a102 1
+#include "../simple-sockets/hostinfo.cpp"
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.9 2014-05-22 17:57:39-07 - - $
+d105 1
+a105 1
+//TEST// mkpspdf dateserver.ps dateserver.cpp*
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.8 2014-05-22 17:56:24-07 - - $
+d50 1
+a50 1
+   cerr << "Usage: " << execname << "port [host]" << endl;
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.7 2014-05-22 17:53:04-07 - - $
+a56 1
+   string date;
+d61 1
+a61 1
+      date += buffer;
+a62 1
+   cout << date << endl;
+d74 1
+a74 1
+                        "%a %b %e %H:%M:%S %Z %Y", localnow);
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.6 2014-05-22 17:50:25-07 - - $
+d9 1
+a9 1
+//    dateserver port [host] 
+d18 1
+d56 1
+a56 1
+   client_socket server (args[1], from_string<in_port_t> (args[0]));
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.5 2014-05-22 17:44:06-07 - - $
+d53 1
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.4 2014-05-22 17:43:01-07 - - $
+d103 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.3 2014-05-22 17:42:31-07 - - $
+a104 1
+//TEST// mkpspdf dateserver.ps hostinfo.cpp*
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.2 2014-05-22 17:34:48-07 - - $
+d105 1
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: dateserver.cpp,v 1.1 2014-05-22 17:34:23-07 - - $
+d21 2
+d24 1
+d53 2
+a54 2
+void client (vector<string> args) {
+   client_socket server (from_string (args[0]), args[1]);
+d65 2
+a66 2
+void server (vector<string> args) {
+   server_socket listener (from_string (args[0]));
+d74 1
+a74 1
+                                  "%a %b %e %H:%M:%S %Z %Y", tm);
+d98 8
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d28 1
+a28 1
+#include "../simple-sockets/sockets.h"
+@

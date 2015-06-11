@@ -1,0 +1,840 @@
+head	1.22;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.22
+date	2014.06.04.19.13.15;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.06.04.19.12.41;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.06.04.03.10.45;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.06.04.03.08.22;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.06.04.02.35.33;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.06.04.02.34.56;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.06.04.02.30.12;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.06.04.02.21.33;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.06.04.02.20.55;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.06.04.02.17.14;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.06.04.02.11.02;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.06.04.02.09.14;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.06.04.02.08.49;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.06.04.02.08.13;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.06.04.02.07.00;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.06.04.02.01.44;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.06.04.01.57.28;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.06.04.01.53.39;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.06.04.01.53.10;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.06.04.01.49.25;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.06.04.00.52.33;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.06.04.00.52.18;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.22
+log
+@-
+@
+text
+@// $Id: semaphilo.cpp,v 1.21 2014-06-04 12:12:41-07 - - $
+
+//
+// Implementation of semaphores.
+// Solution to Dining Philosophers problem.
+//
+
+#include <condition_variable>
+#include <iomanip>
+#include <iostream>
+#include <mutex>
+#include <random>
+#include <string>
+#include <thread>
+using namespace std;
+
+//
+// Timer.
+//
+class elapsed_time {
+   private:
+      using clock = chrono::high_resolution_clock;
+      clock::time_point start {clock::now()};
+   public: 
+      double elapsed_nanoseconds() {
+         clock::time_point now = clock::now();
+         return chrono::duration_cast<chrono::nanoseconds> (now - start)
+                .count() / 1e9;
+      }
+} timer;
+
+
+//
+// Printer for synchronized output accepts a variable number
+// of arguments.
+//
+
+class synch_printer {
+   private:
+      mutex out_mutex;
+      ostream& out;
+      void print_();
+      template <typename Head, typename... Tail>
+      void print_ (const Head& head, Tail... tail);
+   public:
+      synch_printer (ostream& out): out(out){}
+      template <typename... Type>
+      void print (Type... params);
+};
+
+void synch_printer::print_() {
+}
+
+template <typename Head, typename... Tail>
+void synch_printer::print_ (const Head& head, Tail... tail) {
+   out << head;
+   print_ (tail...);
+}
+
+template <typename... Type>
+void synch_printer::print (Type... params) {
+   unique_lock<mutex> lock {out_mutex};
+   out << setw(9) << setprecision(6) << fixed
+       << timer.elapsed_nanoseconds() << " ";
+   print_ (params...);
+   out << endl << flush;
+}
+
+
+//
+// class semaphore
+//    count > 0: number to be let through the gate
+//    count = 0: gate is locked, nobody waiting
+//    count < 0: gate locked with -count threads waiting
+// semaphore lock(1) is a mutex
+//
+
+class semaphore {
+   private:
+      mutex lock;
+      condition_variable cond;
+      int count{};
+   public:
+      semaphore (int count = 0);
+      void down(); // Dijkstra's P ("proberen", Dutch "try")
+      void up();   // Dijkstra's V ("verhogen", Dutch "raise")
+};
+
+semaphore::semaphore (int count): count(count) {
+}
+
+void semaphore::down() {
+   unique_lock<mutex> ulock {lock};
+   --count;
+   if (count < 0) cond.wait (ulock);
+}
+
+void semaphore::up() {
+   unique_lock<mutex> ulock {lock};
+   if (count < 0) cond.notify_one();
+   ++count;
+}
+
+
+class fork_manager {
+   private:
+      enum fork_state {THINKING = 0, HUNGRY, EATING};
+      semaphore lock {1};
+      const size_t size;
+      vector<semaphore> waiting;
+      vector<fork_state> state;
+   private:
+      size_t left (size_t id) { return (id + size - 1) % size; }
+      size_t right (size_t id) { return (id + 1) % size; }
+      void check (size_t id);
+   public:
+      fork_manager (size_t size);
+      void take (size_t id);
+      void put (size_t id);
+};
+
+fork_manager::fork_manager (size_t size): size(size),
+              waiting (size), state(size, THINKING) {
+}
+
+void fork_manager::check (size_t id) {
+   if (state[id] == HUNGRY and state[left(id)] != EATING
+                           and state[right(id)] != EATING) {
+      state[id] = EATING;
+      waiting[id].up();
+   }
+}
+
+void fork_manager::take (size_t id) {
+   lock.down();
+   state[id] = HUNGRY;
+   check (id);
+   lock.up();
+   waiting[id].down();
+}
+
+void fork_manager::put (size_t id) {
+   lock.down();
+   state[id] = THINKING;
+   check (left (id));
+   check (right (id));
+   lock.up();
+}
+
+
+//
+// Code to simulate one Dining Philosopher.
+//
+
+using normal_dist = normal_distribution<double>;
+using rand_engine = default_random_engine;
+using rand_gen = decltype (bind (normal_dist{}, rand_engine{}));
+
+rand_gen make_rand (double mean, double stdev) {
+   auto seed = chrono::system_clock::now().time_since_epoch().count();
+   rand_engine engine {seed};
+   normal_dist distribution (mean, stdev);
+   rand_gen rand = bind (distribution, engine);
+   return rand;
+}
+
+void perform (synch_printer& mcout, rand_gen& rand, size_t cycle,
+              const string& ident, const string& activity) {
+   long delay = rand();
+   mcout.print (ident, activity, " ", cycle, " (", delay, ")");
+   this_thread::sleep_for (chrono::milliseconds (delay));
+}
+
+void philosopher (size_t id, const string& name,
+                  size_t cycles, double mean, double stdev,
+                  fork_manager& forks, synch_printer& mcout) {
+   rand_gen rand = make_rand (mean, stdev);
+   string ident = "(" + to_string(id) + ") " + name + " is ";
+   mcout.print (ident, "STARTING");
+   for (size_t cycle = 0; cycle < cycles; ++cycle) {
+      perform (mcout, rand, cycle, ident, "thinking");
+      mcout.print (ident, "hungry ", cycle);
+      forks.take (id);
+      perform (mcout, rand, cycle, ident, "eating");
+      forks.put (id);
+   }
+   mcout.print (ident, "FINISHED");
+}
+
+
+//
+// Host at the Symposium.
+//
+// In ancient Greece, the symposium (Greek ######### sympósion,
+// from ######### sympínein, "to drink together") was a drinking
+// party.  Literary works that describe or take place at a
+// symposium include two Socratic dialogues, Plato's Symposium and
+// Xenophon's Symposium, as well as a number of Greek poems such
+// as the elegies of Theognis of Megara.
+//
+
+int main() {
+   synch_printer mcout {cout};
+   mcout.print ("Symposium STARTING");
+   vector<string> names = {
+      "Pythagoras",
+      "Socrates",
+      "Plato",
+      "Aristotle",
+      "Zeno",
+   };
+   fork_manager forks {names.size()};
+   vector<thread> philos;
+   for (size_t id = 0; id < names.size(); ++id) {
+      philos.push_back (thread (philosopher, id, ref (names[id]),
+                                5, 1000, 250,
+                                ref (forks), ref (mcout)));
+   }
+   for (auto& phil: philos) phil.join();
+   mcout.print ("Symposium FINISHED");
+   return 0;
+}
+
+//TEST// semaphilo >semaphilo.out 2>&1
+//TEST// mkpspdf semaphilo.ps semaphilo.cpp* semaphilo.out
+
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.20 2014-06-03 20:10:45-07 - - $
+d25 1
+a25 1
+      double elapsed() {
+d64 1
+a64 1
+       << timer.elapsed() << " ";
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.19 2014-06-03 20:08:22-07 - - $
+d85 2
+a86 2
+      void down(); // Dijkstra's P (proberen)
+      void up();   // Dijkstra's V (verhogen)
+d194 7
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.18 2014-06-03 19:35:33-07 - - $
+a104 1
+
+a111 1
+
+d151 4
+d190 5
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.17 2014-06-03 19:34:56-07 - - $
+d153 19
+d175 1
+a175 4
+   auto seed = chrono::system_clock::now() .time_since_epoch().count();
+   default_random_engine engine {seed};
+   normal_distribution<double> distribution (mean, stdev);
+   auto rand = bind (distribution, engine);
+d179 1
+a179 5
+      string label = "[" + to_string(id) + "," + to_string(cycle)
+                   + "] ";
+      long delay = rand();
+      mcout.print (ident, "thinking ", cycle, " (", delay, ")");
+      this_thread::sleep_for (chrono::milliseconds (delay));
+d182 1
+a182 3
+      delay = rand();
+      mcout.print (ident, "eating ", cycle, " (", delay, ")");
+      this_thread::sleep_for (chrono::milliseconds (delay));
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.15 2014-06-03 19:21:33-07 - - $
+d124 5
+a128 1
+void check (size_t id) {
+a135 4
+fork_manager::fork_manager (size_t size): size(size),
+              waiting (size), state(size, THINKING) {
+}
+
+@
+
+
+1.16
+log
+@-
+@
+text
+@d84 1
+a84 1
+      semaphore (int count = {});
+d114 1
+d117 1
+a117 10
+
+      void check (size_t id) {
+         if (state[id] == HUNGRY and
+             state[left(id)] != EATING and
+             state[right(id)] != EATING) {
+            state[id] = EATING;
+            waiting[id].up();
+         }
+      }
+
+d124 8
+d133 1
+a133 2
+              state(size, THINKING) {
+   for (size_t count = 0; count < size: ++count) waiting.push_back ({0});
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.14 2014-06-03 19:20:55-07 - - $
+d110 1
+a110 1
+      size_t size;
+d114 1
+a114 1
+      size_t left (size_t id) { return (id - 1) % size; }
+d117 1
+a117 1
+      void test (size_t id) {
+d127 4
+a130 10
+      fork_manager (size_t size): size(size),
+                    waiting(size), state(size, THINKING) {
+      }
+      void take (size_t id) {
+         lock.down();
+         state[id] = HUNGRY;
+         test (id);
+         lock.up();
+         waiting[id].down();
+      }
+d132 20
+a151 8
+      void put (size_t id) {
+         lock.down();
+         state[id] = THINKING;
+         test (left (id));
+         test (right (id));
+         lock.up();
+      }
+};
+d196 1
+a196 1
+   for (auto& i: philos) i.join();
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.13 2014-06-03 19:17:14-07 - - $
+d128 1
+a128 1
+                    waiting(size, 0), state(size, THINKING) {
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.12 2014-06-03 19:11:02-07 - - $
+d127 2
+a128 2
+      fork_manager (size_t size):
+                    size(size), waiting(size), state(size) {
+d147 1
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.11 2014-06-03 19:09:14-07 - - $
+d174 1
+d190 1
+d193 4
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.10 2014-06-03 19:08:49-07 - - $
+d160 1
+a160 1
+      mcout.print (ident, "thinking (", delay, ")");
+d162 1
+a162 1
+      mcout.print (ident, "hungry");
+d165 1
+a165 1
+      mcout.print (ident, "eating (", delay, ")");
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.9 2014-06-03 19:08:13-07 - - $
+d175 1
+a175 1
+      "Pythagoras"
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.8 2014-06-03 19:07:00-07 - - $
+d181 1
+a181 1
+   fork_manager forks {names};
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.7 2014-06-03 19:01:44-07 - - $
+d127 2
+a128 3
+      fork_manager (const vector<string>& names):
+                    names(names), size(names.size()),
+                    waiting(names.size()), state(names.size()) {
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.6 2014-06-03 18:57:28-07 - - $
+a109 1
+      vector<string> names;
+a130 1
+      string name (size_t id) { return names[id]; }
+d148 2
+a149 1
+void philosopher (size_t id, size_t cycles, double mean, double stdev,
+d155 1
+a155 1
+   string ident = "(" + to_string(id) + ") " + forks.name(id) + " is ";
+d185 2
+a186 1
+      philos.push_back (thread (philosopher, id, 5, 1000, 250,
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.5 2014-06-03 18:53:39-07 - - $
+d176 7
+a182 1
+   vector<string> names = {"Socrates", "Plato", "Aristotle"};
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.4 2014-06-03 18:53:10-07 - - $
+d156 2
+a157 1
+   string name = forks.name(id) + " is ";
+d162 1
+a162 1
+      mcout.print (label, name, "thinking (", delay, ")");
+d164 1
+a164 1
+      mcout.print (label, name, "hungry");
+d167 1
+a167 1
+      mcout.print (label, name, "eating (", delay, ")");
+d171 1
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.3 2014-06-03 18:49:25-07 - - $
+d161 1
+a161 1
+      mcout.print (label, ident, "thinking (", delay, ")");
+d163 1
+a163 1
+      mcout.print (label, ident, "hungry");
+d166 1
+a166 1
+      mcout.print (label, ident, "eating (", delay, ")");
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: semaphilo.cpp,v 1.1 2014-06-03 17:52:18-07 - - $
+d156 4
+a159 2
+   string ident = "(" + to_string(id) + ") " + forks.name(id);
+   for (size_t i = 0; i < cycles; ++i) {
+d161 1
+a161 1
+      mcout.print (ident, " is thinking (", delay, ")");
+d163 1
+a163 1
+      mcout.print (ident, " is hungry");
+d166 1
+a166 1
+      mcout.print (ident, " is eating (", delay, ")");
+d178 1
+a178 1
+      philos.push_back (thread (philosopher, id, 5, 500, 100,
+@
+
+
+1.2
+log
+@-
+@
+text
+@d8 2
+a9 1
+#include <conditioned_variable>
+d12 3
+d17 52
+d84 1
+a84 1
+      semaphore (int count {});
+d95 1
+a95 1
+   if (count < 0) cond.wait();
+d106 20
+a125 19
+struct coordination {
+   constexpr size_t count = 5;
+   enum state {THINKING = 0, HUNGRY, EATING};
+   semaphore lock {1};
+   array<semaphore,count> sema;
+   array<state,count> state;
+} coord;
+
+int left (int id) { return (id - 1) % coord.count; }
+int right (int id) { return (id + 1) % coord.count; }
+
+void test (int id) {
+   if (coord.state[id] == HUNGRY and
+       state[left(id)] != EATING and
+       state[right(id)] != EATING) {
+      state[id] = EATING;
+      sema[id].up();
+   }
+}
+d127 22
+a148 15
+void take_forks (int id) {
+   coord.lock.down();
+   coord.state[id] = HUNGRY;
+   test (id);
+   coord.lock.up();
+   coord.sema[id].down();
+}
+
+void put_forks (int id) {
+   coord.lock.down();
+   state[i] = THINKING;
+   test (left (id));
+   test (right (id));
+   coord.lock.up();
+}
+d150 3
+a152 2
+void philosopher (int id, size_t cycles, double mean, double stdev) {
+   size_t seed = chrono::system_clock::now().time_since_epoch().count();
+d156 1
+d158 7
+a164 2
+      double delay = rand();
+      cout << "Phil " << id << " thinking " << delay << endl;
+d166 1
+a166 6
+      cout << "Phil " << id << " is hungry" << endl;
+      take_forks (id);
+      double delay = rand();
+      cout << "Phil " << id << " eating " << delay << endl;
+      this_thread::sleep_for (chrono::milliseconds (delay);
+      put_forks (id);
+d171 7
+a177 6
+   vector<thread> philos {
+      {philosopher, 1, 10, 20, 20},
+      {philosopher, 2, 10, 20, 20},
+      {philosopher, 3, 10, 20, 20},
+      {philosopher, 4, 10, 20, 20},
+      {philosopher, 5, 10, 20, 20},
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+d8 1
+a8 1
+#include <conditional_variable>
+@

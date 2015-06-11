@@ -1,0 +1,1570 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: prodconsbuf.ps
+%%For: Wesley Mackey
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Fri May 30 22:59:19 2014
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier-Bold /F-gs-font MF
+/F-gs-font 11 11 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript-mycolor 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+/HeaderPageCountF /Helvetica-Bold findfont 18 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    /dhw d_header_w 4 sub def
+
+    /linecolor {0 0 0 setrgbcolor} bind def  % line color
+    /txcolor   {0 0 0 setrgbcolor} bind def  % text color
+    /fncolor   {0 0 0 setrgbcolor} bind def  % filename line color
+
+    .5 setlinewidth
+
+    % line across bottom of the header area
+    linecolor
+    0 0 moveto dhw 0 lineto
+
+    % side boxes
+    /sbw d_header_h 2 mul def	% side box width
+
+    % left side box
+    0 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % date/time in left box
+    txcolor
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 5 div moveto show
+
+    % right side box
+    dhw sbw sub 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % get width of pagecount
+    HeaderPageCountF setfont
+    pagecountstr stringwidth pop
+
+    txcolor
+    HeaderPageNumF setfont
+    pagenumstr stringwidth pop add  % add to width of pagecount
+    sbw exch sub 2 div dhw sbw sub add
+    d_header_h .2 mul moveto
+
+    pagenumstr show
+
+    HeaderPageCountF setfont
+    pagecountstr show
+
+    % filename
+    fncolor
+    HeaderHDRF setfont
+    dhw fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % HACK around a bug in enscript 1.6.0:
+      % for some reason this is getting set to "(null)" and
+      %
+      user_header_center_str (\(null\)) eq {
+        /user_header_center_str () def
+      } if
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        dhw user_header_left_str stringwidth pop sub 2 div
+        h moveto user_header_left_str show
+      } {
+        sbw 5 add h moveto user_header_left_str show
+
+        dhw user_header_center_str stringwidth pop sub 2 div
+        h moveto user_header_center_str show
+
+	dhw sbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} bind def
+%%EndResource
+/d_page_w 536 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 708 def
+/d_header_w 536 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 536 def
+/d_footer_h 0 def
+/d_output_w 536 def
+/d_output_h 708 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (prodconsbuf.cpp) def
+/fdir () def
+/ftail (prodconsbuf.cpp) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (05/30/14) def
+/pagecountstr (/6) def
+/modtimestr (22:59:13) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(// $Id: prodconsbuf.cpp,v 1.3 2014-05-30 22:59:13-07 - - $) s
+32.4 682 M (2:) s
+32.4 670 M (3:) s
+52.2 670 M
+(// Producer/consumer problem using mutex and condition_variable.) s
+32.4 658 M (4:) s
+32.4 646 M (5:) s
+52.2 646 M
+(#include <array>) s
+32.4 634 M (6:) s
+52.2 634 M
+(#include <condition_variable>) s
+32.4 622 M (7:) s
+52.2 622 M
+(#include <iomanip>) s
+32.4 610 M (8:) s
+52.2 610 M
+(#include <cassert>) s
+32.4 598 M (9:) s
+52.2 598 M
+(#include <iostream>) s
+25.8 586 M (10:) s
+52.2 586 M
+(#include <mutex>) s
+25.8 574 M (11:) s
+52.2 574 M
+(#include <sstream>) s
+25.8 562 M (12:) s
+52.2 562 M
+(#include <string>) s
+25.8 550 M (13:) s
+52.2 550 M
+(#include <thread>) s
+25.8 538 M (14:) s
+52.2 538 M
+(#include <vector>) s
+25.8 526 M (15:) s
+52.2 526 M
+(using namespace std;) s
+25.8 514 M (16:) s
+25.8 502 M (17:) s
+52.2 502 M
+(#include <sys/time.h>) s
+25.8 490 M (18:) s
+25.8 478 M (19:) s
+52.2 478 M
+(//) s
+25.8 466 M (20:) s
+52.2 466 M
+(// Timer.) s
+25.8 454 M (21:) s
+52.2 454 M
+(//) s
+25.8 442 M (22:) s
+52.2 442 M
+(class elapsed_time {) s
+25.8 430 M (23:) s
+52.2 430 M
+(   private:) s
+25.8 418 M (24:) s
+52.2 418 M
+(      struct timeval start;) s
+25.8 406 M (25:) s
+52.2 406 M
+(   public:) s
+25.8 394 M (26:) s
+52.2 394 M
+(      elapsed_time\(\) { gettimeofday \(&start, nullptr\); }) s
+25.8 382 M (27:) s
+52.2 382 M
+(      string elapsed\(\) {) s
+25.8 370 M (28:) s
+52.2 370 M
+(         struct timeval now;) s
+25.8 358 M (29:) s
+52.2 358 M
+(         gettimeofday \(&now, nullptr\);) s
+25.8 346 M (30:) s
+52.2 346 M
+(         double secs = \(double\) \(now.tv_sec - start.tv_sec\)) s
+25.8 334 M (31:) s
+52.2 334 M
+(                     + \(double\) \(now.tv_usec - start.tv_usec\) * 1e-6;) s
+25.8 322 M (32:) s
+52.2 322 M
+(         ostringstream result;) s
+25.8 310 M (33:) s
+52.2 310 M
+(         result << setw\(7\) << setprecision\(3\) << fixed << secs;) s
+25.8 298 M (34:) s
+52.2 298 M
+(         return result.str\(\);) s
+25.8 286 M (35:) s
+52.2 286 M
+(      }) s
+25.8 274 M (36:) s
+52.2 274 M
+(} timer;) s
+25.8 262 M (37:) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (prodconsbuf.cpp) def
+/fdir () def
+/ftail (prodconsbuf.cpp) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (05/30/14) def
+/pagecountstr (/6) def
+/modtimestr (22:59:13) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (38:) s
+25.8 682 M (39:) s
+52.2 682 M
+(//) s
+25.8 670 M (40:) s
+52.2 670 M
+(// class bounded_buffer) s
+25.8 658 M (41:) s
+52.2 658 M
+(// NOT synchronized.) s
+25.8 646 M (42:) s
+52.2 646 M
+(// Just your ordinary 12B Data Structures queue.) s
+25.8 634 M (43:) s
+52.2 634 M
+(//) s
+25.8 622 M (44:) s
+25.8 610 M (45:) s
+52.2 610 M
+(template <typename T, size_t size>) s
+25.8 598 M (46:) s
+52.2 598 M
+(class bounded_buffer {) s
+25.8 586 M (47:) s
+52.2 586 M
+(   public:) s
+25.8 574 M (48:) s
+52.2 574 M
+(      using value_type = T;) s
+25.8 562 M (49:) s
+52.2 562 M
+(   private:) s
+25.8 550 M (50:) s
+52.2 550 M
+(      static constexpr ssize_t EMPTY = -1;) s
+25.8 538 M (51:) s
+52.2 538 M
+(      ssize_t head = EMPTY;) s
+25.8 526 M (52:) s
+52.2 526 M
+(      ssize_t tail = EMPTY;) s
+25.8 514 M (53:) s
+52.2 514 M
+(      array<T,size> items;) s
+25.8 502 M (54:) s
+52.2 502 M
+(   public:) s
+25.8 490 M (55:) s
+52.2 490 M
+(      // Six synthesizeable are all OK.) s
+25.8 478 M (56:) s
+52.2 478 M
+(      bool empty\(\) const { return head == EMPTY; }) s
+25.8 466 M (57:) s
+52.2 466 M
+(      bool full\(\) { return \(tail + 1\) % size == head; }) s
+25.8 454 M (58:) s
+52.2 454 M
+(      const value_type& front\(\) const;) s
+25.8 442 M (59:) s
+52.2 442 M
+(      void pop\(\);) s
+25.8 430 M (60:) s
+52.2 430 M
+(      void push \(const value_type& val\);) s
+25.8 418 M (61:) s
+52.2 418 M
+(};) s
+25.8 406 M (62:) s
+25.8 394 M (63:) s
+52.2 394 M
+(template <typename T, size_t size>) s
+25.8 382 M (64:) s
+52.2 382 M
+(const T& bounded_buffer<T,size>::front\(\) const {) s
+25.8 370 M (65:) s
+52.2 370 M
+(   if \(empty\(\)\) throw runtime_error \("bounded_buffer::front \(empty\)"\);) s
+25.8 358 M (66:) s
+52.2 358 M
+(   return items[head];) s
+25.8 346 M (67:) s
+52.2 346 M
+(}) s
+25.8 334 M (68:) s
+25.8 322 M (69:) s
+52.2 322 M
+(template <typename T, size_t size>) s
+25.8 310 M (70:) s
+52.2 310 M
+(void bounded_buffer<T,size>::pop\(\) {) s
+25.8 298 M (71:) s
+52.2 298 M
+(   if \(empty\(\)\) throw runtime_error \("bounded_buffer::pop \(empty\)"\);) s
+25.8 286 M (72:) s
+52.2 286 M
+(   if \(head == tail\) head = tail = EMPTY;) s
+25.8 274 M (73:) s
+52.2 274 M
+(                else head = \(head + 1\) % size;) s
+25.8 262 M (74:) s
+52.2 262 M
+(}) s
+25.8 250 M (75:) s
+25.8 238 M (76:) s
+52.2 238 M
+(template <typename T, size_t size>) s
+25.8 226 M (77:) s
+52.2 226 M
+(void bounded_buffer<T,size>::push \(const value_type& val\) {) s
+25.8 214 M (78:) s
+52.2 214 M
+(   if \(full\(\)\) throw runtime_error \("bounded_buffer::push \(full\)"\);) s
+25.8 202 M (79:) s
+52.2 202 M
+(   if \(empty\(\)\) head = tail = 0;) s
+25.8 190 M (80:) s
+52.2 190 M
+(           else tail = \(tail + 1\) % size;) s
+25.8 178 M (81:) s
+52.2 178 M
+(   items[tail] = val;) s
+25.8 166 M (82:) s
+52.2 166 M
+(}) s
+25.8 154 M (83:) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (prodconsbuf.cpp) def
+/fdir () def
+/ftail (prodconsbuf.cpp) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (05/30/14) def
+/pagecountstr (/6) def
+/modtimestr (22:59:13) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+25.8 694 M (84:) s
+25.8 682 M (85:) s
+52.2 682 M
+(//) s
+25.8 670 M (86:) s
+52.2 670 M
+(// class synchronized_buffer) s
+25.8 658 M (87:) s
+52.2 658 M
+(// prevents concurrent access and uses the bounded_buffer.) s
+25.8 646 M (88:) s
+52.2 646 M
+(//) s
+25.8 634 M (89:) s
+25.8 622 M (90:) s
+52.2 622 M
+(template <typename T, size_t size>) s
+25.8 610 M (91:) s
+52.2 610 M
+(class synchronized_buffer {) s
+25.8 598 M (92:) s
+52.2 598 M
+(   public:) s
+25.8 586 M (93:) s
+52.2 586 M
+(      using value_type = T;) s
+25.8 574 M (94:) s
+52.2 574 M
+(   private:) s
+25.8 562 M (95:) s
+52.2 562 M
+(      bounded_buffer<T,size> buffer;) s
+25.8 550 M (96:) s
+52.2 550 M
+(      mutex lock;) s
+25.8 538 M (97:) s
+52.2 538 M
+(      condition_variable condvar;) s
+25.8 526 M (98:) s
+52.2 526 M
+(      bool ready {false};) s
+25.8 514 M (99:) s
+52.2 514 M
+(   public:) s
+19.2 502 M (100:) s
+52.2 502 M
+(      void put \(const value_type& val\);) s
+19.2 490 M (101:) s
+52.2 490 M
+(      value_type get\(\);) s
+19.2 478 M (102:) s
+52.2 478 M
+(};) s
+19.2 466 M (103:) s
+19.2 454 M (104:) s
+52.2 454 M
+(template <typename T, size_t size>) s
+19.2 442 M (105:) s
+52.2 442 M
+(void synchronized_buffer<T,size>::put \(const value_type& val\) {) s
+19.2 430 M (106:) s
+52.2 430 M
+(   unique_lock<mutex> ulock \(lock\);) s
+19.2 418 M (107:) s
+52.2 418 M
+(   while \(buffer.full\(\)\) condvar.wait \(ulock\);) s
+19.2 406 M (108:) s
+52.2 406 M
+(   buffer.push \(val\);) s
+19.2 394 M (109:) s
+52.2 394 M
+(   condvar.notify_all\(\);) s
+19.2 382 M (110:) s
+52.2 382 M
+(}) s
+19.2 370 M (111:) s
+19.2 358 M (112:) s
+52.2 358 M
+(template <typename T, size_t size>) s
+19.2 346 M (113:) s
+52.2 346 M
+(T synchronized_buffer<T,size>::get\(\) {) s
+19.2 334 M (114:) s
+52.2 334 M
+(   unique_lock<mutex> ulock \(lock\);) s
+19.2 322 M (115:) s
+52.2 322 M
+(   while \(buffer.empty\(\)\) condvar.wait \(ulock\);) s
+19.2 310 M (116:) s
+52.2 310 M
+(   value_type result = buffer.front\(\);) s
+19.2 298 M (117:) s
+52.2 298 M
+(   buffer.pop\(\);) s
+19.2 286 M (118:) s
+52.2 286 M
+(   condvar.notify_all\(\);) s
+19.2 274 M (119:) s
+52.2 274 M
+(   return result;) s
+19.2 262 M (120:) s
+52.2 262 M
+(}) s
+19.2 250 M (121:) s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (prodconsbuf.cpp) def
+/fdir () def
+/ftail (prodconsbuf.cpp) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (05/30/14) def
+/pagecountstr (/6) def
+/modtimestr (22:59:13) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (122:) s
+19.2 682 M (123:) s
+52.2 682 M
+(//) s
+19.2 670 M (124:) s
+52.2 670 M
+(// Data counter.) s
+19.2 658 M (125:) s
+52.2 658 M
+(// Counts messages so that consumers know when to stop.) s
+19.2 646 M (126:) s
+52.2 646 M
+(// Consumers stop when all producers have quit and data is done.) s
+19.2 634 M (127:) s
+52.2 634 M
+(//) s
+19.2 622 M (128:) s
+19.2 610 M (129:) s
+52.2 610 M
+(class counter {) s
+19.2 598 M (130:) s
+52.2 598 M
+(   private:) s
+19.2 586 M (131:) s
+52.2 586 M
+(      ssize_t data_count {0};) s
+19.2 574 M (132:) s
+52.2 574 M
+(      ssize_t producer_count {0};) s
+19.2 562 M (133:) s
+52.2 562 M
+(      bool producer_started {false};) s
+19.2 550 M (134:) s
+52.2 550 M
+(      mutex lock;) s
+19.2 538 M (135:) s
+52.2 538 M
+(   public:) s
+19.2 526 M (136:) s
+52.2 526 M
+(      enum ADJUST {INCR = +1, NONE = 0, DECR = -1};) s
+19.2 514 M (137:) s
+52.2 514 M
+(      void adjust \(ADJUST data, ADJUST producer = NONE\);) s
+19.2 502 M (138:) s
+52.2 502 M
+(      bool end_of_data\(\);) s
+19.2 490 M (139:) s
+52.2 490 M
+(      friend string to_string \(const counter&\);) s
+19.2 478 M (140:) s
+52.2 478 M
+(};) s
+19.2 466 M (141:) s
+19.2 454 M (142:) s
+52.2 454 M
+(void counter::adjust \(ADJUST data, ADJUST producer\) {) s
+19.2 442 M (143:) s
+52.2 442 M
+(   lock.lock\(\);) s
+19.2 430 M (144:) s
+52.2 430 M
+(   assert \(\(data == NONE and producer != NONE\)) s
+19.2 418 M (145:) s
+52.2 418 M
+(        or \(data != NONE and producer == NONE\)\);) s
+19.2 406 M (146:) s
+52.2 406 M
+(   if \(producer == INCR\) producer_started = true;) s
+19.2 394 M (147:) s
+52.2 394 M
+(   data_count += \(ssize_t\) data;) s
+19.2 382 M (148:) s
+52.2 382 M
+(   producer_count += \(ssize_t\) producer;) s
+19.2 370 M (149:) s
+52.2 370 M
+(   assert \(data_count >= 0\);) s
+19.2 358 M (150:) s
+52.2 358 M
+(   assert \(producer_count >= 0\);) s
+19.2 346 M (151:) s
+52.2 346 M
+(   lock.unlock\(\);) s
+19.2 334 M (152:) s
+52.2 334 M
+(}) s
+19.2 322 M (153:) s
+19.2 310 M (154:) s
+52.2 310 M
+(bool counter::end_of_data\(\) {) s
+19.2 298 M (155:) s
+52.2 298 M
+(   // Should be const, but then couldn't lock it.) s
+19.2 286 M (156:) s
+52.2 286 M
+(   lock.lock\(\);) s
+19.2 274 M (157:) s
+52.2 274 M
+(   bool end = producer_started and producer_count == 0) s
+19.2 262 M (158:) s
+52.2 262 M
+(              and data_count == 0;) s
+19.2 250 M (159:) s
+52.2 250 M
+(   lock.unlock\(\);) s
+19.2 238 M (160:) s
+52.2 238 M
+(   return end;) s
+19.2 226 M (161:) s
+52.2 226 M
+(}) s
+19.2 214 M (162:) s
+19.2 202 M (163:) s
+52.2 202 M
+(string to_string \(const counter& ctr\) {) s
+19.2 190 M (164:) s
+52.2 190 M
+(   return "[" + to_string \(ctr.data_count\) + ",") s
+19.2 178 M (165:) s
+52.2 178 M
+(          + to_string \(ctr.producer_count\) + "]") s
+19.2 166 M (166:) s
+52.2 166 M
+(          + \(ctr.producer_started ? "+" : "-"\);) s
+19.2 154 M (167:) s
+52.2 154 M
+(}) s
+19.2 142 M (168:) s
+_R
+S
+%%Page: (5) 5
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 5 def
+/fname (prodconsbuf.cpp) def
+/fdir () def
+/ftail (prodconsbuf.cpp) def
+% User defined strings:
+/pagenumstr (5) def
+/moddatestr (05/30/14) def
+/pagecountstr (/6) def
+/modtimestr (22:59:13) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (169:) s
+19.2 682 M (170:) s
+52.2 682 M
+(//) s
+19.2 670 M (171:) s
+52.2 670 M
+(// Buffer and data declarations and printer.) s
+19.2 658 M (172:) s
+52.2 658 M
+(//) s
+19.2 646 M (173:) s
+19.2 634 M (174:) s
+52.2 634 M
+(using buf_data = pair<string,size_t>;) s
+19.2 622 M (175:) s
+52.2 622 M
+(using synch_buffer = synchronized_buffer<buf_data,5>;) s
+19.2 610 M (176:) s
+52.2 610 M
+(string to_string \(const buf_data& data\) {) s
+19.2 598 M (177:) s
+52.2 598 M
+(   return "[\\"" + data.first + "\\"," + to_string \(data.second\) + "]";) s
+19.2 586 M (178:) s
+52.2 586 M
+(}) s
+19.2 574 M (179:) s
+19.2 562 M (180:) s
+52.2 562 M
+(struct printer {) s
+19.2 550 M (181:) s
+52.2 550 M
+(   mutex lock;) s
+19.2 538 M (182:) s
+52.2 538 M
+(   void print \(const string& name, size_t id, const buf_data& data,) s
+19.2 526 M (183:) s
+52.2 526 M
+(               const counter* count\) {) s
+19.2 514 M (184:) s
+52.2 514 M
+(      lock.lock\(\);) s
+19.2 502 M (185:) s
+52.2 502 M
+(      cout << timer.elapsed\(\) << " " << name << " " << id) s
+19.2 490 M (186:) s
+52.2 490 M
+(           << " " << to_string \(data\) << " ... " << to_string \(*count\)) s
+19.2 478 M (187:) s
+52.2 478 M
+(           << endl << flush;) s
+19.2 466 M (188:) s
+52.2 466 M
+(      lock.unlock\(\);) s
+19.2 454 M (189:) s
+52.2 454 M
+(   }) s
+19.2 442 M (190:) s
+52.2 442 M
+(   void print \(const string& name, const string &status\) {) s
+19.2 430 M (191:) s
+52.2 430 M
+(      lock.lock\(\);) s
+19.2 418 M (192:) s
+52.2 418 M
+(      cout << timer.elapsed\(\) << " " << name << " " << status << endl;) s
+19.2 406 M (193:) s
+52.2 406 M
+(      lock.unlock\(\);) s
+19.2 394 M (194:) s
+52.2 394 M
+(   }) s
+19.2 382 M (195:) s
+52.2 382 M
+(} print;) s
+19.2 370 M (196:) s
+_R
+S
+%%Page: (6) 6
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 6 def
+/fname (prodconsbuf.cpp) def
+/fdir () def
+/ftail (prodconsbuf.cpp) def
+% User defined strings:
+/pagenumstr (6) def
+/moddatestr (05/30/14) def
+/pagecountstr (/6) def
+/modtimestr (22:59:13) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+19.2 694 M (197:) s
+19.2 682 M (198:) s
+52.2 682 M
+(//) s
+19.2 670 M (199:) s
+52.2 670 M
+(// Producer and consumer threads.) s
+19.2 658 M (200:) s
+52.2 658 M
+(//) s
+19.2 646 M (201:) s
+19.2 634 M (202:) s
+52.2 634 M
+(void producer \(size_t id, counter* count, synch_buffer* buffer,) s
+19.2 622 M (203:) s
+52.2 622 M
+(               const vector<string>* words\) {) s
+19.2 610 M (204:) s
+52.2 610 M
+(   count->adjust \(counter::NONE, counter::INCR\);) s
+19.2 598 M (205:) s
+52.2 598 M
+(   print.print \("producer " + to_string \(id\), "STARTING"\);) s
+19.2 586 M (206:) s
+52.2 586 M
+(   for \(const auto& word: *words\) {) s
+19.2 574 M (207:) s
+52.2 574 M
+(      this_thread::sleep_for \(chrono::milliseconds \(id * 200\)\);) s
+19.2 562 M (208:) s
+52.2 562 M
+(      buf_data data {word, id};) s
+19.2 550 M (209:) s
+52.2 550 M
+(      buffer->put \(data\);) s
+19.2 538 M (210:) s
+52.2 538 M
+(      count->adjust \(counter::INCR\);) s
+19.2 526 M (211:) s
+52.2 526 M
+(      print.print \("producer", id, data, count\);) s
+19.2 514 M (212:) s
+52.2 514 M
+(   }) s
+19.2 502 M (213:) s
+52.2 502 M
+(   count->adjust \(counter::NONE, counter::DECR\);) s
+19.2 490 M (214:) s
+52.2 490 M
+(   print.print \("producer " + to_string \(id\), "FINISHED"\);) s
+19.2 478 M (215:) s
+52.2 478 M
+(}) s
+19.2 466 M (216:) s
+19.2 454 M (217:) s
+52.2 454 M
+(void consumer \(size_t id, counter* count, synch_buffer* buffer\) {) s
+19.2 442 M (218:) s
+52.2 442 M
+(   print.print \("consumer " + to_string \(id\), "STARTING"\);) s
+19.2 430 M (219:) s
+52.2 430 M
+(   do {) s
+19.2 418 M (220:) s
+52.2 418 M
+(      this_thread::sleep_for \(chrono::milliseconds \(id * 400\)\);) s
+19.2 406 M (221:) s
+52.2 406 M
+(      if \(count->end_of_data\(\)\) break;) s
+19.2 394 M (222:) s
+52.2 394 M
+(      auto data = buffer->get\(\);) s
+19.2 382 M (223:) s
+52.2 382 M
+(      count->adjust \(counter::DECR\);) s
+19.2 370 M (224:) s
+52.2 370 M
+(      print.print \("consumer", id, data, count\);) s
+19.2 358 M (225:) s
+52.2 358 M
+(   }while \(not count->end_of_data\(\)\);) s
+19.2 346 M (226:) s
+52.2 346 M
+(   print.print \("consumer " + to_string \(id\), "FINISHED"\);) s
+19.2 334 M (227:) s
+52.2 334 M
+(}) s
+19.2 322 M (228:) s
+19.2 310 M (229:) s
+52.2 310 M
+(//) s
+19.2 298 M (230:) s
+52.2 298 M
+(// Main.) s
+19.2 286 M (231:) s
+52.2 286 M
+(//) s
+19.2 274 M (232:) s
+19.2 262 M (233:) s
+52.2 262 M
+(int main\(\) {) s
+19.2 250 M (234:) s
+52.2 250 M
+(   cout << boolalpha;) s
+19.2 238 M (235:) s
+52.2 238 M
+(   counter count;) s
+19.2 226 M (236:) s
+52.2 226 M
+(   print.print \("main " + to_string \(count\), "STARTING"\);) s
+19.2 214 M (237:) s
+52.2 214 M
+(   synch_buffer buffer;) s
+19.2 202 M (238:) s
+52.2 202 M
+(   vector<thread> vec;) s
+19.2 190 M (239:) s
+52.2 190 M
+(   vector<string> words {"Hello", "World", "foo", "bar", "baz", "qux"};) s
+19.2 178 M (240:) s
+52.2 178 M
+(   for \(size_t i = 1; i <= 3; ++i\) {) s
+19.2 166 M (241:) s
+52.2 166 M
+(      vec.push_back \(thread \(producer, i, &count, &buffer, &words\)\);) s
+19.2 154 M (242:) s
+52.2 154 M
+(      vec.push_back \(thread \(consumer, i, &count, &buffer\)\);) s
+19.2 142 M (243:) s
+52.2 142 M
+(   }) s
+19.2 130 M (244:) s
+52.2 130 M
+(   for \(auto& t: vec\) t.join\(\);) s
+19.2 118 M (245:) s
+52.2 118 M
+(   print.print \("main " + to_string \(count\), "FINISHED"\);) s
+19.2 106 M (246:) s
+52.2 106 M
+(   return 0;) s
+19.2 94 M (247:) s
+52.2 94 M
+(}) s
+19.2 82 M (248:) s
+19.2 70 M (249:) s
+52.2 70 M
+(//TEST// prodconsbuf >prodconsbuf.out 2>&1) s
+19.2 58 M (250:) s
+52.2 58 M
+(//TEST// mkpspdf prodconsbuf.ps prodconsbuf.cpp* prodconsbuf.out) s
+19.2 46 M (251:) s
+_R
+S
+%%Page: (1) 7
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (prodconsbuf.cpp.log) def
+/fdir () def
+/ftail (prodconsbuf.cpp.log) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (05/30/14) def
+/pagecountstr (/1) def
+/modtimestr (22:59:14) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting prodconsbuf.cpp) s
+32.4 682 M (2:) s
+52.2 682 M
+(prodconsbuf.cpp:) s
+32.4 670 M (3:) s
+52.2 670 M
+(     $Id: prodconsbuf.cpp,v 1.3 2014-05-30 22:59:13-07 - - $) s
+32.4 658 M (4:) s
+52.2 658 M
+(g++ -g -O0 -Wall -Wextra -std=gnu++11 prodconsbuf.cpp -o prodconsbuf -lg) s
+5 646 M
+(lut -lGLU -lGL -lX11 -lm -lrt) s
+32.4 634 M (5:) s
+52.2 634 M
+(rm -f prodconsbuf.o) s
+32.4 622 M (6:) s
+52.2 622 M
+(@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished prodconsbuf.cpp) s
+_R
+S
+%%Page: (1) 8
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (prodconsbuf.out) def
+/fdir () def
+/ftail (prodconsbuf.out) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (05/30/14) def
+/pagecountstr (/1) def
+/modtimestr (22:59:19) def
+/user_header_p true def
+/user_header_left_str ($cmps109-wm/Examples/threads/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+32.4 694 M (1:) s
+52.2 694 M
+(  0.000 main [0,0]- STARTING) s
+32.4 682 M (2:) s
+52.2 682 M
+(  0.001 producer 1 STARTING) s
+32.4 670 M (3:) s
+52.2 670 M
+(  0.001 producer 2 STARTING) s
+32.4 658 M (4:) s
+52.2 658 M
+(  0.001 consumer 1 STARTING) s
+32.4 646 M (5:) s
+52.2 646 M
+(  0.001 consumer 2 STARTING) s
+32.4 634 M (6:) s
+52.2 634 M
+(  0.001 producer 3 STARTING) s
+32.4 622 M (7:) s
+52.2 622 M
+(  0.001 consumer 3 STARTING) s
+32.4 610 M (8:) s
+52.2 610 M
+(  0.201 producer 1 ["Hello",1] ... [1,3]+) s
+32.4 598 M (9:) s
+52.2 598 M
+(  0.401 producer 2 ["Hello",2] ... [2,3]+) s
+25.8 586 M (10:) s
+52.2 586 M
+(  0.401 producer 1 ["World",1] ... [3,3]+) s
+25.8 574 M (11:) s
+52.2 574 M
+(  0.401 consumer 1 ["Hello",1] ... [2,3]+) s
+25.8 562 M (12:) s
+52.2 562 M
+(  0.601 producer 1 ["foo",1] ... [3,3]+) s
+25.8 550 M (13:) s
+52.2 550 M
+(  0.601 producer 3 ["Hello",3] ... [4,3]+) s
+25.8 538 M (14:) s
+52.2 538 M
+(  0.801 producer 2 ["World",2] ... [5,3]+) s
+25.8 526 M (15:) s
+52.2 526 M
+(  0.801 consumer 2 ["Hello",2] ... [4,3]+) s
+25.8 514 M (16:) s
+52.2 514 M
+(  0.801 consumer 1 ["World",1] ... [3,3]+) s
+25.8 502 M (17:) s
+52.2 502 M
+(  0.801 producer 1 ["bar",1] ... [4,3]+) s
+25.8 490 M (18:) s
+52.2 490 M
+(  1.001 producer 1 ["baz",1] ... [5,3]+) s
+25.8 478 M (19:) s
+52.2 478 M
+(  1.201 consumer 1 ["foo",1] ... [4,3]+) s
+25.8 466 M (20:) s
+52.2 466 M
+(  1.201 producer 2 ["foo",2] ... [5,3]+) s
+25.8 454 M (21:) s
+52.2 454 M
+(  1.201 consumer 3 ["Hello",3] ... [5,3]+) s
+25.8 442 M (22:) s
+52.2 442 M
+(  1.202 producer 3 ["World",3] ... [5,3]+) s
+25.8 430 M (23:) s
+52.2 430 M
+(  1.601 consumer 2 ["World",2] ... [4,3]+) s
+25.8 418 M (24:) s
+52.2 418 M
+(  1.601 producer 1 ["qux",1] ... [5,3]+) s
+25.8 406 M (25:) s
+52.2 406 M
+(  1.601 producer 1 FINISHED) s
+25.8 394 M (26:) s
+52.2 394 M
+(  1.601 consumer 1 ["bar",1] ... [4,2]+) s
+25.8 382 M (27:) s
+52.2 382 M
+(  1.602 producer 2 ["bar",2] ... [5,2]+) s
+25.8 370 M (28:) s
+52.2 370 M
+(  2.002 consumer 1 ["baz",1] ... [4,2]+) s
+25.8 358 M (29:) s
+52.2 358 M
+(  2.002 producer 3 ["foo",3] ... [5,2]+) s
+25.8 346 M (30:) s
+52.2 346 M
+(  2.401 consumer 2 ["foo",2] ... [4,2]+) s
+25.8 334 M (31:) s
+52.2 334 M
+(  2.401 producer 2 ["baz",2] ... [5,2]+) s
+25.8 322 M (32:) s
+52.2 322 M
+(  2.402 consumer 1 ["World",3] ... [4,2]+) s
+25.8 310 M (33:) s
+52.2 310 M
+(  2.402 consumer 3 ["qux",1] ... [3,2]+) s
+25.8 298 M (34:) s
+52.2 298 M
+(  2.602 producer 3 ["bar",3] ... [4,2]+) s
+25.8 286 M (35:) s
+52.2 286 M
+(  2.802 producer 2 ["qux",2] ... [5,2]+) s
+25.8 274 M (36:) s
+52.2 274 M
+(  2.802 producer 2 FINISHED) s
+25.8 262 M (37:) s
+52.2 262 M
+(  2.802 consumer 1 ["bar",2] ... [4,1]+) s
+25.8 250 M (38:) s
+52.2 250 M
+(  3.202 consumer 2 ["foo",3] ... [3,1]+) s
+25.8 238 M (39:) s
+52.2 238 M
+(  3.202 consumer 1 ["baz",2] ... [2,1]+) s
+25.8 226 M (40:) s
+52.2 226 M
+(  3.202 producer 3 ["baz",3] ... [3,1]+) s
+25.8 214 M (41:) s
+52.2 214 M
+(  3.602 consumer 3 ["bar",3] ... [2,1]+) s
+25.8 202 M (42:) s
+52.2 202 M
+(  3.602 consumer 1 ["qux",2] ... [1,1]+) s
+25.8 190 M (43:) s
+52.2 190 M
+(  3.802 producer 3 ["qux",3] ... [2,1]+) s
+25.8 178 M (44:) s
+52.2 178 M
+(  3.802 producer 3 FINISHED) s
+25.8 166 M (45:) s
+52.2 166 M
+(  4.002 consumer 2 ["baz",3] ... [1,0]+) s
+25.8 154 M (46:) s
+52.2 154 M
+(  4.002 consumer 1 ["qux",3] ... [0,0]+) s
+25.8 142 M (47:) s
+52.2 142 M
+(  4.002 consumer 1 FINISHED) s
+25.8 130 M (48:) s
+52.2 130 M
+(  4.802 consumer 2 FINISHED) s
+25.8 118 M (49:) s
+52.2 118 M
+(  4.802 consumer 3 FINISHED) s
+25.8 106 M (50:) s
+52.2 106 M
+(  4.802 main [0,0]+ FINISHED) s
+_R
+S
+%%Trailer
+%%Pages: 8
+%%DocumentNeededResources: font Times-Roman Courier-Bold Times-Bold 
+%%EOF

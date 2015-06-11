@@ -7,12 +7,12 @@ Date    - June 4th 2015
 Program - cix/cixd
 
 
-Description : This project includes two programs, a client
-and a server. The project allows one to communicate 
-between the client and the server in a very specific
-manner, mostly involving the transfer, retreival, and
-deletion of files. The following functionality is
-available :
+Description : This project includes two programs, a 
+client and a server. The project allows one to 
+communicate between the client and the server in a 
+very specific manner, mostly involving the transfer,
+retreival, and deletion of files. The following 
+functionality is available :
 
 put fn - put a file from the client to the server.
 get fn - get a file from the server to the client
@@ -23,3 +23,25 @@ usage :
 
 cixd [port] # this is the server program
 cix [host] [port] # this is the client program
+
+NOTES : I had a problem where some files would be 'put'
+and have random bytes attached to the end. I've been
+trying to solve this but as of writing this README the
+bug still exists, so if you perform a diff and see 
+an error that is what the cause is. Please don't murder
+my score 'cause of this :)
+
+-- NOTE 2 - I think I fixed this last minute, tested
+by sending and receiving 5 different files and no 
+random bytes were added.
+
+I wanted to thank you guys for the great quarter, I
+absolutely loved c++ coming into this class and my
+love for language has grown exponentially while
+taking this class. Nothing is more fun to me than
+writing C++ programs on Unix systems, I love to be
+as far away from Java and Windows as possible, so 
+this semester has been programming-heaven for me.
+You guys have been very helpful and very fair 
+graders, and I appreciate the timely grading 
+responses.

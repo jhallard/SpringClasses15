@@ -1,0 +1,34 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.1
+date	2014.05.29.21.49.54;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@// $Id$
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   for (int c = 0; c < 255; ++c) {
+      cout << static_cast<char> (c);
+      if ((c & 0x1F) == 0x1F) cout << endl;
+   }
+}
+@

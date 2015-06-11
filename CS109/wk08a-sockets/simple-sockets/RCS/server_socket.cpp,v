@@ -1,0 +1,161 @@
+head	1.6;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.6
+date	2014.05.19.23.28.15;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.17.06.06.12;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.17.05.20.56;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.17.05.18.59;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.17.04.14.41;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.17.04.08.34;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@-
+@
+text
+@// $Id: server_socket.cpp,v 1.5 2014-05-16 23:06:12-07 - - $
+
+#include <string>
+using namespace std;
+
+#include "server_socket.h"
+#include "socket_error.h"
+
+server_socket::server_socket (in_port_t port) {
+   socket::create();
+   socket::bind (port);
+   socket::listen();
+}
+
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: server_socket.cpp,v 1.4 2014-05-16 22:20:56-07 - - $
+d9 1
+a9 1
+server_socket::server_socket (int port) {
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id$
+a14 13
+server_socket& server_socket::operator<< (const string& message) {
+  ssize_t nbytes = socket::send (message);
+  if (nbytes == 0) throw socket_error ("socket::send() failed");
+  return *this;
+}
+
+
+server_socket& server_socket::operator>> (string& message) {
+  ssize_t nbytes = socket::recv (message);
+  if (nbytes == 0) throw socket_error ("socket::recv() failed");
+  return *this;
+}
+
+@
+
+
+1.3
+log
+@-
+@
+text
+@a8 4
+void error (const string& message) {
+   throw socket_error (message);
+}
+
+d10 3
+a12 6
+   bool created = socket::create();
+   if (not created) error ("socket::create() failed");
+   bool bound = socket::bind (port);
+   if (not bound) error ("socket::bind() failed");
+   bool listening = socket::listen();
+   if (not listening) error ("socket::listen() failed");
+d16 2
+a17 2
+  bool sent = socket::send (message);
+  if (not sent) error ("socket::send() failed");
+d23 2
+a24 2
+  bool received = socket::recv (message);
+  if (not received) error ("socket::recv() failed");
+a27 5
+void server_socket::accept (server_socket& sock) {
+  bool accepted = socket::accept (sock);
+  if (not accepted) error ("socket::accept() failed");
+}
+
+@
+
+
+1.2
+log
+@-
+@
+text
+@d1 1
+a1 1
+// Implementation of the server_socket class
+@
+
+
+1.1
+log
+@-
+@
+text
+@d22 1
+a22 1
+server_socket& server_socket::operato<< (const string& message) {
+d30 1
+a30 1
+  bool received = socket::recv (message))
+@

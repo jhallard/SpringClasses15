@@ -1,0 +1,50 @@
+  0.000 main [0,0]- STARTING
+  0.001 producer 1 STARTING
+  0.001 producer 2 STARTING
+  0.001 consumer 1 STARTING
+  0.001 consumer 2 STARTING
+  0.001 producer 3 STARTING
+  0.001 consumer 3 STARTING
+  0.201 producer 1 ["Hello",1] ... [1,3]+
+  0.401 producer 2 ["Hello",2] ... [2,3]+
+  0.401 producer 1 ["World",1] ... [3,3]+
+  0.401 consumer 1 ["Hello",1] ... [2,3]+
+  0.601 producer 1 ["foo",1] ... [3,3]+
+  0.601 producer 3 ["Hello",3] ... [4,3]+
+  0.801 producer 2 ["World",2] ... [5,3]+
+  0.801 consumer 2 ["Hello",2] ... [4,3]+
+  0.801 consumer 1 ["World",1] ... [3,3]+
+  0.801 producer 1 ["bar",1] ... [4,3]+
+  1.001 producer 1 ["baz",1] ... [5,3]+
+  1.201 consumer 1 ["foo",1] ... [4,3]+
+  1.201 producer 2 ["foo",2] ... [5,3]+
+  1.201 consumer 3 ["Hello",3] ... [5,3]+
+  1.202 producer 3 ["World",3] ... [5,3]+
+  1.601 consumer 2 ["World",2] ... [4,3]+
+  1.601 producer 1 ["qux",1] ... [5,3]+
+  1.601 producer 1 FINISHED
+  1.601 consumer 1 ["bar",1] ... [4,2]+
+  1.602 producer 2 ["bar",2] ... [5,2]+
+  2.002 consumer 1 ["baz",1] ... [4,2]+
+  2.002 producer 3 ["foo",3] ... [5,2]+
+  2.401 consumer 2 ["foo",2] ... [4,2]+
+  2.401 producer 2 ["baz",2] ... [5,2]+
+  2.402 consumer 1 ["World",3] ... [4,2]+
+  2.402 consumer 3 ["qux",1] ... [3,2]+
+  2.602 producer 3 ["bar",3] ... [4,2]+
+  2.802 producer 2 ["qux",2] ... [5,2]+
+  2.802 producer 2 FINISHED
+  2.802 consumer 1 ["bar",2] ... [4,1]+
+  3.202 consumer 2 ["foo",3] ... [3,1]+
+  3.202 consumer 1 ["baz",2] ... [2,1]+
+  3.202 producer 3 ["baz",3] ... [3,1]+
+  3.602 consumer 3 ["bar",3] ... [2,1]+
+  3.602 consumer 1 ["qux",2] ... [1,1]+
+  3.802 producer 3 ["qux",3] ... [2,1]+
+  3.802 producer 3 FINISHED
+  4.002 consumer 2 ["baz",3] ... [1,0]+
+  4.002 consumer 1 ["qux",3] ... [0,0]+
+  4.002 consumer 1 FINISHED
+  4.802 consumer 2 FINISHED
+  4.802 consumer 3 FINISHED
+  4.802 main [0,0]+ FINISHED

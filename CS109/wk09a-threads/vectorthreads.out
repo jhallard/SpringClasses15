@@ -1,0 +1,49 @@
+thread::hardware_concurrency() = 8
+Starting thread 0
+Starting thread 1
+Hello 0 is thread id 140416454964992
+Starting thread 2
+Hello 1 is thread id 140416444475136
+Starting thread 3
+Hello 2 is thread id 140416433985280
+Starting thread 4
+Starting thread 5
+Hello 4 is thread id 140416413005568
+Starting thread 6
+Hello Starting thread 7
+Hello 6 is thread id 5 is thread id 140416402515712
+Starting thread 8
+Hello 7 is thread id 140416381536000
+Starting thread 9
+Hello 8 is thread id 140416371046144
+Starting thread 10
+Hello 3 is thread id 140416423495424
+Starting thread 11
+Hello 9 is thread id 140416360556288
+Starting thread Hello 11 is thread id 140416339576576
+12
+Hello 10 is thread id 140416350066432
+Starting thread 13
+140416392025856
+Hello 13 is thread id 140416318596864
+Starting thread 14
+Starting thread 15
+Hello 14 is thread id 140416308107008
+Joining
+Hello 15 is thread id 140416297617152
+Joining
+Joining
+Joining
+Joining
+Joining
+Joining
+Joining
+Joining
+Joining
+Joining
+Joining
+Joining
+Hello 12 is thread id 140416329086720
+Joining
+Joining
+Joining

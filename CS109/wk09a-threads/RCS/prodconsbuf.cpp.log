@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting prodconsbuf.cpp
+prodconsbuf.cpp:
+     $Id: prodconsbuf.cpp,v 1.3 2014-05-30 22:59:13-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 prodconsbuf.cpp -o prodconsbuf -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f prodconsbuf.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished prodconsbuf.cpp

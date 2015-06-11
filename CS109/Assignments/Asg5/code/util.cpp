@@ -16,11 +16,11 @@ string read_file(const string & fn) {
 	infile.seekg (0);
 
 	// allocate memory for file content
-	char* buffer = new char[size];
+	char* buffer = new char[size+1];
 
 	// read content of infile
 	infile.read (buffer,size);
-
+	buffer[size] = '\0';
 	string ret(buffer);
 
 	delete [] buffer;

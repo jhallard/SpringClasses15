@@ -1,0 +1,31 @@
+
+bash-2$ ./dateserver 8888&
+[1] 21136
+
+bash-3$ telnet localhost 8888
+Trying ::1...
+telnet: connect to address ::1: Connection refused
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+Thu May 22 18:07:59 PDT 2014
+Connection closed by foreign host.
+
+bash-4$ ./dateserver localhost 8888
+Thu May 22 18:08:07 PDT 2014
+
+bash-5$ ./dateserver localhost 8888
+Thu May 22 18:08:14 PDT 2014
+
+bash-5$ ./dateserver localhost 8888
+Thu May 22 18:08:15 PDT 2014
+
+bash-5$ kill %1
+
+bash-6$ 
+[1]+  Terminated              ./dateserver 8888
+
+bash-6$ exit
+exit
+
+Script done on Thu 22 May 2014 06:08:27 PM PDT

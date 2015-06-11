@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting hellothread.cpp
+hellothread.cpp:
+     $Id: hellothread.cpp,v 1.6 2014-05-30 22:34:00-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 hellothread.cpp -o hellothread -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f hellothread.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished hellothread.cpp

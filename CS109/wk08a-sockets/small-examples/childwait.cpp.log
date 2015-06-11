@@ -1,0 +1,6 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: starting childwait.cpp
+childwait.cpp:
+     $Id: childwait.cpp,v 1.2 2014-05-23 12:26:39-07 - - $
+g++ -g -O0 -Wall -Wextra -std=gnu++11 childwait.cpp -o childwait -lglut -lGLU -lGL -lX11 -lm -lrt
+rm -f childwait.o
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ mkc: finished childwait.cpp

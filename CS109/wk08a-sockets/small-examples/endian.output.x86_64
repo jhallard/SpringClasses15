@@ -1,0 +1,10 @@
+-bash-23$ uname -srmpi
+Linux 2.6.32-431.11.2.el6.x86_64 x86_64 x86_64 x86_64
+-bash-24$ ./endian
+Original: 0x12345678 = 78 56 34 12
+Network : 0x78563412 = 12 34 56 78
+Host    : 0x12345678 = 78 56 34 12
+Original: 0x1234 = 34 12
+Network : 0x3412 = 12 34
+Host    : 0x1234 = 34 12
+

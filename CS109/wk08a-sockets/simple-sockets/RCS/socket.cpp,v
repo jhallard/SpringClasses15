@@ -1,0 +1,1148 @@
+head	1.27;
+access;
+symbols;
+locks;
+comment	@// @;
+
+
+1.27
+date	2014.05.23.19.46.27;	author -;	state -;
+branches;
+next	1.26;
+
+1.26
+date	2014.05.23.19.45.23;	author -;	state -;
+branches;
+next	1.25;
+
+1.25
+date	2014.05.23.02.00.24;	author -;	state -;
+branches;
+next	1.24;
+
+1.24
+date	2014.05.23.01.55.42;	author -;	state -;
+branches;
+next	1.23;
+
+1.23
+date	2014.05.22.01.20.33;	author -;	state -;
+branches;
+next	1.22;
+
+1.22
+date	2014.05.22.01.14.52;	author -;	state -;
+branches;
+next	1.21;
+
+1.21
+date	2014.05.22.01.05.21;	author -;	state -;
+branches;
+next	1.20;
+
+1.20
+date	2014.05.22.01.00.37;	author -;	state -;
+branches;
+next	1.19;
+
+1.19
+date	2014.05.22.00.46.53;	author -;	state -;
+branches;
+next	1.18;
+
+1.18
+date	2014.05.21.20.08.00;	author -;	state -;
+branches;
+next	1.17;
+
+1.17
+date	2014.05.21.01.39.15;	author -;	state -;
+branches;
+next	1.16;
+
+1.16
+date	2014.05.21.01.37.39;	author -;	state -;
+branches;
+next	1.15;
+
+1.15
+date	2014.05.20.01.38.48;	author -;	state -;
+branches;
+next	1.14;
+
+1.14
+date	2014.05.20.01.31.39;	author -;	state -;
+branches;
+next	1.13;
+
+1.13
+date	2014.05.20.00.44.29;	author -;	state -;
+branches;
+next	1.12;
+
+1.12
+date	2014.05.20.00.28.41;	author -;	state -;
+branches;
+next	1.11;
+
+1.11
+date	2014.05.19.23.29.35;	author -;	state -;
+branches;
+next	1.10;
+
+1.10
+date	2014.05.19.23.29.24;	author -;	state -;
+branches;
+next	1.9;
+
+1.9
+date	2014.05.19.23.28.15;	author -;	state -;
+branches;
+next	1.8;
+
+1.8
+date	2014.05.19.20.22.02;	author -;	state -;
+branches;
+next	1.7;
+
+1.7
+date	2014.05.19.20.19.42;	author -;	state -;
+branches;
+next	1.6;
+
+1.6
+date	2014.05.19.20.19.09;	author -;	state -;
+branches;
+next	1.5;
+
+1.5
+date	2014.05.19.20.06.47;	author -;	state -;
+branches;
+next	1.4;
+
+1.4
+date	2014.05.17.06.06.12;	author -;	state -;
+branches;
+next	1.3;
+
+1.3
+date	2014.05.17.05.18.59;	author -;	state -;
+branches;
+next	1.2;
+
+1.2
+date	2014.05.17.04.43.07;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2014.05.17.04.08.34;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.27
+log
+@-
+@
+text
+@// $Id: socket.cpp,v 1.26 2014-05-23 12:45:23-07 - - $
+
+#include <cerrno>
+#include <cstring>
+#include <iostream>
+#include <sstream>
+#include <string>
+using namespace std;
+
+#include <fcntl.h>
+#include <limits.h>
+
+#include "socket.h"
+
+base_socket::base_socket() {
+   memset (&socket_addr, 0, sizeof (socket_addr));
+}
+
+base_socket::~base_socket() {
+   if (socket_fd != CLOSED_FD) close();
+}
+
+void base_socket::close() {
+   int status = ::close (socket_fd);
+   if (status < 0) throw socket_sys_error ("close");
+   socket_fd = CLOSED_FD;
+}
+
+void base_socket::create() {
+   socket_fd = ::socket (AF_INET, SOCK_STREAM, 0);
+   if (socket_fd < 0) throw socket_sys_error ("socket");
+   int on = 1;
+   int status = ::setsockopt (socket_fd, SOL_SOCKET, SO_REUSEADDR,
+                            &on, sizeof on);
+   if (status < 0) throw socket_sys_error ("setsockopt");
+}
+
+void base_socket::bind (const in_port_t port) {
+   socket_addr.sin_family = AF_INET;
+   socket_addr.sin_addr.s_addr = INADDR_ANY;
+   socket_addr.sin_port = htons (port);
+   int status = ::bind (socket_fd, (sockaddr*) &socket_addr,
+                        sizeof socket_addr);
+   if (status < 0) throw socket_sys_error ("bind");
+}
+
+void base_socket::listen() const {
+   int status = ::listen (socket_fd, SOMAXCONN);
+   if (status < 0) throw socket_sys_error ("listen");
+}
+
+
+void base_socket::accept (base_socket& new_socket) const {
+   int addr_length = sizeof new_socket.socket_addr;
+   new_socket.socket_fd = ::accept (socket_fd,
+                            (sockaddr*) &new_socket.socket_addr,
+                            (socklen_t*) &addr_length);
+   if (new_socket.socket_fd < 0) throw socket_sys_error ("accept");
+}
+
+ssize_t base_socket::send (const string& message) {
+   int nbytes = ::send (socket_fd, message.c_str(), message.size(),
+                        MSG_NOSIGNAL);
+   if (nbytes < 0) throw socket_sys_error ("send");
+   return nbytes;
+}
+
+ssize_t base_socket::recv (string& message) {
+   char buffer [MAXRECV + 1];
+   message = "";
+   memset (buffer, 0, MAXRECV + 1);
+   ssize_t nbytes = ::recv (socket_fd, buffer, MAXRECV, 0);
+   if (nbytes < 0) throw socket_sys_error ("recv");
+   if (nbytes > 0) message = buffer;
+   return nbytes;
+}
+
+void base_socket::connect (const string host, const in_port_t port) {
+   struct hostent *hostp = ::gethostbyname (host.c_str());
+   if (hostp == NULL) throw socket_h_error ("gethostbyname("
+                            + host + ")");
+   socket_addr.sin_family = AF_INET;
+   socket_addr.sin_port = htons (port);
+   socket_addr.sin_addr = *(in_addr*) hostp->h_addr;
+   int status = ::connect (socket_fd, (sockaddr*) &socket_addr,
+                           sizeof (socket_addr));
+   if (status < 0) throw socket_sys_error ("connect(" + host + ":"
+                         + to_string (port) + ")");
+}
+
+void base_socket::set_non_blocking (const bool blocking) {
+   int opts = ::fcntl (socket_fd, F_GETFL);
+   if (opts < 0) throw socket_sys_error ("fcntl");
+   if (blocking) opts |= O_NONBLOCK;
+            else opts &= compl O_NONBLOCK;
+   opts = ::fcntl (socket_fd, F_SETFL, opts);
+   if (opts < 0) throw socket_sys_error ("fcntl");
+}
+
+
+client_socket::client_socket (string host, in_port_t port) {
+   base_socket::create();
+   base_socket::connect (host, port);
+}
+
+server_socket::server_socket (in_port_t port) {
+   base_socket::create();
+   base_socket::bind (port);
+   base_socket::listen();
+}
+
+string to_string (const hostinfo& info) {
+   return info.hostname + " (" + to_string (info.addresses[0]) + ")";
+}
+
+string to_string (const in_addr& ipv4_addr) { 
+   char buffer[INET_ADDRSTRLEN];
+   const char *result = ::inet_ntop (AF_INET, &ipv4_addr,
+                                     buffer, sizeof buffer);
+   if (result == NULL) throw socket_sys_error ("inet_ntop");
+   return result; 
+}
+
+string to_string (const base_socket& sock) {
+   hostinfo info (sock.socket_addr.sin_addr);
+   return info.hostname + " (" + to_string (info.addresses[0])
+          + ") port " + to_string (ntohs (sock.socket_addr.sin_port));
+}
+
+
+string init_hostname (hostent* host) {
+   if (host == nullptr) throw socket_h_error ("gethostbyname");
+   return host->h_name;
+}
+
+vector<string> init_aliases (hostent* host) {
+   if (host == nullptr) throw socket_h_error ("gethostbyname");
+   vector<string> init_aliases;
+   for (char** alias = host->h_aliases; *alias != nullptr; ++alias) {
+      init_aliases.push_back (*alias);
+   }
+   return init_aliases;
+}
+
+vector<in_addr> init_addresses (hostent* host) {
+   vector<in_addr> init_addresses;
+   if (host == nullptr) throw socket_h_error ("gethostbyname");
+   for (in_addr** addr = (in_addr**) host->h_addr_list;
+        *addr != nullptr; ++addr) {
+      init_addresses.push_back (**addr);
+   }
+   return init_addresses;
+}
+
+hostinfo::hostinfo (hostent* host):
+   hostname (init_hostname (host)),
+   aliases (init_aliases (host)),
+   addresses (init_addresses (host)) {
+}
+
+hostinfo::hostinfo(): hostinfo (localhost()) {
+}
+
+hostinfo::hostinfo (const string& hostname):
+          hostinfo (::gethostbyname (hostname.c_str())) {
+}
+
+hostinfo::hostinfo (const in_addr& ipv4_addr):
+          hostinfo (::gethostbyaddr (&ipv4_addr, sizeof ipv4_addr,
+                                     AF_INET)) {
+}
+
+string localhost() {
+   char hostname[HOST_NAME_MAX];
+   int rc = gethostname (hostname, sizeof hostname);
+   if (rc < 0) throw socket_sys_error ("gethostname");
+   return hostname;
+}
+
+@
+
+
+1.26
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.25 2014-05-22 19:00:24-07 - - $
+a100 6
+string to_string (const base_socket& sock) {
+   hostinfo info (sock.socket_addr.sin_addr);
+   return info.hostname + " (" + to_string (info.addresses[0])
+          + ") port " + to_string (ntohs (sock.socket_addr.sin_port));
+}
+
+d124 6
+@
+
+
+1.25
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.24 2014-05-22 18:55:42-07 - - $
+d118 12
+a154 1
+
+a179 12
+string to_string (const hostinfo& info) {
+   return info.hostname + " (" + to_string (info.addresses[0]) + ")";
+}
+
+string to_string (const in_addr& ipv4_addr) { 
+   char buffer[INET_ADDRSTRLEN];
+   const char *result = ::inet_ntop (AF_INET, &ipv4_addr,
+                                     buffer, sizeof buffer);
+   if (result == NULL) throw socket_sys_error ("inet_ntop");
+   return result; 
+}
+
+@
+
+
+1.24
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.23 2014-05-21 18:20:33-07 - - $
+d11 1
+a12 1
+#include "hostinfo.h"
+d118 1
+a118 12
+// $Id: hostinfo.cpp,v 1.7 2014-05-22 16:33:32-07 - - $
+
+#include <string>
+#include <sstream>
+using namespace std;
+
+#include <limits.h>
+#include <unistd.h>
+
+#include "hostinfo.h"
+#include "socket.h"
+
+@
+
+
+1.23
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.22 2014-05-21 18:14:52-07 - - $
+d118 74
+@
+
+
+1.22
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.21 2014-05-21 18:05:21-07 - - $
+d100 1
+a106 3
+
+/////////////////////////////////////////////////////////////////
+
+a111 2
+/////////////////////////////////////////////////////////////////
+
+a117 2
+/////////////////////////////////////////////////////////////////
+
+@
+
+
+1.21
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.20 2014-05-21 18:00:37-07 - - $
+d106 1
+d122 2
+@
+
+
+1.20
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.19 2014-05-21 17:46:53-07 - - $
+d100 1
+a100 1
+string to_string (const base_socket& sock) const {
+@
+
+
+1.19
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.18 2014-05-21 13:08:00-07 - - $
+d15 1
+a15 1
+socket::socket() {
+d19 1
+a19 1
+socket::~socket() {
+d23 1
+a23 1
+void socket::close() {
+d29 1
+a29 1
+void socket::create() {
+d38 1
+a38 1
+void socket::bind (const in_port_t port) {
+d47 1
+a47 1
+void socket::listen() const {
+d53 1
+a53 1
+void socket::accept (socket& new_socket) const {
+d61 1
+a61 1
+ssize_t socket::send (const string& message) {
+d68 1
+a68 1
+ssize_t socket::recv (string& message) {
+d78 1
+a78 1
+void socket::connect (const string host, const in_port_t port) {
+d88 1
+a88 1
+                         + ::to_string (port) + ")");
+d91 1
+a91 1
+void socket::set_non_blocking (const bool blocking) {
+d100 4
+a103 4
+string socket::to_string() const {
+   hostinfo info (socket_addr.sin_addr);
+   return info.hostname + " (" + ::to_string (info.addresses[0])
+          + ") port " + ::to_string (socket_addr.sin_port);
+d109 2
+a110 2
+   socket::create();
+   socket::connect (host, port);
+d116 3
+a118 3
+   socket::create();
+   socket::bind (port);
+   socket::listen();
+@
+
+
+1.18
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.17 2014-05-20 18:39:15-07 - - $
+a13 1
+#include "socket_error.h"
+d25 1
+a25 1
+   if (status < 0) throw socket_error ("close");
+d31 1
+a31 1
+   if (socket_fd < 0) throw socket_error ("socket");
+d35 1
+a35 1
+   if (status < 0) throw socket_error ("setsockopt");
+d44 1
+a44 1
+   if (status < 0) throw socket_error ("bind");
+d49 1
+a49 1
+   if (status < 0) throw socket_error ("listen");
+d58 1
+a58 1
+   if (new_socket.socket_fd < 0) throw socket_error ("accept");
+d64 1
+a64 1
+   if (nbytes < 0) throw socket_error ("send");
+d73 1
+a73 1
+   if (nbytes < 0) throw socket_error ("recv");
+d87 1
+a87 1
+   if (status < 0) throw socket_error ("connect(" + host + ":"
+d93 1
+a93 1
+   if (opts < 0) throw socket_error ("fcntl");
+d97 1
+a97 1
+   if (opts < 0) throw socket_error ("fcntl");
+a99 1
+
+d106 15
+@
+
+
+1.17
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.16 2014-05-20 18:37:39-07 - - $
+d21 1
+a21 1
+   if (socket_fd != CLOSED) close();
+d27 1
+a27 1
+   socket_fd = CLOSED;
+d96 1
+a96 1
+            else opts &= ~O_NONBLOCK;
+a101 9
+int socket::is_valid() const {
+   int error = 0;
+   socklen_t len = sizeof error;
+   int status = ::getsockopt (socket_fd, SOL_SOCKET, SO_ERROR,
+                            &error, &len);
+   if (status < 0) throw socket_error ("getsockopt");
+   return error;
+}
+
+@
+
+
+1.16
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.16 2014-05-20 18:12:07-07 - - $
+d101 1
+@
+
+
+1.15
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.14 2014-05-19 18:31:39-07 - - $
+d12 1
+d55 3
+a57 2
+   int addr_length = sizeof socket_addr;
+   new_socket.socket_fd = ::accept (socket_fd, (sockaddr*) &socket_addr,
+d89 1
+a89 1
+                         + to_string (port) + ")");
+d110 6
+@
+
+
+1.14
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.13 2014-05-19 17:44:29-07 - - $
+d52 1
+a59 1
+
+@
+
+
+1.13
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.12 2014-05-19 17:28:41-07 - - $
+a58 9
+void socket::getpeer (socket& peer_socket) const {
+   sockaddr_in addr;
+   socklen_t socklen;
+   int status = getpeername (peer_socket.socket_fd,
+                             (sockaddr*) &addr, &socklen);
+   if (status < 0) throw socket_error ("getpeername");
+   peer_socket.socket_addr = addr;
+}
+
+d86 2
+a87 2
+   if (status < 0) throw socket_error ("connect("
+                         + string(*this) + ")");
+a107 10
+socket::operator string() const {
+   char buffer[INET_ADDRSTRLEN];
+   const char *status = ::inet_ntop (AF_INET, &socket_addr.sin_addr,
+                                     buffer, sizeof buffer);
+   if (status == NULL) throw socket_error ("inet_ntop");
+   ostringstream result; 
+   result << buffer << ":" << socket_addr.sin_port;
+   return result.str();
+}
+
+@
+
+
+1.12
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.11 2014-05-19 16:29:35-07 - - $
+d59 9
+@
+
+
+1.11
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.10 2014-05-19 16:29:24-07 - - $
+d78 3
+d83 5
+a87 6
+   int status = ::inet_pton (AF_INET, host.c_str(),
+                           &socket_addr.sin_addr);
+   if (status < 0) throw socket_error ("inet_pton(" + host + ")");
+   status = ::connect (socket_fd, (sockaddr*) &socket_addr,
+                       sizeof (socket_addr));
+   if (status < 0) throw socket_error ("connect(" + host + ")");
+d108 10
+@
+
+
+1.10
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.9 2014-05-19 16:28:15-07 - - $
+d105 1
+a105 1
+}
+@
+
+
+1.9
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.8 2014-05-19 13:22:02-07 - - $
+a104 9
+
+socket::operator string() const {
+   char buffer[INET_ADDRSTRLEN];
+   const char *status = ::inet_ntop (AF_INET, &socket_addr.sin_addr,
+                                     buffer, sizeof buffer);
+   if (status == NULL) throw socket_error ("inet_ntop");
+   ostringstream result;
+   result << buffer << ":" << socket_addr.sin_port;
+   return result.str();
+@
+
+
+1.8
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.7 2014-05-19 13:19:42-07 - - $
+d3 1
+a4 2
+#include <errno.h>
+#include <fcntl.h>
+d6 1
+d10 2
+d26 1
+d97 1
+a97 1
+pair<int,int> socket::is_valid() const {
+d102 2
+a103 1
+   return {error, status == 0 ? 0 : errno};
+d106 9
+@
+
+
+1.7
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.6 2014-05-19 13:19:09-07 - - $
+d56 1
+@
+
+
+1.6
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.5 2014-05-19 13:06:47-07 - - $
+d23 1
+a23 1
+   if (status < 0) throw socket_error ("::close");
+d28 1
+a28 1
+   if (socket_fd < 0) throw socket_error ("::socket");
+d32 1
+a32 1
+   if (status < 0) throw socket_error ("::setsockopt");
+d41 1
+a41 1
+   if (status < 0) throw socket_error ("::bind");
+d46 1
+a46 1
+   if (status < 0) throw socket_error ("::listen");
+d53 1
+a53 1
+   if (new_socket.socket_fd < 0) throw socket_error ("::accept");
+d59 1
+a59 1
+   if (nbytes < 0) throw socket_error ("::send");
+d68 1
+a68 1
+   if (nbytes < 0) throw socket_error ("::recv");
+d78 1
+a78 1
+   if (status < 0) throw socket_error ("::inet_pton(" + host + ")");
+d81 1
+a81 1
+   if (status < 0) throw socket_error ("::connect(" + host + ")");
+d86 1
+a86 1
+   if (opts < 0) throw socket_error ("::fcntl");
+d90 1
+a90 1
+   if (opts < 0) throw socket_error ("::fcntl");
+@
+
+
+1.5
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.4 2014-05-16 23:06:12-07 - - $
+d30 1
+a30 1
+   int status = setsockopt (socket_fd, SOL_SOCKET, SO_REUSEADDR,
+d76 1
+a76 1
+   int status = inet_pton (AF_INET, host.c_str(),
+d78 1
+a78 1
+   if (status < 0) throw socket_error ("::inet_pton");
+d81 1
+a81 1
+   if (status < 0) throw socket_error ("::connect");
+d85 1
+a85 1
+   int opts = fcntl (socket_fd, F_GETFL);
+d89 1
+a89 1
+   opts = fcntl (socket_fd, F_SETFL, opts);
+d96 1
+a96 1
+   int status = getsockopt (socket_fd, SOL_SOCKET, SO_ERROR,
+@
+
+
+1.4
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.3 2014-05-16 22:18:59-07 - - $
+a12 5
+constexpr int MAXHOSTNAME = 200;
+constexpr int MAXCONNECTIONS = 5;
+constexpr int MAXRECV = 500;
+constexpr int INVALID = -1;
+
+a13 1
+   socket_fd = -1;
+d18 4
+d23 1
+a23 1
+   if (status < 0) syserror ("::close");
+d28 1
+a28 1
+   if (socket_fd < 0) syserror ("::socket");
+d32 1
+a32 1
+   if (status < 0) syserror ("::setsockopt");
+d35 1
+a35 1
+void socket::bind (const int port) {
+d41 1
+a41 1
+   if (status < 0) syserror ("::bind");
+d45 2
+a46 2
+   int status = ::listen (socket_fd, MAXCONNECTIONS);
+   if (status < 0) syserror ("::listen");
+d53 1
+a53 1
+   if (new_socket.socket_fd < 0) syserror ("::accept");
+d59 1
+a59 1
+   if (nbytes < 0) syserror ("::send");
+d68 1
+a68 1
+   if (nbytes < 0) syserror ("::recv");
+d73 1
+a73 1
+void socket::connect (const string host, const int port) {
+d78 1
+a78 1
+   if (status < 0) syserror ("::inet_pton");
+d81 1
+a81 1
+   if (status < 0) syserror ("::connect");
+d86 1
+a86 1
+   if (opts < 0) syserror ("::fcntl");
+d90 1
+a90 1
+   if (opts < 0) syserror ("::fcntl");
+@
+
+
+1.3
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.1 2014-05-16 21:08:34-07 - - $
+d18 2
+a19 1
+socket::socket(): socket_fd (INVALID) {
+d24 2
+a25 1
+   if (is_valid()) ::close (socket_fd);
+d30 1
+a30 1
+   if (socket_fd < 0) syserror ("socket");
+d34 1
+a34 1
+   if (status < 0) syserror ("setsockopt");
+a37 1
+   if (not is_valid()) throw socket_error ("socket::bind not valid");
+d43 1
+a43 1
+   if (status < 0) syserror ("bind");
+a46 1
+   if (not is_valid()) throw socket_error ("socket::bind not valid");
+d48 1
+a48 1
+   if (status < 0) syserror ("bind");
+d55 1
+a55 1
+   if (new_socket.socket_fd < 0) syserror ("accept");
+d58 4
+a61 3
+ssize_t socket::send (const string s) {
+   int nbytes = ::send (socket_fd, s.c_str(), s.size(), MSG_NOSIGNAL);
+   if (nbytes < 0) syserror ("send");
+d70 1
+a70 1
+   if (nbytes < 0) syserror ("recv");
+a75 1
+   if (not is_valid()) throw socket_error ("socket::connect not valid");
+d80 1
+a80 1
+   if (status < 0) syserror ("inet_pton");
+d83 1
+a83 1
+   if (status < 0) syserror ("connect");
+d88 1
+a88 1
+   if (opts < 0) syserror ("set_non_blocking/fcntl");
+d92 9
+a100 1
+   if (opts < 0) syserror ("set_non_blocking/fcntl");
+@
+
+
+1.2
+log
+@-
+@
+text
+@d11 1
+d26 1
+a26 1
+bool socket::create() {
+d28 1
+a28 1
+   if (not is_valid()) return false;
+d32 1
+a32 1
+   return status != INVALID;
+d35 2
+a36 2
+bool socket::bind (const int port) {
+   if (not is_valid()) return false;
+d40 3
+a42 3
+   int status = ::bind (socket_fd, (struct sockaddr *) &socket_addr,
+                        sizeof (socket_addr));
+   return status != INVALID;
+d45 2
+a46 2
+bool socket::listen() const {
+   if (not is_valid()) return false;
+d48 1
+a48 1
+   return status != INVALID;
+d51 1
+a51 1
+bool socket::accept (socket& new_socket) const {
+d54 2
+a55 2
+                                 (socklen_t*) &addr_length);
+   return new_socket.socket_fd > 0;
+d58 4
+a61 3
+bool socket::send (const string s) {
+   int status = ::send (socket_fd, s.c_str(), s.size(), MSG_NOSIGNAL);
+   return status != INVALID;
+d64 1
+a64 1
+int socket::recv (string& message) {
+d68 4
+a71 10
+   int status = ::recv (socket_fd, buffer, MAXRECV, 0);
+   if (status == INVALID) {
+      cout << "socket::recv(): " << strerror (errno) << endl;
+      return 0;
+   }else if (status == 0) {
+       return 0;
+   }else {
+      message = buffer;
+      return status;
+   }
+d74 2
+a75 2
+bool socket::connect (const string host, const int port) {
+   if (not is_valid()) return false;
+d78 6
+a83 4
+   int status = inet_pton (AF_INET, host.c_str(), &socket_addr.sin_addr);
+   if (errno == EAFNOSUPPORT) return false;
+   status = ::connect (socket_fd, (sockaddr *) &socket_addr, sizeof (socket_addr));
+   return status == 0;
+d88 1
+a88 1
+   if (opts < 0) return;
+d91 2
+a92 1
+   fcntl (socket_fd, F_SETFL,opts);
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+// $Id: socket.cpp,v 1.2 2014-05-16 21:07:27-07 - - $
+d17 2
+a18 2
+socket::socket(): m_sock (INVALID) {
+   memset (&m_addr, 0, sizeof (m_addr));
+d22 1
+a22 1
+   if (is_valid()) ::close (m_sock);
+d26 1
+a26 1
+   m_sock = ::socket (AF_INET, SOCK_STREAM, 0);
+d29 1
+a29 1
+   int status = setsockopt (m_sock, SOL_SOCKET, SO_REUSEADDR,
+a33 2
+
+
+d36 5
+a40 5
+   m_addr.sin_family = AF_INET;
+   m_addr.sin_addr.s_addr = INADDR_ANY;
+   m_addr.sin_port = htons (port);
+   int status = ::bind (m_sock, (struct sockaddr *) &m_addr,
+                        sizeof (m_addr));
+a43 1
+
+d46 1
+a46 1
+   int status = ::listen (m_sock, MAXCONNECTIONS);
+a49 1
+
+d51 2
+a52 2
+   int addr_length = sizeof m_addr;
+   new_socket.m_sock = ::accept (m_sock, (sockaddr*) &m_addr,
+d54 1
+a54 1
+   return new_socket.m_sock > 0;
+a56 1
+
+d58 1
+a58 1
+   int status = ::send (m_sock, s.c_str(), s.size(), MSG_NOSIGNAL);
+a61 1
+
+d66 1
+a66 1
+   int status = ::recv (m_sock, buffer, MAXRECV, 0);
+a77 2
+
+
+d80 3
+a82 3
+   m_addr.sin_family = AF_INET;
+   m_addr.sin_port = htons (port);
+   int status = inet_pton (AF_INET, host.c_str(), &m_addr.sin_addr);
+d84 1
+a84 1
+   status = ::connect (m_sock, (sockaddr *) &m_addr, sizeof (m_addr));
+d89 1
+a89 1
+   int opts = fcntl (m_sock, F_GETFL);
+d93 1
+a93 1
+   fcntl (m_sock, F_SETFL,opts);
+d95 1
+@
