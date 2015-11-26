@@ -61,13 +61,24 @@
   </header>
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title"><strong>Board-om</strong></span>
-    <hr>
     <nav class="mdl-navigation">
       {% #if logged_in %} 
-          <a class="mdl-navigation__link" href={{=URL('do_logout')}}><i class="fa fa-sign-out"></i> logout</a>
+        <a href={{=URL('do_logout')}}>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="width:100%; padding-bottom:5px">
+                <i class="fa fa-sign-out"></i> Logout
+            </button>
+       </a>
       {% else %}
-          <a class="mdl-navigation__link" href={{=URL('do_login')}}><i class="fa fa-sign-in"></i> login</a>
-          <a class="mdl-navigation__link" href={{=URL('do_register')}}><i class="fa fa-user-plus"></i> register</a>
+        <a href={{=URL('do_login')}}>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="width:100%; padding-bottom:5px">
+                <i class="fa fa-sign-in"></i> Login 
+            </button>
+       </a>
+        <a href={{=URL('do_register')}}>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="width:100%; padding-bottom:5px">
+                <i class="fa fa-user-plus"></i> Register
+            </button>
+       </a>
       {% /if %}
     </nav>
 	<hr>
@@ -88,7 +99,7 @@
         {% /if %}
 
         {% #each board_list %}
-         {% #if is_draft %}
+         {% #if is_draft && user_id == creator %}
             <div class="col-md-offset-1 col-sm-12 col-xs-12 col-lg-5 col-md-6">
             <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card-wide mdl-card mdl-shadow--2dp" style="width:100%">
@@ -122,12 +133,20 @@
             <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card-wide mdl-card mdl-shadow--2dp" style="width:100%">
               <div class="mdl-card__title">
+                {% #if title == "" %}
+                <h2 class="mdl-card__title-text"><small style="color:white"> in progress... </small></h2>
+                {% else %}
                 <h2 class="mdl-card__title-text">{% title %}</h2>
+                {% /if %}
               </div>
               <div class="mdl-card__supporting-text">
                 <div class="row">
                 <div class="col-sm-8 col-xs-12 col-md-8 col-lg-9">
+                {% #if description == "" %}
+                    <p style="color:red"> another user is creating this board right now.</p>
+                {% else %}
                     {% description %}
+                {% /if %}
                 </div>
                 <div class="col-sm-4 col-xs-12 col-md-4 col-lg-3">
                     <div class="pull-right"><strong>Posts</strong> : {% num_posts %}</div>
@@ -366,7 +385,7 @@ $(function() {
   function periodic_send() {
       var board_list = MAIN.get('board_list');
       for(var x = 0; x < board_list.length; x++) {
-          if(board_list[x].is_draft) {
+          if(board_list[x].is_draft && board_list[x].creator == MAIN.get('user_id')) {
               var id = board_list[x].board_id;
               var title = $("#board_title_"+id).val();
               var description  = $("#board_desc_"+id).val();
