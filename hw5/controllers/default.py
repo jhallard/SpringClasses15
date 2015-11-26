@@ -46,24 +46,25 @@ def add_board():
     if board :
         board.update_record(
             title=request.vars.title,
-            dtitle=request.vars.title,
+            dtitle=request.vars.dtitle,
             board_id=str(request.vars.board_id),
             description=request.vars.description,
-            ddescription=request.vars.description,
+            ddescription=request.vars.ddescription,
             creator = request.vars.creator,
             is_draft=json.loads(request.vars.is_draft)
         )
-        return
+        return load_board(request.vars.board_id);
+
     db['boards'].insert(
             title=request.vars.title,
-            dtitle=request.vars.title,
+            dtitle=request.vars.dtitle,
             board_id=str(request.vars.board_id),
             description=request.vars.description,
-            ddescription=request.vars.description,
+            ddescription=request.vars.ddescription,
             creator = request.vars.creator,
             is_draft=json.loads(request.vars.is_draft)
             )
-    return "ok"
+    return load_board(request.vars.board_id);
 
 @auth.requires_signature()
 def remove_board():
@@ -80,6 +81,30 @@ def add_favorite():
             board_id=board_id,
             user_id=user_id)
     return True
+
+def load_board():
+    return load_board(request.vars.board_id);
+
+def load_board(board_id) :
+    """Loads One Board, just the board"""
+    board = db(db.boards.board_id == board_id).select().first()
+
+    board_dict = {
+                  "board_id" : board.board_id,
+                  "creator" : board.creator,
+                  "title"    : board.title,
+                  "dtitle"    : board.dtitle,
+                  "num_posts" : db(db.posts.board == board).count(),
+                  "description" : board.description,
+                  "ddescription" : board.ddescription,
+                  "created_at" : board.created_at.isoformat(),
+                  "is_draft" : board.is_draft,
+                  "uri" : URL('default', 'board', args=[str(board.id)])
+                  }
+
+    return response.json(dict(
+                             board_dict= board_dict
+                         ))
 
 def load_boards():
     """Loads all boards for the user."""

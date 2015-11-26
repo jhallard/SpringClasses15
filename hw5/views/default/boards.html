@@ -184,19 +184,38 @@ $(function() {
     },
   });
 
-  // Loads the initial list of boards
-  $.ajax("{{=URL('default', 'load_boards', user_signature=True)}}",
-          {
-            method: 'POST',
-            success: function (data) {
-              MAIN.set('board_list', data['board_list']);
-              MAIN.set('my_boards', data['my_boards']);
-              MAIN.set('logged_in', (data['user_id'] != -1));
-              MAIN.set('user_id', data['user_id']);
-              MAIN.set('loading', false);
-            }
-          }
-    );
+  function load_boards() {
+      // Loads the initial list of boards
+      $.ajax("{{=URL('default', 'load_boards', user_signature=True)}}",
+              {
+                method: 'POST',
+                success: function (data) {
+                  MAIN.set('board_list', data['board_list']);
+                  MAIN.set('my_boards', data['my_boards']);
+                  MAIN.set('logged_in', (data['user_id'] != -1));
+                  MAIN.set('user_id', data['user_id']);
+                  MAIN.set('loading', false);
+                }
+              }
+        );
+  }
+
+  function load_board(board_id) {
+      // Loads the initial list of boards
+      $.ajax("{{=URL('default', 'load_board')}}",
+              {
+                method: 'POST',
+                data : {"board_id" : board_id},
+                success: function (data) {
+                  get_by_id(board_id, function(board_list, x) {
+                      board_list[x] = data['board_dict'];
+                      MAIN.set('board_list', data['board_list']);
+                })
+              }
+      });
+  }
+
+  load_boards();
 
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   function generateUUID(){
@@ -293,7 +312,7 @@ $(function() {
   });
 
   MAIN.on("removeBoard", function(e) { 
-      id = $(e.node).data('board-id');
+      var id = $(e.node).data('board-id');
       if(remove_board(id)) {
           board = get_by_id(id, function(board_list, x) {
               board_list.splice(x, 1);
@@ -301,7 +320,6 @@ $(function() {
           });
       }
   });
-
 
   function get_by_id(board_id, callback) {
       var board_list = MAIN.get('board_list');
@@ -314,7 +332,9 @@ $(function() {
   }
 
   function save_board(board_id) {
+      console.log("save-board");
       return get_by_id(board_id, function(board_list, x) {
+      console.log(board_list[x]);
           $.ajax("{{=URL('default', 'add_board', user_signature=True)}}",
                   {
                     method: 'POST',
@@ -343,10 +363,28 @@ $(function() {
       });
   }
 
+  function periodic_send() {
+      var board_list = MAIN.get('board_list');
+      for(var x = 0; x < board_list.length; x++) {
+          if(board_list[x].is_draft) {
+              var id = board_list[x].board_id;
+              var title = $("#board_title_"+id).val();
+              var description  = $("#board_desc_"+id).val();
+              console.log(title);
+              console.log(description);
+              board_list[x].dtitle = title;
+              board_list[x].ddescription = description;
+              save_board(id);
+              MAIN.set('board_list', board_list);
+          }
+      }
+      setTimeout(function() {
+          load_boards();
+      }, 500);
+  }
 
 
-
-  // setInterval(periodic_send, 10000);
+  setInterval(periodic_send, 5000);
 
  });
 
