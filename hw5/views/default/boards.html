@@ -1,0 +1,353 @@
+<head>
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<script language="JavaScript" type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.blue_grey-red.min.css" />
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+
+<div id="target"></div>
+<script id="template" type="text/ractive">
+
+<style>
+#new-board{
+  position: fixed;
+  display: block;
+  right: 0;
+  bottom: 0;
+  margin-right: 40px;
+  margin-bottom: 40px;
+  z-index: 900;
+}
+.card-wide.mdl-card {
+    margin-bottom: 20px;
+}
+.card-wide > .mdl-card__title {
+  color: #fff;
+  background-color: #37474f;
+  height: 130px;
+}
+.card-wide > .mdl-card__menu {
+  color: #fff;
+}
+.share_box{
+    position:fixed;
+    top:10%;
+    left:10%;
+    z-index:100000000;
+}
+</style>
+
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+    <span class="mdl-layout-title">Boards</span>
+      <div class="mdl-layout-spacer"></div>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+        <label class="mdl-button mdl-js-button mdl-button--icon"
+               for="fixed-header-drawer-exp">
+          <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="sample"
+                 id="fixed-header-drawer-exp">
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title"><strong>Board-om</strong></span>
+    <hr>
+    <nav class="mdl-navigation">
+      {% #if logged_in %} 
+          <a class="mdl-navigation__link" href={{=URL('do_logout')}}><i class="fa fa-sign-out"></i> logout</a>
+      {% else %}
+          <a class="mdl-navigation__link" href={{=URL('do_login')}}><i class="fa fa-sign-in"></i> login</a>
+          <a class="mdl-navigation__link" href={{=URL('do_register')}}><i class="fa fa-user-plus"></i> register</a>
+      {% /if %}
+    </nav>
+	<hr>
+    <span class="mdl-layout-title">My Boards</span>
+    <nav class="mdl-navigation">
+    {% #each my_boards %}
+      <a class="mdl-navigation__link" href="{% uri %}">{% title%}</a>
+    {% /each %}
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content centered">
+        <br>
+        {% #if logged_in %}
+            <button id="new-board" on-click="addBoard" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+              <i class="material-icons">add</i>
+            </button>
+        {% /if %}
+
+        {% #each board_list %}
+         {% #if is_draft %}
+            <div class="col-md-offset-1 col-sm-12 col-xs-12 col-lg-5 col-md-6">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card-wide mdl-card mdl-shadow--2dp" style="width:100%">
+
+              <div class="mdl-card__title">
+                  <div class="mdl-textfield mdl-js-textfield" style="width:100%">
+                    <label style="padding-bottom:0px" for="board_title">Title...</label>
+                    <input class="mdl-textfield__input" value={% dtitle %} type="text" id="board_title_{% board_id %}" style="font-size:26px;width:100%;color:#FFF">
+                  </div>
+              </div>
+              <div class="mdl-card__supporting-text" style="width:100%">
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:100%">
+                      <input value={% ddescription %} class="mdl-textfield__input" type="text" rows= "1" id="board_desc_{% board_id %}" >
+                  </div>
+              </div>
+              <div class="mdl-card__menu">
+                {% #if user_id == creator %}
+                    <button data-board-id="{% board_id %}" on-click="saveDraft" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                      <i class="material-icons">save</i>
+                    </button>
+                    <button data-board-id="{% board_id %}" on-click="cancelDraft" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                      <i class="material-icons">clear</i>
+                    </button>
+                {% /if %}
+              </div>
+            </div>
+            </div>
+        </div>
+        {% else %}
+            <div class="col-md-offset-1 col-sm-12 col-xs-12 col-lg-5 col-md-6">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card-wide mdl-card mdl-shadow--2dp" style="width:100%">
+              <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">{% title %}</h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                <div class="row">
+                <div class="col-sm-8 col-xs-12 col-md-8 col-lg-9">
+                    {% description %}
+                </div>
+                <div class="col-sm-4 col-xs-12 col-md-4 col-lg-3">
+                    <div class="pull-right"><strong>Posts</strong> : {% num_posts %}</div>
+                </div>
+                </div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <div class="row">
+                  <a href="{% uri %}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    View
+                  </a>
+                    <a class="pull-right mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                        New Post	
+                    </a>
+                </div>
+              </div>
+              <div class="mdl-card__menu">
+                {% #if user_id == creator %}
+                <button data-board-id="{% board_id %}" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" on-click="editBoard">
+                      <i class="material-icons">create</i>
+                    </button>
+                    <button data-board-id="{% board_id %}" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" on-click="removeBoard">
+                      <i class="material-icons">clear</i>
+                    </button>
+                {% /if %}
+              </div>
+            </div>
+            </div>
+          </div>
+
+        {% /if %}
+
+      {% /each %}
+    </div>
+  </main>
+</div>
+</script>
+
+<script>
+$(function() {
+
+  // Ractive object
+  var MAIN = new Ractive({
+    el: '#target',
+    template: '#template',
+    delimiters: ['{%', '%}'],
+    tripleDelimiters: ['{%%', '%%}'],
+    data: {
+      board_dict: {},
+      user_id : -1, 
+      my_boards: [],
+      active_draft: "",
+      loading: true
+    },
+  });
+
+  // Loads the initial list of boards
+  $.ajax("{{=URL('default', 'load_boards', user_signature=True)}}",
+          {
+            method: 'POST',
+            success: function (data) {
+              MAIN.set('board_list', data['board_list']);
+              MAIN.set('my_boards', data['my_boards']);
+              MAIN.set('logged_in', (data['user_id'] != -1));
+              MAIN.set('user_id', data['user_id']);
+              MAIN.set('loading', false);
+            }
+          }
+    );
+
+  // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+  function generateUUID(){
+    var d = new Date().getTime();
+    if(window.performance && typeof window.performance.now === "function"){
+        d += performance.now();; //use high-precision timer if available
+    }
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+  }
+
+  MAIN.on("editBoard", function(e) {
+      id = $(e.node).data('board-id');
+      var board_list = MAIN.get('board_list');
+      board = get_by_id(id, function(board_list, x) { 
+          board_list[x].dtitle = board_list[x].title;
+          board_list[x].ddescription = board_list[x].description;
+          board_list[x].is_draft = true;
+          MAIN.set('board_list', board_list);
+          save_board(id);
+      });
+  });
+
+  // This code is called when the submit button is pressed.
+  MAIN.on("addBoard", function(e) {
+      if(! MAIN.get('logged_in') ) {
+          return false;
+      }
+      var board_list = MAIN.get('board_list');
+
+      console.log("addBoard Called");
+
+      board_list.unshift({"board_id" : generateUUID(),
+                          "creator" :  MAIN.get('user_id'),
+                          "title" : "",
+                          "dtitle" : "",
+                          "num_posts" : 0,
+                          "created_at" : new Date().toISOString(),
+                          "description" : "",
+                          "ddescription" : "",
+                          "is_draft" : true,
+                          "uri" : "" 
+      });
+
+      MAIN.set('board_list', board_list);
+  });
+
+
+  // This code is called when the submit button is pressed.
+  MAIN.on("saveDraft", function(e) {
+      var id = $(e.node).data('board-id');
+      var title = $("#board_title_"+id).val();
+      var description  = $("#board_desc_"+id).val();
+      if(title === "") {
+          alert("Please title the board before saving.");
+          return;
+      }
+      console.log("saveDraft Called : ");
+      console.log(id);
+      board = get_by_id(id, function(board_list, x) {
+          board_list[x].title = title;
+          board_list[x].board_id = id;
+          board_list[x].dtitle = title;
+          board_list[x].description = description;
+          board_list[x].ddescription = description;
+          board_list[x].is_draft = false;
+          MAIN.set('board_list', board_list);
+          save_board(id);
+      });
+  });
+
+  // This code is called when the submit button is pressed.
+  MAIN.on("cancelDraft", function(e) {
+      var id = $(e.node).data('board-id');
+      board = get_by_id(id, function(board_list, x) {
+          if(board_list[x].title === "") {
+              remove_board(id);
+              board = get_by_id(id, function(board_list, x) {
+                  board_list.splice(x, 1);
+                  MAIN.set('board_list', board_list);
+              });
+              return false;
+          }
+          board_list[x].is_draft = false;
+          board_list[x].dtitle = board_list[x].title;
+          board_list[x].ddescription = board_list[x].description;
+          MAIN.set('board_list', board_list);
+          save_board(id);
+      });
+  });
+
+  MAIN.on("removeBoard", function(e) { 
+      id = $(e.node).data('board-id');
+      if(remove_board(id)) {
+          board = get_by_id(id, function(board_list, x) {
+              board_list.splice(x, 1);
+              MAIN.set('board_list', board_list);
+          });
+      }
+  });
+
+
+  function get_by_id(board_id, callback) {
+      var board_list = MAIN.get('board_list');
+      for(var x = 0; x < board_list.length; x++) {
+          if(board_list[x].board_id === board_id) {
+              return callback(board_list, x);
+          }
+      }
+      return false;
+  }
+
+  function save_board(board_id) {
+      return get_by_id(board_id, function(board_list, x) {
+          $.ajax("{{=URL('default', 'add_board', user_signature=True)}}",
+                  {
+                    method: 'POST',
+                    data : board_list[x],
+                    success: function (data) {
+                        console.log(data);
+                    }
+                  }
+            );
+      });
+  }
+
+
+  function remove_board(board_id) {
+      return get_by_id(board_id, function(board_list, x) {
+          return $.ajax("{{=URL('default', 'remove_board', user_signature=True)}}",
+                  {
+                    method: 'POST',
+                    data : {"board_id" : board_id},
+                    success: function (data) {
+                        console.log(data);
+                        return true;
+                    }
+                  }
+            );
+      });
+  }
+
+
+
+
+  // setInterval(periodic_send, 10000);
+
+ });
+
+</script>

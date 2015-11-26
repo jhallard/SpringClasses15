@@ -1,0 +1,183 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+
+<div id="target"></div>
+
+<script id="template" type="text/ractive">
+<div id="new_msg">
+  <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+  <div class="form-group" id="no_table_message__row">
+  <label class="control-label col-sm-3" for="no_table_message" id="no_table_message__label">Message</label>
+  <div class="col-sm-9">
+  <textarea value="{% active_draft %}" class="text form-control" cols="40" id="no_table_message" name="message" rows="10">
+  </textarea>
+  <span class="help-block"></span></div></div>
+  <div class="form-group" id="submit_record__row"><div class="col-sm-9 col-sm-offset-3">
+  <input class="btn btn-primary" type="submit" value="Submit" on-click="addmsg"/></div>
+  </div></form>
+</div>
+
+<h2>
+<button class="btn btn-warning" on-click="new-draft"><i class="fa fa-plus"></i> New Draft</button>
+Drafts:</h2>
+<div class="message_list">
+  {% #msg_dict:msg_id %}
+    {% #if is_draft === true %}
+      <div class="message">
+        <button class="btn btn-success" data-msgid="{% msg_id %}" on-click="edit-draft">Edit</button>
+        {% message_content %}
+      </div>
+    {% /if %}
+  {% /msg_dict %}
+</div>
+
+<h2>Messages:</h2>
+<div class="message_list">
+  {% #msg_dict:msg_id %}
+    {% #if is_draft === false %}
+      <div class="message">
+        {% message_content %}
+      </div>
+    {% /if %}
+  {% /msg_dict %}
+</div>
+
+{% #if loading %}
+  <div id="load_spinner">
+    <i class="fa fa-spinner fa-pulse fa-4x"></i>
+  </div>
+{% /if %}
+
+</script>
+
+
+<script>
+$(function() {
+
+  // Ractive object
+  var MAIN = new Ractive({
+    el: '#target',
+    template: '#template',
+    delimiters: ['{%', '%}'],
+    tripleDelimiters: ['{%%', '%%}'],
+    data: {
+      msg_dict: {},
+      draft_id: "{{=draft_id}}",
+      active_draft: "",
+      loading: true
+    },
+  });
+
+  // Loads the initial list of messages.
+  $.ajax("{{=URL('default', 'load_messages', user_signature=True)}}",
+          {
+            method: 'POST',
+            success: function (data) {
+              MAIN.set('msg_dict', data['msg_dict']);
+              MAIN.set('loading', false);
+            }
+          }
+  );
+
+  // Called every 10s, or upon switching drafts.
+  function periodic_send() {
+    var new_msg = MAIN.get('active_draft');
+    var msg_dict = MAIN.get('msg_dict');
+    var draft_id = MAIN.get('draft_id');
+    if (draft_id in msg_dict) {
+      // There is already a draft.  Check if it is modified.
+      var old_msg = msg_dict[draft_id]['message_content'];
+      if (new_msg !== old_msg) {
+        // Yes, it is modified.  Send it to the server.
+        send_message(new_msg, true); // true means: it's a draft
+      }
+    } else if ($.trim(new_msg).length > 0) {
+      // This is a brand new draft, send it to the server.
+      send_message(new_msg, true);
+    }
+  }
+
+  function send_message(msg_content, is_draft) {
+    var call_draft_id = MAIN.get('draft_id');
+    $.ajax("{{=URL('default', 'add_msg', user_signature=True)}}",
+            {
+              data: {
+                msg: msg_content, // request.vars.msg
+                is_draft: is_draft, // request.vars.is_draft
+                msg_id: call_draft_id // request.vars.msg_id
+              },
+              method: 'POST',
+              success: function() {
+                // Reflect in the list of drafts or messages the update sent to the server.
+                var msg_dict = MAIN.get('msg_dict');
+                if (call_draft_id in msg_dict) {
+                  // We have sent to the server a message/draft we have already in the dict.
+                  msg_dict[call_draft_id]['message_content'] = msg_content;
+                  msg_dict[call_draft_id]['is_draft'] = is_draft;
+                } else {
+                  // This is a new message or draft.  We have to create a new entry in the dict.
+                  msg_dict[call_draft_id] = {
+                    message_content: msg_content,
+                    is_draft: is_draft
+                  }
+                }
+                MAIN.set('msg_dict', msg_dict);
+              },
+              error: function() {}
+            }
+    );
+  }
+
+  // This code is called when the submit button is pressed.
+  MAIN.on("addmsg", function(e) {
+    var msg_content = MAIN.get('active_draft');
+    if ($.trim(msg_content).length > 0) {
+      // Send content back to server.  false = message is not a draft.
+      send_message(msg_content, false);
+      MAIN.set('active_draft', '');
+      // Invent new random draft_id.
+      MAIN.set('draft_id', generateUUID());
+    }
+    return false;
+  });
+
+  // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+  function generateUUID(){
+    var d = new Date().getTime();
+    if(window.performance && typeof window.performance.now === "function"){
+        d += performance.now();; //use high-precision timer if available
+    }
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+  }
+
+  // Listens to click on Edit buttons for drafts.
+  MAIN.on("edit-draft", function(e) {
+    // First, we send to the server the current draft, to avoid losing it.
+    periodic_send();
+    var t = $(e.original.target); // This is the button on which we clicked.
+    var clicked_id = t.data('msgid');  // To set it, you could do .data('msgid', 'my id');
+    var msg_dict = MAIN.get('msg_dict');
+    // First, display the draft text in the editing area.
+    MAIN.set('active_draft', msg_dict[clicked_id]['message_content']);
+    // Sets the id of the draft being edited.
+    MAIN.set('draft_id', clicked_id);
+  });
+
+  // We want to create a new draft.
+  MAIN.on("new-draft", function(e) {
+    // First, we send to the server the current draft, to avoid losing it.
+    periodic_send();
+    MAIN.set('active_draft', '');
+    // Invent new random draft_id.
+    MAIN.set('draft_id', generateUUID());
+  });
+
+  setInterval(periodic_send, 10000);
+
+});
+</script>
